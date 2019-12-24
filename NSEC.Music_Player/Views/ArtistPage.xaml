@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             xmlns:controls="clr-namespace:NSEC.Music_Player"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.ArtistPage" Visual="Default">
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <ListView x:Name="ArtistTrackListView"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                      ItemSelected="OnTrackSelected"
+                      ItemsSource="{Binding MenuItems}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <RelativeLayout BackgroundColor="{Binding BackgroundColor}">
+                                <Label Text="{Binding Text}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16" TextColor="{Binding LabelColor}"
+                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=10}"
+                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=10}"
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-32}"/>
+                                <Label Text="{Binding Description}" 
+                                d:Text="Item descripton"
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" TextColor="{Binding LabelColor}"
+                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=10}"
+                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=36}"
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-32}" Padding="0,0,0,10"
+                                       />
+
+
+                                <controls:CustomButton 
+                ImageSource="menu.png" 
+                BackgroundColor="#00000000" 
+                WidthRequest="32" 
+                HeightRequest="32" 
+                Clicked="Button_Clicked" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-42}"
+                                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=1.0, Constant=16}" Tag="{Binding Tag}"/>
+                            </RelativeLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <views:PlayerPanel x:Name="playerPanel"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
