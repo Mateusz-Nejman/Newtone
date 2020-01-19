@@ -7,14 +7,7 @@
              x:Class="NSEC.Music_Player.App">
 
     <Application.Resources>
-        <ResourceDictionary>
-            <!--Global Styles-->
-            <Color x:Key="NavigationPrimary">#1565C0</Color>
-            <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
-                <Setter Property="BarTextColor" Value="White" />
-            </Style>
-        </ResourceDictionary>
+
     </Application.Resources>
 
 </Application>

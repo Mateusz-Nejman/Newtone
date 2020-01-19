@@ -67,6 +67,8 @@ namespace NSEC.Music_Player.Views.Tabs
                 model.Items[a].Selected(args.SelectedItemIndex == a);
             }
 
+            Global.CurrentQueue = new List<Track>();
+            Global.CurrentQueuePosition = 0;
             await Navigation.PushAsync(new PlayerPage(item, model.Items.ToList(), args.SelectedItemIndex));
 
             if (args.SelectedItemIndex >= 0)

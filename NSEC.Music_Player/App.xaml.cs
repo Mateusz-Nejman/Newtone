@@ -16,7 +16,9 @@ namespace NSEC.Music_Player
 
             Global.Directories = directories;
             DependencyService.Register<DefaultDataStore>();
-            MainPage = new MainPage();
+            MainPage = new MainPage(new LobbyPage());
+            Global.MediaPlayer = new Media.CustomMediaPlayer();
+            
         }
 
         protected async override void OnStart()

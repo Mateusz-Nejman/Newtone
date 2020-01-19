@@ -16,7 +16,7 @@ namespace NSEC.Music_Player
 {
     public static class Helpers
     {
-        public async static Task LoadArtistsOnce(object instance, AuthorsTabModel model)
+        public async static Task LoadArtistsOnce(object instance, ArtistsTabModel model)
         {
             if (model.DataStore.Count() == 0)
             {
@@ -46,7 +46,7 @@ namespace NSEC.Music_Player
             model.LoadItemsCommand.Execute(instance);
         }
 
-        public async static Task ReloadArtists(object instance, AuthorsTabModel model)
+        public async static Task ReloadArtists(object instance, ArtistsTabModel model)
         {
             model.DataStore.Clear();
             model.Items.Clear();
@@ -62,7 +62,7 @@ namespace NSEC.Music_Player
                 {
                     foreach (MP3Processing.Container container in Global.Audios[artist])
                     {
-                        tracksBeforeSort.Add(new Models.Track { Id = artist + container.Title, Text = container.Title, Description = container.Author + " * "+container.Duration, Container = container, Tag = container.FilePath });
+                        tracksBeforeSort.Add(new Models.Track { Id = artist + container.Title, Text = container.Title, Description = container.Artist, Container = container, Tag = container.FilePath });
                     }
                     //await model.DataStore.AddItemAsync(new Models.Artist { Id = artist, Text = artist });
                 }
@@ -120,7 +120,8 @@ namespace NSEC.Music_Player
 
         public async static Task LoadGlobalsOnce()
         {
-
+            Global.CurrentQueue = new List<Track>();
+            Global.CurrentQueuePosition = 0;
 
             if (Global.Audios.Count == 0)
             {
@@ -142,26 +143,14 @@ namespace NSEC.Music_Player
 
         public static void AddTrack(MP3Processing.Container container)
         {
-            if (!Global.Audios.ContainsKey(container.Author.Trim()))
+            if (!Global.Audios.ContainsKey(container.Artist.Trim()))
             {
                 //File.AppendAllText(App.debugPath + "/debug.txt", "Create list for " + files[a].Author.Trim() + "\n");
-                Global.Audios.Add(container.Author.Trim(), new List<MP3Processing.Container>());
+                Global.Audios.Add(container.Artist.Trim(), new List<MP3Processing.Container>());
             }
 
             //File.AppendAllText(App.debugPath + "/debug.txt", "Add " + files[a] + " to " + files[a].Author.Trim() + "\n");
-            Global.Audios[container.Author.Trim()].Add(container);
-        }
-
-        public static RelativeLayout GeneratePlayerPanel()
-        {
-            RelativeLayout relativeLayout = new RelativeLayout()
-            {
-                VerticalOptions = LayoutOptions.End,
-                HeightRequest = 72,
-                BackgroundColor = Color.White,
-
-            };
-            return relativeLayout;
+            Global.Audios[container.Artist.Trim()].Add(container);
         }
 
         public static Track FindTrackByTag(ObservableCollection<Track> Items, string tag)
@@ -172,11 +161,6 @@ namespace NSEC.Music_Player
                     return track;
             }
             return null;
-        }
-
-        public static void RemoveTrack(string path, params ObservableCollection<Track>[] tracks)
-        {
-            RemoveTrack(path, false, tracks);
         }
 
         public static void RemoveTrack(string path, bool onlyPlaylist, params ObservableCollection<Track>[] tracks)
@@ -213,6 +197,41 @@ namespace NSEC.Music_Player
                     }
                 }
             }
+        }
+
+        public static void AddToCounter(string filepath, int count)
+        {
+
+            List<TrackCounter> tracks = new List<TrackCounter>(Global.MostTracks);
+            int index = tracks.FindIndex(o => o.Track == filepath);
+
+            if (index == -1)
+                tracks.Add(new TrackCounter(filepath, count));
+            else
+                tracks[index].Count += count;
+
+            Global.MostTracks = tracks.ToArray();
+
+            Global.SaveConfig();
+        }
+
+        public static void AddToLast(string filepath)
+        {
+            List<TrackCounter> tracks = new List<TrackCounter>(Global.LastTracks);
+
+            int index = tracks.FindIndex(o => o.Track == filepath);
+            if (index >= 0)
+                tracks.RemoveAt(index);
+            tracks.Reverse();
+
+
+            tracks.Add(new TrackCounter(filepath, 0));
+            tracks.Reverse();
+            if(tracks.Count > 5)
+                tracks.RemoveAt(tracks.Count - 1);
+
+            Global.LastTracks = tracks.ToArray();
+            Global.SaveConfig();
         }
     }
 }

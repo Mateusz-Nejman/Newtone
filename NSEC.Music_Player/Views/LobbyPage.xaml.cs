@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace NSEC.Music_Player.Views.Notification
+namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PlayerNotification : ContentView
+    public partial class LobbyPage : TabbedPage
     {
-        public PlayerNotification()
+        public LobbyPage()
         {
             InitializeComponent();
         }

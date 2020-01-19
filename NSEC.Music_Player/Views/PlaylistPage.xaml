@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
              xmlns:controls="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.PlaylistPage" Visual="Default">
+             x:Class="NSEC.Music_Player.Views.PlaylistPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="NsecBack.png">
     <ContentPage.Content>
         <StackLayout Spacing="0">
             <ListView x:Name="PlaylistTrackListView"

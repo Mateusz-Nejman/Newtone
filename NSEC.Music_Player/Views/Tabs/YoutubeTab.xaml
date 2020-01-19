@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.YoutubePage">
+             x:Class="NSEC.Music_Player.Views.Tabs.YoutubeTab"
+             Title="Youtube">
     <ContentPage.Content>
         <RelativeLayout>
             <Button x:Name="prevButton" ImageSource="back.png" Clicked="prevButton_Clicked" BackgroundColor="#00000000"
@@ -18,10 +19,10 @@
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"
                     RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"/>
-            <Label x:Name="progressLabel" TextColor="Black" 
+            <Label x:Name="progressLabel" TextColor="White" 
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=79}"
-                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"/>
-            <ProgressBar x:Name="progressBar" ProgressColor="#1565C0"
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}" FontSize="20"/>
+            <ProgressBar x:Name="progressBar" ProgressColor="#EF6C00"
                          RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=79}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=28}"
                          RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0,Constant=-84}"/>
@@ -29,10 +30,10 @@
                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=5}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=42}"
                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=1.0,Constant=-10}"
-                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height, Factor=1.0,Constant=-47}"/>
+                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height, Factor=1.0,Constant=-109}"/>
 
-            
-            
+
+
             <views:PlayerPanel x:Name="playerPanel" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1.0,Constant=-62}"/>
         </RelativeLayout>
     </ContentPage.Content>

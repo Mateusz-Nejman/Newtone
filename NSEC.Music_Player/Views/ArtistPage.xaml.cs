@@ -25,7 +25,7 @@ namespace NSEC.Music_Player.Views
             List<Track> tracksBeforeSort = new List<Track>();
             foreach (MP3Processing.Container container in Global.Audios[artist])
             {
-                tracksBeforeSort.Add(new Track() { Id = container.Author + container.Title, Text = container.Title, Description = container.Author, Container = container });
+                tracksBeforeSort.Add(new Track() { Id = container.Artist + container.Title, Text = container.Title, Description = container.Artist, Container = container });
                 //MenuItems.Add(new Track() { Id = container.Author + container.Title, Text = container.Title, Description = container.Author, Container = container });
             }
 

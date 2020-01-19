@@ -1,4 +1,6 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using Android.App;
+using Android.Support.V4.App;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using Plugin.SimpleAudioPlayer;
 using System;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player.Views
 {
@@ -30,19 +33,20 @@ namespace NSEC.Music_Player.Views
         }
         private MP3Processing.Container TrackContainer { get; set; }
 
-        private Task ClockTask { get; set; }
-
         public PlayerPage(Track track, List<Track> playlist, int playlistPosition)
         {
             InitializeComponent();
             Console.WriteLine("PlayerPage.xaml.cs: " + track.Id + ", position = " + playlistPosition);
 
             TrackContainer = track.Container;
+
+            Console.WriteLine("PlayerPage " + TrackContainer.Title);
             titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Author;
+            artistLabel.Text = TrackContainer.Artist;
             menuButton.Tag = TrackContainer.FilePath;
 
-            Global.CurrentPlaylist = playlist;
+            Global.CurrentPlaylist = new List<Track>(playlist);
+            Console.WriteLine("PlayerPage PlaylistPosition " + playlistPosition);
             Global.CurrentPlaylistPosition = playlistPosition;
             Global.CurrentTrack = TrackContainer;
             this.Appearing += PlayerPage_Appearing;
@@ -51,21 +55,24 @@ namespace NSEC.Music_Player.Views
             if (track.Id == Global.AudioPlayerTrack)
             {
                 BindPlayerControls();
-                UpdatePosition();
-                Start = Global.AudioPlayer.IsPlaying;
+                Start = UpdatePosition();
+                Start = Global.MediaPlayer.IsPlaying;
+
+                Play();
             }
             else
             {
-                if (Global.AudioPlayer != null)
-                    Global.AudioPlayer.Stop();
-                var stream = FileProcessing.GetStreamFromFile(TrackContainer.FilePath);
-                Global.AudioPlayer = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                Global.AudioPlayer.Load(stream);
-                Global.AudioPlayer.PlaybackEnded += Global.AudioPlayer_PlaybackEnded;
+                if (Global.MediaPlayer != null)
+                    Global.MediaPlayer.Stop();
+
                 Global.AudioPlayerTrack = track.Id;
+                Helpers.AddToCounter(track.Container.FilePath, 1);
+                Helpers.AddToLast(track.Container.FilePath);
                 BindPlayerControls();
-                Start = true;
+
+                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
                 Play();
+                Start = true;
             }
 
 
@@ -78,24 +85,24 @@ namespace NSEC.Music_Player.Views
         {
             TrackContainer = Global.CurrentTrack;
             titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Author;
-            Start = Global.AudioPlayer.IsPlaying;
-            SetSliderPosition(Global.AudioPlayer.CurrentPosition);
+            artistLabel.Text = TrackContainer.Artist;
+            Start = Global.MediaPlayer.IsPlaying;
+            SetSliderPosition(Global.MediaPlayer.CurrentPosition);
         }
 
-        private void prevButton_Clicked(object sender, EventArgs e)
+        private void PrevButton_Clicked(object sender, EventArgs e)
         {
             Prev();
         }
 
-        private void nextButton_Clicked(object sender, EventArgs e)
+        private void NextButton_Clicked(object sender, EventArgs e)
         {
             Next();
         }
 
         private void BindPlayerControls()
         {
-            trackSlider.Maximum = Global.AudioPlayer.Duration;
+            trackSlider.Maximum = Global.MediaPlayer.Duration;
             trackSlider.ValueChanged += TrackSlider_ValueChanged;
 
             playStopButton.Clicked += PlayStopButton_Clicked;
@@ -104,43 +111,46 @@ namespace NSEC.Music_Player.Views
         private void PlayStopButton_Clicked(object sender, EventArgs e)
         {
             if (Start)
-                Global.AudioPlayer.Pause();
+                Pause();
             else
-            {
-                //Play();
-                Global.AudioPlayer.Play();
-            }
+                Global.MediaPlayer.Play();
 
             Start = !Start;
         }
         bool UpdatePosition()
         {
+            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
+            TrackContainer = track.Container;
+            titleLabel.Text = TrackContainer.Title;
+            artistLabel.Text = TrackContainer.Artist;
             //lblPosition.Text = $"Postion: {(int)player.CurrentPosition} / {(int)player.Duration}";
 
-            SetSliderPosition(Global.AudioPlayer.CurrentPosition);
+            SetSliderPosition(Global.MediaPlayer.CurrentPosition);
+            Start = Global.MediaPlayer.IsPlaying;
 
-            return Global.AudioPlayer.IsPlaying;
+            return Global.MediaPlayer.IsPlaying;
         }
 
         private void TrackSlider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            if (trackSlider.Value != Global.AudioPlayer.Duration)
-                Global.AudioPlayer.Seek(trackSlider.Value);
+            if (trackSlider.Value != Global.MediaPlayer.Duration)
+                Global.MediaPlayer.Seek(trackSlider.Value);
         }
 
 
         private void Play()
         {
-            Global.AudioPlayer.Play();
+            Global.MediaPlayer.Play();
+            Start = true;
             SetSliderPosition(0);
-            trackSlider.Maximum = Global.AudioPlayer.Duration;
-            trackSlider.IsEnabled = Global.AudioPlayer.CanSeek;
+            trackSlider.Maximum = Global.MediaPlayer.Duration;
+            trackSlider.IsEnabled = Global.MediaPlayer.CanSeek;
             Global.SaveConfig();
         }
 
         private void Next()
         {
-            Global.AudioPlayer.Stop();
+            Global.MediaPlayer.Stop();
             Global.CurrentPlaylistPosition += 1;
 
             if (Global.CurrentPlaylistPosition == Global.CurrentPlaylist.Count)
@@ -148,20 +158,19 @@ namespace NSEC.Music_Player.Views
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             TrackContainer = track.Container;
-            var stream = FileProcessing.GetStreamFromFile(TrackContainer.FilePath);
-            Global.AudioPlayer = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-            Global.AudioPlayer.PlaybackEnded += Global.AudioPlayer_PlaybackEnded;
-            Global.AudioPlayer.Load(stream);
+
+            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+            Global.MediaPlayer.Play();
             Global.AudioPlayerTrack = track.Id;
+            Global.CurrentTrack = track.Container;
             titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Author;
+            artistLabel.Text = TrackContainer.Artist;
             SetSliderPosition(0);
-            Play();
         }
 
         private void Prev()
         {
-            Global.AudioPlayer.Stop();
+            Global.MediaPlayer.Stop();
             Global.CurrentPlaylistPosition -= 1;
 
             if (Global.CurrentPlaylistPosition == -1)
@@ -169,25 +178,24 @@ namespace NSEC.Music_Player.Views
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             TrackContainer = track.Container;
-            var stream = FileProcessing.GetStreamFromFile(TrackContainer.FilePath);
-            Global.AudioPlayer = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-            Global.AudioPlayer.PlaybackEnded += Global.AudioPlayer_PlaybackEnded;
-            Global.AudioPlayer.Load(stream);
+            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+            Global.MediaPlayer.Play();
+            Global.CurrentTrack = track.Container;
             Global.AudioPlayerTrack = track.Id;
             titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Author;
+            artistLabel.Text = TrackContainer.Artist;
             SetSliderPosition(0);
-            Play();
         }
 
         private void Pause()
         {
-            Global.AudioPlayer.Pause();
+            Global.MediaPlayer.Pause();
         }
 
         private void SetSliderPosition(double position)
         {
             trackSlider.ValueChanged -= TrackSlider_ValueChanged;
+            trackSlider.Maximum = Global.MediaPlayer.Duration;
             trackSlider.Value = position;
             trackSlider.ValueChanged += TrackSlider_ValueChanged;
         }

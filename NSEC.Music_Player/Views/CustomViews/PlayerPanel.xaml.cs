@@ -32,12 +32,12 @@ namespace NSEC.Music_Player.Views.CustomViews
 
         private void PlayStopButton_Clicked(object sender, EventArgs e)
         {
-            if (Global.AudioPlayer.IsPlaying)
-                Global.AudioPlayer.Pause();
+            if (Global.MediaPlayer.IsPlaying)
+                Global.MediaPlayer.Pause();
             else
-                Global.AudioPlayer.Play();
+                Global.MediaPlayer.Play();
 
-            bool start = Global.AudioPlayer.IsPlaying;
+            bool start = Global.MediaPlayer.IsPlaying;
             playStopButton.ImageSource = start ? ImageSource.FromFile("pause.png") : ImageSource.FromFile("play.png");
         }
 
@@ -46,8 +46,8 @@ namespace NSEC.Music_Player.Views.CustomViews
             if (Global.CurrentTrack != null)
             {
                 titleLabel.Text = Global.CurrentTrack.Title;
-                artistLabel.Text = Global.CurrentTrack.Author;
-                bool start = Global.AudioPlayer.IsPlaying;
+                artistLabel.Text = Global.CurrentTrack.Artist;
+                bool start = Global.MediaPlayer.IsPlaying;
                 playStopButton.ImageSource = start ? ImageSource.FromFile("pause.png") : ImageSource.FromFile("play.png");
                 IsVisible = true;
             }

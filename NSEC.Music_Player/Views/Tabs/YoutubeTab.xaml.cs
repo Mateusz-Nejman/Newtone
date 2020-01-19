@@ -1,17 +1,21 @@
 ﻿using NSEC.Music_Player.Logic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace NSEC.Music_Player.Views
+namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class YoutubePage : ContentPage
+    public partial class YoutubeTab : ContentPage
     {
         private string currentUrl = "";
         private FormsWebView WebView;
-        public YoutubePage()
+        public YoutubeTab()
         {
             InitializeComponent();
 
@@ -21,7 +25,6 @@ namespace NSEC.Music_Player.Views
             WebView.OnNavigationStarted += WebView_OnNavigationStarted;
             webViewGrid.Children.Add(WebView);
             this.Appearing += YoutubePage_Appearing;
-
         }
 
         private void YoutubePage_Appearing(object sender, EventArgs e)

@@ -1,4 +1,6 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using Android.App;
+using Android.Support.Design.Widget;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using NSEC.Music_Player.ViewModels.Tabs;
@@ -109,17 +111,14 @@ namespace NSEC.Music_Player.Views.Tabs
             {
                 if(Global.Playlists[PlaylistName].Count > 0)
                 {
-                    if (Global.AudioPlayer != null)
-                        Global.AudioPlayer.Stop();
-                    var stream = FileProcessing.GetStreamFromFile(Global.Playlists[PlaylistName][0].Container.FilePath);
-                    Global.AudioPlayer = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
-                    Global.AudioPlayer.Load(stream);
-                    Global.AudioPlayer.PlaybackEnded += Global.AudioPlayer_PlaybackEnded;
+                    if (Global.MediaPlayer != null)
+                        Global.MediaPlayer.Stop();
                     Global.AudioPlayerTrack = Global.Playlists[PlaylistName][0].Id;
                     Global.CurrentTrack = Global.Playlists[PlaylistName][0].Container;
                     Global.CurrentPlaylist = Global.Playlists[PlaylistName];
                     Global.CurrentPlaylistPosition = 0;
-                    Global.AudioPlayer.Play();
+                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(Global.CurrentTrack.FilePath));
+                    Global.MediaPlayer.Play();
                 }
                 
             }
@@ -132,6 +131,10 @@ namespace NSEC.Music_Player.Views.Tabs
                     Global.Playlists.Remove(PlaylistName);
                     await Helpers.ReloadPlaylists(this, model);
                     Global.SaveConfig();
+
+                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                    var snack = Snackbar.Make(view, "Usunięto", Snackbar.LengthLong);
+                    snack.Show();
                 }
             }
         }

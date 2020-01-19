@@ -12,7 +12,7 @@ namespace NSEC.Music_Player.Logic
         {
             public string FilePath { get; set; }
             public string Title { get; set; }
-            public string Author { get; set; }
+            public string Artist { get; set; }
             public string Album { get; set; }
 
             public string Duration { get; set; }
@@ -31,14 +31,14 @@ namespace NSEC.Music_Player.Logic
                 Console.WriteLine(container.Title);
                 container.Album = audioFile.Tag.Album;
                 string artistsJoin = string.Join(", ", audioFile.Tag.Performers);
-                container.Author = artistsJoin == "" ? "Nieznany" : artistsJoin;
+                container.Artist = artistsJoin == "" ? "Nieznany" : artistsJoin;
                 container.Duration = audioFile.Properties.Duration.ToString(@"mm\:ss");
             }
             catch (Exception e)
             {
                 Console.WriteLine("MP3Processing.cs -> " + e);
                 container.Title = new FileInfo(filePath).Name;
-                container.Author = "Nieznany";
+                container.Artist = "Nieznany";
                 container.Duration = "00:00";
             }
             return container;

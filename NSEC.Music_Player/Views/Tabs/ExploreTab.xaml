@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.Tabs.ExploreTab"
+             Title="Przeglądaj">
+    <ContentPage.Content>
+        <!-- Ostatnio odtwarzane(5), Najczęściej odtwarzane(5)-->
+        <RelativeLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackLayout Grid.Row="0">
+                    <Label Text="Najczęściej odtwarzane" FontSize="Title"  TextColor="White" FontAttributes="Bold" Margin="5"/>
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Padding="5">
+                        <StackLayout Orientation="Horizontal" x:Name="mostView">
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+                <StackLayout Grid.Row="1">
+                    <Label Text="Ostation odtwarzane" FontSize="Title"  TextColor="White" FontAttributes="Bold" Margin="5"/>
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Padding="5">
+                        <StackLayout Orientation="Horizontal" x:Name="lastView">
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+            </Grid>
+            <views:PlayerPanel x:Name="playerPanel" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1.0,Constant=-62}"/>
+        </RelativeLayout>
+        
+        
+    </ContentPage.Content>
+</ContentPage>

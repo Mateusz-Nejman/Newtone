@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:tabs="clr-namespace:NSEC.Music_Player.Views.Tabs"
+            mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.LobbyPage"
+            NavigationPage.HasNavigationBar="False" 
+            BarBackgroundColor="#1b3a59">
+  <!--Pages can be added as references or inline-->
+    <tabs:ExploreTab BackgroundImageSource="NsecBack.png"/>
+    <tabs:ArtistsTab BackgroundImageSource="NsecBack.png"/>
+    <tabs:TracksTab BackgroundImageSource="NsecBack.png"/>
+    <tabs:PlaylistsTab BackgroundImageSource="NsecBack.png"/>
+    <tabs:YoutubeTab BackgroundImageSource="NsecBack.png"/>
+    <tabs:AboutTab BackgroundImageSource="NsecBack.png"/>
+</TabbedPage>

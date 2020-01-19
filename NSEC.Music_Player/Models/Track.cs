@@ -7,13 +7,13 @@ namespace NSEC.Music_Player.Models
 {
     public class Track : Item, INotifyPropertyChanged
     {
-        Color backgroundColor = Color.White;
-        Color backgroundColorSelected = Color.FromHex("#1565C0");
-        Color textColor = Color.Black;
-        Color textColorSelected = Color.White;
+        Color backgroundColor = Color.Transparent;
+        Color backgroundColorSelected = Color.FromHex("#2f4459");
+        Color textColor = Color.White;
+        Color textColorSelected = Color.FromHex("#EF6C00");
 
-        Color labelColor = Color.Black;
-        Color backColor = Color.White;
+        Color labelColor = Color.White;
+        Color backColor = Color.Transparent;
         public Color LabelColor
         {
             set

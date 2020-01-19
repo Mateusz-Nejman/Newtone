@@ -14,16 +14,20 @@ namespace NSEC.Music_Player.Logic
 
                 if (subDirectoriesLevel > currentLevel)
                 {
-                    string[] dirs = Directory.GetDirectories(directory);
-
-                    for (int a = 0; a < dirs.Length; a++)
+                    if(Directory.Exists(directory))
                     {
-                        if (!listedDirectories.Contains(dirs[a]))
+                        string[] dirs = Directory.GetDirectories(directory);
+
+                        for (int a = 0; a < dirs.Length; a++)
                         {
-                            listedDirectories.Add(dirs[a]);
-                            containers.AddRange(await ListFiles(dirs[a], subDirectoriesLevel, currentLevel + 1, listedDirectories));
+                            if (!listedDirectories.Contains(dirs[a]))
+                            {
+                                listedDirectories.Add(dirs[a]);
+                                containers.AddRange(await ListFiles(dirs[a], subDirectoriesLevel, currentLevel + 1, listedDirectories));
+                            }
                         }
                     }
+                    
                 }
 
                 string[] filePaths = Directory.GetFiles(directory, "*.mp3");

@@ -1,4 +1,6 @@
-﻿using NSEC.Music_Player.Models;
+﻿using Android.App;
+using Android.Support.Design.Widget;
+using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -77,6 +79,9 @@ namespace NSEC.Music_Player.Logic
                     }
 
                     Global.SaveConfig();
+                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                    var snack = Snackbar.Make(view, "Usunięto", Snackbar.LengthLong);
+                    snack.Show();
                 }
             }
             else if (item == "Dodaj do playlisty")
@@ -101,6 +106,10 @@ namespace NSEC.Music_Player.Logic
                             Global.Playlists.Add(playlistName, new List<Track>() { track });
 
                         Global.SaveConfig();
+
+                        var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                        var snack = Snackbar.Make(view, "Dodano do nowej playlisty", Snackbar.LengthLong);
+                        snack.Show();
                     }
                 }
                 else if (Global.Playlists.ContainsKey(answer))
@@ -118,23 +127,20 @@ namespace NSEC.Music_Player.Logic
                     if (!contains)
                         Global.Playlists[answer].Add(track);
                     Global.SaveConfig();
+
+                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                    var snack = Snackbar.Make(view, "Dodano do playlisty", Snackbar.LengthLong);
+                    snack.Show();
                 }
             }
             else if(item == "Dodaj do kolejki")
             {
-                if (!Global.CurrentPlaylist.Contains(track))
-                    Global.CurrentPlaylist.Add(track);
-            }
-        }
+                if (!Global.CurrentQueue.Contains(track))
+                    Global.CurrentQueue.Add(track);
 
-        private class PopupMenuItem
-        {
-            public string Text { get; set; }
-            public string Tag { get; set; }
-
-            public override string ToString()
-            {
-                return Text;
+                var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                var snack = Snackbar.Make(view, "Dodano do kolejki", Snackbar.LengthLong);
+                snack.Show();
             }
         }
     }

@@ -10,19 +10,19 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AuthorsTab : ContentPage, IAsyncEndListener
+    public partial class ArtistsTab : ContentPage, IAsyncEndListener
     {
 
-        AuthorsTabModel model;
+        ArtistsTabModel model;
 
         public event EventHandler AsyncEnded;
 
-        public AuthorsTab()
+        public ArtistsTab()
         {
             InitializeComponent();
             this.Appearing += AuthorsTab_Appearing;
 
-            BindingContext = model = new AuthorsTabModel();
+            BindingContext = model = new ArtistsTabModel();
             Global.asyncEndController.Add("authorstab", this);
 
             /*if (model.DataStore.Count() == 0)

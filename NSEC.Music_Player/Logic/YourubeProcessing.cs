@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Android.App;
+using Android.Graphics.Drawables.Shapes;
+using Android.Support.Design.Widget;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -54,13 +57,19 @@ namespace NSEC.Music_Player.Logic
 
                 MP3Processing.Container container = MP3Processing.GetMeta(Global.DataPath + "/" + video.Title + ".mp3");
                 Helpers.AddTrack(container);
-
+                var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                var snack = Snackbar.Make(view, "Gotowe", Snackbar.LengthLong);
+                snack.Show();
                 progressLabel.Text = "Gotowe";
                 //File.WriteAllBytes(Global.DataPath+"/data.bin", video.GetBytes());
             }
             catch (Exception e)
             {
                 Console.WriteLine("YoutubeProcessing.cs -> " + e);
+                var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
+                var snack = Snackbar.Make(view, "Film posiada blokadę lub jest niedostępny", 3000);
+                snack.Show();
+                //Snackbar.Make(view., "Film posiada blokadę lub jest niedostępny", 1000);
                 progressLabel.Text = "Film posiada blokadę lub jest niedostępny";
             }
 

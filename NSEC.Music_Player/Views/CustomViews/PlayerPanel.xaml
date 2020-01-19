@@ -4,22 +4,18 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.CustomViews.PlayerPanel" Visual="Default">
+             x:Class="NSEC.Music_Player.Views.CustomViews.PlayerPanel" Visual="Default" >
     <ContentView.Content>
-        <RelativeLayout BackgroundColor="Black" CascadeInputTransparent="False" HeightRequest="58">
-            <RelativeLayout BackgroundColor="White" 
-                                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=2}"
-                                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0}"
-                                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1.0,Constant=-1}">
-                <Label x:Name="titleLabel" Text="Matma to chuj asd a sdas gfdsgf gfsgdsfg" TextColor="Black" FontSize="Large" LineBreakMode="TailTruncation"
+        <RelativeLayout BackgroundColor="#1b3a59" CascadeInputTransparent="False" HeightRequest="58">
+            <Label x:Name="titleLabel" Text="Matma to chuj asd a sdas gfdsgf gfsgdsfg" TextColor="White" FontSize="Large" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-76}"/>
-                <Label x:Name="artistLabel" Text="Grubas idzie sgdf gssgfdfgs sdfgsdfg assade" TextColor="Black" FontSize="Medium" LineBreakMode="TailTruncation"
+            <Label x:Name="artistLabel" Text="Grubas idzie sgdf gssgfdfgs sdfgsdfg assade" TextColor="GhostWhite" FontSize="Medium" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=28}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-76}"/>
-                <Button 
+            <Button 
                 x:Name="playStopButton"
                 ImageSource="play.png" 
                 BackgroundColor="#00000000" 
@@ -28,7 +24,6 @@
                 RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-48}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=1.0, Constant=13}"
                 />
-            </RelativeLayout>
         </RelativeLayout>
 
     </ContentView.Content>

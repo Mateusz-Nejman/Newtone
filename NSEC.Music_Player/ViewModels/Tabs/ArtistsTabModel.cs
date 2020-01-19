@@ -9,11 +9,11 @@ using Xamarin.Forms;
 
 namespace NSEC.Music_Player.ViewModels.Tabs
 {
-    public class AuthorsTabModel : BaseViewModel
+    public class ArtistsTabModel : BaseViewModel
     {
         public ObservableCollection<Track> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
-        public AuthorsTabModel()
+        public ArtistsTabModel()
         {
             Title = "Wykonawcy";
 
