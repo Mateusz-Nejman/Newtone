@@ -6,7 +6,7 @@
             mc:Ignorable="d"
             xmlns:views="clr-namespace:NSEC.Music_Player.Views"
             x:Class="NSEC.Music_Player.Views.MainPage"
-                  Visual="Material" NavigationPage.HasNavigationBar="False">
+                  Visual="Material" NavigationPage.HasNavigationBar="False" BarBackgroundColor="#1b3a59">
 
     <NavigationPage.Icon>
         <OnPlatform x:TypeArguments="FileImageSource">

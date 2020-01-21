@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:NSEC.Music_Player"
+             xmlns:controls="clr-namespace:NSEC.Music_Player.Views.CustomViews"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.PlayerPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="NsecBack.png">
+             x:Class="NSEC.Music_Player.Views.PlayerPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="background.png">
     <ContentPage.Content>
-        <RelativeLayout BackgroundColor="Transparent" x:Name="relativeLayout">
+        <RelativeLayout BackgroundColor="#1b3a59" x:Name="relativeLayout">
 
 
             <Button 
                 x:Name="prevButton"
-                ImageSource="prev.png" 
+                ImageSource="prevIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 
@@ -22,7 +22,7 @@
                 />
             <Button 
                 x:Name="playStopButton"
-                ImageSource="play.png" 
+                ImageSource="playIcon.png" 
                 BackgroundColor="White"
                 CornerRadius="24"
                 WidthRequest="48" 
@@ -32,7 +32,7 @@
                 />
             <Button 
                 x:Name="nextButton"
-                ImageSource="next.png" 
+                ImageSource="nextIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 
@@ -42,33 +42,38 @@
                 />
 
             <controls:CustomButton 
-                ImageSource="menu.png" 
+                ImageSource="menuIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 
                     x:Name="menuButton"
                 Clicked="Button_Clicked" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-37}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-92}"/>
+            
+            <controls:CustomButton 
+                ImageSource="repeatIcon.png" 
+                BackgroundColor="#00000000" 
+                WidthRequest="32" 
+                HeightRequest="32" 
+                    x:Name="modeButton"
+                Clicked="ModeButton_Clicked" 
+                RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X, Factor=1, Constant=10}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-92}"/>
 
             <Frame HasShadow="False" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=72}"
                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-64}"
                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-64}"
                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=32}" CornerRadius="35">
-                <Grid BackgroundColor="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <Image Source="emptyTrack.png" 
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
+                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}"/>
             </Frame>
 
-            <Label x:Name="titleLabel" Text="Matma to chuj asd a sdas gfdsgf gfsgdsfg" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
+            <Label x:Name="titleLabel" Text="" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=40}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=400}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-28}"/>
-            <Label x:Name="artistLabel" Text="Grubas idzie sgdf gssgfdfgs sdfgsdfg assade asd fda dfas" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
+            <Label x:Name="artistLabel" Text="" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=40}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=426}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-28}"/>
@@ -77,6 +82,13 @@
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=450}"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=1,Constant=16}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-32}"/>
+            <Label x:Name="currentLabel" Text="0:00" TextColor="White"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=470}"
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=1,Constant=16}" />
+            <Label x:Name="maximumLabel" Text="0:00" TextColor="White"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=470}"
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-50}" />
+
         </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

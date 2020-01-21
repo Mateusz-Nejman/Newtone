@@ -7,17 +7,23 @@
              x:Class="NSEC.Music_Player.Views.CustomViews.PlayerPanel" Visual="Default" >
     <ContentView.Content>
         <RelativeLayout BackgroundColor="#1b3a59" CascadeInputTransparent="False" HeightRequest="58">
+            <Frame CornerRadius="8" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-8}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-8}" Padding="0">
+                <Image Source="emptyTrack.png"/>
+            </Frame>
             <Label x:Name="titleLabel" Text="Matma to chuj asd a sdas gfdsgf gfsgdsfg" TextColor="White" FontSize="Large" LineBreakMode="TailTruncation"
-                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
+                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=74}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
-                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-76}"/>
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-136}"/>
             <Label x:Name="artistLabel" Text="Grubas idzie sgdf gssgfdfgs sdfgsdfg assade" TextColor="GhostWhite" FontSize="Medium" LineBreakMode="TailTruncation"
-                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
+                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=74}" 
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=28}"
-                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-76}"/>
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-136}"/>
             <Button 
                 x:Name="playStopButton"
-                ImageSource="play.png" 
+                ImageSource="playIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 

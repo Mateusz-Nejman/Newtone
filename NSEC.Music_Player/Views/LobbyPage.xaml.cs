@@ -15,6 +15,9 @@ namespace NSEC.Music_Player.Views
         public LobbyPage()
         {
             InitializeComponent();
+            App.IsInLobby = true;
+            Global.MostTracks = new Models.TrackCounter[0];
+            Global.LastTracks = new Models.TrackCounter[0];
         }
     }
 }

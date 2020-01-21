@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NSEC.Music_Player.ViewModels.Tabs"
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
-             xmlns:controls="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Tabs.PlaylistsTab"
              Title="{Binding Title}" Visual="Default">
@@ -46,8 +45,8 @@
                                        />
 
 
-                                <controls:CustomButton 
-                ImageSource="menu.png" 
+                                <views:CustomButton 
+                ImageSource="menuIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 

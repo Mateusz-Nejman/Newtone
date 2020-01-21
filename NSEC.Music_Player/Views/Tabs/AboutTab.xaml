@@ -28,7 +28,7 @@
                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1.0}">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                     <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                        <Image Source="xamarin_logo.png" VerticalOptions="Center" HeightRequest="64" />
+                        <Image Source="musicPlayerLogo.png" VerticalOptions="Center" HeightRequest="64" />
                     </ContentView>
                 </StackLayout>
             </StackLayout>
@@ -41,7 +41,7 @@
                                 <FormattedString.Spans>
                                     <Span Text="NSEC Music Player" FontAttributes="Bold" FontSize="22" />
                                     <Span Text=" " />
-                                    <Span Text="2.0" ForegroundColor="#EF6C00" />
+                                    <Span Text="2.0" ForegroundColor="#fb8c00" x:Name="versionLabel"/>
                                 </FormattedString.Spans>
                             </FormattedString>
                         </Label.FormattedText>

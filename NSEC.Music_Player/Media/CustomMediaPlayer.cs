@@ -20,6 +20,7 @@ namespace NSEC.Music_Player.Media
     {
         private string CachePath { get; set; }
         private int CacheIndex { get; set; }
+        private Random Random { get; set; }
         public MediaPlayer MediaPlayer { get; set; }
 
         public bool IsPlaying
@@ -60,15 +61,28 @@ namespace NSEC.Music_Player.Media
             if (MediaPlayer == null)
             {
                 MediaPlayer = new MediaPlayer();
+                MediaPlayer.SetWakeMode(Global.Context, WakeLockFlags.Partial);
                 MediaPlayer.Completion += MediaPlayer_Completion;
+
                 CacheIndex = 0;
                 CachePath = "";
             }
+
+            Random = new Random(Global.password.GetHashCode());
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            Next();
+            if(Global.PlayerMode == PlayerMode.One)
+            {
+                MediaPlayer.SeekTo(0);
+                MediaPlayer.Start();
+            }
+            else
+            {
+                Next();
+            }
+            
             TrackCompleted?.Invoke(this, e);
         }
 
@@ -116,58 +130,58 @@ namespace NSEC.Music_Player.Media
         public void Play()
         {
             MediaPlayer.Start();
-            MainActivity.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
+            Global.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
         }
 
         public void Stop()
         {
             MediaPlayer.Stop();
-            MainActivity.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
+            Global.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
         }
 
         public void Next()
         {
-            Stop();
-            Global.CurrentPlaylistPosition += 1;
+            Global.CurrentPlaylistPosition += Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0,Global.CurrentPlaylist.Count);
 
-            if (Global.CurrentPlaylistPosition == Global.CurrentPlaylist.Count)
-                Global.CurrentPlaylistPosition = 0;
+            if (Global.CurrentPlaylistPosition >= Global.CurrentPlaylist.Count)
+                Global.CurrentPlaylistPosition -= Global.CurrentPlaylist.Count;
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             Global.CurrentTrack = track.Container;
             Global.AudioPlayerTrack = track.Id;
             Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+            if (Global.LastPlayerClick)
+                Play();
             Helpers.AddToCounter(track.Container.FilePath, 1);
             Helpers.AddToLast(track.Container.FilePath);
-            Play();
-            
-            MainActivity.SetNotification(track.Container.Title, track.Container.Artist, IsPlaying);
+
+            Global.SetNotification(track.Container.Title, track.Container.Artist, IsPlaying);
         }
 
         public void Prev()
         {
-            Stop();
-            Global.CurrentPlaylistPosition -= 1;
+            Global.CurrentPlaylistPosition -= Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
 
-            if (Global.CurrentPlaylistPosition == -1)
-                Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count-1;
+            if (Global.CurrentPlaylistPosition < 0)
+                Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count-Global.CurrentPlaylistPosition;
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             
             Global.CurrentTrack = track.Container;
             Global.AudioPlayerTrack = track.Id;
             Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+            if (Global.LastPlayerClick)
+                Play();
             Helpers.AddToCounter(track.Container.FilePath, 1);
             Helpers.AddToLast(track.Container.FilePath);
-            Play();
-            MainActivity.SetNotification(track.Container.Title, track.Container.Artist, IsPlaying);
+            Global.SetNotification(track.Container.Title, track.Container.Artist, IsPlaying);
             
         }
 
         public void Pause()
         {
             MediaPlayer.Pause();
-            MainActivity.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
+            Global.SetNotification(Global.CurrentTrack.Title, Global.CurrentTrack.Artist, IsPlaying);
             
         }
 
@@ -175,6 +189,11 @@ namespace NSEC.Music_Player.Media
         {
             if(CanSeek)
                 MediaPlayer.SeekTo((int)seek * 1000);
+        }
+
+        public void SetVolume(float volume)
+        {
+            MediaPlayer.SetVolume(volume, volume);
         }
     }
 

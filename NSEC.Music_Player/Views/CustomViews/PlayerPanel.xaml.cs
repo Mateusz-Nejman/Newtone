@@ -38,7 +38,8 @@ namespace NSEC.Music_Player.Views.CustomViews
                 Global.MediaPlayer.Play();
 
             bool start = Global.MediaPlayer.IsPlaying;
-            playStopButton.ImageSource = start ? ImageSource.FromFile("pause.png") : ImageSource.FromFile("play.png");
+            playStopButton.ImageSource = start ? ImageSource.FromFile("pauseIcon.png") : ImageSource.FromFile("playIcon.png");
+            Global.LastPlayerClick = start;
         }
 
         public void Refresh()
@@ -48,7 +49,7 @@ namespace NSEC.Music_Player.Views.CustomViews
                 titleLabel.Text = Global.CurrentTrack.Title;
                 artistLabel.Text = Global.CurrentTrack.Artist;
                 bool start = Global.MediaPlayer.IsPlaying;
-                playStopButton.ImageSource = start ? ImageSource.FromFile("pause.png") : ImageSource.FromFile("play.png");
+                playStopButton.ImageSource = start ? ImageSource.FromFile("pauseIcon.png") : ImageSource.FromFile("playIcon.png");
                 IsVisible = true;
             }
             else

@@ -4,7 +4,7 @@ using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using NSEC.Music_Player.ViewModels.Tabs;
-using Plugin.SimpleAudioPlayer;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -17,8 +17,7 @@ namespace NSEC.Music_Player.Views.Tabs
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlaylistsTab : ContentPage, IAsyncEndListener
     {
-
-        PlaylistsTabModel model;
+        readonly PlaylistsTabModel model;
 
         public event EventHandler AsyncEnded;
         private string PlaylistName { get; set; }
@@ -26,7 +25,7 @@ namespace NSEC.Music_Player.Views.Tabs
         public PlaylistsTab()
         {
             InitializeComponent();
-            this.Appearing += PlaylistsTab_Appearing;
+            Appearing += PlaylistsTab_Appearing;
 
             BindingContext = model = new PlaylistsTabModel();
             Global.asyncEndController.Add("playliststab", this);
@@ -61,14 +60,13 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             //File.AppendAllText(App.debugPath + "/debugAutorsTab.txt", "Count = " + Global.Audios.Count + "\n");
             await Helpers.LoadPlaylistsOnce(this, model);
-            this.model.LoadItemsCommand.Execute(this);
+            model.LoadItemsCommand.Execute(this);
         }
 
         private async void OnPlaylistSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            Track item = PlaylistsListView.SelectedItem as Track;
             //Console.WriteLine("OnAuthorSelected: " + (item == null));
-            if (item == null)
+            if (!(PlaylistsListView.SelectedItem is Track item))
                 return;
 
             for (int a = 0; a < model.Items.Count; a++)
@@ -98,11 +96,11 @@ namespace NSEC.Music_Player.Views.Tabs
             menuItems.Add("Odtwórz");
             menuItems.Add("Usuń");
 
-            PopupMenu menu = new PopupMenu();
-            menu.ItemsSource = menuItems;
-            menu.OnItemSelected += Menu_OnItemSelected;
+            
 
-            menu.ShowPopup((View)sender);
+            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, "Odtwórz", "Usuń");
+            menu.OnSelect += Menu_OnItemSelected;
+            menu.Show();
         }
 
         private async void Menu_OnItemSelected(string item)
@@ -132,9 +130,7 @@ namespace NSEC.Music_Player.Views.Tabs
                     await Helpers.ReloadPlaylists(this, model);
                     Global.SaveConfig();
 
-                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
-                    var snack = Snackbar.Make(view, "Usunięto", Snackbar.LengthLong);
-                    snack.Show();
+                    SnackbarBuilder.Show("Usunięto");
                 }
             }
         }

@@ -17,14 +17,9 @@ namespace NSEC.Music_Player.ViewModels.Tabs
         {
             Title = "Wykonawcy";
 
-            
-            OpenWebCommand = new Command(() => Launcher.TryOpenAsync(new Uri("https://mateusz-nejman.pl")));
-
             Items = new ObservableCollection<Track>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
         }
-
-        public ICommand OpenWebCommand { get; }
 
         async Task ExecuteLoadItemsCommand()
         {

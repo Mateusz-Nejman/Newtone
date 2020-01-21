@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Android;
 using Android.App;
 using Android.Content;
@@ -11,45 +12,42 @@ using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
 using NSEC.Music_Player.Media;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xam.Plugin.WebView.Droid;
 using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player
 {
-    [Activity(Label = "NSEC Music_Player", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Navigation | ConfigChanges.UiMode, MultiProcess = false, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "NSEC Music Player", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Navigation | ConfigChanges.UiMode, MultiProcess = false, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        public AudioManager AudioManager { get; set; }
-        public static global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity Instance { get; set; }
-        public static NotificationManager NotificationManager { get; set; }
+        private List<string> folders;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            Instance = this;
+            Global.Context = this;
+            
             var customReceiver = new MediaPlayerReceiver();
             var intentFilter = new IntentFilter();
             intentFilter.AddAction("prev");
             intentFilter.AddAction("next");
             intentFilter.AddAction("play");
             intentFilter.AddAction("pause");
-            this.RegisterReceiver(customReceiver,intentFilter);
-            AudioManager = (AudioManager)GetSystemService("audio");
-            App.Context = this.ApplicationContext;
+            RegisterReceiver(customReceiver,intentFilter);
+
+            
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Max);
-            NotificationManager = (NotificationManager)GetSystemService(NotificationService);
-            NotificationManager.CreateNotificationChannel(notificationChannel);
+            InitializeGlobalVariables();
 
 
             FormsWebViewRenderer.Initialize();
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
-            //global::Xamarin.Forms.Forms.SetTitleBarVisibility(this, Xamarin.Forms.AndroidTitleBarVisibility.);
-            ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage }, 0);
             
-
             string[] paths = new string[] { Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath,
                 Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).AbsolutePath,
                 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
@@ -57,9 +55,7 @@ namespace NSEC.Music_Player
                 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath+"/NSEC/Music_Player"
             };
 
-            Global.DataPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
-
-            List<string> folders = new List<string>();
+            folders = new List<string>();
 
             foreach (string path in paths)
             {
@@ -67,11 +63,10 @@ namespace NSEC.Music_Player
                     folders.Add(path);
             }
 
-            Console.WriteLine("MainActivity OnCreate()");
-
-            
             LoadApplication(new App(folders.ToArray()));
+
         }
+        
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -87,33 +82,25 @@ namespace NSEC.Music_Player
                 Global.MediaPlayer.Prev();
         }
 
-        public static void SetNotification(string title, string desc, bool play)
+        private void InitializeGlobalVariables()
         {
-            PendingIntent prevIntentP = PendingIntent.GetBroadcast(Instance, 1, new Intent("prev"), PendingIntentFlags.CancelCurrent);
-            PendingIntent playIntentP = PendingIntent.GetBroadcast(Instance, 0, new Intent("play"), PendingIntentFlags.Immutable);
-            PendingIntent pauseIntentP = PendingIntent.GetBroadcast(Instance, 0, new Intent("pause"), PendingIntentFlags.Immutable);
-            PendingIntent nextIntentP = PendingIntent.GetBroadcast(Instance, 0, new Intent("next"), PendingIntentFlags.Immutable);
-
-            NotificationCompat.Action actionPrev = new NotificationCompat.Action(Resource.Drawable.prevN, "Prev", prevIntentP);
-            NotificationCompat.Action actionPlay = new NotificationCompat.Action(!play ? Resource.Drawable.playN : Resource.Drawable.pauseN, "Play", !play ? playIntentP : pauseIntentP);
-            NotificationCompat.Action actionNext = new NotificationCompat.Action(Resource.Drawable.nextN, "Next", nextIntentP);
-
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(Instance, "nsec music_player notification").
-                SetContentTitle(title).
-                SetContentText(desc).
-                SetSmallIcon(Resource.Drawable.playN).
-                AddAction(actionPrev).
-                AddAction(actionPlay).
-                AddAction(actionNext).
-                SetContentIntent(prevIntentP).
-                SetStyle(new MediaStyle()).
-                SetLargeIcon(BitmapFactory.DecodeResource(Instance.Resources, Resource.Drawable.playN)).
-                SetVisibility(NotificationCompat.VisibilityPublic).SetOngoing(true);
-            Notification notification = builder.Build();
-
-            //Instance.StartService(prevIntent);
-            NotificationManager.Notify(0, notification);
+            NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Max);
+            Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
+            Global.NotificationManager.CreateNotificationChannel(notificationChannel);
+            Global.AudioManager = (AudioManager)GetSystemService(AudioService);
+            AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
+            Global.AudioManager.RequestAudioFocus(afrc);
+            Global.Audios = new Dictionary<string, System.Collections.Generic.List<Logic.MP3Processing.Container>>();
+            Global.CurrentPlaylist = new List<Models.Track>();
+            Global.CurrentPlaylistPosition = 0;
+            Global.CurrentQueue = new List<Models.Track>();
+            Global.CurrentQueuePosition = 0;
+            Global.LastTracks = new Models.TrackCounter[0];
+            Global.MostTracks = new Models.TrackCounter[0];
+            Global.Playlists = new Dictionary<string, System.Collections.Generic.List<Models.Track>>();
+            Global.DataPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            Global.PlayerMode = Models.PlayerMode.All;
+            Global.LastPlayerClick = true;
         }
     }
 }

@@ -28,6 +28,8 @@ namespace NSEC.Music_Player.Views.Tabs
 
         public void Refresh(StackLayout layout, TrackCounter[] counters)
         {
+            if (counters == null)
+                counters = new TrackCounter[0];
             List<TrackCounter> tracks = new List<TrackCounter>(counters);
             tracks = tracks.OrderByDescending(o => o.Count).ToList();
 

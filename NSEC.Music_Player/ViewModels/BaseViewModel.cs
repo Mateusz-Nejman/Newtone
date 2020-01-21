@@ -10,8 +10,8 @@ namespace NSEC.Music_Player.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        private IDataStore<Item> dataStore;
-        public IDataStore<Item> DataStore
+        private IDataStore<Track> dataStore;
+        public IDataStore<Track> DataStore
         {
             get
             {

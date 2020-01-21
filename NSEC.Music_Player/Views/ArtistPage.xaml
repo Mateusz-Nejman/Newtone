@@ -4,9 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
-             xmlns:controls="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.ArtistPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="NsecBack.png">
+             x:Class="NSEC.Music_Player.Views.ArtistPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="background.png">
     <ContentPage.Content>
         <StackLayout Spacing="0">
             <ListView x:Name="ArtistTrackListView"
@@ -18,27 +17,33 @@
                     <DataTemplate>
                         <ViewCell>
                             <RelativeLayout BackgroundColor="{Binding BackgroundColor}">
+                                <Frame CornerRadius="8" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
+                                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
+                                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}"
+                                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}" Padding="0">
+                                    <Image Source="emptyTrack.png"/>
+                                </Frame>
                                 <Label Text="{Binding Text}" 
                                 d:Text="{Binding .}"
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" TextColor="{Binding LabelColor}"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=10}"
+                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=78}"
                                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=10}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-32}"/>
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}"/>
                                 <Label Text="{Binding Description}" 
                                 d:Text="Item descripton"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" TextColor="{Binding LabelColor}"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=10}"
+                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=78}"
                                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=36}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-32}" Padding="0,0,0,10"
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}" Padding="0,0,0,10"
                                        />
 
 
-                                <controls:CustomButton 
-                ImageSource="menu.png" 
+                                <views:CustomButton 
+                ImageSource="menuIcon.png" 
                 BackgroundColor="#00000000" 
                 WidthRequest="32" 
                 HeightRequest="32" 

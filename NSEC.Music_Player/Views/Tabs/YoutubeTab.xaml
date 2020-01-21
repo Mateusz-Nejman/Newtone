@@ -9,12 +9,12 @@
              Title="Youtube">
     <ContentPage.Content>
         <RelativeLayout>
-            <Button x:Name="prevButton" ImageSource="back.png" Clicked="prevButton_Clicked" BackgroundColor="#00000000"
+            <Button x:Name="prevButton" ImageSource="backIcon.png" Clicked="PrevButton_Clicked" BackgroundColor="#00000000"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=5}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"
                     RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"/>
-            <Button x:Name="youtubeButton" ImageSource="download.png" Clicked="youtubeButton_Clicked" BackgroundColor="#00000000"
+            <Button x:Name="youtubeButton" ImageSource="downloadIcon.png" Clicked="YoutubeButton_Clicked" BackgroundColor="#00000000"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=42}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"

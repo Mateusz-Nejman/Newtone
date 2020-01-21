@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Support.Design.Widget;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -39,11 +40,10 @@ namespace NSEC.Music_Player.Logic
             View = view;
             Playlist = playlist;
             PlaylistName = playlistName;
-            PopupMenu menu = new PopupMenu();
-            menu.ItemsSource = menuItems;
-            menu.OnItemSelected += Menu_OnItemSelected;
+            PopupMenu menu = new PopupMenu(Global.Context,(View)sender,"Dodaj do kolejki","Dodaj do playlisty","Usuń");
+            menu.OnSelect += Menu_OnItemSelected;
 
-            menu.ShowPopup((View)sender);
+            menu.Show();
         }
 
         private static async void Menu_OnItemSelected(string item)
@@ -62,32 +62,36 @@ namespace NSEC.Music_Player.Logic
                         
                     }
 
-                    ObservableCollection<Track> observableTracks = new ObservableCollection<Track>(Global.Playlists[PlaylistName]);
-                    Helpers.RemoveTrack(track.Container.FilePath, Playlist,observableTracks);
-
-                    if (Playlist)
-                        Global.Playlists[PlaylistName] = observableTracks.ToList();
-
-
-                    foreach (Track tr in Items)
+                    if(Global.Playlists.ContainsKey(PlaylistName))
                     {
-                        if (tr.Container.FilePath == track.Container.FilePath)
+                        ObservableCollection<Track> observableTracks = new ObservableCollection<Track>(Global.Playlists[PlaylistName]);
+                        Helpers.RemoveTrack(track.Container.FilePath, Playlist, observableTracks);
+
+                        if (Playlist)
+                            Global.Playlists[PlaylistName] = observableTracks.ToList();
+
+
+                        foreach (Track tr in Items)
                         {
-                            Items.Remove(tr);
-                            break;
+                            if (tr.Container.FilePath == track.Container.FilePath)
+                            {
+                                Items.Remove(tr);
+                                break;
+                            }
                         }
                     }
+                    
 
                     Global.SaveConfig();
-                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
-                    var snack = Snackbar.Make(view, "Usunięto", Snackbar.LengthLong);
-                    snack.Show();
+                    SnackbarBuilder.Show("Usunięto");
                 }
             }
             else if (item == "Dodaj do playlisty")
             {
-                List<string> positions = new List<string>();
-                positions.Add("Nowa playlista");
+                List<string> positions = new List<string>
+                {
+                    "Nowa playlista"
+                };
                 foreach (string playlist in Global.Playlists.Keys)
                     positions.Add(playlist);
 
@@ -107,9 +111,7 @@ namespace NSEC.Music_Player.Logic
 
                         Global.SaveConfig();
 
-                        var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
-                        var snack = Snackbar.Make(view, "Dodano do nowej playlisty", Snackbar.LengthLong);
-                        snack.Show();
+                        SnackbarBuilder.Show("Dodano do nowej playlisty");
                     }
                 }
                 else if (Global.Playlists.ContainsKey(answer))
@@ -128,9 +130,7 @@ namespace NSEC.Music_Player.Logic
                         Global.Playlists[answer].Add(track);
                     Global.SaveConfig();
 
-                    var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
-                    var snack = Snackbar.Make(view, "Dodano do playlisty", Snackbar.LengthLong);
-                    snack.Show();
+                    SnackbarBuilder.Show("Dodano do playlisty");
                 }
             }
             else if(item == "Dodaj do kolejki")
@@ -138,9 +138,7 @@ namespace NSEC.Music_Player.Logic
                 if (!Global.CurrentQueue.Contains(track))
                     Global.CurrentQueue.Add(track);
 
-                var view = ((Activity)Forms.Context).FindViewById(Android.Resource.Id.Content);
-                var snack = Snackbar.Make(view, "Dodano do kolejki", Snackbar.LengthLong);
-                snack.Show();
+                SnackbarBuilder.Show("Dodano do kolejki");
             }
         }
     }

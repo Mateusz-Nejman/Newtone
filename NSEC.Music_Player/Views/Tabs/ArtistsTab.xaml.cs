@@ -12,8 +12,7 @@ namespace NSEC.Music_Player.Views.Tabs
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ArtistsTab : ContentPage, IAsyncEndListener
     {
-
-        ArtistsTabModel model;
+        readonly ArtistsTabModel model;
 
         public event EventHandler AsyncEnded;
 
@@ -55,14 +54,13 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             //File.AppendAllText(App.debugPath + "/debugAutorsTab.txt", "Count = " + Global.Audios.Count + "\n");
             await Helpers.LoadArtistsOnce(this, model);
-            this.model.LoadItemsCommand.Execute(this);
+            model.LoadItemsCommand.Execute(this);
         }
 
         private async void OnAuthorSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            Track item = AuthorListView.SelectedItem as Track;
             //Console.WriteLine("OnAuthorSelected: " + (item == null));
-            if (item == null)
+            if (!(AuthorListView.SelectedItem is Track item))
                 return;
 
             for (int a = 0; a < model.Items.Count; a++)

@@ -20,15 +20,18 @@ namespace NSEC.Music_Player.Logic
 
         public static Container GetMeta(string filePath)
         {
-            Container container = new Container();
-            container.FilePath = filePath;
-            
+            Container container = new Container
+            {
+                FilePath = filePath
+            };
+
             try
             {
                 TagLib.File audioFile = TagLib.File.Create(filePath);
                 Console.WriteLine("Title: [" + audioFile.Tag.Title + "][" + new FileInfo(filePath).Name + "]");
                 container.Title = audioFile.Tag.Title == "" || audioFile.Tag.Title == null ? new FileInfo(filePath).Name : audioFile.Tag.Title;
                 Console.WriteLine(container.Title);
+                
                 container.Album = audioFile.Tag.Album;
                 string artistsJoin = string.Join(", ", audioFile.Tag.Performers);
                 container.Artist = artistsJoin == "" ? "Nieznany" : artistsJoin;

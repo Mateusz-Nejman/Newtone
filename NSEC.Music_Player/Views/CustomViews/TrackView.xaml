@@ -10,14 +10,9 @@
             <Frame HasShadow="False"
                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=0,Constant=96}"
                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=0,Constant=96}"  CornerRadius="16" Padding="0" x:Name="frame">
-                <Grid BackgroundColor="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <Image Source="emptyTrack.png" 
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
+                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}"/>
             </Frame>
             <Label x:Name="trackLabel" TextColor="White" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=96}"
                                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=0,Constant=96}"

@@ -19,7 +19,7 @@ namespace NSEC.Music_Player.Views
             InitializeComponent();
             Title = artist;
 
-            this.Appearing += TracksTab_Appearing;
+            Appearing += TracksTab_Appearing;
             MenuItems = new ObservableCollection<Track>();
 
             List<Track> tracksBeforeSort = new List<Track>();

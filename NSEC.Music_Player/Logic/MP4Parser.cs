@@ -79,7 +79,6 @@ namespace NSEC.Music_Player.Logic
             // for copying each sample and stop when we get to the end of the source
             // file or exceed the end time of the trimming.
             int offset = 0;
-            int trackIndex = -1;
             ByteBuffer dstBuf = ByteBuffer.Allocate(bufferSize);
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             muxer.Start();
@@ -104,7 +103,7 @@ namespace NSEC.Music_Player.Logic
                     else
                     {
                         bufferInfo.Flags = (MediaCodecBufferFlags)extractor.SampleFlags;
-                        trackIndex = extractor.SampleTrackIndex;
+                        int trackIndex = extractor.SampleTrackIndex;
                         muxer.WriteSampleData(indexMap[trackIndex], dstBuf, bufferInfo);
                         extractor.Advance();
                     }

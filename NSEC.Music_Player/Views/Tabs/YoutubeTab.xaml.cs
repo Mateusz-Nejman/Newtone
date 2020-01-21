@@ -14,17 +14,19 @@ namespace NSEC.Music_Player.Views.Tabs
     public partial class YoutubeTab : ContentPage
     {
         private string currentUrl = "";
-        private FormsWebView WebView;
+        private readonly FormsWebView WebView;
         public YoutubeTab()
         {
             InitializeComponent();
 
-            WebView = new FormsWebView();
-            WebView.BaseUrl = "https://youtube.com";
-            WebView.Source = "https://youtube.com";
+            WebView = new FormsWebView
+            {
+                BaseUrl = "https://youtube.com",
+                Source = "https://youtube.com"
+            };
             WebView.OnNavigationStarted += WebView_OnNavigationStarted;
             webViewGrid.Children.Add(WebView);
-            this.Appearing += YoutubePage_Appearing;
+            Appearing += YoutubePage_Appearing;
         }
 
         private void YoutubePage_Appearing(object sender, EventArgs e)
@@ -44,27 +46,32 @@ namespace NSEC.Music_Player.Views.Tabs
 
         }
 
-        private async void youtubeButton_Clicked(object sender, EventArgs e)
+        private async void YoutubeButton_Clicked(object sender, EventArgs e)
         {
             //youtubeButton.Text = "Downloading";
             youtubeButton.IsEnabled = false;
             await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel);
         }
 
-        private void youtubeWebview_Navigating(object sender, WebNavigatingEventArgs e)
+        private void YoutubeWebview_Navigating(object sender, WebNavigatingEventArgs e)
         {
             Console.WriteLine("Change url to " + e.Url);
-            currentUrl = e.Url;
+            if (!e.Url.Contains("youtube.com"))
+                e.Cancel = true;
+            else
+                currentUrl = e.Url;
+            
+            
 
         }
 
-        private void youtubeWebview_Navigated(object sender, WebNavigatedEventArgs e)
+        private void YoutubeWebview_Navigated(object sender, WebNavigatedEventArgs e)
         {
             Console.WriteLine("Change navigated url to " + e.Url);
             currentUrl = e.Url;
         }
 
-        private void prevButton_Clicked(object sender, EventArgs e)
+        private void PrevButton_Clicked(object sender, EventArgs e)
         {
             if (WebView.CanGoBack)
                 WebView.GoBack();

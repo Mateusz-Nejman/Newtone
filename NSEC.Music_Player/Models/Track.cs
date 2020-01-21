@@ -5,15 +5,17 @@ using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
 {
-    public class Track : Item, INotifyPropertyChanged
+    public class Track : INotifyPropertyChanged
     {
-        Color backgroundColor = Color.Transparent;
-        Color backgroundColorSelected = Color.FromHex("#2f4459");
-        Color textColor = Color.White;
-        Color textColorSelected = Color.FromHex("#EF6C00");
+        readonly Color backgroundColor = Color.Transparent;
+        readonly Color backgroundColorSelected = Color.FromHex("#2f4459");
+        readonly Color textColor = Color.White;
+        readonly Color textColorSelected = Color.FromHex("#EF6C00");
 
         Color labelColor = Color.White;
         Color backColor = Color.Transparent;
+
+        public string Id { get; set; }
         public Color LabelColor
         {
             set

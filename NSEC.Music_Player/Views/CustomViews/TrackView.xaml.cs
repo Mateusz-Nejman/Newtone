@@ -14,18 +14,6 @@ namespace NSEC.Music_Player.Views.CustomViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TrackView : ContentView
     {
-        private string Title
-        {
-            get
-            {
-                return trackLabel.Text;
-            }
-            set
-            {
-                trackLabel.Text = value;
-            }
-        }
-
         private Track track;
         private string filePath;
         public string FilePath
@@ -43,7 +31,7 @@ namespace NSEC.Music_Player.Views.CustomViews
                     
                 };
                 track.Id = track.Container.Artist + track.Container.Title;
-                Title = track.Container.Title;
+                trackLabel.Text = track.Container.Title;
                 
             }
         }

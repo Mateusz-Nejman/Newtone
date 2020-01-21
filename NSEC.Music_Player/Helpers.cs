@@ -201,7 +201,6 @@ namespace NSEC.Music_Player
 
         public static void AddToCounter(string filepath, int count)
         {
-
             List<TrackCounter> tracks = new List<TrackCounter>(Global.MostTracks);
             int index = tracks.FindIndex(o => o.Track == filepath);
 
