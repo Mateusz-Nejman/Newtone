@@ -46,7 +46,7 @@ namespace NSEC.Music_Player.Models
 
         public string Tag { get; set; }
 
-        public MP3Processing.Container Container { get; set; }
+        public MediaProcessing.MediaTag Container { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

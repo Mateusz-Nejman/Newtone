@@ -1,8 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 
@@ -10,6 +19,7 @@ namespace NSEC.Music_Player.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public ObservableCollection<Track> Items { get; set; }
         private IDataStore<Track> dataStore;
         public IDataStore<Track> DataStore
         {
@@ -31,13 +41,6 @@ namespace NSEC.Music_Player.ViewModels
         {
             get { return isBusy; }
             set { SetProperty(ref isBusy, value); }
-        }
-
-        string title = string.Empty;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,

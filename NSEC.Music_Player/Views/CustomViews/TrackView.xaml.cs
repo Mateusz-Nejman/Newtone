@@ -27,7 +27,7 @@ namespace NSEC.Music_Player.Views.CustomViews
                 filePath = value;
                 track = new Track
                 {
-                    Container = MP3Processing.GetMeta(filePath),
+                    Container = Global.Audios[filePath],
                     
                 };
                 track.Id = track.Container.Artist + track.Container.Title;

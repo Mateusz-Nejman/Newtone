@@ -5,6 +5,7 @@ using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -50,7 +51,7 @@ namespace NSEC.Music_Player.Views
                     modeButton.ImageSource = ImageSource.FromFile("randomIcon");
             }
         }
-        private MP3Processing.Container TrackContainer { get; set; }
+        private MediaProcessing.MediaTag TrackContainer { get; set; }
 
         public PlayerPage(Track track, List<Track> playlist, int playlistPosition)
         {
@@ -70,9 +71,10 @@ namespace NSEC.Music_Player.Views
             Global.CurrentTrack = TrackContainer;
             this.Appearing += PlayerPage_Appearing;
 
-
+            
             if (track.Id == Global.AudioPlayerTrack)
             {
+                Console.WriteLine("PlayerPage the same");
                 BindPlayerControls();
                 Start = UpdatePosition();
                 Start = Global.MediaPlayer.IsPlaying;
@@ -88,10 +90,15 @@ namespace NSEC.Music_Player.Views
                 Helpers.AddToLast(track.Container.FilePath);
                 BindPlayerControls();
 
-                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath),track.Container.FilePath);
                 Play();
                 Start = true;
                 Global.LastPlayerClick = Start;
+            }
+
+            if(track.Container.Picture != null)
+            {
+                trackImage.Source = ImageSource.FromStream(() => new MemoryStream(track.Container.Picture));
             }
 
 
@@ -176,23 +183,16 @@ namespace NSEC.Music_Player.Views
 
         private void Next()
         {
-            Global.CurrentPlaylistPosition += 1;
-
-            if (Global.CurrentPlaylistPosition == Global.CurrentPlaylist.Count)
-                Global.CurrentPlaylistPosition = 0;
-
-            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-            TrackContainer = track.Container;
-
-            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
-            
-            Global.AudioPlayerTrack = track.Id;
-            Global.CurrentTrack = track.Container;
-            titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Artist;
+            Next();
+            if(Global.CurrentTrack != null)
+            {
+                
+                TrackContainer = Global.CurrentTrack;
+                Global.AudioPlayerTrack = TrackContainer.FilePath;
+                titleLabel.Text = TrackContainer.Title;
+                artistLabel.Text = TrackContainer.Artist;
+            }
             SetSliderPosition(0);
-            if (Global.LastPlayerClick)
-                Play();
         }
 
         private void Prev()
@@ -200,11 +200,11 @@ namespace NSEC.Music_Player.Views
             Global.CurrentPlaylistPosition -= 1;
 
             if (Global.CurrentPlaylistPosition == -1)
-                Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count;
+                Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count-1;
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             TrackContainer = track.Container;
-            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath));
+            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath),track.Container.FilePath);
             Global.CurrentTrack = track.Container;
             Global.AudioPlayerTrack = track.Id;
             titleLabel.Text = TrackContainer.Title;

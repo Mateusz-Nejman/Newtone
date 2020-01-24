@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resources="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.PermissionPage" BackgroundImageSource="background.png" Visual="Material">
     <ContentPage.Content>
@@ -13,7 +14,7 @@
                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1.0}">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                     <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                        <Image Source="musicPlayerLogo.png" VerticalOptions="Center" HeightRequest="64" />
+                        <Image Source="musicPlayerLogoTest.png" VerticalOptions="Center" HeightRequest="64" />
                     </ContentView>
                 </StackLayout>
             </StackLayout>
@@ -24,12 +25,12 @@
                         <Label.FormattedText>
                             <FormattedString>
                                 <FormattedString.Spans>
-                                    <Span Text="Ta Aplikacja wymaga pewnych uprawnień. Kliknij przycisk poniżej, aby je przyznać." FontAttributes="Bold" FontSize="16" />
+                                    <Span Text="{x:Static resources:Localization.PermissionsInfo}" FontAttributes="Bold" FontSize="16" />
                                 </FormattedString.Spans>
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <Button Margin="0,10,0,0" Text="Przyznaj"
+                    <Button Margin="0,10,0,0" Text="{x:Static resources:Localization.PermissionsGrant}"
                         Clicked="Button_Clicked"
                         BackgroundColor="Transparent"
                             BorderColor="Black"

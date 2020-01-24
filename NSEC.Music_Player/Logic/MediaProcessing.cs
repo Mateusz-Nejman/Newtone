@@ -1,39 +1,89 @@
-﻿using Android.Media;
-using Java.Nio;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.Media;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Java.Nio;
+using NSEC.Music_Player.Languages;
 
 namespace NSEC.Music_Player.Logic
 {
-    public class MP4Parser
+    public class MediaProcessing
     {
         private const int DEFAULT_BUFFER_SIZE = 1 * 1024 * 1024;
-        public void ToMP3(string input, string output)
+        public static MediaTag GetTags(string filePath)
         {
-            //genVideoUsingMuxer(videoFile, originalAudio, -1, -1, true, false);
-            Parse(input, output, -1, -1, true, false);
+            MediaTag container = new MediaTag
+            {
+                FilePath = filePath
+            };
+
+            try
+            {
+                using TagLib.File audioFile = TagLib.File.Create(filePath);
+                container.Title = audioFile.Tag.Title == "" || audioFile.Tag.Title == null ? new FileInfo(filePath).Name : audioFile.Tag.Title;
+                Console.WriteLine(container.Title);
+
+                container.Album = audioFile.Tag.Album;
+                string artistsJoin = string.Join(", ", audioFile.Tag.Performers);
+                container.Artist = artistsJoin == "" ? Localization.UnknownArtist : artistsJoin;
+
+                for (int a = 0; a < audioFile.Tag.Pictures.Length; a++)
+                {
+                    if (audioFile.Tag.Pictures[a] != null && audioFile.Tag.Pictures[a].Data.Data.Length > 0)
+                    {
+                        container.Picture = audioFile.Tag.Pictures[a].Data.Data;
+                        break;
+                    }
+                }
+
+            }
+            catch
+            {
+                container.Title = new FileInfo(filePath).Name;
+                container.Artist = Localization.UnknownArtist;
+            }
+            return container;
         }
 
-        private void Parse(string srcPath, string dstPath, int startMs, int endMs, bool useAudio, bool useVideo)
+        public static MediaOutputType GetAudio(string input, string output)
         {
+            return Parse(input, output, -1, -1, true, false);
+        }
+
+        private static MediaOutputType Parse(string srcPath, string dstPath, int startMs, int endMs, bool useAudio, bool useVideo)
+        {
+            MediaOutputType outputType = MediaOutputType.mp4;
             // Set up MediaExtractor to read from the source.
-            MediaExtractor extractor = new MediaExtractor();
+            using MediaExtractor extractor = new MediaExtractor();
+            using MediaMuxer muxer = new MediaMuxer(dstPath, MuxerOutputType.Mpeg4);
             extractor.SetDataSource(srcPath);
             int trackCount = extractor.TrackCount;
             // Set up MediaMuxer for the destination.
-            MediaMuxer muxer;
-            muxer = new MediaMuxer(dstPath, MuxerOutputType.Mpeg4);
             // Set up the tracks and retrieve the max buffer size for selected
             // tracks.
             Dictionary<int, int> indexMap = new Dictionary<int, int>(trackCount);
             int bufferSize = -1;
             for (int i = 0; i < trackCount; i++)
             {
-                MediaFormat format = extractor.GetTrackFormat(i);
+                using MediaFormat format = extractor.GetTrackFormat(i);
                 string mime = format.GetString(MediaFormat.KeyMime);
                 bool selectCurrentTrack = false;
                 if (mime.StartsWith("audio/") && useAudio)
                 {
+                    Console.WriteLine("MP4Parser: " + mime);
+                    if (mime == MediaFormat.MimetypeAudioAac)
+                        outputType = MediaOutputType.m4a;
+                    else if (mime == MediaFormat.MimetypeAudioMpeg)
+                        outputType = MediaOutputType.mp3;
                     selectCurrentTrack = true;
                 }
                 else if (mime.StartsWith("video/") && useVideo)
@@ -54,23 +104,14 @@ namespace NSEC.Music_Player.Logic
                         bufferSize = newSize > bufferSize ? newSize : bufferSize;
                     }
                 }
+
             }
             if (bufferSize < 0)
             {
                 bufferSize = DEFAULT_BUFFER_SIZE;
             }
             // Set up the orientation and starting time for extractor.
-            MediaMetadataRetriever retrieverSrc = new MediaMetadataRetriever();
-            retrieverSrc.SetDataSource(srcPath);
-            string degreesString = retrieverSrc.ExtractMetadata(MetadataKey.VideoRotation);
-            if (degreesString != null)
-            {
-                int degrees = int.Parse(degreesString);
-                if (degrees >= 0)
-                {
-                    muxer.SetOrientationHint(degrees);
-                }
-            }
+
             if (startMs > 0)
             {
                 extractor.SeekTo(startMs * 1000, MediaExtractorSeekTo.ClosestSync);
@@ -111,7 +152,35 @@ namespace NSEC.Music_Player.Logic
             }
             muxer.Stop();
             muxer.Release();
-            return;
+            return outputType;
+        }
+        public class MediaOutput
+        {
+            public byte[] Data { get; set; }
+            public MediaOutputType OutputType { get; set; }
+
+            public MediaOutput(byte[] data, MediaOutputType outputType)
+            {
+                Data = data;
+                OutputType = outputType;
+            }
+        }
+
+        [Serializable]
+        public class MediaTag
+        {
+            public string FilePath { get; set; }
+            public string Title { get; set; }
+            public string Artist { get; set; }
+            public string Album { get; set; }
+            public byte[] Picture { get; set; }
+        }
+
+        public enum MediaOutputType
+        {
+            mp4,
+            mp3,
+            m4a
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Graphics.Drawables.Shapes;
 using Android.Support.Design.Widget;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.IO;
@@ -18,8 +19,8 @@ namespace NSEC.Music_Player.Logic
         {
             progressLabel.Text = "Rozpoczynanie pobierania...";
             Console.WriteLine("URL: " + url);
-            if (!Directory.Exists(Global.DataPath))
-                Directory.CreateDirectory(Global.DataPath);
+            if (!Directory.Exists(Global.MusicPath))
+                Directory.CreateDirectory(Global.MusicPath);
             try
             {
                 string id = YoutubeClient.ParseVideoId(url);
@@ -42,31 +43,31 @@ namespace NSEC.Music_Player.Logic
 
                 Progress<double> progress = new Progress<double>(progressValue =>
                 {
-                    progressLabel.Text = "Pobrano " + string.Format("{0:0.00}", progressValue * 100.0) + "%";
+                    progressLabel.Text = Localization.YoutubeDownloading+" " + string.Format("{0:0.00}", progressValue * 100.0) + "%";
                     progressBar.Progress = progressValue;
                 });
 
                 Console.WriteLine("Start download");
-                await client.DownloadMediaStreamAsync(streamInfo, Global.DataPath + "/data.bin", progress);
+                await client.DownloadMediaStreamAsync(streamInfo, Global.MusicPath + "/data.bin", progress);
                 Console.WriteLine("End download");
 
-                progressLabel.Text = "Konwertowanie do MP3...";
+                progressLabel.Text = Localization.YoutubeConvert;
                 progressBar.Progress = 0;
                 await ConvertToMP3(video.Title);
-                if (File.Exists(Global.DataPath + "/data.bin"))
-                    File.Delete(Global.DataPath + "/data.bin");
+                if (File.Exists(Global.MusicPath + "/data.bin"))
+                    File.Delete(Global.MusicPath + "/data.bin");
 
-                MP3Processing.Container container = MP3Processing.GetMeta(Global.DataPath + "/" + video.Title + ".mp3");
+                MediaProcessing.MediaTag container = MediaProcessing.GetTags(Global.MusicPath + "/" + video.Title + ".mp3");
                 Helpers.AddTrack(container);
-                SnackbarBuilder.Show("Gotowe");
-                progressLabel.Text = "Gotowe";
+                SnackbarBuilder.Show(Localization.YoutubeReady);
+                progressLabel.Text = Localization.YoutubeReady;
                 //File.WriteAllBytes(Global.DataPath+"/data.bin", video.GetBytes());
             }
             catch (Exception e)
             {
                 Console.WriteLine("YoutubeProcessing.cs -> " + e);
-                SnackbarBuilder.Show("Film posiada blokadę lub jest niedostępny");
-                progressLabel.Text = "Film posiada blokadę lub jest niedostępny";
+                SnackbarBuilder.Show(Localization.YoutubeError);
+                progressLabel.Text = Localization.YoutubeError;
             }
 
 
@@ -81,8 +82,12 @@ namespace NSEC.Music_Player.Logic
             //await conversion.Start();
 
             await Task.Run(() => {
-                MP4Parser parser = new MP4Parser();
-                parser.ToMP3(Global.DataPath + "/data.bin", Global.DataPath + "/" + name + ".mp3");
+                var outputType = MediaProcessing.GetAudio(Global.MusicPath + "/data.bin", Global.MusicPath + "/" + name);
+            if (outputType == MediaProcessing.MediaOutputType.mp3)
+                    File.Copy(Global.MusicPath + "/" + name, Global.MusicPath + "/" + name + ".mp3", true);
+            else if(outputType == MediaProcessing.MediaOutputType.m4a)
+                    File.Copy(Global.MusicPath + "/" + name, Global.MusicPath + "/" + name + ".m4a", true);
+                File.Delete(Global.MusicPath + "/" + name);
             });
         }
     }

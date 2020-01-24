@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Support.Design.Widget;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.CustomViews;
 using System;
@@ -20,27 +21,32 @@ namespace NSEC.Music_Player.Logic
         private static Page View { get; set; }
         private static bool Playlist { get; set; }
         private static string PlaylistName { get; set; }
+        
         public static void Process(object sender,ObservableCollection<Track> items, Page view)
         {
             Process(sender, items, view, false,"");
         }
 
+        public static Track GetTrack(string filepath)
+        {
+            MediaProcessing.MediaTag container = Global.Audios[filepath];
+            return new Track()
+            {
+                Container = container,
+                Id = container.FilePath
+            };
+        }
         public static void Process(object sender,ObservableCollection<Track> items,Page view, bool playlist, string playlistName)
         {
-            ObservableCollection<string> menuItems = new ObservableCollection<string>();
             CustomButton button = (CustomButton)sender;
             Console.WriteLine("BUTTON TAG: " + button.Tag);
-
-            menuItems.Add("Dodaj do kolejki");
-            menuItems.Add("Dodaj do playlisty");
-            menuItems.Add("Usuń");
 
             CurrentTag = button.Tag;
             Items = items;
             View = view;
             Playlist = playlist;
             PlaylistName = playlistName;
-            PopupMenu menu = new PopupMenu(Global.Context,(View)sender,"Dodaj do kolejki","Dodaj do playlisty","Usuń");
+            PopupMenu menu = new PopupMenu(Global.Context,(View)sender,Localization.TrackMenuQueue,Localization.TrackMenuPlaylist,Localization.TrackMenuDelete);
             menu.OnSelect += Menu_OnItemSelected;
 
             menu.Show();
@@ -51,9 +57,9 @@ namespace NSEC.Music_Player.Logic
             Console.WriteLine(CurrentTag);
             Console.WriteLine(item);
             Track track = Helpers.FindTrackByTag(Items, CurrentTag);
-            if (item == "Usuń")
+            if (item == Localization.TrackMenuDelete)
             {
-                bool answer = await View.DisplayAlert("Pytanko", "Usunąć plik " + track.Text + (Playlist ? " z playlisty?" : "?"), "Tak", "Nie");
+                bool answer = await View.DisplayAlert(Localization.Question, Localization.QuestionDelete + " " + track.Text + (Playlist ? " "+Localization.QuestionDeleteFromPlaylist+"?" : "?"), Localization.Yes, Localization.No);
                 if (answer)
                 {
                     if(!Playlist)
@@ -80,27 +86,30 @@ namespace NSEC.Music_Player.Logic
                             }
                         }
                     }
+
+                    if (Global.Audios.ContainsKey(track.Container.FilePath))
+                        Global.Audios.Remove(track.Container.FilePath);
                     
 
                     Global.SaveConfig();
-                    SnackbarBuilder.Show("Usunięto");
+                    SnackbarBuilder.Show(Localization.SnackDelete);
                 }
             }
-            else if (item == "Dodaj do playlisty")
+            else if (item == Localization.TrackMenuPlaylist)
             {
                 List<string> positions = new List<string>
                 {
-                    "Nowa playlista"
+                    Localization.NewPlaylist
                 };
                 foreach (string playlist in Global.Playlists.Keys)
                     positions.Add(playlist);
 
-                string answer = await View.DisplayActionSheet("Wybierz playlistę", "Anuluj", null, positions.ToArray());
+                string answer = await View.DisplayActionSheet(Localization.ChoosePlaylist, Localization.Cancel, null, positions.ToArray());
                 Console.WriteLine("ANSWER " + answer);
 
-                if (answer == "Nowa playlista")
+                if (answer == Localization.NewPlaylist)
                 {
-                    string playlistName = await View.DisplayPromptAsync("Nowa playlista", "Wprowadź nazwę playlisty", "Dodaj", "Anuluj", "Playlista");
+                    string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist);
 
                     if (!string.IsNullOrEmpty(playlistName))
                     {
@@ -111,7 +120,7 @@ namespace NSEC.Music_Player.Logic
 
                         Global.SaveConfig();
 
-                        SnackbarBuilder.Show("Dodano do nowej playlisty");
+                        SnackbarBuilder.Show(Localization.SnackPlaylist);
                     }
                 }
                 else if (Global.Playlists.ContainsKey(answer))
@@ -130,15 +139,17 @@ namespace NSEC.Music_Player.Logic
                         Global.Playlists[answer].Add(track);
                     Global.SaveConfig();
 
-                    SnackbarBuilder.Show("Dodano do playlisty");
+                    SnackbarBuilder.Show(Localization.SnackPlaylist);
                 }
             }
-            else if(item == "Dodaj do kolejki")
+            else if(item == Localization.TrackMenuQueue)
             {
+                if (Global.CurrentQueue.Count == 0)
+                    Global.CurrentQueuePosition = -1;
                 if (!Global.CurrentQueue.Contains(track))
                     Global.CurrentQueue.Add(track);
 
-                SnackbarBuilder.Show("Dodano do kolejki");
+                SnackbarBuilder.Show(Localization.SnackQueue);
             }
         }
     }

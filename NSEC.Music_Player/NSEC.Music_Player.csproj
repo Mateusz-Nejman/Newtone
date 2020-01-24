@@ -91,8 +91,7 @@
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
     <Compile Include="Logic\FileProcessing.cs" />
-    <Compile Include="Logic\MP3Processing.cs" />
-    <Compile Include="Logic\MP4Parser.cs" />
+    <Compile Include="Logic\MediaProcessing.cs" />
     <Compile Include="Logic\TickParser.cs" />
     <Compile Include="Logic\TrackProcessing.cs" />
     <Compile Include="Logic\YourubeProcessing.cs" />
@@ -108,8 +107,6 @@
     <Compile Include="Services\DefaultDataStore.cs" />
     <Compile Include="Services\IAsyncEndListener.cs" />
     <Compile Include="Services\IDataStore.cs" />
-    <Compile Include="TranslateExtension.cs" />
-    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Tabs\ArtistsTabModel.cs" />
     <Compile Include="ViewModels\Tabs\PlaylistsTabModel.cs" />
@@ -131,6 +128,9 @@
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PermissionMainPage.xaml.cs">
+      <DependentUpon>PermissionMainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerPage.xaml.cs">
       <DependentUpon>PlayerPage.xaml</DependentUpon>
@@ -220,10 +220,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Languages\Localization.en.resx" />
     <EmbeddedResource Include="Languages\Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Localization.ru.resx" />
     <EmbeddedResource Include="Views\ArtistPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -358,6 +360,26 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\repeatOneIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\stopIcon.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\musicPlayerLogoTest.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\splashLogoTest.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\PermissionMainPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

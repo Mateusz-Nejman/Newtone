@@ -27,6 +27,7 @@ namespace NSEC.Music_Player.Views.CustomViews
 
         private async void Label_Tapped(object sender, EventArgs e)
         {
+            Console.WriteLine($"PlayerPanel " + Global.CurrentPlaylistPosition);
             await Navigation.PushAsync(new PlayerPage(Global.CurrentPlaylist[Global.CurrentPlaylistPosition], Global.CurrentPlaylist, Global.CurrentPlaylistPosition));
         }
 

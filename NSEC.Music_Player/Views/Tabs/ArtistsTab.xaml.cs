@@ -20,6 +20,7 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             InitializeComponent();
             this.Appearing += AuthorsTab_Appearing;
+            this.LayoutChanged += ArtistsTab_LayoutChanged;
 
             BindingContext = model = new ArtistsTabModel();
             Global.asyncEndController.Add("authorstab", this);
@@ -42,6 +43,12 @@ namespace NSEC.Music_Player.Views.Tabs
             AsyncEnded += AuthorsTab_AsyncEnded;
             Task.Run(() => AuthorsTab_AsyncEnded(this, null));
 
+        }
+
+        private async void ArtistsTab_LayoutChanged(object sender, EventArgs e)
+        {
+            playerPanel.Refresh();
+            await Helpers.ReloadArtists(this, model);
         }
 
         private async void AuthorsTab_Appearing(object sender, EventArgs e)

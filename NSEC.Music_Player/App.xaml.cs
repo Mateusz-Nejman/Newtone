@@ -7,6 +7,7 @@ using Android.Content;
 using Android.Support.V4.App;
 using Android;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace NSEC.Music_Player
 {
@@ -21,15 +22,15 @@ namespace NSEC.Music_Player
             Global.Directories = directories;
             Global.MediaPlayer = new Media.CustomMediaPlayer();
             DependencyService.Register<DefaultDataStore>();
-            if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
+            if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(Global.DataPath+"/data.nsec2"))
             {
                 MainPage = new MainPage(new LobbyPage());
-                Global.LoadConfig();
                 
             }
             else
             {
-                MainPage = new MainPage(new PermissionPage());
+                MainPage = new PermissionMainPage(new PermissionPage());
+                
             }
             
             
@@ -38,18 +39,6 @@ namespace NSEC.Music_Player
         public void OnCreate()
         {
             
-            OnStart();
-        }
-
-        protected override void OnStart()
-        {
-            if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
-            {
-                //base.OnStart();
-                Console.WriteLine("App OnStart()");
-                Task.Run(async () => { await Helpers.LoadGlobalsOnce(); }).Wait();
-                
-            }
         }
 
         protected override void OnSleep()

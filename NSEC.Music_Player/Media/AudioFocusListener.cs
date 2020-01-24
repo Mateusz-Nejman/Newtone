@@ -22,14 +22,17 @@ namespace NSEC.Music_Player.Media
             ///TODO
             Console.WriteLine("OnAudioFocusChange " + focusChange.ToString());
 
-            if (focusChange == AudioFocus.Loss)
-                Global.MediaPlayer.Stop();
+            if(Global.MediaPlayer != null)
+            {
+                if (focusChange == AudioFocus.Loss)
+                    Global.MediaPlayer.Stop();
 
-            if (focusChange == AudioFocus.LossTransient)
-                Global.MediaPlayer.SetVolume(0.1f);
+                if (focusChange == AudioFocus.LossTransient)
+                    Global.MediaPlayer.SetVolume(0.1f);
 
-            if (focusChange > 0)
-                Global.MediaPlayer.SetVolume(1f);
+                if (focusChange > 0)
+                    Global.MediaPlayer.SetVolume(1f);
+            }
         }
     }
 }

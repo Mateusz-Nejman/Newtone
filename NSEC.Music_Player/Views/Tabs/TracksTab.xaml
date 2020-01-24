@@ -5,9 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NSEC.Music_Player.ViewModels.Tabs"
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             xmlns:resources="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Tabs.TracksTab"
-             Title="{Binding Title}" Visual="Default">
+             Title="{x:Static resources:Localization.TitleTracks}" Visual="Default">
     <ContentPage.BindingContext>
         <vm:TracksTabModel/>
     </ContentPage.BindingContext>

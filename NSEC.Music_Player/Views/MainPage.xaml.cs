@@ -15,7 +15,7 @@ namespace NSEC.Music_Player.Views
     public partial class MainPage : NavigationPage
     {
         public static MainPage Instance { get; set; }
-        public static List<MP3Processing.Container> containers = new List<MP3Processing.Container>();
+        public static List<MediaProcessing.MediaTag> containers = new List<MediaProcessing.MediaTag>();
         public MainPage(Page page)
         {
             InitializeComponent();
@@ -28,9 +28,11 @@ namespace NSEC.Music_Player.Views
 
         }
 
-        private void MainPage_Appearing(object sender, EventArgs e)
+        private async void MainPage_Appearing(object sender, EventArgs e)
         {
             base.OnAppearing();
+            await Helpers.LoadGlobalsOnce();
+            Global.LoadConfig();
         }
     }
 }

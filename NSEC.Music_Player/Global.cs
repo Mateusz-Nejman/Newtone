@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.OS;
 using Android.Support.V4.App;
 using Nejman.NSEC2;
 using NSEC.Music_Player.Logic;
@@ -34,13 +35,14 @@ namespace NSEC.Music_Player
         /*
          * Track Containers
          */
-        public static Dictionary<string, List<MP3Processing.Container>> Audios { get; set; }
+        public static Dictionary<string, MediaProcessing.MediaTag> Audios { get; set; }
+        public static Dictionary<string, List<string>> Authors { get; set; }
         public static string AudioPlayerTrack { get; set; }
         public static List<Track> CurrentPlaylist { get; set; }
         public static int CurrentPlaylistPosition { get; set; }
         public static int CurrentQueuePosition { get; set; }
         public static List<Track> CurrentQueue { get; set; }
-        public static MP3Processing.Container CurrentTrack { get; set; }
+        public static MediaProcessing.MediaTag CurrentTrack { get; set; }
         public static Dictionary<string, List<Track>> Playlists { get; set; }
         public static TrackCounter[] LastTracks { get; set; }
         public static TrackCounter[] MostTracks { get; set; }
@@ -51,9 +53,12 @@ namespace NSEC.Music_Player
         public static PlayerMode PlayerMode { get; set; }
         public static bool LastPlayerClick { get; set; }
         public static string DataPath { get; set; }
+        public static string MusicPath { get; set; }
         public static string[] Directories { get; set; }
         public static MainActivity Context { get; set; }
         public static NotificationManager NotificationManager { get; set; }
+        public static PowerManager PowerManager { get; set; }
+        public static PowerManager.WakeLock WakeLock { get; set; }
         /*
          * Global app controllers
          */
@@ -61,42 +66,12 @@ namespace NSEC.Music_Player
 
         public static void LoadConfig()
         {
-            if(File.Exists(DataPath+"/config.nsec2"))
+            if(File.Exists(DataPath+"/data.nsec2"))
             {
                 NSEC2 nsec = new NSEC2(password);
-                FileStream fileStream = File.OpenRead(DataPath + "/config.nsec2");
+                FileStream fileStream = File.OpenRead(DataPath + "/data.nsec2");
                 nsec.Load(fileStream);
                 BinaryFormatter bf = new BinaryFormatter();
-                byte[] containerData = nsec.Get("config");
-                ConfigContainer configContainer = (ConfigContainer)bf.Deserialize(new MemoryStream(containerData));
-                CurrentTrack = configContainer.Container;
-                
-
-                if(File.Exists(CurrentTrack.FilePath))
-                {
-                    CurrentPlaylistPosition = configContainer.Position;
-
-                    CurrentPlaylist = new List<Track>
-                    {
-                        new Track()
-                        {
-                            Text = (string)configContainer.Track[0],
-                            Description = (string)configContainer.Track[1],
-                            Tag = (string)configContainer.Track[2],
-                            Container = (MP3Processing.Container)configContainer.Track[3],
-                            Id = (string)configContainer.Track[4]
-                        }
-                    };
-                    CurrentPlaylistPosition = 0;
-
-                    AudioPlayerTrack = CurrentPlaylist[0].Id;
-                    if (MediaPlayer != null)
-                        MediaPlayer.Stop();
-                    MediaPlayer.Load(FileProcessing.GetStreamFromFile(configContainer.Container.FilePath));
-                    AudioPlayerTrack = CurrentPlaylist[0].Id;
-                }
-                
-
                 if(nsec.Exists("playlists"))
                 {
                     byte[] playlistsData = nsec.Get("playlists");
@@ -110,7 +85,7 @@ namespace NSEC.Music_Player
 
                         foreach(object[] playlistTrack in playlist)
                         {
-                            MP3Processing.Container trackContainer = (MP3Processing.Container)playlistTrack[3];
+                            MediaProcessing.MediaTag trackContainer = (MediaProcessing.MediaTag)playlistTrack[3];
                             Console.WriteLine("Global.LoadConfig load "+trackContainer.FilePath+" -> "+File.Exists(trackContainer.FilePath));
 
                             if(File.Exists(trackContainer.FilePath))
@@ -166,6 +141,43 @@ namespace NSEC.Music_Player
                     PlayerMode = (PlayerMode)playerMode;
                 }
 
+                int cpp = 0;
+
+                if(nsec.Exists("currentPlaylistPosition"))
+                {
+                    byte[] currentPlaylistPositionData = nsec.Get("currentPlaylistPosition");
+                    string cpps = Encoding.ASCII.GetString(currentPlaylistPositionData);
+                    cpp = int.Parse(cpps);
+                    Console.WriteLine("LoadConfig cpp " + cpp);
+                }
+
+                if(nsec.Exists("currentPlaylist"))
+                {
+                    byte[] currentPlaylistData = nsec.Get("currentPlaylist");
+                    string[] files = Encoding.UTF8.GetString(currentPlaylistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
+                    CurrentPlaylist = new List<Track>();
+
+                    if (cpp >= files.Length)
+                        cpp = -1;
+                    else
+                    {
+                        if(Audios.ContainsKey(files[cpp]))
+                        {
+                            CurrentPlaylistPosition = cpp;
+                            CurrentTrack = Audios[files[cpp]];
+                            AudioPlayerTrack = CurrentTrack.FilePath;
+                            MediaPlayer.Load(FileProcessing.GetStreamFromFile(files[cpp]), files[cpp]);
+                        }
+                    }
+                    for(int a = 0; a < files.Length; a++)
+                    {
+                        Console.WriteLine($"LoadConfig {a}. {files[a]}");
+                        if (File.Exists(files[a]))
+                        {
+                            CurrentPlaylist.Add(TrackProcessing.GetTrack(files[a]));
+                        }
+                    }
+                }
             }
         }
 
@@ -173,22 +185,9 @@ namespace NSEC.Music_Player
         {
             NSEC2 nsec = new NSEC2(password);
             nsec.SetDebug(false);
-
-            object[] track = CurrentPlaylist?[CurrentPlaylistPosition].Serialize();
-
-            ConfigContainer configContainer = new ConfigContainer() {
-                Container = CurrentTrack,
-                Track = track,
-                Position = CurrentPlaylistPosition
-            };
-            BinaryFormatter bf = new BinaryFormatter();
-
             MemoryStream memoryStream = new MemoryStream();
-            bf.Serialize(memoryStream, configContainer);
-            byte[] containerData = memoryStream.ToArray();
-            nsec.AddFile("config", containerData);
-
-            memoryStream = new MemoryStream();
+            BinaryFormatter bf = new BinaryFormatter();
+            
 
             Dictionary<string, List<object[]>> playlists = new Dictionary<string, List<object[]>>();
             foreach (string playlistName in Playlists.Keys)
@@ -222,49 +221,25 @@ namespace NSEC.Music_Player
             nsec.AddFile("mostTracks", mostTracksData);
 
             byte[] playerModeData = Encoding.ASCII.GetBytes(((int)PlayerMode).ToString());
-            byte[] languageData = Encoding.ASCII.GetBytes("pl-PL");
+            Console.WriteLine("SaveConfig " + System.Globalization.CultureInfo.CurrentUICulture.Name);
 
             nsec.AddFile("playerMode", playerModeData);
-            nsec.AddFile("language", languageData);
 
-            File.WriteAllBytes(DataPath + "/config.nsec2", nsec.Save());
-        }
+            if(CurrentPlaylist.Count > 0)
+            {
+                byte[] currentPlaylistPositionData = Encoding.ASCII.GetBytes(CurrentPlaylistPosition.ToString());
+                nsec.AddFile("currentPlaylistPosition", currentPlaylistPositionData);
 
-        public static void SetNotification(string title, string desc, bool play)
-        {
-            PendingIntent prevIntentP = PendingIntent.GetBroadcast(Context, 1, new Intent("prev"), PendingIntentFlags.CancelCurrent);
-            PendingIntent playIntentP = PendingIntent.GetBroadcast(Context, 0, new Intent("play"), PendingIntentFlags.Immutable);
-            PendingIntent pauseIntentP = PendingIntent.GetBroadcast(Context, 0, new Intent("pause"), PendingIntentFlags.Immutable);
-            PendingIntent nextIntentP = PendingIntent.GetBroadcast(Context, 0, new Intent("next"), PendingIntentFlags.Immutable);
+                string currentPlaylistString = "";
+                for (int a = 0; a < CurrentPlaylist.Count; a++)
+                {
+                    currentPlaylistString += CurrentPlaylist[a].Container.FilePath + ":";
+                }
 
-            NotificationCompat.Action actionPrev = new NotificationCompat.Action(Resource.Drawable.prevIconNotification, "Prev", prevIntentP);
-            NotificationCompat.Action actionPlay = new NotificationCompat.Action(!play ? Resource.Drawable.playiconNotification : Resource.Drawable.pauseIconNotification, "Play", !play ? playIntentP : pauseIntentP);
-            NotificationCompat.Action actionNext = new NotificationCompat.Action(Resource.Drawable.nextIconNotification, "Next", nextIntentP);
+                nsec.AddFile("currentPlaylist", Encoding.UTF8.GetBytes(currentPlaylistString));
+            }
 
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(Context, "nsec music_player notification").
-                SetContentTitle(title).
-                SetContentText(desc).
-                SetSmallIcon(Resource.Drawable.playIconWhite).
-                AddAction(actionPrev).
-                AddAction(actionPlay).
-                AddAction(actionNext).
-                SetContentIntent(prevIntentP).
-                SetStyle(new MediaStyle()).
-                SetLargeIcon(BitmapFactory.DecodeResource(Context.Resources, Resource.Drawable.emptyTrack)).
-                SetVisibility(NotificationCompat.VisibilityPublic).SetOngoing(true);
-            Notification notification = builder.Build();
-
-            //Instance.StartService(prevIntent);
-            NotificationManager.Notify(0, notification);
-        }
-
-        [Serializable]
-        private class ConfigContainer
-        {
-            public MP3Processing.Container Container { get; set; }
-            public object[] Track { get; set; }
-            public int Position { get; set; }
+            File.WriteAllBytes(DataPath + "/data.nsec2", nsec.Save());
         }
     }
 }

@@ -12,12 +12,9 @@ namespace NSEC.Music_Player.ViewModels.Tabs
 {
     public class TracksTabModel : BaseViewModel
     {
-        public ObservableCollection<Track> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         public TracksTabModel()
         {
-            Title = "Utwory";
-
             Items = new ObservableCollection<Track>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
         }

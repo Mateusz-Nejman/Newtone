@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
@@ -25,6 +26,8 @@ namespace NSEC.Music_Player
         private List<string> folders;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            
+            Console.WriteLine("MainActivity OnCreate");
             base.OnCreate(savedInstanceState);
             Global.Context = this;
             
@@ -34,6 +37,8 @@ namespace NSEC.Music_Player
             intentFilter.AddAction("next");
             intentFilter.AddAction("play");
             intentFilter.AddAction("pause");
+            intentFilter.AddAction("open");
+            intentFilter.AddAction("close");
             RegisterReceiver(customReceiver,intentFilter);
 
             
@@ -63,6 +68,8 @@ namespace NSEC.Music_Player
                     folders.Add(path);
             }
 
+
+            
             LoadApplication(new App(folders.ToArray()));
 
         }
@@ -82,15 +89,77 @@ namespace NSEC.Music_Player
                 Global.MediaPlayer.Prev();
         }
 
+        protected override void OnDestroy()
+        {
+            Console.WriteLine("MainActivity OnDestroy");
+            base.OnDestroy();
+            
+        }
+
+        protected override void OnPause()
+        {
+            Console.WriteLine("MainActivity OnPause");
+            if (!Global.WakeLock.IsHeld)
+                Global.WakeLock.Acquire();
+            base.OnPause();
+        }
+
+        protected override void OnRestart()
+        {
+            Console.WriteLine("MainActivity OnRestart");
+            if (Global.WakeLock.IsHeld)
+                Global.WakeLock.Release();
+            base.OnRestart();
+        }
+
+        protected override void OnResume()
+        {
+            Console.WriteLine("MainActivity OnResume");
+            if(Global.WakeLock.IsHeld)
+                Global.WakeLock.Release();
+            base.OnResume();
+        }
+
+        protected override void OnStart()
+        {
+            Console.WriteLine("MainActivity OnStart");
+            if (Global.WakeLock.IsHeld)
+                Global.WakeLock.Release();
+            base.OnStart();
+        }
+
+        protected override void OnStop()
+        {
+            Console.WriteLine("MainActivity OnStop");
+            if(Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying)
+                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            if (!Global.WakeLock.IsHeld)
+                Global.WakeLock.Acquire();
+
+
+            base.OnStop();
+        }
+
+        public void ForceRestart()
+        {
+            OnStop();
+            OnRestart();
+        }
         private void InitializeGlobalVariables()
         {
-            NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Max);
+            NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Default);
+            notificationChannel.SetSound(null, null);
+            notificationChannel.SetVibrationPattern(new long[0]);
             Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
             Global.NotificationManager.CreateNotificationChannel(notificationChannel);
             Global.AudioManager = (AudioManager)GetSystemService(AudioService);
             AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
             Global.AudioManager.RequestAudioFocus(afrc);
-            Global.Audios = new Dictionary<string, System.Collections.Generic.List<Logic.MP3Processing.Container>>();
+
+            Global.PowerManager = (PowerManager)GetSystemService(PowerService);
+            Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
+            Global.Audios = new Dictionary<string, Logic.MediaProcessing.MediaTag>();
+            Global.Authors = new Dictionary<string, List<string>>();
             Global.CurrentPlaylist = new List<Models.Track>();
             Global.CurrentPlaylistPosition = 0;
             Global.CurrentQueue = new List<Models.Track>();
@@ -98,9 +167,12 @@ namespace NSEC.Music_Player
             Global.LastTracks = new Models.TrackCounter[0];
             Global.MostTracks = new Models.TrackCounter[0];
             Global.Playlists = new Dictionary<string, System.Collections.Generic.List<Models.Track>>();
-            Global.DataPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            Global.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            Global.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             Global.PlayerMode = Models.PlayerMode.All;
             Global.LastPlayerClick = true;
+
+            
         }
     }
 }

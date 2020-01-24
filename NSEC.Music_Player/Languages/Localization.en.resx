@@ -118,123 +118,123 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutAuthor" xml:space="preserve">
-    <value>Autor: Mateusz Nejman</value>
+    <value>Author: Mateusz Nejman</value>
   </data>
   <data name="AboutButton" xml:space="preserve">
-    <value>Strona autora</value>
+    <value>Author page</value>
   </data>
   <data name="AboutText" xml:space="preserve">
-    <value>Aplikacja docelowo będzie dostępna tylko na telefonach z systemem Android.</value>
+    <value>Application will be available only on Android phones</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Dodaj</value>
+    <value>Add</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Anuluj</value>
+    <value>Cancel</value>
   </data>
   <data name="ChoosePlaylist" xml:space="preserve">
-    <value>Wybierz playlistę</value>
+    <value>Select playlist</value>
   </data>
   <data name="ExploreLast" xml:space="preserve">
-    <value>Ostatnio odtwarzane</value>
+    <value>Last listen</value>
   </data>
   <data name="ExploreMost" xml:space="preserve">
-    <value>Najczęściej odtwarzane</value>
+    <value>Most listen</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
-    <value>Nowa playlista</value>
+    <value>New playlist</value>
   </data>
   <data name="NewPlaylistHint" xml:space="preserve">
-    <value>Wprowadź nazwę playlisty</value>
+    <value>Enter playlist name</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Nie</value>
+    <value>No</value>
   </data>
   <data name="PermissionsGrant" xml:space="preserve">
-    <value>Przyznaj uprawnienia</value>
+    <value>Grant permission</value>
   </data>
   <data name="PermissionsInfo" xml:space="preserve">
-    <value>Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia</value>
+    <value>This app requires permission to save data in order to download music and save settings</value>
   </data>
   <data name="Play" xml:space="preserve">
-    <value>Odtwórz</value>
+    <value>Play</value>
   </data>
   <data name="Playlist" xml:space="preserve">
-    <value>Playlista</value>
+    <value>Playlist</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Pytanko</value>
+    <value>Question</value>
   </data>
   <data name="QuestionDelete" xml:space="preserve">
-    <value>Usunąć plik</value>
+    <value>Delete file</value>
   </data>
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
-    <value>z playlisty</value>
+    <value>from playlist</value>
   </data>
   <data name="QuestionDeletePlaylist" xml:space="preserve">
-    <value>Usunąć playlistę</value>
+    <value>Delete</value>
   </data>
   <data name="SnackDelete" xml:space="preserve">
-    <value>Pomyślnie usunięto</value>
+    <value>Successfully deleted</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
-    <value>Dodano do playlisty</value>
+    <value>Added to playlist</value>
   </data>
   <data name="SnackQueue" xml:space="preserve">
-    <value>Dodano do kolejki</value>
+    <value>Added to queue</value>
   </data>
   <data name="TitleAbout" xml:space="preserve">
-    <value>O autorze</value>
+    <value>About</value>
   </data>
   <data name="TitleArtists" xml:space="preserve">
-    <value>Wykonawcy</value>
+    <value>Artists</value>
   </data>
   <data name="TitleExplore" xml:space="preserve">
-    <value>Przeglądaj</value>
+    <value>Explore</value>
   </data>
   <data name="TitlePlaylists" xml:space="preserve">
-    <value>Playlisty</value>
+    <value>Playlists</value>
   </data>
   <data name="TitleSettings" xml:space="preserve">
-    <value>Ustawienia</value>
+    <value>Settings</value>
   </data>
   <data name="TitleTracks" xml:space="preserve">
-    <value>Utwory</value>
+    <value>Tracks</value>
   </data>
   <data name="TrackMenuDelete" xml:space="preserve">
-    <value>Usuń</value>
+    <value>Delete</value>
   </data>
   <data name="TrackMenuDeletePlaylist" xml:space="preserve">
-    <value>Usuń z playlisty</value>
+    <value>Delete from playlist</value>
   </data>
   <data name="TrackMenuPlaylist" xml:space="preserve">
-    <value>Dodaj do playlisty</value>
+    <value>Add to playlist</value>
   </data>
   <data name="TrackMenuQueue" xml:space="preserve">
-    <value>Dodaj do kolejki</value>
+    <value>Add to queue</value>
   </data>
   <data name="TracksCount" xml:space="preserve">
-    <value>Utworów</value>
+    <value>Tracks</value>
   </data>
   <data name="UnknownArtist" xml:space="preserve">
-    <value>Nieznany wykonawca</value>
+    <value>Unknown artist</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Tak</value>
+    <value>Yes</value>
   </data>
   <data name="YoutubeConvert" xml:space="preserve">
-    <value>Konwertowanie do MP3</value>
+    <value>Converting to MP3</value>
   </data>
   <data name="YoutubeDownloading" xml:space="preserve">
-    <value>Pobrano</value>
+    <value>Downloading</value>
   </data>
   <data name="YoutubeError" xml:space="preserve">
-    <value>Film posiada blokadę lub jest niedostępny</value>
+    <value>This video is blocked or unavailable</value>
   </data>
   <data name="YoutubeReady" xml:space="preserve">
-    <value>Gotowe</value>
+    <value>Ready</value>
   </data>
   <data name="YoutubeStart" xml:space="preserve">
-    <value>Rozpoczynanie pobierania</value>
+    <value>Starting downloading</value>
   </data>
 </root>

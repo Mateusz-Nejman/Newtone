@@ -27,6 +27,13 @@ namespace NSEC.Music_Player.Views.Tabs
             WebView.OnNavigationStarted += WebView_OnNavigationStarted;
             webViewGrid.Children.Add(WebView);
             Appearing += YoutubePage_Appearing;
+            Disappearing += YoutubeTab_Disappearing;
+        }
+
+        private void YoutubeTab_Disappearing(object sender, EventArgs e)
+        {
+            WebView.Source = "https://youtube.com";
+            WebView.BaseUrl = "https://youtube.com";
         }
 
         private void YoutubePage_Appearing(object sender, EventArgs e)
@@ -38,9 +45,9 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             var url = e.Uri;
 
-            if (url.StartsWith("https://m.youtube.com/watch?v="))
+            if (url.StartsWith("https://m.youtube.com/watch?v=") || url.Contains("youtube.com"))
             {
-                currentUrl = url.Substring(0, url.IndexOf('&'));
+                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : 0) ;
                 Console.WriteLine("ONS: " + currentUrl);
             }
 

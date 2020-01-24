@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -6,11 +7,11 @@ namespace NSEC.Music_Player.Logic
 {
     public static class FileProcessing
     {
-        public static async Task<MP3Processing.Container[]> ListFiles(string directory, int subDirectoriesLevel, int currentLevel, List<string> listedDirectories)
+        public static async Task<MediaProcessing.MediaTag[]> ListFiles(string directory, int subDirectoriesLevel, int currentLevel, List<string> listedDirectories)
         {
-            MP3Processing.Container[] files = await Task.Run(async () =>
+            MediaProcessing.MediaTag[] files = await Task.Run(async () =>
             {
-                List<MP3Processing.Container> containers = new List<MP3Processing.Container>();
+                List<MediaProcessing.MediaTag> containers = new List<MediaProcessing.MediaTag>();
 
                 if (subDirectoriesLevel > currentLevel)
                 {
@@ -30,13 +31,26 @@ namespace NSEC.Music_Player.Logic
                     
                 }
 
-                string[] filePaths = Directory.GetFiles(directory, "*.mp3");
+                string[] mp3Files = Directory.GetFiles(directory, "*.mp3");
+                string[] m4aFiles = Directory.GetFiles(directory, "*.m4a");
+                List<string> filesList = new List<string>();
 
+                for(int a = 0; a < mp3Files.Length; a++)
+                {
+                    filesList.Add(mp3Files[a]);
+                }
+
+                for(int a = 0; a < m4aFiles.Length; a++)
+                {
+                    filesList.Add(m4aFiles[a]);
+                }
+
+                string[] filePaths = filesList.ToArray();
 
 
                 for (int a = 0; a < filePaths.Length; a++)
                 {
-                    MP3Processing.Container container = MP3Processing.GetMeta(filePaths[a]);
+                    MediaProcessing.MediaTag container = MediaProcessing.GetTags(filePaths[a]);
 
                     if (container != null && !containers.Contains(container))
                         containers.Add(container);
@@ -48,11 +62,11 @@ namespace NSEC.Music_Player.Logic
             return files;
         }
 
-        public static async Task<MP3Processing.Container[]> ListFiles(string[] directories, List<string> listedDirectories)
+        public static async Task<MediaProcessing.MediaTag[]> ListFiles(string[] directories, List<string> listedDirectories)
         {
-            MP3Processing.Container[] files = await Task.Run(async () =>
+            MediaProcessing.MediaTag[] files = await Task.Run(async () =>
             {
-                List<MP3Processing.Container> containers = new List<MP3Processing.Container>();
+                List<MediaProcessing.MediaTag> containers = new List<MediaProcessing.MediaTag>();
 
                 foreach (string directory in directories)
                 {

@@ -1,4 +1,5 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using NSEC.Music_Player.ViewModels;
@@ -22,12 +23,12 @@ namespace NSEC.Music_Player
             {
                 Track unknownAuthor = null;
                 List<Models.Track> artistsBeforeSort = new List<Models.Track>();
-                foreach (string artist in Global.Audios.Keys)
+                foreach (string artist in Global.Authors.Keys)
                 {
                     if(artist == "Nieznany")
-                        unknownAuthor = new Models.Track { Id = artist, Text = artist, Description = "Utworów: " + Global.Audios[artist].Count };
+                        unknownAuthor = new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount+": " + Global.Authors[artist].Count };
                     else
-                        artistsBeforeSort.Add(new Models.Track { Id = artist, Text = artist, Description = "Utworów: " + Global.Audios[artist].Count });
+                        artistsBeforeSort.Add(new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount + ": " + Global.Authors[artist].Count });
                     //model.Items.Add();
                     //await model.DataStore.AddItemAsync(new Models.Track { Id = artist, Text = artist, Description = "Utworów: " + Global.Audios[artist].Count });
                 }
@@ -58,13 +59,10 @@ namespace NSEC.Music_Player
             if (model.DataStore.Count() == 0)
             {
                 List<Models.Track> tracksBeforeSort = new List<Models.Track>();
-                foreach (string artist in Global.Audios.Keys)
+                foreach (string filepath in Global.Audios.Keys)
                 {
-                    foreach (MP3Processing.Container container in Global.Audios[artist])
-                    {
-                        tracksBeforeSort.Add(new Models.Track { Id = artist + container.Title, Text = container.Title, Description = container.Artist, Container = container, Tag = container.FilePath });
-                    }
-                    //await model.DataStore.AddItemAsync(new Models.Artist { Id = artist, Text = artist });
+                    MediaProcessing.MediaTag container = Global.Audios[filepath];
+                    tracksBeforeSort.Add(new Models.Track { Id = container.FilePath, Text = container.Title, Description = container.Artist, Container = container, Tag = container.FilePath });
                 }
 
                 List<Models.Track> tracksAfterSort = tracksBeforeSort.OrderBy(o => o.Text).ToList();
@@ -96,7 +94,7 @@ namespace NSEC.Music_Player
                 foreach(string playlist in Global.Playlists.Keys)
                 {
                     List<Track> tracks = Global.Playlists[playlist];
-                    playlistsBeforeSort.Add(new Track() { Id = playlist, Text = playlist, Description = "Utworów: "+tracks.Count});
+                    playlistsBeforeSort.Add(new Track() { Id = playlist, Text = playlist, Description = Localization.TracksCount + ": " + tracks.Count});
                 }
 
                 List<Models.Track> playlistsAfterSort = playlistsBeforeSort.OrderBy(o => o.Text).ToList();
@@ -126,7 +124,7 @@ namespace NSEC.Music_Player
             if (Global.Audios.Count == 0)
             {
                 List<string> listed = new List<string>();
-                MP3Processing.Container[] files = await FileProcessing.ListFiles(Global.Directories, listed);
+                MediaProcessing.MediaTag[] files = await FileProcessing.ListFiles(Global.Directories, listed);
                 for (int a = 0; a < files.Length; a++)
                 {
                     AddTrack(files[a]);
@@ -141,16 +139,20 @@ namespace NSEC.Music_Player
 
         }
 
-        public static void AddTrack(MP3Processing.Container container)
+        public static void AddTrack(MediaProcessing.MediaTag container)
         {
-            if (!Global.Audios.ContainsKey(container.Artist.Trim()))
+            if (!Global.Audios.ContainsKey(container.FilePath) && File.Exists(container.FilePath))
             {
                 //File.AppendAllText(App.debugPath + "/debug.txt", "Create list for " + files[a].Author.Trim() + "\n");
-                Global.Audios.Add(container.Artist.Trim(), new List<MP3Processing.Container>());
+                Global.Audios.Add(container.FilePath, container);
+
+                if (!Global.Authors.ContainsKey(container.Artist))
+                    Global.Authors.Add(container.Artist, new List<string>());
+
+                Global.Authors[container.Artist].Add(container.FilePath);
             }
 
             //File.AppendAllText(App.debugPath + "/debug.txt", "Add " + files[a] + " to " + files[a].Author.Trim() + "\n");
-            Global.Audios[container.Artist.Trim()].Add(container);
         }
 
         public static Track FindTrackByTag(ObservableCollection<Track> Items, string tag)
@@ -168,21 +170,14 @@ namespace NSEC.Music_Player
             
             if(!onlyPlaylist)
             {
-                bool toBreak = false;
-                foreach (string author in Global.Audios.Keys)
+                foreach (string filepath in Global.Audios.Keys)
                 {
-                    foreach (MP3Processing.Container container in Global.Audios[author])
+                    MediaProcessing.MediaTag container = Global.Audios[filepath];
+                    if (container.FilePath == path)
                     {
-                        if (container.FilePath == path)
-                        {
-                            Global.Audios[author].Remove(container);
-                            toBreak = true;
-                            break;
-                        }
-                    }
-
-                    if (toBreak)
+                        Global.Audios.Remove(filepath);
                         break;
+                    }
                 }
             }
 

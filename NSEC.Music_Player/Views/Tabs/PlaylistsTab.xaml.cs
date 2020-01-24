@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Support.Design.Widget;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
@@ -88,24 +89,18 @@ namespace NSEC.Music_Player.Views.Tabs
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-            ObservableCollection<string> menuItems = new ObservableCollection<string>();
             CustomButton button = (CustomButton)sender;
             Console.WriteLine("BUTTON TAG: " + button.Tag);
             PlaylistName = button.Tag;
 
-            menuItems.Add("Odtwórz");
-            menuItems.Add("Usuń");
-
-            
-
-            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, "Odtwórz", "Usuń");
+            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, Localization.Play, Localization.TrackMenuDelete);
             menu.OnSelect += Menu_OnItemSelected;
             menu.Show();
         }
 
         private async void Menu_OnItemSelected(string item)
         {
-            if(item == "Odtwórz")
+            if(item == Localization.Play)
             {
                 if(Global.Playlists[PlaylistName].Count > 0)
                 {
@@ -115,14 +110,14 @@ namespace NSEC.Music_Player.Views.Tabs
                     Global.CurrentTrack = Global.Playlists[PlaylistName][0].Container;
                     Global.CurrentPlaylist = Global.Playlists[PlaylistName];
                     Global.CurrentPlaylistPosition = 0;
-                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(Global.CurrentTrack.FilePath));
+                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(Global.CurrentTrack.FilePath),Global.CurrentTrack.FilePath);
                     Global.MediaPlayer.Play();
                 }
                 
             }
-            else if(item == "Usuń")
+            else if(item == Localization.TrackMenuDelete)
             {
-                bool answer = await DisplayAlert("Pytanko", "Usunąć playlistę "+PlaylistName+"?", "Tak", "Nie");
+                bool answer = await DisplayAlert(Localization.Question, Localization.QuestionDelete+" "+PlaylistName+"?", Localization.Yes, Localization.No);
 
                 if(answer)
                 {
@@ -130,7 +125,7 @@ namespace NSEC.Music_Player.Views.Tabs
                     await Helpers.ReloadPlaylists(this, model);
                     Global.SaveConfig();
 
-                    SnackbarBuilder.Show("Usunięto");
+                    SnackbarBuilder.Show(Localization.SnackDelete);
                 }
             }
         }

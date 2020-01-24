@@ -5,12 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NSEC.Music_Player.ViewModels"
              xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             xmlns:resources="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Tabs.AboutTab"
-             Title="O Autorze">
-    <ContentPage.BindingContext>
-        <vm:AboutViewModel />
-    </ContentPage.BindingContext>
+             Title="{x:Static resources:Localization.TitleAbout}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -28,7 +26,7 @@
                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1.0}">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                     <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                        <Image Source="musicPlayerLogo.png" VerticalOptions="Center" HeightRequest="64" />
+                        <Image Source="musicPlayerLogoTest.png" VerticalOptions="Center" HeightRequest="64" />
                     </ContentView>
                 </StackLayout>
             </StackLayout>
@@ -50,7 +48,7 @@
                         <Label.FormattedText>
                             <FormattedString>
                                 <FormattedString.Spans>
-                                    <Span Text="Autor: Mateusz Nejman" />
+                                    <Span Text="{x:Static resources:Localization.AboutAuthor}" />
                                 </FormattedString.Spans>
                             </FormattedString>
                         </Label.FormattedText>
@@ -59,16 +57,16 @@
                         <Label.FormattedText>
                             <FormattedString>
                                 <FormattedString.Spans>
-                                    <Span Text="Aplikacja docelowo będzie dostępna tylko na telefonach z systemem Android." />
+                                    <Span Text="{x:Static resources:Localization.AboutText}" />
                                 </FormattedString.Spans>
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <Button Margin="0,10,0,0" Text="Strona autora"
-                        Command="{Binding OpenWebCommand}"
+                    <Button Margin="0,10,0,0" Text="{x:Static resources:Localization.AboutButton}"
+                        Clicked="Button_Clicked"
                         BackgroundColor="Transparent"
                             BorderColor="#EF6C00"
-                        TextColor="White" />
+                        TextColor="White" x:Name="aboutButton"/>
                 </StackLayout>
             </ScrollView>
             <views:PlayerPanel x:Name="playerPanel" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1.0,Constant=-62}"/>

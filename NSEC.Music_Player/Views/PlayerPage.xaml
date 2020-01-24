@@ -61,32 +61,32 @@
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-92}"/>
 
             <Frame HasShadow="False" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=72}"
-                  RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-64}"
-                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-64}"
-                  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=32}" CornerRadius="35">
+                  RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=0,Constant=256}"
+                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=0,Constant=256}"
+                  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.5, Constant=-128}" CornerRadius="35">
                 <Image Source="emptyTrack.png" 
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
-                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}"/>
+                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}" x:Name="trackImage"/>
             </Frame>
 
             <Label x:Name="titleLabel" Text="" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=40}" 
-                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=400}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=333}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-28}"/>
             <Label x:Name="artistLabel" Text="" TextColor="White" FontSize="Medium" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=40}" 
-                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=426}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=353}"
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0, Constant=-28}"/>
 
             <Slider x:Name="trackSlider" Minimum="0" Maximum="1" ThumbColor="#EF6C00" MaximumTrackColor="White" MinimumTrackColor="#EF6C00"
-                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=450}"
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=373}"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=1,Constant=16}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-32}"/>
             <Label x:Name="currentLabel" Text="0:00" TextColor="White"
-                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=470}"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=388}"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=1,Constant=16}" />
             <Label x:Name="maximumLabel" Text="0:00" TextColor="White"
-                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=470}"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=388}"
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-50}" />
 
         </RelativeLayout>

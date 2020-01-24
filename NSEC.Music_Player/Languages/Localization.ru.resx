@@ -118,123 +118,123 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutAuthor" xml:space="preserve">
-    <value>Autor: Mateusz Nejman</value>
+    <value>Автор: Mateusz Nejman</value>
   </data>
   <data name="AboutButton" xml:space="preserve">
-    <value>Strona autora</value>
+    <value>авторский сайт</value>
   </data>
   <data name="AboutText" xml:space="preserve">
-    <value>Aplikacja docelowo będzie dostępna tylko na telefonach z systemem Android.</value>
+    <value>Приложение будет доступно на телефонах Android</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Dodaj</value>
+    <value>Добавлять</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Anuluj</value>
+    <value>Отменить</value>
   </data>
   <data name="ChoosePlaylist" xml:space="preserve">
-    <value>Wybierz playlistę</value>
+    <value>выберите список</value>
   </data>
   <data name="ExploreLast" xml:space="preserve">
-    <value>Ostatnio odtwarzane</value>
+    <value>недавно играл</value>
   </data>
   <data name="ExploreMost" xml:space="preserve">
-    <value>Najczęściej odtwarzane</value>
+    <value>самые популярные</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
-    <value>Nowa playlista</value>
+    <value>Новый список</value>
   </data>
   <data name="NewPlaylistHint" xml:space="preserve">
-    <value>Wprowadź nazwę playlisty</value>
+    <value>Введите название списка</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Nie</value>
+    <value>Не</value>
   </data>
   <data name="PermissionsGrant" xml:space="preserve">
-    <value>Przyznaj uprawnienia</value>
+    <value>предоставить разрешения</value>
   </data>
   <data name="PermissionsInfo" xml:space="preserve">
-    <value>Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia</value>
+    <value>Плеер требует разрешения на запись для прослушивания музыки в автономном режиме </value>
   </data>
   <data name="Play" xml:space="preserve">
-    <value>Odtwórz</value>
+    <value>играть</value>
   </data>
   <data name="Playlist" xml:space="preserve">
-    <value>Playlista</value>
+    <value>список</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Pytanko</value>
+    <value>вопрос</value>
   </data>
   <data name="QuestionDelete" xml:space="preserve">
-    <value>Usunąć plik</value>
+    <value>Удалить файл</value>
   </data>
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
-    <value>z playlisty</value>
+    <value>из списка</value>
   </data>
   <data name="QuestionDeletePlaylist" xml:space="preserve">
-    <value>Usunąć playlistę</value>
+    <value>Удалить список </value>
   </data>
   <data name="SnackDelete" xml:space="preserve">
-    <value>Pomyślnie usunięto</value>
+    <value>Успешно удален</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
-    <value>Dodano do playlisty</value>
+    <value>Добавлено в список</value>
   </data>
   <data name="SnackQueue" xml:space="preserve">
-    <value>Dodano do kolejki</value>
+    <value>Добавлено в очередь</value>
   </data>
   <data name="TitleAbout" xml:space="preserve">
-    <value>O autorze</value>
+    <value>Об авторе</value>
   </data>
   <data name="TitleArtists" xml:space="preserve">
-    <value>Wykonawcy</value>
+    <value>Музыканты</value>
   </data>
   <data name="TitleExplore" xml:space="preserve">
-    <value>Przeglądaj</value>
+    <value>Просмотр</value>
   </data>
   <data name="TitlePlaylists" xml:space="preserve">
-    <value>Playlisty</value>
+    <value>Списки</value>
   </data>
   <data name="TitleSettings" xml:space="preserve">
-    <value>Ustawienia</value>
+    <value>Настройки</value>
   </data>
   <data name="TitleTracks" xml:space="preserve">
-    <value>Utwory</value>
+    <value>Песни</value>
   </data>
   <data name="TrackMenuDelete" xml:space="preserve">
-    <value>Usuń</value>
+    <value>Удалить</value>
   </data>
   <data name="TrackMenuDeletePlaylist" xml:space="preserve">
-    <value>Usuń z playlisty</value>
+    <value>Удалить из списка</value>
   </data>
   <data name="TrackMenuPlaylist" xml:space="preserve">
-    <value>Dodaj do playlisty</value>
+    <value>Добавить в список</value>
   </data>
   <data name="TrackMenuQueue" xml:space="preserve">
-    <value>Dodaj do kolejki</value>
+    <value>Добавить в очередь</value>
   </data>
   <data name="TracksCount" xml:space="preserve">
-    <value>Utworów</value>
+    <value>Песен</value>
   </data>
   <data name="UnknownArtist" xml:space="preserve">
-    <value>Nieznany wykonawca</value>
+    <value>Неизвестный музыкант</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Tak</value>
+    <value>Да</value>
   </data>
   <data name="YoutubeConvert" xml:space="preserve">
-    <value>Konwertowanie do MP3</value>
+    <value>Конвертировать в MP3</value>
   </data>
   <data name="YoutubeDownloading" xml:space="preserve">
-    <value>Pobrano</value>
+    <value>Загруженные</value>
   </data>
   <data name="YoutubeError" xml:space="preserve">
-    <value>Film posiada blokadę lub jest niedostępny</value>
+    <value>Видео заблокировано или недоступно </value>
   </data>
   <data name="YoutubeReady" xml:space="preserve">
-    <value>Gotowe</value>
+    <value>Готовый</value>
   </data>
   <data name="YoutubeStart" xml:space="preserve">
-    <value>Rozpoczynanie pobierania</value>
+    <value>Начало загрузки</value>
   </data>
 </root>
