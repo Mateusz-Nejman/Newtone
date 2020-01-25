@@ -45,9 +45,9 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             var url = e.Uri;
 
-            if (url.StartsWith("https://m.youtube.com/watch?v=") || url.Contains("youtube.com"))
+            if (url.StartsWith("https://m.youtube.com/watch?v="))
             {
-                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : 0) ;
+                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : url.Length) ;
                 Console.WriteLine("ONS: " + currentUrl);
             }
 

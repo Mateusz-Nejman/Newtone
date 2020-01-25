@@ -53,19 +53,19 @@ namespace NSEC.Music_Player.Logic
 
                 progressLabel.Text = Localization.YoutubeConvert;
                 progressBar.Progress = 0;
-                await ConvertToMP3(video.Title);
+                var type = await ConvertToMP3(video.Title);
                 if (File.Exists(Global.MusicPath + "/data.bin"))
                     File.Delete(Global.MusicPath + "/data.bin");
 
-                MediaProcessing.MediaTag container = MediaProcessing.GetTags(Global.MusicPath + "/" + video.Title + ".mp3");
+                MediaProcessing.MediaTag container = MediaProcessing.GetTags(Global.MusicPath + "/" + video.Title + "."+type.ToString());
                 Helpers.AddTrack(container);
                 SnackbarBuilder.Show(Localization.YoutubeReady);
                 progressLabel.Text = Localization.YoutubeReady;
                 //File.WriteAllBytes(Global.DataPath+"/data.bin", video.GetBytes());
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine("YoutubeProcessing.cs -> " + e);
+                //Console.WriteLine("YoutubeProcessing.cs -> " + e);
                 SnackbarBuilder.Show(Localization.YoutubeError);
                 progressLabel.Text = Localization.YoutubeError;
             }
@@ -74,20 +74,22 @@ namespace NSEC.Music_Player.Logic
             button.IsEnabled = true;
         }
 
-        public async static Task ConvertToMP3(string name)
+        public async static Task<MediaProcessing.MediaOutputType>ConvertToMP3(string name)
         {
             //await Xamarin.MP4Transcoder.Transcoder.For960x540Format().
             //await FFMpeg.Xamarin.FFMpegLibrary.Run(App.Context, " -i "+ Global.DataPath + "/data.bin"+" -vn -f mp3 -ab 192k "+ Global.DataPath + "/"+name+".mp3");
             //IConversion conversion = Conversion.ExtractAudio(Global.DataPath + "/data.bin", Global.DataPath + "/" + name + ".mp3");
             //await conversion.Start();
 
-            await Task.Run(() => {
+            return await Task.Run(() => {
                 var outputType = MediaProcessing.GetAudio(Global.MusicPath + "/data.bin", Global.MusicPath + "/" + name);
             if (outputType == MediaProcessing.MediaOutputType.mp3)
                     File.Copy(Global.MusicPath + "/" + name, Global.MusicPath + "/" + name + ".mp3", true);
             else if(outputType == MediaProcessing.MediaOutputType.m4a)
                     File.Copy(Global.MusicPath + "/" + name, Global.MusicPath + "/" + name + ".m4a", true);
                 File.Delete(Global.MusicPath + "/" + name);
+
+                return outputType;
             });
         }
     }
