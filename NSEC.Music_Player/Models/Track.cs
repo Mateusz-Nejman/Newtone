@@ -44,7 +44,13 @@ namespace NSEC.Music_Player.Models
         public string Text { get; set; }
         public string Description { get; set; }
 
-        public string Tag { get; set; }
+        public string Tag
+        {
+            get
+            {
+                return Container == null ? "" : Container.FilePath;
+            }
+        }
 
         public MediaProcessing.MediaTag Container { get; set; }
 

@@ -54,103 +54,111 @@ namespace NSEC.Music_Player.Logic
 
         private static async void Menu_OnItemSelected(string item)
         {
+            Console.WriteLine("TrackProcessing item " + item);
             Console.WriteLine(CurrentTag);
             Console.WriteLine(item);
             Track track = Helpers.FindTrackByTag(Items, CurrentTag);
-            if (item == Localization.TrackMenuDelete)
+
+            if (track == null)
+                SnackbarBuilder.Show("Plik nie istnieje");
+            else
             {
-                bool answer = await View.DisplayAlert(Localization.Question, Localization.QuestionDelete + " " + track.Text + (Playlist ? " "+Localization.QuestionDeleteFromPlaylist+"?" : "?"), Localization.Yes, Localization.No);
-                if (answer)
+                if (item == Localization.TrackMenuDelete)
                 {
-                    if(!Playlist)
+                    bool answer = await View.DisplayAlert(Localization.Question, Localization.QuestionDelete + " " + track.Text + (Playlist ? " " + Localization.QuestionDeleteFromPlaylist + "?" : "?"), Localization.Yes, Localization.No);
+                    if (answer)
                     {
-                        File.Delete(track.Container.FilePath);
-                        
-                    }
-
-                    if(Global.Playlists.ContainsKey(PlaylistName))
-                    {
-                        ObservableCollection<Track> observableTracks = new ObservableCollection<Track>(Global.Playlists[PlaylistName]);
-                        Helpers.RemoveTrack(track.Container.FilePath, Playlist, observableTracks);
-
-                        if (Playlist)
-                            Global.Playlists[PlaylistName] = observableTracks.ToList();
-
-
-                        foreach (Track tr in Items)
+                        if (!Playlist)
                         {
-                            if (tr.Container.FilePath == track.Container.FilePath)
+                            File.Delete(track.Container.FilePath);
+
+                        }
+
+                        if (Global.Playlists.ContainsKey(PlaylistName))
+                        {
+                            ObservableCollection<Track> observableTracks = new ObservableCollection<Track>(Global.Playlists[PlaylistName]);
+                            Helpers.RemoveTrack(track.Container.FilePath, Playlist, observableTracks);
+
+                            if (Playlist)
+                                Global.Playlists[PlaylistName] = observableTracks.ToList();
+
+
+                            foreach (Track tr in Items)
                             {
-                                Items.Remove(tr);
-                                break;
+                                if (tr.Container.FilePath == track.Container.FilePath)
+                                {
+                                    Items.Remove(tr);
+                                    break;
+                                }
                             }
                         }
+
+                        if (Global.Audios.ContainsKey(track.Container.FilePath))
+                            Global.Audios.Remove(track.Container.FilePath);
+
+
+                        Global.SaveConfig();
+                        SnackbarBuilder.Show(Localization.SnackDelete);
                     }
-
-                    if (Global.Audios.ContainsKey(track.Container.FilePath))
-                        Global.Audios.Remove(track.Container.FilePath);
-                    
-
-                    Global.SaveConfig();
-                    SnackbarBuilder.Show(Localization.SnackDelete);
                 }
-            }
-            else if (item == Localization.TrackMenuPlaylist)
-            {
-                List<string> positions = new List<string>
+                else if (item == Localization.TrackMenuPlaylist)
+                {
+                    List<string> positions = new List<string>
                 {
                     Localization.NewPlaylist
                 };
-                foreach (string playlist in Global.Playlists.Keys)
-                    positions.Add(playlist);
+                    foreach (string playlist in Global.Playlists.Keys)
+                        positions.Add(playlist);
 
-                string answer = await View.DisplayActionSheet(Localization.ChoosePlaylist, Localization.Cancel, null, positions.ToArray());
-                Console.WriteLine("ANSWER " + answer);
+                    string answer = await View.DisplayActionSheet(Localization.ChoosePlaylist, Localization.Cancel, null, positions.ToArray());
+                    Console.WriteLine("ANSWER " + answer);
 
-                if (answer == Localization.NewPlaylist)
-                {
-                    string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist);
-
-                    if (!string.IsNullOrEmpty(playlistName))
+                    if (answer == Localization.NewPlaylist)
                     {
-                        if (Global.Playlists.ContainsKey(playlistName))
-                            Global.Playlists[playlistName].Add(track);
-                        else
-                            Global.Playlists.Add(playlistName, new List<Track>() { track });
+                        string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist);
 
+                        if (!string.IsNullOrEmpty(playlistName))
+                        {
+                            if (Global.Playlists.ContainsKey(playlistName))
+                                Global.Playlists[playlistName].Add(track);
+                            else
+                                Global.Playlists.Add(playlistName, new List<Track>() { track });
+
+                            Global.SaveConfig();
+
+                            SnackbarBuilder.Show(Localization.SnackPlaylist);
+                        }
+                    }
+                    else if (Global.Playlists.ContainsKey(answer))
+                    {
+                        bool contains = false;
+
+                        foreach (Track playlistTrack in Global.Playlists[answer])
+                        {
+                            if (playlistTrack.Container.FilePath == track.Container.FilePath)
+                            {
+                                contains = true;
+                                break;
+                            }
+                        }
+                        if (!contains)
+                            Global.Playlists[answer].Add(track);
                         Global.SaveConfig();
 
                         SnackbarBuilder.Show(Localization.SnackPlaylist);
                     }
                 }
-                else if (Global.Playlists.ContainsKey(answer))
+                else if (item == Localization.TrackMenuQueue)
                 {
-                    bool contains = false;
+                    if (Global.CurrentQueue.Count == 0)
+                        Global.CurrentQueuePosition = -1;
+                    if (!Global.CurrentQueue.Contains(track))
+                        Global.CurrentQueue.Add(track);
 
-                    foreach (Track playlistTrack in Global.Playlists[answer])
-                    {
-                        if (playlistTrack.Container.FilePath == track.Container.FilePath)
-                        {
-                            contains = true;
-                            break;
-                        }
-                    }
-                    if (!contains)
-                        Global.Playlists[answer].Add(track);
-                    Global.SaveConfig();
-
-                    SnackbarBuilder.Show(Localization.SnackPlaylist);
+                    SnackbarBuilder.Show(Localization.SnackQueue);
                 }
             }
-            else if(item == Localization.TrackMenuQueue)
-            {
-                if (Global.CurrentQueue.Count == 0)
-                    Global.CurrentQueuePosition = -1;
-                if (!Global.CurrentQueue.Contains(track))
-                    Global.CurrentQueue.Add(track);
-
-                SnackbarBuilder.Show(Localization.SnackQueue);
-            }
+            
         }
     }
 }

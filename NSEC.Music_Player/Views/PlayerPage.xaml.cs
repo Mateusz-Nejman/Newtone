@@ -183,16 +183,29 @@ namespace NSEC.Music_Player.Views
 
         private void Next()
         {
-            Next();
-            if(Global.CurrentTrack != null)
+            Global.CurrentPlaylistPosition += 1;
+
+            if (Global.CurrentPlaylistPosition == Global.CurrentPlaylist.Count)
+                Global.CurrentPlaylistPosition = 0;
+
+            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
+            TrackContainer = track.Container;
+            if(File.Exists(TrackContainer.FilePath))
             {
-                
-                TrackContainer = Global.CurrentTrack;
-                Global.AudioPlayerTrack = TrackContainer.FilePath;
+                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                Global.CurrentTrack = track.Container;
+                Global.AudioPlayerTrack = track.Id;
                 titleLabel.Text = TrackContainer.Title;
                 artistLabel.Text = TrackContainer.Artist;
+                SetSliderPosition(0);
+                if (Global.LastPlayerClick)
+                    Play();
             }
-            SetSliderPosition(0);
+            else
+            {
+                Next();
+            }
+            
         }
 
         private void Prev()
@@ -204,14 +217,21 @@ namespace NSEC.Music_Player.Views
 
             Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
             TrackContainer = track.Container;
-            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath),track.Container.FilePath);
-            Global.CurrentTrack = track.Container;
-            Global.AudioPlayerTrack = track.Id;
-            titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Artist;
-            SetSliderPosition(0);
-            if (Global.LastPlayerClick)
-                Play();
+            if(File.Exists(TrackContainer.FilePath))
+            {
+                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                Global.CurrentTrack = track.Container;
+                Global.AudioPlayerTrack = track.Id;
+                titleLabel.Text = TrackContainer.Title;
+                artistLabel.Text = TrackContainer.Artist;
+                SetSliderPosition(0);
+                if (Global.LastPlayerClick)
+                    Play();
+            }
+            else
+            {
+                Prev();
+            }
         }
 
         private void Pause()

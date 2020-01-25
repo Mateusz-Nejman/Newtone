@@ -47,6 +47,7 @@ namespace NSEC.Music_Player.Views.CustomViews
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             Console.WriteLine("TrackView " + track.Container.Title);
+            
             await Navigation.PushAsync(new PlayerPage(track, new List<Track>() { track }, 0));
         }
     }

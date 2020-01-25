@@ -1,8 +1,10 @@
 ﻿using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 using Xamarin.Forms;
@@ -34,7 +36,12 @@ namespace NSEC.Music_Player.Views
                     return;
                 Track item = e.SelectedItem as Track;
 
-                await Navigation.PushAsync(new PlayerPage(item, MenuItems.ToList(), e.SelectedItemIndex));
+                if (File.Exists(item.Container.FilePath))
+                {
+                    await Navigation.PushAsync(new PlayerPage(item, MenuItems.ToList(), e.SelectedItemIndex));
+                }
+                else
+                    SnackbarBuilder.Show("Nie mogę znaleźć określonego pliku");
             };
 
             PlaylistTrackListView.BindingContext = this;

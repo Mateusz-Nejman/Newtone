@@ -2,6 +2,7 @@
 using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,12 +39,15 @@ namespace NSEC.Music_Player.Views.Tabs
             {
                 if(a < 5)
                 {
-                    TrackView trackView = new TrackView
+                    if(File.Exists(tracks[a].Track))
                     {
-                        FilePath = tracks[a].Track
-                    };
+                        TrackView trackView = new TrackView
+                        {
+                            FilePath = tracks[a].Track
+                        };
 
-                    layout.Children.Add(trackView);
+                        layout.Children.Add(trackView);
+                    }
                 }
             }
         }

@@ -12,7 +12,8 @@
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
                       ItemSelected="OnTrackSelected"
-                      ItemsSource="{Binding MenuItems}">
+                      ItemsSource="{Binding MenuItems}"
+                      >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

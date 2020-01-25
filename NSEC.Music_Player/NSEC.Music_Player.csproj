@@ -44,6 +44,7 @@
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidSupportedAbis />
     <AndroidDexTool>d8</AndroidDexTool>
+    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

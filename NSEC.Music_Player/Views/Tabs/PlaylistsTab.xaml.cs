@@ -8,6 +8,7 @@ using NSEC.Music_Player.ViewModels.Tabs;
 using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Xam.Plugin;
 using Xamarin.Forms;
@@ -106,12 +107,26 @@ namespace NSEC.Music_Player.Views.Tabs
                 {
                     if (Global.MediaPlayer != null)
                         Global.MediaPlayer.Stop();
-                    Global.AudioPlayerTrack = Global.Playlists[PlaylistName][0].Id;
-                    Global.CurrentTrack = Global.Playlists[PlaylistName][0].Container;
-                    Global.CurrentPlaylist = Global.Playlists[PlaylistName];
-                    Global.CurrentPlaylistPosition = 0;
-                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(Global.CurrentTrack.FilePath),Global.CurrentTrack.FilePath);
-                    Global.MediaPlayer.Play();
+
+                    bool files = false;
+                    for(int a = 0; a < Global.Playlists[PlaylistName].Count; a++)
+                    {
+                        if(File.Exists(Global.Playlists[PlaylistName][a].Container.FilePath))
+                        {
+                            Global.AudioPlayerTrack = Global.Playlists[PlaylistName][a].Container.FilePath;
+                            Global.CurrentTrack = Global.Playlists[PlaylistName][a].Container;
+                            Global.CurrentPlaylist = Global.Playlists[PlaylistName];
+                            Global.CurrentPlaylistPosition = 0;
+                            Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(Global.CurrentTrack.FilePath), Global.CurrentTrack.FilePath);
+                            Global.MediaPlayer.Play();
+                            files = true;
+                            break;
+                        }
+                    }
+
+                    if (!files)
+                        SnackbarBuilder.Show("Nie mogę odtworzyć playlisty");
+                    
                 }
                 
             }

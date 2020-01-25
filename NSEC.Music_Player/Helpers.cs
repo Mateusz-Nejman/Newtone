@@ -159,8 +159,12 @@ namespace NSEC.Music_Player
         {
             foreach(Track track in Items)
             {
-                if (track.Tag == tag)
+                if (File.Exists(track.Container.FilePath) && track.Container.FilePath == tag)
+                {
+                    track.Text = track.Container.Title;
                     return track;
+                }
+                    
             }
             return null;
         }
