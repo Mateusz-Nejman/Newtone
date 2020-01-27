@@ -10,6 +10,7 @@ using Android.Media;
 using Android.Media.Session;
 using Android.OS;
 using Android.Support.V4.App;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.CustomViews;
@@ -140,7 +141,7 @@ namespace NSEC.Music_Player.Media
             }
             catch
             {
-                SnackbarBuilder.Show("Nie można otworzyc pliku");
+                SnackbarBuilder.Show(Localization.FileCorrupted);
             }
 
         }
@@ -166,8 +167,6 @@ namespace NSEC.Music_Player.Media
                 if (Global.CurrentQueue.Count > 0)
                 {
                     track = Global.CurrentQueue[Global.CurrentQueuePosition];
-                    Global.CurrentTrack = track.Container;
-                    Global.AudioPlayerTrack = track.Id;
                 }
                 else
                 {
@@ -180,17 +179,26 @@ namespace NSEC.Music_Player.Media
                     }
 
                     track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-                    Global.CurrentTrack = track.Container;
-                    Global.AudioPlayerTrack = track.Id;
+                    
                 }
 
-                Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                if (Global.LastPlayerClick)
-                    Play();
-                Helpers.AddToCounter(track.Container.FilePath, 1);
-                Helpers.AddToLast(track.Container.FilePath);
+                if(File.Exists(track.Container.FilePath))
+                {
+                    Global.CurrentTrack = track.Container;
+                    Global.AudioPlayerTrack = track.Id;
+                    Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                    if (Global.LastPlayerClick)
+                        Play();
+                    Helpers.AddToCounter(track.Container.FilePath, 1);
+                    Helpers.AddToLast(track.Container.FilePath);
 
-                SetNotification(track);
+                    SetNotification(track);
+                }
+                else
+                {
+                    SnackbarBuilder.Show(Localization.SnackFileExists);
+                }
+                
             }
         }
 
@@ -208,14 +216,23 @@ namespace NSEC.Music_Player.Media
 
                 Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
 
-                Global.CurrentTrack = track.Container;
-                Global.AudioPlayerTrack = track.Id;
-                Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                if (Global.LastPlayerClick)
-                    Play();
-                Helpers.AddToCounter(track.Container.FilePath, 1);
-                Helpers.AddToLast(track.Container.FilePath);
-                SetNotification(track);
+                
+                if(File.Exists(track.Container.FilePath))
+                {
+                    Global.CurrentTrack = track.Container;
+                    Global.AudioPlayerTrack = track.Id;
+                    Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                    if (Global.LastPlayerClick)
+                        Play();
+                    Helpers.AddToCounter(track.Container.FilePath, 1);
+                    Helpers.AddToLast(track.Container.FilePath);
+                    SetNotification(track);
+                }
+                else
+                {
+                    SnackbarBuilder.Show(Localization.SnackFileExists);
+                }
+                
 
             }
             

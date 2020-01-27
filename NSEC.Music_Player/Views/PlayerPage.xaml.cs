@@ -1,7 +1,9 @@
 ﻿using Android.App;
 using Android.Support.V4.App;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -85,15 +87,22 @@ namespace NSEC.Music_Player.Views
                 if (Global.MediaPlayer != null)
                     Global.MediaPlayer.Stop();
 
-                Global.AudioPlayerTrack = track.Id;
-                Helpers.AddToCounter(track.Container.FilePath, 1);
-                Helpers.AddToLast(track.Container.FilePath);
-                BindPlayerControls();
 
-                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath),track.Container.FilePath);
-                Play();
-                Start = true;
-                Global.LastPlayerClick = Start;
+
+                if (File.Exists(track.Container.FilePath))
+                {
+                    Global.AudioPlayerTrack = track.Id;
+                    Helpers.AddToCounter(track.Container.FilePath, 1);
+                    Helpers.AddToLast(track.Container.FilePath);
+                    BindPlayerControls();
+                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                    Play();
+                    Start = true;
+                    Global.LastPlayerClick = Start;
+                }
+                else
+                    SnackbarBuilder.Show(Localization.SnackFileExists);
+                
             }
 
             if(track.Container.Picture != null)
@@ -113,7 +122,7 @@ namespace NSEC.Music_Player.Views
             titleLabel.Text = TrackContainer.Title;
             artistLabel.Text = TrackContainer.Artist;
             Start = Global.MediaPlayer.IsPlaying;
-            SetSliderPosition(Global.MediaPlayer.CurrentPosition);
+            SetSliderPosition(Global.MediaPlayer.CurrentPosition/Global.MediaPlayer.Duration);
         }
 
         private void PrevButton_Clicked(object sender, EventArgs e)
@@ -128,7 +137,7 @@ namespace NSEC.Music_Player.Views
 
         private void BindPlayerControls()
         {
-            trackSlider.Maximum = Global.MediaPlayer.Duration;
+            trackSlider.Maximum = 1;
             trackSlider.ValueChanged += TrackSlider_ValueChanged;
 
             playStopButton.Clicked += PlayStopButton_Clicked;
@@ -136,7 +145,7 @@ namespace NSEC.Music_Player.Views
 
         private void PlayStopButton_Clicked(object sender, EventArgs e)
         {
-            trackSlider.Maximum = Global.MediaPlayer.Duration;
+            trackSlider.Maximum = 1;
             trackSlider.IsEnabled = Global.MediaPlayer.CanSeek;
             if (Start)
                 Pause();
@@ -154,7 +163,7 @@ namespace NSEC.Music_Player.Views
             artistLabel.Text = TrackContainer.Artist;
             //lblPosition.Text = $"Postion: {(int)player.CurrentPosition} / {(int)player.Duration}";
 
-            SetSliderPosition(Global.MediaPlayer.CurrentPosition);
+            SetSliderPosition(Global.MediaPlayer.CurrentPosition/Global.MediaPlayer.Duration);
 
             maximumLabel.Text = TickParser.FormatTick(Global.MediaPlayer.Duration);
             currentLabel.Text = TickParser.FormatTick(Global.MediaPlayer.CurrentPosition);
@@ -166,8 +175,8 @@ namespace NSEC.Music_Player.Views
 
         private void TrackSlider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            if (trackSlider.Value != Global.MediaPlayer.Duration)
-                Global.MediaPlayer.Seek(trackSlider.Value);
+            if (trackSlider.Value != 1)
+                Global.MediaPlayer.Seek(trackSlider.Value*Global.MediaPlayer.Duration);
         }
 
 
@@ -176,7 +185,7 @@ namespace NSEC.Music_Player.Views
             Global.MediaPlayer.Play();
             Start = true;
             SetSliderPosition(0);
-            trackSlider.Maximum = Global.MediaPlayer.Duration;
+            trackSlider.Maximum = 1;
             trackSlider.IsEnabled = Global.MediaPlayer.CanSeek;
             Global.SaveConfig();
         }
@@ -242,7 +251,7 @@ namespace NSEC.Music_Player.Views
         private void SetSliderPosition(double position)
         {
             trackSlider.ValueChanged -= TrackSlider_ValueChanged;
-            trackSlider.Maximum = Global.MediaPlayer.Duration;
+            trackSlider.Maximum = 1;
             trackSlider.Value = position;
             trackSlider.ValueChanged += TrackSlider_ValueChanged;
         }

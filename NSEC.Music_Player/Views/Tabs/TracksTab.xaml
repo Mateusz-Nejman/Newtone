@@ -33,7 +33,7 @@
                                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
                                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}"
                                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}" Padding="0">
-                                    <Image Source="emptyTrack.png"/>
+                                    <Image Source="{Binding Picture}"/>
                                 </Frame>
                                 <Label Text="{Binding Text}" 
                                 d:Text="{Binding .}"

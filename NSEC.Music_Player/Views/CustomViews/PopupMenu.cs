@@ -30,7 +30,6 @@ namespace NSEC.Music_Player.Views.CustomViews
             Context = context;
             Anchor = anchor;
             Items = items;
- 
 
             
             Menu = new Android.Widget.PopupMenu(Context, Anchor.GetRenderer().View);

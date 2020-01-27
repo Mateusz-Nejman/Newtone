@@ -12,10 +12,14 @@ using Android.Media;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
+using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
+using NSEC.Music_Player.Views.CustomViews;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using Xam.Plugin.WebView.Droid;
+using Xamarin.Forms;
 using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player
@@ -24,6 +28,8 @@ namespace NSEC.Music_Player
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private List<string> folders;
+        private bool backPressed = false;
+        private Intent backgroundIntent;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             
@@ -72,6 +78,8 @@ namespace NSEC.Music_Player
             
             LoadApplication(new App(folders.ToArray()));
 
+            backgroundIntent = new Intent(this, typeof(BackgroundService));
+
         }
         
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -99,33 +107,51 @@ namespace NSEC.Music_Player
         protected override void OnPause()
         {
             Console.WriteLine("MainActivity OnPause");
-            if (!Global.WakeLock.IsHeld)
-                Global.WakeLock.Acquire();
             base.OnPause();
         }
 
         protected override void OnRestart()
         {
             Console.WriteLine("MainActivity OnRestart");
-            if (Global.WakeLock.IsHeld)
-                Global.WakeLock.Release();
             base.OnRestart();
         }
 
         protected override void OnResume()
         {
             Console.WriteLine("MainActivity OnResume");
-            if(Global.WakeLock.IsHeld)
-                Global.WakeLock.Release();
+            StopService(backgroundIntent);
             base.OnResume();
         }
 
         protected override void OnStart()
         {
             Console.WriteLine("MainActivity OnStart");
-            if (Global.WakeLock.IsHeld)
-                Global.WakeLock.Release();
             base.OnStart();
+        }
+
+        public override void OnBackPressed()
+        {
+            
+            if(App.Instance.MainPage.Navigation.NavigationStack.Count == 1)
+            {
+                if (backPressed)
+                    base.OnBackPressed();
+                else
+                {
+                    SnackbarBuilder.Show(Localization.BackPressed);
+                    backPressed = true;
+                    Task.Run(() => {
+                        Thread.Sleep(2000);
+                        backPressed = false;
+                    });
+                }
+                
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
+            
         }
 
         protected override void OnStop()
@@ -133,10 +159,8 @@ namespace NSEC.Music_Player
             Console.WriteLine("MainActivity OnStop");
             if(Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying)
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            if (!Global.WakeLock.IsHeld)
-                Global.WakeLock.Acquire();
 
-
+            StartService(backgroundIntent);
             base.OnStop();
         }
 
@@ -158,6 +182,7 @@ namespace NSEC.Music_Player
 
             Global.PowerManager = (PowerManager)GetSystemService(PowerService);
             Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
+            Global.WakeLock.Acquire();
             Global.Audios = new Dictionary<string, Logic.MediaProcessing.MediaTag>();
             Global.Authors = new Dictionary<string, List<string>>();
             Global.CurrentPlaylist = new List<Models.Track>();
@@ -171,7 +196,7 @@ namespace NSEC.Music_Player
             Global.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             Global.PlayerMode = Models.PlayerMode.All;
             Global.LastPlayerClick = true;
-
+            Global.EmptyTrack = ImageSource.FromFile("emptyTrack.png");
             
         }
     }

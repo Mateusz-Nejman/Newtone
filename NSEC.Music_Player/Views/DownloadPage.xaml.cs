@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LobbyPage : TabbedPage
+    public partial class DownloadPage : ContentPage
     {
-        public LobbyPage()
+        public DownloadPage()
         {
             InitializeComponent();
         }

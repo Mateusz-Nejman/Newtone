@@ -2,6 +2,7 @@
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using NSEC.Music_Player.ViewModels.Tabs;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +16,7 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class TracksTab : ContentPage, IAsyncEndListener
+    public partial class TracksTab : ContentPage, IAsyncEndListener, IInvokePage
     {
         readonly TracksTabModel model;
 
@@ -84,6 +85,11 @@ namespace NSEC.Music_Player.Views.Tabs
         private void Button_Clicked(object sender, EventArgs e)
         {
             TrackProcessing.Process(sender, model.Items, this);
+        }
+
+        public void PageInvoke()
+        {
+            TracksTab_Appearing(null, null);
         }
     }
 }

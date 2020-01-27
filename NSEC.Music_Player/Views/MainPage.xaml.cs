@@ -15,13 +15,14 @@ namespace NSEC.Music_Player.Views
     public partial class MainPage : NavigationPage
     {
         public static MainPage Instance { get; set; }
-        public static List<MediaProcessing.MediaTag> containers = new List<MediaProcessing.MediaTag>();
         public MainPage(Page page)
         {
             InitializeComponent();
             Instance = this;
 
             this.Appearing += MainPage_Appearing;
+            Task.Run(async () => { await Helpers.LoadGlobalsOnce(); }).Wait();
+            Global.LoadConfig();
 
             Navigation.PushAsync(page);
             //containers = new List<MP3Processing.Container>(AsyncHelper.RunSync<MP3Processing.Container[]>(() => FileProcessing.ListFiles(App.Directories)));

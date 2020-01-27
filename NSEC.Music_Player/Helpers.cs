@@ -62,7 +62,7 @@ namespace NSEC.Music_Player
                 foreach (string filepath in Global.Audios.Keys)
                 {
                     MediaProcessing.MediaTag container = Global.Audios[filepath];
-                    tracksBeforeSort.Add(new Models.Track { Id = container.FilePath, Text = container.Title, Description = container.Artist, Container = container, Tag = container.FilePath });
+                    tracksBeforeSort.Add(new Models.Track { Id = container.FilePath, Text = container.Title, Description = container.Artist, Container = container });
                 }
 
                 List<Models.Track> tracksAfterSort = tracksBeforeSort.OrderBy(o => o.Text).ToList();

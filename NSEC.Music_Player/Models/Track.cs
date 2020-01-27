@@ -1,6 +1,7 @@
 ﻿using NSEC.Music_Player.Logic;
 using System;
 using System.ComponentModel;
+using System.IO;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
@@ -49,6 +50,14 @@ namespace NSEC.Music_Player.Models
             get
             {
                 return Container == null ? "" : Container.FilePath;
+            }
+        }
+
+        public ImageSource Picture
+        {
+            get
+            {
+                return Container == null || Container.Picture == null || Container.Picture.Length == 0 ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(Container.Picture));
             }
         }
 

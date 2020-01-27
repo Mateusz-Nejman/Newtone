@@ -129,6 +129,9 @@
   <data name="Add" xml:space="preserve">
     <value>Dodaj</value>
   </data>
+  <data name="BackPressed" xml:space="preserve">
+    <value>Naciśnij jeszcze raz, żeby wyjść</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="ExploreMost" xml:space="preserve">
     <value>Najczęściej odtwarzane</value>
+  </data>
+  <data name="FileCorrupted" xml:space="preserve">
+    <value>Nie mogę otworzyć pliku</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
     <value>Nowa playlista</value>
@@ -162,6 +168,9 @@
   <data name="Playlist" xml:space="preserve">
     <value>Playlista</value>
   </data>
+  <data name="PlaylistCorrupted" xml:space="preserve">
+    <value>Nie mogę odtworzyć playlisty</value>
+  </data>
   <data name="Question" xml:space="preserve">
     <value>Pytanko</value>
   </data>
@@ -176,6 +185,9 @@
   </data>
   <data name="SnackDelete" xml:space="preserve">
     <value>Pomyślnie usunięto</value>
+  </data>
+  <data name="SnackFileExists" xml:space="preserve">
+    <value>Plik nie istnieje</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
     <value>Dodano do playlisty</value>

@@ -1,4 +1,5 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.CustomViews;
 using System;
@@ -13,7 +14,7 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PlaylistPage : ContentPage
+    public partial class PlaylistPage : ContentPage, IInvokePage
     {
         public ObservableCollection<Track> MenuItems { get; set; }
         public PlaylistPage(string playlist)
@@ -41,7 +42,7 @@ namespace NSEC.Music_Player.Views
                     await Navigation.PushAsync(new PlayerPage(item, MenuItems.ToList(), e.SelectedItemIndex));
                 }
                 else
-                    SnackbarBuilder.Show("Nie mogę znaleźć określonego pliku");
+                    SnackbarBuilder.Show(Localization.SnackFileExists);
             };
 
             PlaylistTrackListView.BindingContext = this;
@@ -68,6 +69,11 @@ namespace NSEC.Music_Player.Views
         private void Button_Clicked(object sender, EventArgs e)
         {
             TrackProcessing.Process(sender, MenuItems, this, true, Title);
+        }
+
+        public void PageInvoke()
+        {
+            TracksTab_Appearing(null, null);
         }
     }
 }

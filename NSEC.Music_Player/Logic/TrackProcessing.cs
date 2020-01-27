@@ -46,7 +46,7 @@ namespace NSEC.Music_Player.Logic
             View = view;
             Playlist = playlist;
             PlaylistName = playlistName;
-            PopupMenu menu = new PopupMenu(Global.Context,(View)sender,Localization.TrackMenuQueue,Localization.TrackMenuPlaylist,Localization.TrackMenuDelete);
+            PopupMenu menu = new PopupMenu(Global.Context,(View)sender, Localization.TrackMenuQueue,Localization.TrackMenuPlaylist,Localization.TrackMenuDelete);
             menu.OnSelect += Menu_OnItemSelected;
 
             menu.Show();
@@ -60,7 +60,7 @@ namespace NSEC.Music_Player.Logic
             Track track = Helpers.FindTrackByTag(Items, CurrentTag);
 
             if (track == null)
-                SnackbarBuilder.Show("Plik nie istnieje");
+                SnackbarBuilder.Show(Localization.SnackFileExists);
             else
             {
                 if (item == Localization.TrackMenuDelete)
@@ -158,6 +158,9 @@ namespace NSEC.Music_Player.Logic
                     SnackbarBuilder.Show(Localization.SnackQueue);
                 }
             }
+
+            if (View is IInvokePage)
+                ((IInvokePage)View).PageInvoke();
             
         }
     }

@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Tabs.YoutubeTab"
              Title="Youtube"
-             Visual="Default">
+             Visual="Default" BackgroundColor="Black">
     <ContentPage.Content>
         <RelativeLayout>
             <Button x:Name="prevButton" ImageSource="backIcon.png" Clicked="PrevButton_Clicked" BackgroundColor="#00000000"

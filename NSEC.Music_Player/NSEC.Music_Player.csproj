@@ -91,6 +91,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
+    <Compile Include="Logic\BackgroundService.cs" />
     <Compile Include="Logic\FileProcessing.cs" />
     <Compile Include="Logic\MediaProcessing.cs" />
     <Compile Include="Logic\TickParser.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Views\ArtistPage.xaml.cs">
       <DependentUpon>ArtistPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\InvokePage.cs" />
     <Compile Include="Views\CustomViews\CustomButton.cs" />
     <Compile Include="Views\CustomViews\PlayerPanel.xaml.cs">
       <DependentUpon>PlayerPanel.xaml</DependentUpon>
@@ -123,6 +125,9 @@
     <Compile Include="Views\CustomViews\SnackbarBuilder.cs" />
     <Compile Include="Views\CustomViews\TrackView.xaml.cs">
       <DependentUpon>TrackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DownloadPage.xaml.cs">
+      <DependentUpon>DownloadPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LobbyPage.xaml.cs">
       <DependentUpon>LobbyPage.xaml</DependentUpon>
@@ -379,6 +384,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\PermissionMainPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\DownloadPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

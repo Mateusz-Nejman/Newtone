@@ -13,12 +13,14 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ExploreTab : ContentPage
+    public partial class ExploreTab : ContentPage, IInvokePage
     {
         public ExploreTab()
         {
             InitializeComponent();
             Appearing += ExploreTab_Appearing;
+            Refresh(mostView, Global.MostTracks);
+            Refresh(lastView, Global.LastTracks);
         }
 
         private void ExploreTab_Appearing(object sender, EventArgs e)
@@ -35,22 +37,31 @@ namespace NSEC.Music_Player.Views.Tabs
             tracks = tracks.OrderByDescending(o => o.Count).ToList();
 
             layout.Children.Clear();
+            int minus = 0;
             for(int a = 0; a < tracks.Count; a++)
             {
                 if(a < 5)
                 {
-                    if(File.Exists(tracks[a].Track))
+                    if (File.Exists(tracks[a].Track))
                     {
                         TrackView trackView = new TrackView
                         {
-                            FilePath = tracks[a].Track
+                            FilePath = tracks[a].Track,
+                            PlaylistIndex = a-minus,
+                            LastTracks = layout == lastView
                         };
 
                         layout.Children.Add(trackView);
                     }
+                    else
+                        minus += 1;
                 }
             }
         }
-        
+
+        public void PageInvoke()
+        {
+            ExploreTab_Appearing(null, null);
+        }
     }
 }

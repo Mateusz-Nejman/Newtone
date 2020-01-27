@@ -1,6 +1,7 @@
 ﻿using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using NSEC.Music_Player.ViewModels.Tabs;
+using NSEC.Music_Player.Views.CustomViews;
 using System;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ArtistsTab : ContentPage, IAsyncEndListener
+    public partial class ArtistsTab : ContentPage, IAsyncEndListener, IInvokePage
     {
         readonly ArtistsTabModel model;
 
@@ -85,6 +86,11 @@ namespace NSEC.Music_Player.Views.Tabs
         public void AsyncEnd()
         {
             AsyncEnded.Invoke(this, new EventArgs());
+        }
+
+        public void PageInvoke()
+        {
+            AuthorsTab_Appearing(null, null);
         }
     }
 }

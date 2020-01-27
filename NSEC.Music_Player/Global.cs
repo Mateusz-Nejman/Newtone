@@ -10,10 +10,12 @@ using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Xamarin.Forms;
 using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player
@@ -59,6 +61,7 @@ namespace NSEC.Music_Player
         public static NotificationManager NotificationManager { get; set; }
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
+        public static ImageSource EmptyTrack { get; set; }
         /*
          * Global app controllers
          */
@@ -91,7 +94,7 @@ namespace NSEC.Music_Player
                             if(File.Exists(trackContainer.FilePath))
                             {
                                 
-                                Track track = new Track() { Text = (string)playlistTrack[0], Description = (string)playlistTrack[1], Tag = (string)playlistTrack[2], Container = trackContainer, Id = (string)playlistTrack[4] };
+                                Track track = new Track() { Text = (string)playlistTrack[0], Description = (string)playlistTrack[1], Container = trackContainer, Id = (string)playlistTrack[4] };
                                 newPlaylist.Add(track);
                             }
                         }

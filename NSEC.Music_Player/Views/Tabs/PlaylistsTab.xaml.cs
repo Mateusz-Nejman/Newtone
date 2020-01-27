@@ -17,7 +17,7 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Tabs
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PlaylistsTab : ContentPage, IAsyncEndListener
+    public partial class PlaylistsTab : ContentPage, IAsyncEndListener, IInvokePage
     {
         readonly PlaylistsTabModel model;
 
@@ -125,7 +125,7 @@ namespace NSEC.Music_Player.Views.Tabs
                     }
 
                     if (!files)
-                        SnackbarBuilder.Show("Nie mogę odtworzyć playlisty");
+                        SnackbarBuilder.Show(Localization.PlaylistCorrupted);
                     
                 }
                 
@@ -143,6 +143,11 @@ namespace NSEC.Music_Player.Views.Tabs
                     SnackbarBuilder.Show(Localization.SnackDelete);
                 }
             }
+        }
+
+        public void PageInvoke()
+        {
+            PlaylistsTab_Appearing(null, null);
         }
     }
 }

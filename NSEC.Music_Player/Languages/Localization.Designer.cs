@@ -97,6 +97,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, żeby wyjść.
+        /// </summary>
+        public static string BackPressed {
+            get {
+                return ResourceManager.GetString("BackPressed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Anuluj.
         /// </summary>
         public static string Cancel {
@@ -129,6 +138,15 @@ namespace NSEC.Music_Player.Languages {
         public static string ExploreMost {
             get {
                 return ResourceManager.GetString("ExploreMost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nie mogę otworzyć pliku.
+        /// </summary>
+        public static string FileCorrupted {
+            get {
+                return ResourceManager.GetString("FileCorrupted", resourceCulture);
             }
         }
         
@@ -196,6 +214,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nie mogę odtworzyć playlisty.
+        /// </summary>
+        public static string PlaylistCorrupted {
+            get {
+                return ResourceManager.GetString("PlaylistCorrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pytanko.
         /// </summary>
         public static string Question {
@@ -237,6 +264,15 @@ namespace NSEC.Music_Player.Languages {
         public static string SnackDelete {
             get {
                 return ResourceManager.GetString("SnackDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik nie istnieje.
+        /// </summary>
+        public static string SnackFileExists {
+            get {
+                return ResourceManager.GetString("SnackFileExists", resourceCulture);
             }
         }
         

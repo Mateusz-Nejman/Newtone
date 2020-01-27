@@ -14,7 +14,6 @@ namespace NSEC.Music_Player
     public partial class App : Application
     {
         public static App Instance { get; set; }
-        public static bool IsInLobby = false;
         public App(string[] directories)
         {
             InitializeComponent();
