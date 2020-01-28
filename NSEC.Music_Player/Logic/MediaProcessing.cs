@@ -28,19 +28,19 @@ namespace NSEC.Music_Player.Logic
 
             try
             {
-                using TagLib.File audioFile = TagLib.File.Create(filePath);
-                container.Title = audioFile.Tag.Title == "" || audioFile.Tag.Title == null ? new FileInfo(filePath).Name : audioFile.Tag.Title;
+                ATL.Track audioFile = new ATL.Track(filePath);
+                container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;
                 Console.WriteLine(container.Title);
 
-                container.Album = audioFile.Tag.Album;
-                string artistsJoin = string.Join(", ", audioFile.Tag.Performers);
+                container.Album = audioFile.Album;
+                string artistsJoin = string.Join(", ", audioFile.Artist);
                 container.Artist = artistsJoin == "" ? Localization.UnknownArtist : artistsJoin;
 
-                for (int a = 0; a < audioFile.Tag.Pictures.Length; a++)
+                for (int a = 0; a < audioFile.EmbeddedPictures.Count; a++)
                 {
-                    if (audioFile.Tag.Pictures[a] != null && audioFile.Tag.Pictures[a].Data.Data.Length > 0)
+                    if (audioFile.EmbeddedPictures[a] != null && audioFile.EmbeddedPictures[a].PictureData.Length > 0)
                     {
-                        container.Picture = audioFile.Tag.Pictures[a].Data.Data;
+                        container.Picture = audioFile.EmbeddedPictures[a].PictureData;
                         break;
                     }
                 }

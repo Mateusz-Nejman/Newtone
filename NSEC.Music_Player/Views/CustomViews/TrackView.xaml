@@ -5,14 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.CustomViews.TrackView">
-  <ContentView.Content>
+    <ContentView.Content>
         <RelativeLayout HeightRequest="120" WidthRequest="96" Margin="5">
             <Frame HasShadow="False"
                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=0,Constant=96}"
                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=0,Constant=96}"  CornerRadius="16" Padding="0" x:Name="frame">
                 <Image Source="emptyTrack.png" 
                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
-                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}"/>
+                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height,Factor=1}" x:Name="trackImage"/>
             </Frame>
             <Label x:Name="trackLabel" TextColor="White" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=96}"
                                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=0,Constant=96}"

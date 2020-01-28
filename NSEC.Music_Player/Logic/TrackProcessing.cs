@@ -21,10 +21,10 @@ namespace NSEC.Music_Player.Logic
         private static Page View { get; set; }
         private static bool Playlist { get; set; }
         private static string PlaylistName { get; set; }
-        
-        public static void Process(object sender,ObservableCollection<Track> items, Page view)
+
+        public static void Process(object sender, ObservableCollection<Track> items, Page view)
         {
-            Process(sender, items, view, false,"");
+            Process(sender, items, view, false, "");
         }
 
         public static Track GetTrack(string filepath)
@@ -36,7 +36,7 @@ namespace NSEC.Music_Player.Logic
                 Id = container.FilePath
             };
         }
-        public static void Process(object sender,ObservableCollection<Track> items,Page view, bool playlist, string playlistName)
+        public static void Process(object sender, ObservableCollection<Track> items, Page view, bool playlist, string playlistName)
         {
             CustomButton button = (CustomButton)sender;
             Console.WriteLine("BUTTON TAG: " + button.Tag);
@@ -46,7 +46,7 @@ namespace NSEC.Music_Player.Logic
             View = view;
             Playlist = playlist;
             PlaylistName = playlistName;
-            PopupMenu menu = new PopupMenu(Global.Context,(View)sender, Localization.TrackMenuQueue,Localization.TrackMenuPlaylist,Localization.TrackMenuDelete);
+            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, Localization.TrackMenuQueue, Localization.TrackMenuPlaylist, Localization.TrackMenuDelete);
             menu.OnSelect += Menu_OnItemSelected;
 
             menu.Show();
@@ -72,6 +72,11 @@ namespace NSEC.Music_Player.Logic
                         {
                             File.Delete(track.Container.FilePath);
 
+                            if (Global.Artists[track.Container.Artist].Contains(track.Container.FilePath))
+                                Global.Artists[track.Container.Artist].Remove(track.Container.FilePath);
+
+                            if (Global.Artists[track.Container.Artist].Count == 0)
+                                Global.Artists.Remove(track.Container.Artist);
                         }
 
                         if (Global.Playlists.ContainsKey(PlaylistName))
@@ -161,7 +166,7 @@ namespace NSEC.Music_Player.Logic
 
             if (View is IInvokePage)
                 ((IInvokePage)View).PageInvoke();
-            
+
         }
     }
 }

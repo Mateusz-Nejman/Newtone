@@ -77,21 +77,21 @@ namespace NSEC.Music_Player.Media
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            if(Global.PlayerMode == PlayerMode.One)
+            if (Global.PlayerMode == PlayerMode.One)
             {
                 MediaPlayer.SeekTo(0);
                 MediaPlayer.Start();
             }
             else
             {
-                if(Global.CurrentQueue.Count > 0)
+                if (Global.CurrentQueue.Count > 0)
                 {
                     Global.CurrentQueuePosition += 1;
                 }
 
                 Next();
             }
-            
+
             TrackCompleted?.Invoke(this, e);
         }
 
@@ -116,7 +116,7 @@ namespace NSEC.Music_Player.Media
 
             try
             {
-                
+
                 //MediaPlayer.SetDataSource(filename);
                 MediaPlayer.SetDataSource(filename);
             }
@@ -126,7 +126,7 @@ namespace NSEC.Music_Player.Media
                 {
                     var context = Android.App.Application.Context;
                     MediaPlayer?.SetDataSource(Global.Context, Uri.Parse(Uri.Encode(filename)));
-                    
+
                 }
                 catch
                 {
@@ -135,7 +135,7 @@ namespace NSEC.Music_Player.Media
             }
 
             Console.WriteLine("MediaPlayer " + filename);
-           try
+            try
             {
                 MediaPlayer?.Prepare();
             }
@@ -161,7 +161,7 @@ namespace NSEC.Music_Player.Media
 
         public void Next()
         {
-            if(Global.CurrentPlaylist.Count > 0)
+            if (Global.CurrentPlaylist.Count > 0)
             {
                 Track track;
                 if (Global.CurrentQueue.Count > 0)
@@ -179,10 +179,10 @@ namespace NSEC.Music_Player.Media
                     }
 
                     track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-                    
+
                 }
 
-                if(File.Exists(track.Container.FilePath))
+                if (File.Exists(track.Container.FilePath))
                 {
                     Global.CurrentTrack = track.Container;
                     Global.AudioPlayerTrack = track.Id;
@@ -198,13 +198,13 @@ namespace NSEC.Music_Player.Media
                 {
                     SnackbarBuilder.Show(Localization.SnackFileExists);
                 }
-                
+
             }
         }
 
         public void Prev()
         {
-            if(Global.CurrentPlaylist.Count > 0)
+            if (Global.CurrentPlaylist.Count > 0)
             {
                 if (Global.CurrentPlaylist.Count > 1)
                 {
@@ -216,8 +216,8 @@ namespace NSEC.Music_Player.Media
 
                 Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
 
-                
-                if(File.Exists(track.Container.FilePath))
+
+                if (File.Exists(track.Container.FilePath))
                 {
                     Global.CurrentTrack = track.Container;
                     Global.AudioPlayerTrack = track.Id;
@@ -232,22 +232,22 @@ namespace NSEC.Music_Player.Media
                 {
                     SnackbarBuilder.Show(Localization.SnackFileExists);
                 }
-                
+
 
             }
-            
+
         }
 
         public void Pause()
         {
             MediaPlayer.Pause();
             SetNotification(Global.CurrentTrack);
-            
+
         }
 
         public void Seek(double seek)
         {
-            if(CanSeek)
+            if (CanSeek)
                 MediaPlayer.SeekTo((int)seek * 1000);
         }
 
@@ -262,7 +262,7 @@ namespace NSEC.Music_Player.Media
         }
         public void SetNotification(MediaProcessing.MediaTag container)
         {
-            if(container != null)
+            if (container != null)
             {
                 PendingIntent prevIntent = PendingIntent.GetBroadcast(Global.Context, 1, new Intent("prev"), PendingIntentFlags.Immutable);
                 PendingIntent playIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("play"), PendingIntentFlags.Immutable);
@@ -276,6 +276,7 @@ namespace NSEC.Music_Player.Media
                 NotificationCompat.Action actionNext = new NotificationCompat.Action(Resource.Drawable.nextIconNotification, "Next", nextIntent);
                 NotificationCompat.Action actionStop = new NotificationCompat.Action(Resource.Drawable.stopIcon, "Stop", stopIntent);
 
+                Bitmap largeIcon = container.Picture == null ? BitmapFactory.DecodeResource(Global.Context.Resources, Resource.Drawable.emptyTrack) : BitmapFactory.DecodeByteArray(container.Picture, 0, container.Picture.Length);
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(Global.Context, "nsec music_player notification").
                     SetContentTitle(container.Title).
@@ -288,7 +289,7 @@ namespace NSEC.Music_Player.Media
                     SetContentIntent(openIntent).
                     SetSound(null).
                     SetStyle(new MediaStyle()).
-                    SetLargeIcon(BitmapFactory.DecodeResource(Global.Context.Resources, Resource.Drawable.emptyTrack)).
+                    SetLargeIcon(largeIcon).
                     SetVisibility(NotificationCompat.VisibilityPublic).SetOngoing(true);
                 Notification notification = builder.Build();
 
@@ -320,15 +321,15 @@ namespace NSEC.Music_Player.Media
                 Global.MediaPlayer.Play();
             else if (intent.Action == "pause")
                 Global.MediaPlayer.Pause();
-            else if(intent.Action == "open")
+            else if (intent.Action == "open")
             {
-                
+
             }
-            else if(intent.Action == "close")
+            else if (intent.Action == "close")
             {
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
             }
-            Console.WriteLine("MediaPlayerReceiver "+intent.Action);
+            Console.WriteLine("MediaPlayerReceiver " + intent.Action);
         }
     }
 }

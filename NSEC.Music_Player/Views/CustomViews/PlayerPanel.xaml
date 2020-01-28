@@ -11,7 +11,7 @@
                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-8}"
                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1.0, Constant=-8}" Padding="0">
-                <Image Source="emptyTrack.png"/>
+                <Image Source="emptyTrack.png" x:Name="trackImage"/>
             </Frame>
             <Label x:Name="titleLabel" Text="Matma to chuj asd a sdas gfdsgf gfsgdsfg" TextColor="White" FontSize="Large" LineBreakMode="TailTruncation"
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=74}" 

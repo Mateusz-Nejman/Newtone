@@ -35,7 +35,7 @@ namespace NSEC.Music_Player.Views.CustomViews
 
                 TrackCounter[] trackCounters = lastTracks ? Global.LastTracks : Global.MostTracks;
 
-                for(int a = 0; a < trackCounters.Length; a++)
+                for (int a = 0; a < trackCounters.Length; a++)
                 {
                     Playlist.Add(new Track() { Container = Global.Audios[trackCounters[a].Track] });
                 }
@@ -54,14 +54,15 @@ namespace NSEC.Music_Player.Views.CustomViews
                 track = new Track
                 {
                     Container = Global.Audios[filePath],
-                    
+
                 };
                 track.Id = track.Container.Artist + track.Container.Title;
                 trackLabel.Text = track.Container.Title;
-                
+                trackImage.Source = track.Picture;
+
             }
         }
-        
+
         public TrackView()
         {
             InitializeComponent();

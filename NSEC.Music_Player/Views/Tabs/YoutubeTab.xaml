@@ -21,13 +21,18 @@
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"
                     RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"/>
+            <Button x:Name="listButton" ImageSource="listIcon.png" Clicked="ListButton_Clicked"  BackgroundColor="#00000000"
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0,Constant=-37}"
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}"
+                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"
+                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=32}"/>
             <Label x:Name="progressLabel" TextColor="White" 
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=79}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=5}" FontSize="20"/>
             <ProgressBar x:Name="progressBar" ProgressColor="#EF6C00"
                          RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=79}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=28}"
-                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0,Constant=-84}"/>
+                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1.0,Constant=-126}"/>
             <Grid x:Name="webViewGrid" VerticalOptions="FillAndExpand" 
                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Factor=0,Constant=5}"
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=42}"

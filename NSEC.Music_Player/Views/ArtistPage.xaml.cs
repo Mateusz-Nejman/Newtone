@@ -23,14 +23,14 @@ namespace NSEC.Music_Player.Views
             MenuItems = new ObservableCollection<Track>();
 
             List<Track> tracksBeforeSort = new List<Track>();
-            foreach (string filepath in Global.Authors[artist])
+            foreach (string filepath in Global.Artists[artist])
             {
-                if(Global.Audios.ContainsKey(filepath))
+                if (Global.Audios.ContainsKey(filepath))
                 {
                     MediaProcessing.MediaTag container = Global.Audios[filepath];
                     tracksBeforeSort.Add(new Track() { Id = container.Artist + container.Title, Text = container.Title, Description = container.Artist, Container = container });
                 }
-                
+
                 //MenuItems.Add(new Track() { Id = container.Author + container.Title, Text = container.Title, Description = container.Author, Container = container });
             }
 

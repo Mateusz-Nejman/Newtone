@@ -23,12 +23,12 @@ namespace NSEC.Music_Player
             {
                 Track unknownAuthor = null;
                 List<Models.Track> artistsBeforeSort = new List<Models.Track>();
-                foreach (string artist in Global.Authors.Keys)
+                foreach (string artist in Global.Artists.Keys)
                 {
-                    if(artist == "Nieznany")
-                        unknownAuthor = new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount+": " + Global.Authors[artist].Count };
+                    if (artist == "Nieznany")
+                        unknownAuthor = new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount + ": " + Global.Artists[artist].Count };
                     else
-                        artistsBeforeSort.Add(new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount + ": " + Global.Authors[artist].Count });
+                        artistsBeforeSort.Add(new Models.Track { Id = artist, Text = artist, Description = Localization.TracksCount + ": " + Global.Artists[artist].Count });
                     //model.Items.Add();
                     //await model.DataStore.AddItemAsync(new Models.Track { Id = artist, Text = artist, Description = "Utworów: " + Global.Audios[artist].Count });
                 }
@@ -91,10 +91,10 @@ namespace NSEC.Music_Player
             {
                 List<Models.Track> playlistsBeforeSort = new List<Models.Track>();
 
-                foreach(string playlist in Global.Playlists.Keys)
+                foreach (string playlist in Global.Playlists.Keys)
                 {
                     List<Track> tracks = Global.Playlists[playlist];
-                    playlistsBeforeSort.Add(new Track() { Id = playlist, Text = playlist, Description = Localization.TracksCount + ": " + tracks.Count});
+                    playlistsBeforeSort.Add(new Track() { Id = playlist, Text = playlist, Description = Localization.TracksCount + ": " + tracks.Count });
                 }
 
                 List<Models.Track> playlistsAfterSort = playlistsBeforeSort.OrderBy(o => o.Text).ToList();
@@ -146,10 +146,10 @@ namespace NSEC.Music_Player
                 //File.AppendAllText(App.debugPath + "/debug.txt", "Create list for " + files[a].Author.Trim() + "\n");
                 Global.Audios.Add(container.FilePath, container);
 
-                if (!Global.Authors.ContainsKey(container.Artist))
-                    Global.Authors.Add(container.Artist, new List<string>());
+                if (!Global.Artists.ContainsKey(container.Artist))
+                    Global.Artists.Add(container.Artist, new List<string>());
 
-                Global.Authors[container.Artist].Add(container.FilePath);
+                Global.Artists[container.Artist].Add(container.FilePath);
             }
 
             //File.AppendAllText(App.debugPath + "/debug.txt", "Add " + files[a] + " to " + files[a].Author.Trim() + "\n");
@@ -157,22 +157,22 @@ namespace NSEC.Music_Player
 
         public static Track FindTrackByTag(ObservableCollection<Track> Items, string tag)
         {
-            foreach(Track track in Items)
+            foreach (Track track in Items)
             {
                 if (File.Exists(track.Container.FilePath) && track.Container.FilePath == tag)
                 {
                     track.Text = track.Container.Title;
                     return track;
                 }
-                    
+
             }
             return null;
         }
 
         public static void RemoveTrack(string path, bool onlyPlaylist, params ObservableCollection<Track>[] tracks)
         {
-            
-            if(!onlyPlaylist)
+
+            if (!onlyPlaylist)
             {
                 foreach (string filepath in Global.Audios.Keys)
                 {
@@ -225,7 +225,7 @@ namespace NSEC.Music_Player
 
             tracks.Add(new TrackCounter(filepath, 0));
             tracks.Reverse();
-            if(tracks.Count > 5)
+            if (tracks.Count > 5)
                 tracks.RemoveAt(tracks.Count - 1);
 
             Global.LastTracks = tracks.ToArray();

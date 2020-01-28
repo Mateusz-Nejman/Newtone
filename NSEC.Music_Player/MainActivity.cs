@@ -32,11 +32,11 @@ namespace NSEC.Music_Player
         private Intent backgroundIntent;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            
+
             Console.WriteLine("MainActivity OnCreate");
             base.OnCreate(savedInstanceState);
             Global.Context = this;
-            
+
             var customReceiver = new MediaPlayerReceiver();
             var intentFilter = new IntentFilter();
             intentFilter.AddAction("prev");
@@ -45,9 +45,9 @@ namespace NSEC.Music_Player
             intentFilter.AddAction("pause");
             intentFilter.AddAction("open");
             intentFilter.AddAction("close");
-            RegisterReceiver(customReceiver,intentFilter);
+            RegisterReceiver(customReceiver, intentFilter);
 
-            
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             InitializeGlobalVariables();
@@ -58,7 +58,7 @@ namespace NSEC.Music_Player
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
-            
+
             string[] paths = new string[] { Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath,
                 Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).AbsolutePath,
                 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
@@ -75,13 +75,13 @@ namespace NSEC.Music_Player
             }
 
 
-            
+
             LoadApplication(new App(folders.ToArray()));
 
             backgroundIntent = new Intent(this, typeof(BackgroundService));
 
         }
-        
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -101,7 +101,7 @@ namespace NSEC.Music_Player
         {
             Console.WriteLine("MainActivity OnDestroy");
             base.OnDestroy();
-            
+
         }
 
         protected override void OnPause()
@@ -131,8 +131,8 @@ namespace NSEC.Music_Player
 
         public override void OnBackPressed()
         {
-            
-            if(App.Instance.MainPage.Navigation.NavigationStack.Count == 1)
+
+            if (App.Instance.MainPage.Navigation.NavigationStack.Count == 1)
             {
                 if (backPressed)
                     base.OnBackPressed();
@@ -145,19 +145,19 @@ namespace NSEC.Music_Player
                         backPressed = false;
                     });
                 }
-                
+
             }
             else
             {
                 base.OnBackPressed();
             }
-            
+
         }
 
         protected override void OnStop()
         {
             Console.WriteLine("MainActivity OnStop");
-            if(Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying)
+            if (Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying)
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
 
             StartService(backgroundIntent);
@@ -171,11 +171,16 @@ namespace NSEC.Music_Player
         }
         private void InitializeGlobalVariables()
         {
-            NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Default);
-            notificationChannel.SetSound(null, null);
-            notificationChannel.SetVibrationPattern(new long[0]);
+
             Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
-            Global.NotificationManager.CreateNotificationChannel(notificationChannel);
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+            {
+                NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Default);
+                notificationChannel.SetSound(null, null);
+                notificationChannel.SetVibrationPattern(new long[0]);
+                Global.NotificationManager.CreateNotificationChannel(notificationChannel);
+            }
+
             Global.AudioManager = (AudioManager)GetSystemService(AudioService);
             AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
             Global.AudioManager.RequestAudioFocus(afrc);
@@ -184,7 +189,7 @@ namespace NSEC.Music_Player
             Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
             Global.WakeLock.Acquire();
             Global.Audios = new Dictionary<string, Logic.MediaProcessing.MediaTag>();
-            Global.Authors = new Dictionary<string, List<string>>();
+            Global.Artists = new Dictionary<string, List<string>>();
             Global.CurrentPlaylist = new List<Models.Track>();
             Global.CurrentPlaylistPosition = 0;
             Global.CurrentQueue = new List<Models.Track>();
@@ -197,7 +202,7 @@ namespace NSEC.Music_Player
             Global.PlayerMode = Models.PlayerMode.All;
             Global.LastPlayerClick = true;
             Global.EmptyTrack = ImageSource.FromFile("emptyTrack.png");
-            
+            Global.Downloads = new Dictionary<string, Models.DownloadModel>();
         }
     }
 }

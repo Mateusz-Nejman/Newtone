@@ -47,7 +47,7 @@ namespace NSEC.Music_Player.Views.Tabs
 
             if (url.StartsWith("https://m.youtube.com/watch?v="))
             {
-                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : url.Length) ;
+                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : url.Length);
                 Console.WriteLine("ONS: " + currentUrl);
             }
 
@@ -56,8 +56,9 @@ namespace NSEC.Music_Player.Views.Tabs
         private async void YoutubeButton_Clicked(object sender, EventArgs e)
         {
             //youtubeButton.Text = "Downloading";
-            youtubeButton.IsEnabled = false;
-            await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel);
+            //youtubeButton.IsEnabled = false;
+            if (!Global.Downloads.ContainsKey(currentUrl))
+                await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel);
         }
 
         private void YoutubeWebview_Navigating(object sender, WebNavigatingEventArgs e)
@@ -67,8 +68,8 @@ namespace NSEC.Music_Player.Views.Tabs
                 e.Cancel = true;
             else
                 currentUrl = e.Url;
-            
-            
+
+
 
         }
 
@@ -82,6 +83,11 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             if (WebView.CanGoBack)
                 WebView.GoBack();
+        }
+
+        private async void ListButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DownloadPage());
         }
     }
 }

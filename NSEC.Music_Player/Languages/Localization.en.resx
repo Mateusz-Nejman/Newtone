@@ -237,8 +237,14 @@
   <data name="YoutubeConvert" xml:space="preserve">
     <value>Converting to MP3</value>
   </data>
+  <data name="YoutubeDownloadFiles" xml:space="preserve">
+    <value>Downloading files</value>
+  </data>
   <data name="YoutubeDownloading" xml:space="preserve">
     <value>Downloading</value>
+  </data>
+  <data name="YoutubeDownloadTitle" xml:space="preserve">
+    <value>Downloading title</value>
   </data>
   <data name="YoutubeError" xml:space="preserve">
     <value>This video is blocked or unavailable</value>

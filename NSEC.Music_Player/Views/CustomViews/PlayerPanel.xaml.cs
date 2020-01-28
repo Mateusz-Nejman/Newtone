@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -8,6 +8,7 @@ namespace NSEC.Music_Player.Views.CustomViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlayerPanel : ContentView
     {
+        private string oldTrack = "";
         public PlayerPanel()
         {
             InitializeComponent();
@@ -51,6 +52,13 @@ namespace NSEC.Music_Player.Views.CustomViews
                 artistLabel.Text = Global.CurrentTrack.Artist;
                 bool start = Global.MediaPlayer.IsPlaying;
                 playStopButton.ImageSource = start ? ImageSource.FromFile("pauseIcon.png") : ImageSource.FromFile("playIcon.png");
+                if (Global.CurrentTrack.FilePath != oldTrack)
+                {
+                    oldTrack = Global.CurrentTrack.FilePath;
+                    trackImage.Source = Global.CurrentTrack.Picture != null ? ImageSource.FromStream(() => new MemoryStream(Global.CurrentTrack.Picture)) : ImageSource.FromFile("emptyTrack.png");
+                }
+
+
                 IsVisible = true;
             }
             else

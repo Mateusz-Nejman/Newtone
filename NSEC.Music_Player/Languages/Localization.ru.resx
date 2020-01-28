@@ -240,6 +240,12 @@
   <data name="YoutubeDownloading" xml:space="preserve">
     <value>Загруженные</value>
   </data>
+  <data name="YoutubeDownloadingFiles" xml:space="preserve">
+    <value>Скачивание  файлов</value>
+  </data>
+  <data name="YoutubeDownloadingTitle" xml:space="preserve">
+    <value>Загрузка заголовка</value>
+  </data>
   <data name="YoutubeError" xml:space="preserve">
     <value>Видео заблокировано или недоступно </value>
   </data>

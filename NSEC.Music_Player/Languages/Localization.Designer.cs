@@ -421,11 +421,29 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobieranie plików.
+        /// </summary>
+        public static string YoutubeDownloadFiles {
+            get {
+                return ResourceManager.GetString("YoutubeDownloadFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrano.
         /// </summary>
         public static string YoutubeDownloading {
             get {
                 return ResourceManager.GetString("YoutubeDownloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobieranie tytułu.
+        /// </summary>
+        public static string YoutubeDownloadTitle {
+            get {
+                return ResourceManager.GetString("YoutubeDownloadTitle", resourceCulture);
             }
         }
         
