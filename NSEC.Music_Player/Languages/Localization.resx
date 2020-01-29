@@ -129,6 +129,9 @@
   <data name="Add" xml:space="preserve">
     <value>Dodaj</value>
   </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Wykonawca</value>
+  </data>
   <data name="BackPressed" xml:space="preserve">
     <value>Naciśnij jeszcze raz, żeby wyjść</value>
   </data>
@@ -183,6 +186,15 @@
   <data name="QuestionDeletePlaylist" xml:space="preserve">
     <value>Usunąć playlistę</value>
   </data>
+  <data name="SettingsAddTags" xml:space="preserve">
+    <value>Dodaj tagi do plików</value>
+  </data>
+  <data name="SettingsChanges" xml:space="preserve">
+    <value>Zmiany będą widoczne po ponownym uruchomieniu aplikacji</value>
+  </data>
+  <data name="SettingsClear" xml:space="preserve">
+    <value>Wyczyść dane</value>
+  </data>
   <data name="SnackDelete" xml:space="preserve">
     <value>Pomyślnie usunięto</value>
   </data>
@@ -194,6 +206,9 @@
   </data>
   <data name="SnackQueue" xml:space="preserve">
     <value>Dodano do kolejki</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Tytuł</value>
   </data>
   <data name="TitleAbout" xml:space="preserve">
     <value>O autorze</value>
@@ -219,6 +234,9 @@
   <data name="TrackMenuDeletePlaylist" xml:space="preserve">
     <value>Usuń z playlisty</value>
   </data>
+  <data name="TrackMenuEdit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
   <data name="TrackMenuPlaylist" xml:space="preserve">
     <value>Dodaj do playlisty</value>
   </data>
@@ -233,6 +251,9 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Tak</value>
+  </data>
+  <data name="YoutubeAddTags" xml:space="preserve">
+    <value>Dodać tagi(autor, tytuł, okładka)</value>
   </data>
   <data name="YoutubeConvert" xml:space="preserve">
     <value>Konwertowanie do MP3</value>

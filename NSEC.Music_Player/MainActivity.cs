@@ -173,17 +173,23 @@ namespace NSEC.Music_Player
         {
 
             Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
+            Global.AudioManager = (AudioManager)GetSystemService(AudioService);
             if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
             {
                 NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Default);
                 notificationChannel.SetSound(null, null);
                 notificationChannel.SetVibrationPattern(new long[0]);
                 Global.NotificationManager.CreateNotificationChannel(notificationChannel);
+                AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
+                Global.AudioManager.RequestAudioFocus(afrc);
+            }
+            else
+            {
+                Global.AudioManager.RequestAudioFocus(new AudioFocusListener(), Android.Media.Stream.Music, AudioFocus.GainTransient);
             }
 
-            Global.AudioManager = (AudioManager)GetSystemService(AudioService);
-            AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
-            Global.AudioManager.RequestAudioFocus(afrc);
+
+
 
             Global.PowerManager = (PowerManager)GetSystemService(PowerService);
             Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
@@ -203,6 +209,7 @@ namespace NSEC.Music_Player
             Global.LastPlayerClick = true;
             Global.EmptyTrack = ImageSource.FromFile("emptyTrack.png");
             Global.Downloads = new Dictionary<string, Models.DownloadModel>();
+            Global.AudioTags = new Dictionary<string, MediaProcessing.MediaTag>();
         }
     }
 }

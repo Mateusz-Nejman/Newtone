@@ -7,11 +7,12 @@
             mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.LobbyPage"
             NavigationPage.HasNavigationBar="False" BarBackgroundColor="#1b3a59">
-  <!--Pages can be added as references or inline-->
+    <!--Pages can be added as references or inline-->
     <tabs:ExploreTab BackgroundImageSource="background.png"/>
     <tabs:ArtistsTab BackgroundImageSource="background.png"/>
     <tabs:TracksTab BackgroundImageSource="background.png"/>
     <tabs:PlaylistsTab BackgroundImageSource="background.png"/>
     <tabs:YoutubeTab BackgroundImageSource="background.png"/>
+    <tabs:SettingsTab BackgroundImageSource="background.png"/>
     <tabs:AboutTab BackgroundImageSource="background.png"/>
 </TabbedPage>

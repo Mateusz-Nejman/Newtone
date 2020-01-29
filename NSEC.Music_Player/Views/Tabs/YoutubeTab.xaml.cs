@@ -58,7 +58,7 @@ namespace NSEC.Music_Player.Views.Tabs
             //youtubeButton.Text = "Downloading";
             //youtubeButton.IsEnabled = false;
             if (!Global.Downloads.ContainsKey(currentUrl))
-                await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel);
+                await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel, this);
         }
 
         private void YoutubeWebview_Navigating(object sender, WebNavigatingEventArgs e)

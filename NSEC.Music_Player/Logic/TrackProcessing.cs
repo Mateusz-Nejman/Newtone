@@ -46,7 +46,7 @@ namespace NSEC.Music_Player.Logic
             View = view;
             Playlist = playlist;
             PlaylistName = playlistName;
-            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, Localization.TrackMenuQueue, Localization.TrackMenuPlaylist, Localization.TrackMenuDelete);
+            PopupMenu menu = new PopupMenu(Global.Context, (View)sender, Localization.TrackMenuQueue, Localization.TrackMenuPlaylist, Localization.TrackMenuDelete, Localization.TrackMenuEdit);
             menu.OnSelect += Menu_OnItemSelected;
 
             menu.Show();
@@ -161,6 +161,47 @@ namespace NSEC.Music_Player.Logic
                         Global.CurrentQueue.Add(track);
 
                     SnackbarBuilder.Show(Localization.SnackQueue);
+                }
+                else if (item == Localization.TrackMenuEdit)
+                {
+                    string title;
+                    //Zmiany będą widoczne po ponownym uruchomieniu aplikacji
+
+                    string artist;
+                    if (Global.AudioTags.ContainsKey(track.Container.FilePath))
+                    {
+                        artist = Global.AudioTags[track.Container.FilePath].Artist;
+                        title = Global.AudioTags[track.Container.FilePath].Title;
+                    }
+                    else
+                    {
+                        FileInfo fileInfo = new FileInfo(track.Container.FilePath);
+                        string[] splitted = fileInfo.Name.Replace(fileInfo.Extension, "").Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
+                        artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
+                        title = splitted[splitted.Length == 1 ? 0 : 1];
+                    }
+
+
+
+                    string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist);
+                    string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title);
+
+                    userArtist = userArtist == "" ? artist : userArtist;
+                    userTitle = userTitle == "" ? title : userTitle;
+
+                    if (Global.AudioTags.ContainsKey(track.Container.FilePath))
+                    {
+                        Global.AudioTags[track.Container.FilePath].Artist = userArtist;
+                        Global.AudioTags[track.Container.FilePath].Title = userTitle;
+                    }
+                    else
+                    {
+                        Global.AudioTags.Add(track.Container.FilePath, new MediaProcessing.MediaTag() { Artist = userArtist, Title = userTitle });
+                    }
+
+                    Global.SaveTags();
+
+                    SnackbarBuilder.Show(Localization.SettingsChanges);
                 }
             }
 

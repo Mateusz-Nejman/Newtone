@@ -102,6 +102,7 @@
     <Compile Include="Media\CustomMediaPlayer.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\PlayerMode.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackCounter.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -159,6 +160,9 @@
     </Compile>
     <Compile Include="Views\Tabs\PlaylistsTab.xaml.cs">
       <DependentUpon>PlaylistsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SettingsTab.xaml.cs">
+      <DependentUpon>SettingsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\TracksTab.xaml.cs">
       <DependentUpon>TracksTab.xaml</DependentUpon>
@@ -227,12 +231,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Languages\Localization.be.resx" />
     <EmbeddedResource Include="Languages\Localization.en.resx" />
     <EmbeddedResource Include="Languages\Localization.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Languages\Localization.ru.resx" />
+    <EmbeddedResource Include="Languages\Localization.uk.resx" />
     <EmbeddedResource Include="Views\ArtistPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -395,6 +401,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\listIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Tabs\SettingsTab.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

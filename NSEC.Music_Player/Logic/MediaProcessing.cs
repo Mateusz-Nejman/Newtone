@@ -33,8 +33,7 @@ namespace NSEC.Music_Player.Logic
                 Console.WriteLine(container.Title);
 
                 container.Album = audioFile.Album;
-                string artistsJoin = string.Join(", ", audioFile.Artist);
-                container.Artist = artistsJoin == "" ? Localization.UnknownArtist : artistsJoin;
+                container.Artist = audioFile.Artist == "" ? Localization.UnknownArtist : audioFile.Artist;
 
                 for (int a = 0; a < audioFile.EmbeddedPictures.Count; a++)
                 {
@@ -50,6 +49,15 @@ namespace NSEC.Music_Player.Logic
             {
                 container.Title = new FileInfo(filePath).Name;
                 container.Artist = Localization.UnknownArtist;
+            }
+
+            if (Global.AudioTags.ContainsKey(filePath))
+            {
+                MediaTag newTags = Global.AudioTags[filePath];
+
+                container.Artist = newTags.Artist;
+                container.Title = newTags.Title;
+                container.Picture ??= newTags.Picture;
             }
             return container;
         }

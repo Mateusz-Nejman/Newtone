@@ -97,6 +97,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wykonawca.
+        /// </summary>
+        public static string Artist {
+            get {
+                return ResourceManager.GetString("Artist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, żeby wyjść.
         /// </summary>
         public static string BackPressed {
@@ -259,6 +268,33 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj tagi do plików.
+        /// </summary>
+        public static string SettingsAddTags {
+            get {
+                return ResourceManager.GetString("SettingsAddTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zmiany będą widoczne po ponownym uruchomieniu aplikacji.
+        /// </summary>
+        public static string SettingsChanges {
+            get {
+                return ResourceManager.GetString("SettingsChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyczyść dane.
+        /// </summary>
+        public static string SettingsClear {
+            get {
+                return ResourceManager.GetString("SettingsClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pomyślnie usunięto.
         /// </summary>
         public static string SnackDelete {
@@ -291,6 +327,15 @@ namespace NSEC.Music_Player.Languages {
         public static string SnackQueue {
             get {
                 return ResourceManager.GetString("SnackQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Tytuł.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
@@ -367,6 +412,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edytuj.
+        /// </summary>
+        public static string TrackMenuEdit {
+            get {
+                return ResourceManager.GetString("TrackMenuEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj do playlisty.
         /// </summary>
         public static string TrackMenuPlaylist {
@@ -408,6 +462,15 @@ namespace NSEC.Music_Player.Languages {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodać tagi(autor, tytuł, okładka).
+        /// </summary>
+        public static string YoutubeAddTags {
+            get {
+                return ResourceManager.GetString("YoutubeAddTags", resourceCulture);
             }
         }
         

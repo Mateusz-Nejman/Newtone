@@ -21,6 +21,7 @@ namespace NSEC.Music_Player.Views
             Instance = this;
 
             this.Appearing += MainPage_Appearing;
+            Global.LoadTags();
             Task.Run(async () => { await Helpers.LoadGlobalsOnce(); }).Wait();
             Global.LoadConfig();
 
@@ -32,8 +33,10 @@ namespace NSEC.Music_Player.Views
         private async void MainPage_Appearing(object sender, EventArgs e)
         {
             base.OnAppearing();
+            Global.LoadTags();
             await Helpers.LoadGlobalsOnce();
             Global.LoadConfig();
+
         }
     }
 }

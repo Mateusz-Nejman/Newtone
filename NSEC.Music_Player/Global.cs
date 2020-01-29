@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
 using Nejman.NSEC2;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
@@ -38,6 +39,7 @@ namespace NSEC.Music_Player
          * Track Containers
          */
         public static Dictionary<string, MediaProcessing.MediaTag> Audios { get; set; }
+        public static Dictionary<string, MediaProcessing.MediaTag> AudioTags { get; set; }
         public static Dictionary<string, List<string>> Artists { get; set; }
         public static string AudioPlayerTrack { get; set; }
         public static List<Track> CurrentPlaylist { get; set; }
@@ -243,7 +245,40 @@ namespace NSEC.Music_Player
                 nsec.AddFile("currentPlaylist", Encoding.UTF8.GetBytes(currentPlaylistString));
             }
 
+            SaveTags();
+
             File.WriteAllBytes(DataPath + "/data.nsec2", nsec.Save());
+        }
+
+        public static void SaveTags()
+        {
+            if (AudioTags.Count > 0)
+            {
+                NSEC2 nsec = new NSEC2(password);
+                nsec.SetDebug(false);
+                BinaryFormatter bf = new BinaryFormatter();
+                using MemoryStream memoryStream = new MemoryStream();
+                bf.Serialize(memoryStream, AudioTags);
+                nsec.AddFile("tags", memoryStream.ToArray());
+
+                File.WriteAllBytes(DataPath + "/tags.nsec2", nsec.Save());
+            }
+        }
+
+        public static void LoadTags()
+        {
+            if (File.Exists(DataPath + "/tags.nsec2"))
+            {
+                NSEC2 nsec = new NSEC2(password);
+                nsec.SetDebug(false);
+                FileStream fileStream = File.OpenRead(DataPath + "/tags.nsec2");
+                nsec.Load(fileStream);
+
+                using MemoryStream memoryStream = new MemoryStream(nsec.Get("tags"));
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                AudioTags = (Dictionary<string, MediaProcessing.MediaTag>)binaryFormatter.Deserialize(memoryStream);
+                fileStream.Dispose();
+            }
         }
     }
 }

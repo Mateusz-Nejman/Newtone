@@ -164,12 +164,14 @@ namespace NSEC.Music_Player.Media
             if (Global.CurrentPlaylist.Count > 0)
             {
                 Track track;
-                if (Global.CurrentQueue.Count > 0)
+                if (Global.CurrentQueue.Count > 0 && Global.CurrentQueuePosition < Global.CurrentQueue.Count)
                 {
                     track = Global.CurrentQueue[Global.CurrentQueuePosition];
                 }
                 else
                 {
+                    Global.CurrentQueue.Clear();
+                    Global.CurrentQueuePosition = 0;
                     if (Global.CurrentPlaylist.Count > 1)
                     {
                         Global.CurrentPlaylistPosition += Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
