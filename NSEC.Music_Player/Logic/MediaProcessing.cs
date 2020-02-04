@@ -19,6 +19,7 @@ namespace NSEC.Music_Player.Logic
     public class MediaProcessing
     {
         private const int DEFAULT_BUFFER_SIZE = 1 * 1024 * 1024;
+        private const int MINIMUM_TRACK_DURATION = 10;
         public static MediaTag GetTags(string filePath)
         {
             MediaTag container = new MediaTag
@@ -29,11 +30,15 @@ namespace NSEC.Music_Player.Logic
             try
             {
                 ATL.Track audioFile = new ATL.Track(filePath);
+
+                if (audioFile.DurationMs < MINIMUM_TRACK_DURATION * 1000)
+                    return null;
                 container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;
                 Console.WriteLine(container.Title);
 
                 container.Album = audioFile.Album;
                 container.Artist = audioFile.Artist == "" ? Localization.UnknownArtist : audioFile.Artist;
+
 
                 for (int a = 0; a < audioFile.EmbeddedPictures.Count; a++)
                 {

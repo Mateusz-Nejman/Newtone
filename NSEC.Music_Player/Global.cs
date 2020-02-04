@@ -58,7 +58,6 @@ namespace NSEC.Music_Player
         public static bool LastPlayerClick { get; set; }
         public static string DataPath { get; set; }
         public static string MusicPath { get; set; }
-        public static string[] Directories { get; set; }
         public static MainActivity Context { get; set; }
         public static NotificationManager NotificationManager { get; set; }
         public static PowerManager PowerManager { get; set; }
@@ -178,7 +177,7 @@ namespace NSEC.Music_Player
                     for (int a = 0; a < files.Length; a++)
                     {
                         Console.WriteLine($"LoadConfig {a}. {files[a]}");
-                        if (File.Exists(files[a]))
+                        if (File.Exists(files[a]) && Audios.ContainsKey(files[a]))
                         {
                             CurrentPlaylist.Add(TrackProcessing.GetTrack(files[a]));
                         }

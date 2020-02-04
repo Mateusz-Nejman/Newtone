@@ -124,7 +124,7 @@ namespace NSEC.Music_Player
             if (Global.Audios.Count == 0)
             {
                 List<string> listed = new List<string>();
-                MediaProcessing.MediaTag[] files = await FileProcessing.ListFiles(Global.Directories, listed);
+                MediaProcessing.MediaTag[] files = await FileProcessing.ListFiles(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, listed);
                 for (int a = 0; a < files.Length; a++)
                 {
                     AddTrack(files[a]);

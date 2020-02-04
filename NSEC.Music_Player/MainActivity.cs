@@ -27,7 +27,6 @@ namespace NSEC.Music_Player
     [Activity(Label = "NSEC Music Player", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Navigation | ConfigChanges.UiMode, MultiProcess = false, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private List<string> folders;
         private bool backPressed = false;
         private Intent backgroundIntent;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -59,24 +58,10 @@ namespace NSEC.Music_Player
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
 
-            string[] paths = new string[] { Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath,
-                Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).AbsolutePath,
-                Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                Android.OS.Environment.ExternalStorageDirectory.AbsolutePath+"/Videoder",
-                Android.OS.Environment.ExternalStorageDirectory.AbsolutePath+"/NSEC/Music_Player"
-            };
-
-            folders = new List<string>();
-
-            foreach (string path in paths)
-            {
-                if (Directory.Exists(path))
-                    folders.Add(path);
-            }
 
 
 
-            LoadApplication(new App(folders.ToArray()));
+            LoadApplication(new App());
 
             backgroundIntent = new Intent(this, typeof(BackgroundService));
 

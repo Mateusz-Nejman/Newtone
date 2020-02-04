@@ -175,10 +175,9 @@ namespace NSEC.Music_Player.Logic
                     }
                     else
                     {
+                        artist = Global.Audios[track.Container.FilePath].Artist;
+                        title = Global.Audios[track.Container.FilePath].Title;
                         FileInfo fileInfo = new FileInfo(track.Container.FilePath);
-                        string[] splitted = fileInfo.Name.Replace(fileInfo.Extension, "").Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
-                        artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
-                        title = splitted[splitted.Length == 1 ? 0 : 1];
                     }
 
 
@@ -186,22 +185,25 @@ namespace NSEC.Music_Player.Logic
                     string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist);
                     string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title);
 
-                    userArtist = userArtist == "" ? artist : userArtist;
-                    userTitle = userTitle == "" ? title : userTitle;
-
-                    if (Global.AudioTags.ContainsKey(track.Container.FilePath))
+                    if (userArtist != null && userTitle != null)
                     {
-                        Global.AudioTags[track.Container.FilePath].Artist = userArtist;
-                        Global.AudioTags[track.Container.FilePath].Title = userTitle;
-                    }
-                    else
-                    {
-                        Global.AudioTags.Add(track.Container.FilePath, new MediaProcessing.MediaTag() { Artist = userArtist, Title = userTitle });
-                    }
+                        userArtist = userArtist == "" ? artist : userArtist;
+                        userTitle = userTitle == "" ? title : userTitle;
 
-                    Global.SaveTags();
+                        if (Global.AudioTags.ContainsKey(track.Container.FilePath))
+                        {
+                            Global.AudioTags[track.Container.FilePath].Artist = userArtist;
+                            Global.AudioTags[track.Container.FilePath].Title = userTitle;
+                        }
+                        else
+                        {
+                            Global.AudioTags.Add(track.Container.FilePath, new MediaProcessing.MediaTag() { Artist = userArtist, Title = userTitle });
+                        }
 
-                    SnackbarBuilder.Show(Localization.SettingsChanges);
+                        Global.SaveTags();
+
+                        SnackbarBuilder.Show(Localization.SettingsChanges);
+                    }
                 }
             }
 
