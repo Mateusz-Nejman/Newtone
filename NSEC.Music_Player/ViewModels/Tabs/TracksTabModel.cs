@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xam.Plugin;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.ViewModels.Tabs

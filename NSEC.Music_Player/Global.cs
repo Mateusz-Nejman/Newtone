@@ -50,6 +50,7 @@ namespace NSEC.Music_Player
         public static Dictionary<string, List<Track>> Playlists { get; set; }
         public static TrackCounter[] LastTracks { get; set; }
         public static TrackCounter[] MostTracks { get; set; }
+        public static bool AudioFromIntent { get; set; }
 
         /*
          * Global app variables
@@ -73,6 +74,7 @@ namespace NSEC.Music_Player
         {
             if (File.Exists(DataPath + "/data.nsec2"))
             {
+                MainActivity.Loaded = true;
                 NSEC2 nsec = new NSEC2(password);
                 FileStream fileStream = File.OpenRead(DataPath + "/data.nsec2");
                 nsec.Load(fileStream);
@@ -146,40 +148,43 @@ namespace NSEC.Music_Player
                     PlayerMode = (PlayerMode)playerMode;
                 }
 
-                int cpp = 0;
-
-                if (nsec.Exists("currentPlaylistPosition"))
+                if(!AudioFromIntent)
                 {
-                    byte[] currentPlaylistPositionData = nsec.Get("currentPlaylistPosition");
-                    string cpps = Encoding.ASCII.GetString(currentPlaylistPositionData);
-                    cpp = int.Parse(cpps);
-                    Console.WriteLine("LoadConfig cpp " + cpp);
-                }
+                    int cpp = 0;
 
-                if (nsec.Exists("currentPlaylist"))
-                {
-                    byte[] currentPlaylistData = nsec.Get("currentPlaylist");
-                    string[] files = Encoding.UTF8.GetString(currentPlaylistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
-                    CurrentPlaylist = new List<Track>();
-
-                    if (cpp >= files.Length)
-                        cpp = -1;
-                    else
+                    if (nsec.Exists("currentPlaylistPosition"))
                     {
-                        if (Audios.ContainsKey(files[cpp]))
-                        {
-                            CurrentPlaylistPosition = cpp;
-                            CurrentTrack = Audios[files[cpp]];
-                            AudioPlayerTrack = CurrentTrack.FilePath;
-                            MediaPlayer.Load(FileProcessing.GetStreamFromFile(files[cpp]), files[cpp]);
-                        }
+                        byte[] currentPlaylistPositionData = nsec.Get("currentPlaylistPosition");
+                        string cpps = Encoding.ASCII.GetString(currentPlaylistPositionData);
+                        cpp = int.Parse(cpps);
+                        Console.WriteLine("LoadConfig cpp " + cpp);
                     }
-                    for (int a = 0; a < files.Length; a++)
+
+                    if (nsec.Exists("currentPlaylist"))
                     {
-                        Console.WriteLine($"LoadConfig {a}. {files[a]}");
-                        if (File.Exists(files[a]) && Audios.ContainsKey(files[a]))
+                        byte[] currentPlaylistData = nsec.Get("currentPlaylist");
+                        string[] files = Encoding.UTF8.GetString(currentPlaylistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
+                        CurrentPlaylist = new List<Track>();
+
+                        if (cpp >= files.Length)
+                            cpp = -1;
+                        else
                         {
-                            CurrentPlaylist.Add(TrackProcessing.GetTrack(files[a]));
+                            if (Audios.ContainsKey(files[cpp]))
+                            {
+                                CurrentPlaylistPosition = cpp;
+                                CurrentTrack = Audios[files[cpp]];
+                                AudioPlayerTrack = CurrentTrack.FilePath;
+                                MediaPlayer.Load(FileProcessing.GetStreamFromFile(files[cpp]), files[cpp]);
+                            }
+                        }
+                        for (int a = 0; a < files.Length; a++)
+                        {
+                            Console.WriteLine($"LoadConfig {a}. {files[a]}");
+                            if (File.Exists(files[a]) && Audios.ContainsKey(files[a]))
+                            {
+                                CurrentPlaylist.Add(TrackProcessing.GetTrack(files[a]));
+                            }
                         }
                     }
                 }

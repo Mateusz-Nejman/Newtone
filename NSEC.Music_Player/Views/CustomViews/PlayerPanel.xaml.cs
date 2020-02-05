@@ -34,6 +34,7 @@ namespace NSEC.Music_Player.Views.CustomViews
 
         private void PlayStopButton_Clicked(object sender, EventArgs e)
         {
+            Console.WriteLine("ProcessNewIntent -> "+Global.CurrentTrack.FilePath);
             if (Global.MediaPlayer.IsPlaying)
                 Global.MediaPlayer.Pause();
             else

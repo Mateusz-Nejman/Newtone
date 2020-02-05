@@ -20,22 +20,22 @@ namespace NSEC.Music_Player.Views
             InitializeComponent();
             Instance = this;
 
-            this.Appearing += MainPage_Appearing;
-            Global.LoadTags();
-            Task.Run(async () => { await Helpers.LoadGlobalsOnce(); }).Wait();
-            Global.LoadConfig();
-
             Navigation.PushAsync(page);
+
+            if (!MainActivity.Loaded)
+            {
+
+                Task.Run(async () => {
+                    Global.LoadTags();
+                    await Helpers.LoadGlobalsOnce();
+                    Global.LoadConfig();
+
+                    await Helpers.ReloadTracks();
+                    FileProcessing.SaveCache();
+                });
+                
+            }
             //containers = new List<MP3Processing.Container>(AsyncHelper.RunSync<MP3Processing.Container[]>(() => FileProcessing.ListFiles(App.Directories)));
-
-        }
-
-        private async void MainPage_Appearing(object sender, EventArgs e)
-        {
-            base.OnAppearing();
-            Global.LoadTags();
-            await Helpers.LoadGlobalsOnce();
-            Global.LoadConfig();
 
         }
     }

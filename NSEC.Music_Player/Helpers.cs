@@ -118,13 +118,9 @@ namespace NSEC.Music_Player
 
         public async static Task LoadGlobalsOnce()
         {
-            Global.CurrentQueue = new List<Track>();
-            Global.CurrentQueuePosition = 0;
-
             if (Global.Audios.Count == 0)
             {
-                List<string> listed = new List<string>();
-                MediaProcessing.MediaTag[] files = await FileProcessing.ListFiles(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, listed);
+                MediaProcessing.MediaTag[] files = await FileProcessing.ChooseCorrectAndLoad(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath);
                 for (int a = 0; a < files.Length; a++)
                 {
                     AddTrack(files[a]);
@@ -137,6 +133,30 @@ namespace NSEC.Music_Player
             Global.asyncEndController.Invoke("trackstab");
             Global.asyncEndController.Invoke("playliststab");
 
+        }
+
+        public async static Task ReloadTracks()
+        {
+            Console.WriteLine("ReloadTracks");
+            List<string> listed = new List<string>();
+            MediaProcessing.MediaTag[] files = await FileProcessing.ListFiles(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, listed);
+            
+
+            foreach(MediaProcessing.MediaTag mediaTag in files)
+            {
+                if (!Global.Audios.ContainsKey(mediaTag.FilePath))
+                {
+                    Console.WriteLine("ReloadTracks add " + mediaTag.FilePath);
+                    AddTrack(mediaTag);
+                    
+                }
+                    
+            }
+
+            FileProcessing.SaveCache();
+            Global.asyncEndController.Invoke("authorstab");
+            Global.asyncEndController.Invoke("trackstab");
+            Global.asyncEndController.Invoke("playliststab");
         }
 
         public static void AddTrack(MediaProcessing.MediaTag container)

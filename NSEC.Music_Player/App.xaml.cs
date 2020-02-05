@@ -18,7 +18,6 @@ namespace NSEC.Music_Player
         {
             InitializeComponent();
             Instance = this;
-            Global.MediaPlayer = new Media.CustomMediaPlayer();
             DependencyService.Register<DefaultDataStore>();
             if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(Global.DataPath + "/data.nsec2"))
             {

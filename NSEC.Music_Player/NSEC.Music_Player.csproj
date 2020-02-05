@@ -92,8 +92,11 @@
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
     <Compile Include="Logic\BackgroundService.cs" />
+    <Compile Include="Logic\Cache.cs" />
+    <Compile Include="Logic\CacheString.cs" />
     <Compile Include="Logic\FileProcessing.cs" />
     <Compile Include="Logic\MediaProcessing.cs" />
+    <Compile Include="Logic\StopWatch.cs" />
     <Compile Include="Logic\TickParser.cs" />
     <Compile Include="Logic\TrackProcessing.cs" />
     <Compile Include="Logic\YourubeProcessing.cs" />
@@ -184,21 +187,16 @@
     <AndroidResource Include="Resources\mipmap-hdpi\app_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Plugin.Permissions">
-      <Version>3.0.0.12</Version>
-    </PackageReference>
     <PackageReference Include="Xam.Plugin.WebView">
       <Version>2.1.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991477</Version>
+      <Version>4.4.0.991537</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>4.4.0.991477</Version>
+      <Version>4.4.0.991537</Version>
     </PackageReference>
     <PackageReference Include="YoutubeExplode">
       <Version>4.7.12</Version>

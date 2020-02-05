@@ -266,12 +266,12 @@ namespace NSEC.Music_Player.Media
         {
             if (container != null)
             {
-                PendingIntent prevIntent = PendingIntent.GetBroadcast(Global.Context, 1, new Intent("prev"), PendingIntentFlags.Immutable);
+                PendingIntent prevIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("prev"), PendingIntentFlags.Immutable);
                 PendingIntent playIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("play"), PendingIntentFlags.Immutable);
                 PendingIntent pauseIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("pause"), PendingIntentFlags.Immutable);
                 PendingIntent nextIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("next"), PendingIntentFlags.Immutable);
                 PendingIntent stopIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("close"), PendingIntentFlags.Immutable);
-                PendingIntent openIntent = PendingIntent.GetActivity(Global.Context, 0, new Intent(Global.Context, typeof(MainActivity)), PendingIntentFlags.UpdateCurrent);
+                PendingIntent openIntent = PendingIntent.GetActivity(Global.Context, 0, new Intent(Global.Context, typeof(MainActivity)), PendingIntentFlags.OneShot);
 
                 NotificationCompat.Action actionPrev = new NotificationCompat.Action(Resource.Drawable.prevIconNotification, "Prev", prevIntent);
                 NotificationCompat.Action actionPlay = new NotificationCompat.Action(!IsPlaying ? Resource.Drawable.playiconNotification : Resource.Drawable.pauseIconNotification, "Play", !IsPlaying ? playIntent : pauseIntent);
