@@ -4,6 +4,7 @@ using Android.Support.Design.Widget;
 using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.CustomViews;
+using NSEC.Music_Player.Views.Tabs;
 using System;
 using System.IO;
 using System.Net;
@@ -17,24 +18,74 @@ namespace NSEC.Music_Player.Logic
 {
     public static class YoutubeProcessing
     {
-        public async static Task Download(string url, Button button, ProgressBar progressBar, Label progressLabel, Page page)
+        public static Page Page;
+        public async static Task Download(string url)
         {
-            Global.Downloads.Add(url, new Models.DownloadModel() { Url = url, Progress = 0.0, Name = Localization.YoutubeDownloadTitle, Download = true });
-            progressLabel.Text = Localization.YoutubeStart;
-            Console.WriteLine("URL: " + url);
-            if (!Directory.Exists(Global.MusicPath))
-                Directory.CreateDirectory(Global.MusicPath);
+            string playlistId = "";
+            YoutubeClient client = new YoutubeClient();
+
+            if (url.Contains("list="))
+            {
+                if (url.Contains("v="))
+                {
+                    bool answer = await Page.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack+"?", Localization.Track, Localization.Playlist);
+                    if(answer)
+                    {
+                        playlistId = "";
+                    }
+                    else
+                    {
+                        playlistId = YoutubeClient.ParsePlaylistId(url);
+                    }
+                }
+                else
+                    playlistId = YoutubeClient.ParsePlaylistId(url);
+            }
+
+
+            if(playlistId == "")
+            {
+                Console.WriteLine("YoutubeProcessing download one "+url);
+                string id = YoutubeClient.ParseVideoId(url);
+                Video video = await client.GetVideoAsync(id);
+                DownloadProcessing.AddToDownloadTask(id, video.Title);
+            }
+            else
+            {
+                Console.WriteLine("YoutubeProcessing download many");
+                Playlist playlist = await client.GetPlaylistAsync(playlistId);
+                
+                foreach(Video video in playlist.Videos)
+                {
+                    Console.WriteLine("YoutubeProcessing download many "+video.Id);
+                    DownloadProcessing.AddToDownloadTask(video.Id, video.Title);
+                }
+            }
+        }
+
+
+        public async static Task DownloadVideoId(string id)
+        {
+            string url = "https://www.youtube.com/watch?v="+id;
+
+            await DownloadVideo(url);
+        }
+        private async static Task DownloadVideo(string url)
+        {
+            string id = YoutubeClient.ParseVideoId(url);
             try
             {
 
-                string id = YoutubeClient.ParseVideoId(url);
-                Console.WriteLine("video id: " + id);
+                Console.WriteLine("URL: " + url);
+                if (!Directory.Exists(Global.MusicPath))
+                    Directory.CreateDirectory(Global.MusicPath);
+
+                
+
                 YoutubeClient client = new YoutubeClient();
-                Console.WriteLine("youtube client initialized");
+
                 Video video = await client.GetVideoAsync(id);
-                Console.WriteLine("video info");
                 MediaStreamInfoSet streamInfoSet = await client.GetVideoMediaStreamInfosAsync(id);
-                Console.WriteLine("streamInfoSet");
                 MuxedStreamInfo streamInfo = streamInfoSet.Muxed.WithHighestVideoQuality();
 
                 foreach (MuxedStreamInfo msi in streamInfoSet.Muxed)
@@ -42,45 +93,21 @@ namespace NSEC.Music_Player.Logic
                     if (msi.Resolution.Height < streamInfo.Resolution.Height)
                         streamInfo = msi;
                 }
-                Console.WriteLine("streamInfo");
-
-                Console.WriteLine(streamInfo == null);
-
-                string ext = streamInfo.Container.GetFileExtension();
-
-                Console.WriteLine(ext);
-                // Download stream to file
 
                 Progress<double> progress = new Progress<double>(progressValue =>
                 {
-                    Global.Downloads[url].Name = video.Title;
-                    Global.Downloads[url].Progress = progressValue;
-
-                    double newProgress = 0.0;
-
-                    foreach (DownloadModel model in Global.Downloads.Values)
-                    {
-                        newProgress += model.Progress;
-                    }
-
-                    newProgress /= Global.Downloads.Count;
-                    progressLabel.Text = Localization.YoutubeDownloadFiles + " (" + Global.Downloads.Count + ") " + string.Format("{0:0.00}", newProgress * 100.0) + "%";
-                    progressBar.Progress = newProgress;
+                    DownloadProcessing.SetProgress(id, progressValue);
                 });
-
-                Console.WriteLine("Start download");
                 await client.DownloadMediaStreamAsync(streamInfo, Global.MusicPath + "/data.bin" + id, progress);
-                Console.WriteLine("End download");
-
-                progressLabel.Text = Localization.YoutubeConvert;
-                progressBar.Progress = 0;
+                Console.WriteLine("YoutubeProcessing await Convert");
                 var type = await ConvertToMP3(video.Title, id);
+                Console.WriteLine("YoutubeProcessing await Convert end");
                 if (File.Exists(Global.MusicPath + "/data.bin" + id))
                     File.Delete(Global.MusicPath + "/data.bin" + id);
 
-                if (true)
-                {
-                    bool answer = await page.DisplayAlert(Localization.Question, Localization.YoutubeAddTags + "?", "OK", Localization.Cancel);
+                Page.Dispatcher.BeginInvokeOnMainThread(async () => {
+                    bool answer = Global.AutoTags ? true : await Page.DisplayAlert(Localization.Question, Localization.YoutubeAddTags + "?", "OK", Localization.Cancel);
+                        
                     if (answer)
                     {
                         //Global.MusicPath + "/" + video.Title + "."+type.ToString()
@@ -89,15 +116,21 @@ namespace NSEC.Music_Player.Logic
                         string title = splitted[splitted.Length == 1 ? 0 : 1];
 
 
+                        string userArtist = Global.AutoTags ? "" : await Page.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist);
+                        string userTitle = Global.AutoTags ? "" : await Page.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title);
 
-                        string userArtist = await page.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist);
-                        string userTitle = await page.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title);
-
-                        userArtist = userArtist == "" ? artist : userArtist;
-                        userTitle = userTitle == "" ? title : userTitle;
-
-                        using WebClient wc = new WebClient();
-                        byte[] picture = wc.DownloadData(video.Thumbnails.StandardResUrl);
+                        userArtist = userArtist == "" || userArtist == null ? artist : userArtist;
+                        userTitle = userTitle == "" || userTitle == null ? title : userTitle;
+                        byte[] picture = null;
+                        try
+                        {
+                            using WebClient wc = new WebClient();
+                            picture = wc.DownloadData(video.Thumbnails.StandardResUrl);
+                        }
+                        catch
+                        {
+                            
+                        }
 
                         if (Global.AudioTags.ContainsKey(Global.MusicPath + "/" + video.Title + "." + type.ToString()))
                         {
@@ -111,24 +144,19 @@ namespace NSEC.Music_Player.Logic
                             Global.AudioTags.Add(Global.MusicPath + "/" + video.Title + "." + type.ToString(), new MediaProcessing.MediaTag() { Artist = userArtist, Title = userTitle, Picture = picture });
                         }
                     }
-                }
+                });
+
                 MediaProcessing.MediaTag container = MediaProcessing.GetTags(Global.MusicPath + "/" + video.Title + "." + type.ToString());
                 Helpers.AddTrack(container);
                 Global.SaveConfig();
                 SnackbarBuilder.Show(Localization.YoutubeReady);
-                progressLabel.Text = Localization.YoutubeReady;
-                //File.WriteAllBytes(Global.DataPath+"/data.bin", video.GetBytes());
             }
             catch
             {
+                DownloadProcessing.SetProgress(id, -1.0);
                 //Console.WriteLine("YoutubeProcessing.cs -> " + e);
                 SnackbarBuilder.Show(Localization.YoutubeError);
-                progressLabel.Text = Localization.YoutubeError;
             }
-
-
-            Global.Downloads.Remove(url);
-            button.IsEnabled = true;
         }
 
         public async static Task<MediaProcessing.MediaOutputType> ConvertToMP3(string name, string id)

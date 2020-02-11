@@ -1,4 +1,5 @@
-﻿using NSEC.Music_Player.Models;
+﻿using NSEC.Music_Player.Logic;
+using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,9 +22,10 @@ namespace NSEC.Music_Player.Views
             Items = new ObservableCollection<DownloadModel>();
             TrackListView.ItemsSource = Items;
 
-            foreach (string url in Global.Downloads.Keys)
+            foreach (string id in DownloadProcessing.GetDownloads().Keys)
             {
-                Items.Add(new DownloadModel() { Name = Global.Downloads[url].Name, Url = url, Progress = Global.Downloads[url].Progress });
+                DownloadModel model = DownloadProcessing.GetDownloads()[id];
+                Items.Add(new DownloadModel() { Name = model.Name, Url = model.Url, Progress = model.Progress });
             }
 
             Device.StartTimer(TimeSpan.FromSeconds(0.5), Refresh);
@@ -32,14 +34,13 @@ namespace NSEC.Music_Player.Views
         private bool Refresh()
         {
             Items.Clear();
-            foreach (string url in Global.Downloads.Keys)
+            foreach (string id in DownloadProcessing.GetDownloads().Keys)
             {
-                Items.Add(new DownloadModel() { Name = Global.Downloads[url].Name, Url = url, Progress = Global.Downloads[url].Progress });
+                DownloadModel model = DownloadProcessing.GetDownloads()[id];
+                Items.Add(new DownloadModel() { Name = model.Name, Url = model.Url, Progress = model.Progress });
             }
 
             return true;
-        }
-
-
+        } 
     }
 }

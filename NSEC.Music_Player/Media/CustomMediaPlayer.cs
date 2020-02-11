@@ -109,7 +109,7 @@ namespace NSEC.Music_Player.Media
                     Console.WriteLine("Error deleting cache : " + CachePath);
                 }
             }
-            CachePath = System.IO.Path.Combine(Global.MusicPath, $"cache{CacheIndex++}.wav");
+            CachePath = System.IO.Path.Combine(Global.MusicPath, $"cache.wav");
             FileStream fileStream = File.Create(CachePath);
             stream.CopyTo(fileStream);
             fileStream.Close();
@@ -329,6 +329,7 @@ namespace NSEC.Music_Player.Media
             }
             else if (intent.Action == "close")
             {
+                Global.NotificationManager.CancelAll();
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
             }
             Console.WriteLine("MediaPlayerReceiver " + intent.Action);

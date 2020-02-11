@@ -38,9 +38,6 @@
                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=0,Constant=42}"
                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=1.0,Constant=-10}"
                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height, Factor=1.0,Constant=-109}"/>
-
-
-
             <views:PlayerPanel x:Name="playerPanel" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1.0,Constant=-62}"/>
         </RelativeLayout>
     </ContentPage.Content>

@@ -24,7 +24,7 @@
                                 FontSize="16" TextColor="White"
                                        RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=5}"
                                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=10}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}"/>
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-10}"/>
                                 <Label Text="{Binding ProgressString}" 
                                 d:Text="Item descripton"
                                 LineBreakMode="NoWrap"
@@ -32,7 +32,7 @@
                                 FontSize="13" TextColor="White"
                                        RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=5}"
                                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=36}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}" Padding="0,0,0,10"
+                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-10}" Padding="0,0,0,10"
                                        />
                             </RelativeLayout>
                         </ViewCell>

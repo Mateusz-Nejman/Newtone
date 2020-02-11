@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.PlayerPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="background.png">
     <ContentPage.Content>
-        <RelativeLayout BackgroundColor="#1b3a59" x:Name="relativeLayout">
+        <RelativeLayout x:Name="relativeLayout">
 
 
             <Button 

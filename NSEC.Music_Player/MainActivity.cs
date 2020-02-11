@@ -74,7 +74,7 @@ namespace NSEC.Music_Player
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            Console.WriteLine("MainActivity Intent " + intent.Data.ToString());
+            //Console.WriteLine("MainActivity Intent " + intent.Data.ToString());
             Console.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
             ProcessNewIntent(Intent);
         }
@@ -198,10 +198,10 @@ namespace NSEC.Music_Player
             Global.PlayerMode = Models.PlayerMode.All;
             Global.LastPlayerClick = true;
             Global.EmptyTrack = ImageSource.FromFile("emptyTrack.png");
-            Global.Downloads = new Dictionary<string, Models.DownloadModel>();
             Global.AudioTags = new Dictionary<string, MediaProcessing.MediaTag>();
             Global.MediaPlayer = new Media.CustomMediaPlayer();
             Global.AudioFromIntent = false;
+            Global.AutoTags = false;
         }
 
         private void ProcessNewIntent(Intent intent)

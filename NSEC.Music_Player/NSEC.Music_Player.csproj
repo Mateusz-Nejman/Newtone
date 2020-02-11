@@ -94,6 +94,7 @@
     <Compile Include="Logic\BackgroundService.cs" />
     <Compile Include="Logic\Cache.cs" />
     <Compile Include="Logic\CacheString.cs" />
+    <Compile Include="Logic\DownloadProcessing.cs" />
     <Compile Include="Logic\FileProcessing.cs" />
     <Compile Include="Logic\MediaProcessing.cs" />
     <Compile Include="Logic\StopWatch.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Views\ArtistPage.xaml.cs">
       <DependentUpon>ArtistPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomViews\CustomCheckbox.cs" />
     <Compile Include="Views\CustomViews\InvokePage.cs" />
     <Compile Include="Views\CustomViews\CustomButton.cs" />
     <Compile Include="Views\CustomViews\PlayerPanel.xaml.cs">

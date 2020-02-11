@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using NSEC.Music_Player.Languages;
 
 namespace NSEC.Music_Player.Models
 {
@@ -23,6 +24,8 @@ namespace NSEC.Music_Player.Models
         {
             get
             {
+                if (Progress == -1.0)
+                    return Localization.YoutubeError;
                 return string.Format("{0:0.00}", Progress * 100.0) + "%";
             }
         }

@@ -64,7 +64,7 @@ namespace NSEC.Music_Player
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
         public static ImageSource EmptyTrack { get; set; }
-        public static Dictionary<string, DownloadModel> Downloads { get; set; }
+        public static bool AutoTags { get; set; }
         /*
          * Global app controllers
          */
@@ -146,6 +146,14 @@ namespace NSEC.Music_Player
                     byte[] playerModeData = nsec.Get("playerMode");
                     int playerMode = int.Parse(Encoding.ASCII.GetString(playerModeData));
                     PlayerMode = (PlayerMode)playerMode;
+                }
+
+                if(nsec.Exists("autoTags"))
+                {
+                    byte[] autoTagsData = nsec.Get("autoTags");
+                    string buff = Encoding.ASCII.GetString(autoTagsData);
+
+                    AutoTags = buff == "auto";
                 }
 
                 if(!AudioFromIntent)
@@ -248,6 +256,8 @@ namespace NSEC.Music_Player
 
                 nsec.AddFile("currentPlaylist", Encoding.UTF8.GetBytes(currentPlaylistString));
             }
+
+            nsec.AddFile("autoTags", Encoding.ASCII.GetBytes(AutoTags ? "auto" : "none"));
 
             SaveTags();
 

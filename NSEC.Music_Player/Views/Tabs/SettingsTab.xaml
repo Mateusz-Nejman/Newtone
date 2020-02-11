@@ -19,7 +19,7 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="32"/>
+                                    <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <StackLayout Padding="10" BackgroundColor="Transparent">
@@ -33,6 +33,8 @@
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" TextColor="White"/>
                                 </StackLayout>
+                               
+                                <views:CustomCheckbox Grid.Column="1" IsVisible="{Binding CheckboxVisible}" IsChecked="{Binding CheckboxValue}" Tag="{Binding Id}" CheckedChanged="CustomCheckbox_CheckedChanged"/>
                             </Grid>
 
                         </ViewCell>

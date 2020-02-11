@@ -1,4 +1,5 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace NSEC.Music_Player.Views.Tabs
     {
         private string currentUrl = "";
         private readonly FormsWebView WebView;
+
         public YoutubeTab()
         {
             InitializeComponent();
-
             WebView = new FormsWebView
             {
                 BaseUrl = "https://youtube.com",
@@ -28,6 +29,8 @@ namespace NSEC.Music_Player.Views.Tabs
             webViewGrid.Children.Add(WebView);
             Appearing += YoutubePage_Appearing;
             Disappearing += YoutubeTab_Disappearing;
+
+            Device.StartTimer(TimeSpan.FromSeconds(0.5), Refresh);
         }
 
         private void YoutubeTab_Disappearing(object sender, EventArgs e)
@@ -45,20 +48,22 @@ namespace NSEC.Music_Player.Views.Tabs
         {
             var url = e.Uri;
 
-            if (url.StartsWith("https://m.youtube.com/watch?v="))
+            if (url.Contains("watch?v=") || url.Contains("list="))
             {
-                currentUrl = url.Substring(0, url.IndexOf('&') >= 0 ? url.IndexOf('&') : url.Length);
+                currentUrl = url;
                 Console.WriteLine("ONS: " + currentUrl);
             }
 
         }
 
-        private async void YoutubeButton_Clicked(object sender, EventArgs e)
+        private void YoutubeButton_Clicked(object sender, EventArgs e)
         {
             //youtubeButton.Text = "Downloading";
             //youtubeButton.IsEnabled = false;
-            if (!Global.Downloads.ContainsKey(currentUrl))
-                await YoutubeProcessing.Download(currentUrl, youtubeButton, progressBar, progressLabel, this);
+
+            YoutubeProcessing.Page = this;
+            progressLabel.Text = Localization.YoutubeStart;
+            YoutubeProcessing.Download(currentUrl);
         }
 
         private void YoutubeWebview_Navigating(object sender, WebNavigatingEventArgs e)
@@ -88,6 +93,19 @@ namespace NSEC.Music_Player.Views.Tabs
         private async void ListButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new DownloadPage());
+        }
+
+        private bool Refresh()
+        {
+            if(DownloadProcessing.GetGlobalProgress() != "")
+            {
+                progressLabel.Text = $"{Localization.YoutubeDownloadFiles} {DownloadProcessing.GetGlobalProgress()}";
+            }
+
+            if (DownloadProcessing.AllCompleted)
+                progressLabel.Text = Localization.YoutubeReady;
+            
+            return true;
         }
     }
 }

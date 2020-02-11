@@ -232,6 +232,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrać utwór czy playlistę.
+        /// </summary>
+        public static string PlaylistOrTrack {
+            get {
+                return ResourceManager.GetString("PlaylistOrTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pytanko.
         /// </summary>
         public static string Question {
@@ -390,6 +399,15 @@ namespace NSEC.Music_Player.Languages {
         public static string TitleTracks {
             get {
                 return ResourceManager.GetString("TitleTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utwór.
+        /// </summary>
+        public static string Track {
+            get {
+                return ResourceManager.GetString("Track", resourceCulture);
             }
         }
         

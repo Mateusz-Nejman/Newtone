@@ -17,5 +17,8 @@ namespace NSEC.Music_Player.Models
         public string Text { get; set; }
         public string Description { get; set; }
         public int Id { get; set; }
+        public bool CheckboxVisible { get; set; }
+        public bool CheckboxValue { get; set; }
+
     }
 }

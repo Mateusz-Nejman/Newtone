@@ -25,14 +25,29 @@ namespace NSEC.Music_Player.Views.Tabs
             Items = new ObservableCollection<SettingsModel>();
             settingsView.ItemsSource = Items;
 
-            Items.Add(new SettingsModel() { Id = 0, Text = Localization.SettingsAddTags, Description = Localization.SettingsChanges });
-            Items.Add(new SettingsModel() { Id = 1, Text = Localization.SettingsClear, Description = Localization.SettingsChanges });
+            
+
+            Appearing += SettingsTab_Appearing;
+        }
+
+        private void SettingsTab_Appearing(object sender, EventArgs e)
+        {
+            Items.Clear();
+            Items.Add(new SettingsModel() { Id = 0, Text = Localization.SettingsAddTags, Description = Localization.SettingsChanges, CheckboxVisible = false, CheckboxValue = false });
+            Items.Add(new SettingsModel() { Id = 1, Text = Localization.SettingsClear, Description = Localization.SettingsChanges, CheckboxVisible = false, CheckboxValue = false });
+            Items.Add(new SettingsModel() { Id = 2, Text = "Automatyczne tagi", Description = "Tagi będą się dodawać automatycznie", CheckboxVisible = true, CheckboxValue = Global.AutoTags });
         }
 
         private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             int index = Items.IndexOf((SettingsModel)settingsView.SelectedItem);
+            SettingsSelected(index);
+            
+            settingsView.SelectedItem = null;
+        }
 
+        private void SettingsSelected(int index)
+        {
             if (index >= 0)
             {
                 SettingsModel settingsModel = Items[index];
@@ -70,8 +85,35 @@ namespace NSEC.Music_Player.Views.Tabs
 
                     SnackbarBuilder.Show(Localization.YoutubeReady);
                 }
+                else if(settingsModel.Id == 2)
+                {
+                    Global.AutoTags = !Global.AutoTags;
+                    SettingsTab_Appearing(null, null);
+                    Global.SaveConfig();
+                }
             }
-            settingsView.SelectedItem = null;
+        }
+
+        private void CustomCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            CustomCheckbox cc = (CustomCheckbox)sender;
+            Console.WriteLine("CustomCheckBox " + cc.Tag);
+            if(cc.Tag != "")
+            {
+                int id = int.Parse(cc.Tag);
+                int index = -1;
+
+                for (int a = 0; a < Items.Count; a++)
+                {
+                    if (Items[a].Id == id)
+                    {
+                        index = a;
+                        break;
+                    }
+                }
+
+                SettingsSelected(index);
+            }
         }
     }
 }
