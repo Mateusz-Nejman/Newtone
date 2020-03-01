@@ -35,7 +35,7 @@ namespace NSEC.Music_Player.Views
             downloadLabel.IsVisible = DownloadProcessing.GetDownloads().Count == 0;
             Items.Clear();
 
-            foreach (DownloadListModel model in DownloadProcessing.GetDownloads().Values)
+            foreach (DownloadListModel model in DownloadProcessing.GetDownloads().Values.ToList())
             {
                 Items.Add(model);
             }

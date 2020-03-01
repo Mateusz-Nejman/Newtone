@@ -18,11 +18,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=296}">
+            <StackLayout Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=296}" HorizontalOptions="Center">
                 <Label Text="Newtone" FontSize="48" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center"/>
                 <Label Text="v4.0" FontSize="16" TextColor="{x:Static local:Colors.ColorBadge}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center" x:Name="versionLabel"/>
                 <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}"/>
-                <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}" LineBreakMode="WordWrap"/>
+                <Label Text="{x:Static localization:Localization.AboutDesc}" FontSize="16" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}" LineBreakMode="WordWrap"/>
                 <Button Text="{x:Static localization:Localization.AboutWWW}" BorderColor="Black" BackgroundColor="Transparent" BorderWidth="1" Clicked="Button_Clicked" WidthRequest="200" HorizontalOptions="Center"
                         FontSize="18" TextColor="{x:Static local:Colors.ColorBadge}" FontFamily="{x:Static local:Fonts.Light}"/>
             </StackLayout>

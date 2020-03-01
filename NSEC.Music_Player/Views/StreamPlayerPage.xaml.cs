@@ -244,7 +244,7 @@ namespace NSEC.Music_Player.Views
         private bool UpdatePosition()
         {
             downloadLayout.IsVisible = DownloadProcessing.GetDownloads().Count > 0;
-            downloadLabel.Text = DownloadProcessing.MaxFiles < 10 ? DownloadProcessing.MaxFiles.ToString() : "9+";
+            downloadLabel.Text = DownloadProcessing.BadgeCount < 10 ? DownloadProcessing.BadgeCount.ToString() : "9+";
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;
             titleLabel.Text = MediaSource.Title;

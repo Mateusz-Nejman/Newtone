@@ -72,7 +72,7 @@ namespace NSEC.Music_Player.Views.Custom
             titleLabel.Text = Title;
             downloadButtonLayout.IsVisible = IsDownloadButton;
 
-            downloadLabel.Text = DownloadProcessing.MaxFiles < 10 ? DownloadProcessing.MaxFiles.ToString() : "9+";
+            downloadLabel.Text = DownloadProcessing.BadgeCount < 10 ? DownloadProcessing.BadgeCount.ToString() : "9+";
             return true;
         }
 

@@ -26,6 +26,13 @@ namespace NSEC.Music_Player.Processing
         public static int DownloadedFiles { get; private set; }
 
         public static int MaxFiles { get; private set; }
+        public static int BadgeCount
+        {
+            get
+            {
+                return MaxFiles - DownloadedFiles;
+            }
+        }
 
         public static Dictionary<string, DownloadListModel> GetDownloads()
         {

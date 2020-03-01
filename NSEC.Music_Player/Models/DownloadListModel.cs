@@ -14,10 +14,24 @@ using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
 {
-    public class DownloadListModel
+    public class DownloadListModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
-        public double Progress { get; set; }
+
+        private double progress;
+        public double Progress
+        {
+            get
+            {
+                return progress;
+            }
+            set
+            {
+                progress = value;
+                OnPopertyChanged("Progress");
+                OnPopertyChanged("ProgressString");
+            }
+        }
         public bool Downloaded { get; set; }
         public string Url { get; set; }
         public string ProgressString
@@ -28,5 +42,12 @@ namespace NSEC.Music_Player.Models
             }
         }
         public ImageSource Image { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPopertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -182,7 +182,7 @@ namespace NSEC.Music_Player.Download
                 var playlist = await client.GetPlaylistAsync(validators[QueryEnum.Playlist]);
                 foreach (var video in playlist.Videos)
                 {
-                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration.TotalSeconds, Title = video.Title, Youtube = true, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{Global.SEPARATOR}{video.GetUrl()}" });
+                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration.TotalSeconds, Title = video.Title, Youtube = true, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{Global.SEPARATOR}{video.GetUrl()}&list={validators[QueryEnum.Playlist]}" });
                 }
             }
         }
