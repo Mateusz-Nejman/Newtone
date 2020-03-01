@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Content.Res;
 using Android.Graphics;
 using Android.Media;
-using Android.Media.Session;
 using Android.OS;
+using Android.Runtime;
 using Android.Support.V4.App;
+using Android.Views;
+using Android.Widget;
 using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Loaders;
 using NSEC.Music_Player.Logic;
-using NSEC.Music_Player.Models;
-using NSEC.Music_Player.Views.CustomViews;
-using Xamarin.Forms;
+using YoutubeExplode;
+using YoutubeExplode.Models.MediaStreams;
 using static Android.Support.V4.Media.App.NotificationCompat;
-using Uri = Android.Net.Uri;
 
 namespace NSEC.Music_Player.Media
 {
     public class CustomMediaPlayer
     {
-        private string CachePath { get; set; }
-        private int CacheIndex { get; set; }
         private Random Random { get; set; }
         public MediaPlayer MediaPlayer { get; set; }
 
@@ -58,8 +58,7 @@ namespace NSEC.Music_Player.Media
                 return MediaPlayer != null;
             }
         }
-
-        public EventHandler TrackCompleted;
+        private IPlayerController PlayerController;
         public CustomMediaPlayer()
         {
             if (MediaPlayer == null)
@@ -67,139 +66,110 @@ namespace NSEC.Music_Player.Media
                 MediaPlayer = new MediaPlayer();
                 MediaPlayer.SetWakeMode(Global.Context, WakeLockFlags.Partial);
                 MediaPlayer.Completion += MediaPlayer_Completion;
-
-                CacheIndex = 0;
-                CachePath = "";
+                MediaPlayer.Prepared += MediaPlayer_Prepared;
             }
 
-            Random = new Random(Global.password.GetHashCode());
+            Random = new Random(Global.PASSWORD.GetHashCode());
+        }
+
+        public void SetPlayerController(IPlayerController playerController)
+        {
+            PlayerController = playerController;
+        }
+
+        private void MediaPlayer_Prepared(object sender, EventArgs e)
+        {
+            PlayerController?.Prepared(this);
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            if (Global.PlayerMode == PlayerMode.One)
-            {
-                MediaPlayer.SeekTo(0);
-                MediaPlayer.Start();
-            }
-            else
-            {
-                if (Global.CurrentQueue.Count > 0)
-                {
-                    Global.CurrentQueuePosition += 1;
-                }
+            if(CurrentPosition > 0 && CurrentPosition <= Duration)
+            PlayerController?.Completed(this);
 
-                Next();
-            }
-
-            TrackCompleted?.Invoke(this, e);
+            //TrackCompleted?.Invoke(this, e);
         }
 
-        public void Load(System.IO.Stream stream, string filename)
+        public void Load(string filename)
         {
             MediaPlayer.Reset();
-            if (CachePath != "")
-            {
-                try
-                {
-                    File.Delete(CachePath);
-                }
-                catch
-                {
-                    Console.WriteLine("Error deleting cache : " + CachePath);
-                }
-            }
-            CachePath = System.IO.Path.Combine(Global.MusicPath, $"cache.wav");
-            FileStream fileStream = File.Create(CachePath);
-            stream.CopyTo(fileStream);
-            fileStream.Close();
+
+            PlayerController?.Load(this, filename);
 
             try
             {
-
-                //MediaPlayer.SetDataSource(filename);
-                MediaPlayer.SetDataSource(filename);
-            }
-            catch
-            {
-                try
-                {
-                    var context = Android.App.Application.Context;
-                    MediaPlayer?.SetDataSource(Global.Context, Uri.Parse(Uri.Encode(filename)));
-
-                }
-                catch
-                {
-                    return;
-                }
-            }
-
-            Console.WriteLine("MediaPlayer " + filename);
-            try
-            {
-                MediaPlayer?.Prepare();
+                MediaPlayer?.PrepareAsync();
             }
             catch
             {
                 SnackbarBuilder.Show(Localization.FileCorrupted);
             }
-
         }
-
 
         public void Play()
         {
             MediaPlayer.Start();
-            SetNotification(Global.CurrentTrack);
+            SetNotification(Global.MediaSource);
         }
 
         public void Stop()
         {
             MediaPlayer.Stop();
-            SetNotification(Global.CurrentTrack);
+            SetNotification(Global.MediaSource);
         }
 
         public void Next()
         {
             if (Global.CurrentPlaylist.Count > 0)
             {
-                Track track;
-                if (Global.CurrentQueue.Count > 0 && Global.CurrentQueuePosition < Global.CurrentQueue.Count)
+                MediaSource track;
+                if (Global.CurrentQueue.Count > 0 && Global.QueuePosition < Global.CurrentQueue.Count)
                 {
-                    track = Global.CurrentQueue[Global.CurrentQueuePosition];
+                    track = Global.CurrentQueue[Global.QueuePosition];
                 }
                 else
                 {
                     Global.CurrentQueue.Clear();
-                    Global.CurrentQueuePosition = 0;
+                    Global.QueuePosition = 0;
                     if (Global.CurrentPlaylist.Count > 1)
                     {
-                        Global.CurrentPlaylistPosition += Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
+                        Global.PlaylistPosition += Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
 
-                        if (Global.CurrentPlaylistPosition >= Global.CurrentPlaylist.Count)
-                            Global.CurrentPlaylistPosition -= Global.CurrentPlaylist.Count;
+                        if (Global.PlaylistPosition >= Global.CurrentPlaylist.Count)
+                            Global.PlaylistPosition -= Global.CurrentPlaylist.Count;
                     }
 
-                    track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
+                    track = Global.CurrentPlaylist[Global.PlaylistPosition];
 
                 }
 
-                if (File.Exists(track.Container.FilePath))
+                if (Global.PlaylistType == MediaSource.SourceType.Local)
                 {
-                    Global.CurrentTrack = track.Container;
-                    Global.AudioPlayerTrack = track.Id;
-                    Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                    if (Global.LastPlayerClick)
-                        Play();
-                    Helpers.AddToCounter(track.Container.FilePath, 1);
-                    Helpers.AddToLast(track.Container.FilePath);
-
-                    SetNotification(track);
+                    
+                    if (File.Exists(track.FilePath))
+                    {
+                        Load(track.FilePath);
+                        Global.MediaSource = track;
+                        Global.CurrentAudioPath = track.FilePath;
+                        GlobalLoader.AddToCounter(track.FilePath, 1);
+                        GlobalLoader.AddToLast(track.FilePath);
+                    }
+                    else
+                    {
+                        Console.WriteLine("CustomMediaPlayer Next");
+                        SnackbarBuilder.Show(Localization.SnackFileExists);
+                        track = null;
+                    }
                 }
                 else
                 {
-                    SnackbarBuilder.Show(Localization.SnackFileExists);
+                    Load(track.FilePath);
+                    Global.MediaSource = track;
+                    Global.CurrentAudioPath = track.FilePath;
                 }
+
+                SetNotification(track);
+
 
             }
         }
@@ -210,31 +180,41 @@ namespace NSEC.Music_Player.Media
             {
                 if (Global.CurrentPlaylist.Count > 1)
                 {
-                    Global.CurrentPlaylistPosition -= Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
+                    Global.PlaylistPosition -= Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
 
-                    if (Global.CurrentPlaylistPosition < 0)
-                        Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count - Global.CurrentPlaylistPosition;
+                    if (Global.PlaylistPosition < 0)
+                        Global.PlaylistPosition = Global.CurrentPlaylist.Count - Global.PlaylistPosition;
                 }
 
-                Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
+                MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
 
 
-                if (File.Exists(track.Container.FilePath))
+                if (Global.PlaylistType == MediaSource.SourceType.Local)
                 {
-                    Global.CurrentTrack = track.Container;
-                    Global.AudioPlayerTrack = track.Id;
-                    Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                    if (Global.LastPlayerClick)
-                        Play();
-                    Helpers.AddToCounter(track.Container.FilePath, 1);
-                    Helpers.AddToLast(track.Container.FilePath);
-                    SetNotification(track);
+
+                    if (File.Exists(track.FilePath))
+                    {
+                        Load(track.FilePath);
+                        Global.MediaSource = track;
+                        Global.CurrentAudioPath = track.FilePath;
+                        GlobalLoader.AddToCounter(track.FilePath, 1);
+                        GlobalLoader.AddToLast(track.FilePath);
+                    }
+                    else
+                    {
+                        Console.WriteLine("CustomMediaPlayer Prev");
+                        SnackbarBuilder.Show(Localization.SnackFileExists);
+                        track = null;
+                    }
                 }
                 else
                 {
-                    SnackbarBuilder.Show(Localization.SnackFileExists);
+                    Load(track.FilePath);
+                    Global.MediaSource = track;
+                    Global.CurrentAudioPath = track.FilePath;
                 }
 
+                SetNotification(track);
 
             }
 
@@ -243,7 +223,7 @@ namespace NSEC.Music_Player.Media
         public void Pause()
         {
             MediaPlayer.Pause();
-            SetNotification(Global.CurrentTrack);
+            SetNotification(Global.MediaSource);
 
         }
 
@@ -258,11 +238,7 @@ namespace NSEC.Music_Player.Media
             MediaPlayer.SetVolume(volume, volume);
         }
 
-        public void SetNotification(Track track)
-        {
-            SetNotification(track?.Container);
-        }
-        public void SetNotification(MediaProcessing.MediaTag container)
+        public void SetNotification(MediaSource container)
         {
             if (container != null)
             {
@@ -273,17 +249,21 @@ namespace NSEC.Music_Player.Media
                 PendingIntent stopIntent = PendingIntent.GetBroadcast(Global.Context, 0, new Intent("close"), PendingIntentFlags.Immutable);
                 PendingIntent openIntent = PendingIntent.GetActivity(Global.Context, 0, new Intent(Global.Context, typeof(MainActivity)), PendingIntentFlags.OneShot);
 
-                NotificationCompat.Action actionPrev = new NotificationCompat.Action(Resource.Drawable.prevIconNotification, "Prev", prevIntent);
-                NotificationCompat.Action actionPlay = new NotificationCompat.Action(!IsPlaying ? Resource.Drawable.playiconNotification : Resource.Drawable.pauseIconNotification, "Play", !IsPlaying ? playIntent : pauseIntent);
-                NotificationCompat.Action actionNext = new NotificationCompat.Action(Resource.Drawable.nextIconNotification, "Next", nextIntent);
-                NotificationCompat.Action actionStop = new NotificationCompat.Action(Resource.Drawable.stopIcon, "Stop", stopIntent);
+                NotificationCompat.Action actionPrev = new NotificationCompat.Action(Resource.Drawable.PrevIconNotification, "Prev", prevIntent);
+                NotificationCompat.Action actionPlay = new NotificationCompat.Action(!IsPlaying ? Resource.Drawable.PlayIconNotification : Resource.Drawable.PauseIconNotification, "Play", !IsPlaying ? playIntent : pauseIntent);
+                NotificationCompat.Action actionNext = new NotificationCompat.Action(Resource.Drawable.NextIconNotification, "Next", nextIntent);
+                NotificationCompat.Action actionStop = new NotificationCompat.Action(Resource.Drawable.StopIconNotification, "Stop", stopIntent);
+                Bitmap largeIcon;
 
-                Bitmap largeIcon = container.Picture == null ? BitmapFactory.DecodeResource(Global.Context.Resources, Resource.Drawable.emptyTrack) : BitmapFactory.DecodeByteArray(container.Picture, 0, container.Picture.Length);
+                if (container.Picture != null)
+                    largeIcon = BitmapFactory.DecodeByteArray(container.Picture, 0, container.Picture.Length);
+                else
+                    largeIcon = BitmapFactory.DecodeResource(Global.Context.Resources, Resource.Drawable.EmptyTrack);
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(Global.Context, "nsec music_player notification").
                     SetContentTitle(container.Title).
                     SetContentText(container.Artist).
-                    SetSmallIcon(Resource.Drawable.playIconWhite).
+                    SetSmallIcon(Resource.Drawable.PlayIconNotification).
                     AddAction(actionPrev).
                     AddAction(actionPlay).
                     AddAction(actionNext).
@@ -302,37 +282,6 @@ namespace NSEC.Music_Player.Media
             {
                 Global.NotificationManager.Cancel(0);
             }
-        }
-    }
-
-    [Service]
-    public class MediaPlayerReceiver : BroadcastReceiver
-    {
-        public MediaPlayerReceiver()
-        {
-        }
-
-        public override void OnReceive(Context context, Intent intent)
-        {
-
-            if (intent.Action == "prev")
-                Global.MediaPlayer.Prev();
-            else if (intent.Action == "next")
-                Global.MediaPlayer.Next();
-            else if (intent.Action == "play")
-                Global.MediaPlayer.Play();
-            else if (intent.Action == "pause")
-                Global.MediaPlayer.Pause();
-            else if (intent.Action == "open")
-            {
-
-            }
-            else if (intent.Action == "close")
-            {
-                Global.NotificationManager.CancelAll();
-                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            }
-            Console.WriteLine("MediaPlayerReceiver " + intent.Action);
         }
     }
 }

@@ -1,95 +1,58 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Nejman.NSEC2;
+
 namespace NSEC.Music_Player.Logic
 {
-    public class CacheString : IEnumerable<string>
+    public class CacheString
     {
-        private readonly List<string> cacheElements;
-        public CacheString()
+        public const string SEPARATOR = "[NSEC2_SEPARATOR]";
+        public static List<string> Load()
         {
-            cacheElements = new List<string>();
-        }
-
-        public int Count
-        {
-            get
+            List<string> returnData = new List<string>();
+            if(File.Exists(Global.DataPath+"/cache.nsec2"))
             {
-                return cacheElements == null ? 0 : cacheElements.Count;
+                FileStream fileStream = File.OpenRead(Global.DataPath + "/cache.nsec2");
+                NSEC2 nsec = new NSEC2(Global.PASSWORD);
+                nsec.Load(fileStream);
+                byte[] data = nsec.Get("content");
+                string buffer = Encoding.UTF8.GetString(data);
+                string[] files = buffer.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach(string file in files)
+                {
+                    if(File.Exists(file))
+                        returnData.Add(file);
+                }
+
+                nsec.Dispose();
             }
+
+            return returnData;
         }
-
-        public CacheString(List<string> cacheData)
+        public static void Save()
         {
-            cacheElements = new List<string>(cacheData);
-        }
-
-        public void Add(string stringData)
-        {
-            if (!cacheElements.Contains(stringData))
-                cacheElements.Add(stringData);
-        }
-
-        public void Add(string[] stringData)
-        {
-            foreach (string data in stringData)
-                Add(data);
-        }
-
-        public void RemoveAt(int index)
-        {
-            if (index >= 0 && index < cacheElements.Count)
-                cacheElements.RemoveAt(index);
-        }
-
-        public string Get(int index)
-        {
-            if (index >= 0 && index < cacheElements.Count)
-                return cacheElements[index];
-            else
-                return "";
-        }
-
-        public static CacheString FromBytes(byte[] cacheData)
-        {
-            return FromString(Encoding.UTF8.GetString(cacheData));
-        }
-        public static CacheString FromString(string cacheString)
-        {
-
-            string[] splits = cacheString.Split("[NSEC_SEPARATOR]", StringSplitOptions.RemoveEmptyEntries);
-
-            return new CacheString(new List<string>(splits));
-        }
-
-        public override string ToString()
-        {
+            NSEC2 nsec = new NSEC2(Global.PASSWORD);
             string buffer = "";
-            for (int a = 0; a < cacheElements.Count; a++)
+            foreach(string filepath in Global.Audios.Keys)
             {
-                buffer += cacheElements[a].ToString();
-
-                if (a < cacheElements.Count - 1)
-                    buffer += "[NSEC_SEPARATOR]";
+                buffer += filepath + SEPARATOR;
             }
 
-            return buffer;
-        }
-
-        public byte[] ToBytes()
-        {
-            return Encoding.UTF8.GetBytes(ToString());
-        }
-
-        public IEnumerator<string> GetEnumerator()
-        {
-            return cacheElements.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return cacheElements.GetEnumerator();
+            byte[] data = Encoding.UTF8.GetBytes(buffer);
+            nsec.AddFile("content", data);
+            File.WriteAllBytes(Global.DataPath + "/cache.nsec2", nsec.Save());
+            nsec.Dispose();
         }
     }
 }

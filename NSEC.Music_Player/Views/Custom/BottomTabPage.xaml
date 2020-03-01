@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.Custom.BottomTabPage">
+    <NavigationPage.TitleView>
+        <custom:CustomTitleView IsBackButton="False" Title="" x:Name="titleView"/>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="48"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" x:Name="content"></ScrollView>
+            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+            <custom:BottomTabBar Grid.Row="2" x:Name="tabBar"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

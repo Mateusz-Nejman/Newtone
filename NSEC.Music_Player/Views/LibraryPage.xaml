@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.LibraryPage"
+             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+  <ContentView.Content>
+        <RelativeLayout>
+            <ListView x:Name="menuList" Margin="0,10,0,0" RowHeight="48" ItemSelected="MenuList_ItemSelected" RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=300}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <custom:LibraryMenuViewCell/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=296}">
+                <Label Text="Newtone" FontSize="48" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center"/>
+                <Label Text="v4.0" FontSize="16" TextColor="{x:Static local:Colors.ColorBadge}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center" x:Name="versionLabel"/>
+                <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}"/>
+                <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}" LineBreakMode="WordWrap"/>
+                <Button Text="{x:Static localization:Localization.AboutWWW}" BorderColor="Black" BackgroundColor="Transparent" BorderWidth="1" Clicked="Button_Clicked" WidthRequest="200" HorizontalOptions="Center"
+                        FontSize="18" TextColor="{x:Static local:Colors.ColorBadge}" FontFamily="{x:Static local:Fonts.Light}"/>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentView.Content>
+</ContentView>

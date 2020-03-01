@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.StreamPlayerPage" NavigationPage.HasNavigationBar="False" BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+    <ContentPage.Content>
+        <Grid RowSpacing="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <RelativeLayout>
+                <Image Source="EmptyTrack.png" 
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}" Aspect="AspectFill" x:Name="trackImage"/>
+                <Image Source="DarkerImage.png" 
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"/>
+
+                <Button ImageSource="BackIcon.png" BackgroundColor="Transparent"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=48}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=48}" x:Name="backButton" Clicked="BackButton_Clicked"/>
+
+                <Image Source="YoutubeIcon.png"
+                       x:Name="sourceImage" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-48}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=48}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=48}"/>
+                <RelativeLayout  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-48}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=48}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=48}" x:Name="downloadLayout">
+                    
+                    <Frame CornerRadius="10" 
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1,Constant=-20}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=20}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=20}"
+                       BackgroundColor="{x:Static local:Colors.ColorBadge}"/>
+                    <Label
+                    Text=""
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1,Constant=-20}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=20}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=20}"
+                    HorizontalOptions="Center"
+                       TextColor="{x:Static local:Colors.TextPrimary}" x:Name="downloadLabel"/>
+                </RelativeLayout>
+                
+
+                <StackLayout 
+                Orientation="Vertical"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-200}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}">
+                    <Label Text="Malinowyj Zakat" HorizontalOptions="Center" FontSize="16" FontFamily="{x:Static local:Fonts.Bold}" TextColor="{x:Static local:Colors.TextPrimary}" x:Name="titleLabel" LineBreakMode="TailTruncation"/>
+                    <Label Text="Malinowyj Zakat" HorizontalOptions="Center" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}" Margin="0,0,0,20" x:Name="authorLabel" LineBreakMode="TailTruncation"/>
+                    <Slider Minimum="0" Maximum="1" ThumbColor="{x:Static local:Colors.ColorBadge}" MaximumTrackColor="{x:Static local:Colors.ColorPrimary}" MinimumTrackColor="{x:Static local:Colors.ColorBadge}" VerticalOptions="Fill" Margin="20,0" x:Name="slider"/>
+                    <Grid HorizontalOptions="Fill" Margin="20,0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="0:00" VerticalOptions="Start" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}" x:Name="startLabel"/>
+                        <Label Grid.Column="1"/>
+                        <Label Grid.Column="2" Text="1:23" VerticalOptions="End" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}" x:Name="endLabel"/>
+                    </Grid>
+                    <Grid HorizontalOptions="Fill" Margin="20,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="72"/>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="32"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Button ImageSource="RepeatIcon.png" BackgroundColor="Transparent" x:Name="repeatButton" Clicked="RepeatButton_Clicked"/>
+                        <Button ImageSource="PrevIcon.png" Grid.Column="2" BackgroundColor="Transparent" x:Name="prevButton" Clicked="PrevButton_Clicked"/>
+                        <Button ImageSource="PlayIcon.png" Grid.Column="3" BackgroundColor="Transparent" x:Name="playButton" />
+                        <Button ImageSource="NextIcon.png" Grid.Column="4" BackgroundColor="Transparent" x:Name="nextButton" Clicked="NextButton_Clicked"/>
+                        <custom:CustomButton ImageSource="DownloadIcon.png" Grid.Column="6" BackgroundColor="Transparent" x:Name="menuButton" Clicked="MenuButton_Clicked"/>
+                    </Grid>
+                </StackLayout>
+            </RelativeLayout>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Grid.Row="1">
+                <ListView x:Name="nextTrackList" RowHeight="72" VerticalOptions="StartAndExpand">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <custom:StreamViewCell/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

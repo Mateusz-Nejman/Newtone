@@ -1,18 +1,18 @@
-﻿using Android.App;
-using Android.Support.V4.App;
-using NSEC.Music_Player.Languages;
+﻿using NSEC.Music_Player.Languages;
+using NSEC.Music_Player.Loaders;
 using NSEC.Music_Player.Logic;
-using NSEC.Music_Player.Models;
-using NSEC.Music_Player.Views.CustomViews;
+using NSEC.Music_Player.Media;
+using NSEC.Music_Player.Processing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player.Views
 {
@@ -29,9 +29,9 @@ namespace NSEC.Music_Player.Views
             }
             set
             {
-                start = value; ///TODO
+                start = value;
 
-                playStopButton.ImageSource = start ? ImageSource.FromFile("pauseIcon.png") : ImageSource.FromFile("playIcon.png");
+                playButton.ImageSource = start ? ImageSource.FromFile("PauseIcon.png") : ImageSource.FromFile("PlayIcon.png");
             }
         }
 
@@ -47,84 +47,93 @@ namespace NSEC.Music_Player.Views
                 playerMode = value;
 
                 if (playerMode == PlayerMode.All)
-                    modeButton.ImageSource = ImageSource.FromFile("repeatIcon.png");
+                    repeatButton.ImageSource = ImageSource.FromFile("RepeatIcon.png");
                 else if (playerMode == PlayerMode.One)
-                    modeButton.ImageSource = ImageSource.FromFile("repeatOneIcon.png");
+                    repeatButton.ImageSource = ImageSource.FromFile("RepeatOneIcon.png");
                 else
-                    modeButton.ImageSource = ImageSource.FromFile("randomIcon");
+                    repeatButton.ImageSource = ImageSource.FromFile("RandomIcon.png");
             }
         }
-        private MediaProcessing.MediaTag TrackContainer { get; set; }
 
-        public PlayerPage(Track track, List<Track> playlist, int playlistPosition)
+        private MediaSource MediaSource { get; set; }
+        public PlayerPage(MediaSource source, List<MediaSource> playlist, int playlistPosition)
         {
             InitializeComponent();
-            Console.WriteLine("PlayerPage.xaml.cs: " + track.Id + ", position = " + playlistPosition);
+            Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
 
-            TrackContainer = track.Container;
+            MediaSource = source;
 
-            Console.WriteLine("PlayerPage " + TrackContainer.Title);
-            titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Artist;
-            menuButton.Tag = TrackContainer.FilePath;
+            titleLabel.Text = source.Title;
+            authorLabel.Text = source.Artist;
+            menuButton.Tag = MediaSource.FilePath;
 
-            Global.CurrentPlaylist = new List<Track>(playlist);
-            Console.WriteLine("PlayerPage PlaylistPosition " + playlistPosition);
-            Global.CurrentPlaylistPosition = playlistPosition;
-            Global.CurrentTrack = TrackContainer;
-            this.Appearing += PlayerPage_Appearing;
+            Global.CurrentPlaylist = new List<MediaSource>(playlist);
+            Global.PlaylistType = MediaSource.SourceType.Local;
+            Global.PlaylistPosition = playlistPosition;
+            Global.MediaSource = MediaSource;
 
+            Appearing += PlayerPage_Appearing;
 
-            if (track.Id == Global.AudioPlayerTrack)
+            if(source.FilePath == Global.CurrentAudioPath)
             {
-                Console.WriteLine("PlayerPage the same");
                 BindPlayerControls();
                 Start = UpdatePosition();
                 Start = Global.MediaPlayer.IsPlaying;
-
             }
             else
             {
                 if (Global.MediaPlayer != null)
                     Global.MediaPlayer.Stop();
 
-
-
-                if (File.Exists(track.Container.FilePath))
+                if(File.Exists(source.FilePath))
                 {
-                    Global.AudioPlayerTrack = track.Id;
-                    Helpers.AddToCounter(track.Container.FilePath, 1);
-                    Helpers.AddToLast(track.Container.FilePath);
+                    Global.CurrentAudioPath = source.FilePath;
+                    GlobalLoader.AddToCounter(source.FilePath, 1);
+                    GlobalLoader.AddToLast(source.FilePath);
                     BindPlayerControls();
-                    Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
+                    Global.MediaPlayer.Load(source.FilePath);
                     Play();
                     Start = true;
                     Global.LastPlayerClick = Start;
                 }
                 else
+                {
                     SnackbarBuilder.Show(Localization.SnackFileExists);
-
+                }
             }
 
-            if (track.Container.Picture != null)
-            {
-                trackImage.Source = ImageSource.FromStream(() => new MemoryStream(track.Container.Picture));
-            }
+            if (source.Picture != null)
+                trackImage.Source = ImageSource.FromStream(() => new MemoryStream(source.Picture));
 
-
-
-            Device.StartTimer(TimeSpan.FromSeconds(0.5), UpdatePosition);
-
+            Device.StartTimer(TimeSpan.FromMilliseconds(300), UpdatePosition);
         }
 
         private void PlayerPage_Appearing(object sender, EventArgs e)
         {
-            TrackContainer = Global.CurrentTrack;
-            titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Artist;
-            trackImage.Source = TrackContainer.Picture != null ? ImageSource.FromStream(() => new MemoryStream(TrackContainer.Picture)) : Global.EmptyTrack;
+            Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
+            MediaSource = Global.MediaSource;
+            titleLabel.Text = MediaSource.Title;
+            authorLabel.Text = MediaSource.Artist;
+            trackImage.Source = MediaSource.Picture != null ? ImageSource.FromStream(() => new MemoryStream(MediaSource.Picture)) : Global.EmptyTrack;
             Start = Global.MediaPlayer.IsPlaying;
             SetSliderPosition(Global.MediaPlayer.CurrentPosition / Global.MediaPlayer.Duration);
+        }
+
+        private void BackButton_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopAsync();
+        }
+
+        private void RepeatButton_Clicked(object sender, EventArgs e)
+        {
+            int oldMode = (int)PlayerMode;
+            int newMode = oldMode + 1;
+            if (newMode == 3)
+                newMode = 0;
+
+            PlayerMode = (PlayerMode)newMode;
+            Global.PlayerMode = PlayerMode;
+            Global.SaveConfig();
         }
 
         private void PrevButton_Clicked(object sender, EventArgs e)
@@ -132,23 +141,10 @@ namespace NSEC.Music_Player.Views
             Prev();
         }
 
-        private void NextButton_Clicked(object sender, EventArgs e)
+        private void PlayButton_Clicked(object sender, EventArgs e)
         {
-            Next();
-        }
-
-        private void BindPlayerControls()
-        {
-            trackSlider.Maximum = 1;
-            trackSlider.ValueChanged += TrackSlider_ValueChanged;
-
-            playStopButton.Clicked += PlayStopButton_Clicked;
-        }
-
-        private void PlayStopButton_Clicked(object sender, EventArgs e)
-        {
-            trackSlider.Maximum = 1;
-            trackSlider.IsEnabled = Global.MediaPlayer.CanSeek;
+            slider.Maximum = 1;
+            slider.IsEnabled = Global.MediaPlayer.CanSeek;
             if (Start)
                 Pause();
             else
@@ -157,61 +153,88 @@ namespace NSEC.Music_Player.Views
             Start = !Start;
             Global.LastPlayerClick = Start;
         }
-        bool UpdatePosition()
+
+        private void NextButton_Clicked(object sender, EventArgs e)
         {
-            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-            TrackContainer = track.Container;
-            titleLabel.Text = TrackContainer.Title;
-            artistLabel.Text = TrackContainer.Artist;
+            Next();
+        }
+
+        private void MenuButton_Clicked(object sender, EventArgs e)
+        {
+            ObservableCollection<MediaSource> tracks = new ObservableCollection<MediaSource>();
+
+            foreach (MediaSource track in Global.CurrentPlaylist)
+            {
+                tracks.Add(track);
+            }
+
+            menuButton.Tag = Global.MediaSource.FilePath;
+            TrackProcessing.Process(sender, tracks, this);
+        }
+
+        private void BindPlayerControls()
+        {
+            
+            slider.Maximum = 1;
+            slider.ValueChanged += Slider_ValueChanged;
+
+            playButton.Clicked += PlayButton_Clicked;
+        }
+
+        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            if (slider.Value != 1)
+                Global.MediaPlayer.Seek(slider.Value * Global.MediaPlayer.Duration);
+        }
+
+        private bool UpdatePosition()
+        {
+            MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
+            MediaSource = track;
+            titleLabel.Text = MediaSource.Title;
+            authorLabel.Text = MediaSource.Artist;
             //lblPosition.Text = $"Postion: {(int)player.CurrentPosition} / {(int)player.Duration}";
 
             SetSliderPosition(Global.MediaPlayer.CurrentPosition / Global.MediaPlayer.Duration);
 
-            maximumLabel.Text = TickParser.FormatTick(Global.MediaPlayer.Duration);
-            currentLabel.Text = TickParser.FormatTick(Global.MediaPlayer.CurrentPosition);
+            endLabel.Text = TickParser.FormatTick(Global.MediaPlayer.Duration);
+            startLabel.Text = TickParser.FormatTick(Global.MediaPlayer.CurrentPosition);
             Start = Global.MediaPlayer.IsPlaying;
             PlayerMode = Global.PlayerMode;
 
-            if (oldTrack != track.Container.FilePath)
+            if (oldTrack != track.FilePath)
             {
-                oldTrack = track.Container.FilePath;
-                trackImage.Source = track.Picture;
+                oldTrack = track.FilePath;
+                trackImage.Source = track.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(track.Picture));
             }
 
             return true;
         }
-
-        private void TrackSlider_ValueChanged(object sender, ValueChangedEventArgs e)
-        {
-            if (trackSlider.Value != 1)
-                Global.MediaPlayer.Seek(trackSlider.Value * Global.MediaPlayer.Duration);
-        }
-
 
         private void Play()
         {
             Global.MediaPlayer.Play();
             Start = true;
             SetSliderPosition(0);
-            trackSlider.Maximum = 1;
-            trackSlider.IsEnabled = Global.MediaPlayer.CanSeek;
+            slider.Maximum = 1;
+            slider.IsEnabled = Global.MediaPlayer.CanSeek;
             Global.SaveConfig();
         }
 
         private void Next()
         {
-            Global.CurrentPlaylistPosition += 1;
+            Global.PlaylistPosition += 1;
 
-            if (Global.CurrentPlaylistPosition == Global.CurrentPlaylist.Count)
-                Global.CurrentPlaylistPosition = 0;
+            if (Global.PlaylistPosition == Global.CurrentPlaylist.Count)
+                Global.PlaylistPosition = 0;
 
-            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-            TrackContainer = track.Container;
-            if (File.Exists(TrackContainer.FilePath))
+            MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
+            MediaSource = track;
+            if (File.Exists(MediaSource.FilePath))
             {
-                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                Global.CurrentTrack = track.Container;
-                Global.AudioPlayerTrack = track.Id;
+                Global.MediaPlayer.Load(track.FilePath);
+                Global.MediaSource = track;
+                Global.CurrentAudioPath = track.FilePath;
                 SetSliderPosition(0);
                 if (Global.LastPlayerClick)
                     Play();
@@ -225,18 +248,18 @@ namespace NSEC.Music_Player.Views
 
         private void Prev()
         {
-            Global.CurrentPlaylistPosition -= 1;
+            Global.PlaylistPosition -= 1;
 
-            if (Global.CurrentPlaylistPosition == -1)
-                Global.CurrentPlaylistPosition = Global.CurrentPlaylist.Count - 1;
+            if (Global.PlaylistPosition == -1)
+                Global.PlaylistPosition = Global.CurrentPlaylist.Count - 1;
 
-            Track track = Global.CurrentPlaylist[Global.CurrentPlaylistPosition];
-            TrackContainer = track.Container;
-            if (File.Exists(TrackContainer.FilePath))
+            MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
+            MediaSource = track;
+            if (File.Exists(MediaSource.FilePath))
             {
-                Global.MediaPlayer.Load(FileProcessing.GetStreamFromFile(track.Container.FilePath), track.Container.FilePath);
-                Global.CurrentTrack = track.Container;
-                Global.AudioPlayerTrack = track.Id;
+                Global.MediaPlayer.Load(track.FilePath);
+                Global.MediaSource = track;
+                Global.CurrentAudioPath = track.FilePath;
                 SetSliderPosition(0);
                 if (Global.LastPlayerClick)
                     Play();
@@ -254,35 +277,10 @@ namespace NSEC.Music_Player.Views
 
         private void SetSliderPosition(double position)
         {
-            trackSlider.ValueChanged -= TrackSlider_ValueChanged;
-            trackSlider.Maximum = 1;
-            trackSlider.Value = position;
-            trackSlider.ValueChanged += TrackSlider_ValueChanged;
-        }
-
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            ObservableCollection<Track> tracks = new ObservableCollection<Track>();
-
-            foreach (Track track in Global.CurrentPlaylist)
-            {
-                tracks.Add(track);
-            }
-
-            menuButton.Tag = Global.CurrentTrack.FilePath;
-            TrackProcessing.Process(sender, tracks, this);
-        }
-
-        private void ModeButton_Clicked(object sender, EventArgs e)
-        {
-            int oldMode = (int)PlayerMode;
-            int newMode = oldMode + 1;
-            if (newMode == 3)
-                newMode = 0;
-
-            PlayerMode = (PlayerMode)newMode;
-            Global.PlayerMode = PlayerMode;
-            Global.SaveConfig();
+            slider.ValueChanged -= Slider_ValueChanged;
+            slider.Maximum = 1;
+            slider.Value = position;
+            slider.ValueChanged += Slider_ValueChanged;
         }
     }
 }

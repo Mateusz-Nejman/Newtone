@@ -1,5 +1,5 @@
-﻿using NSEC.Music_Player.Logic;
-using NSEC.Music_Player.Models;
+﻿using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Processing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,32 +15,32 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DownloadPage : ContentPage
     {
-        public ObservableCollection<DownloadModel> Items;
+        private ObservableCollection<DownloadListModel> Items { get; set; }
+        private bool stopTimer = false;
         public DownloadPage()
         {
             InitializeComponent();
-            Items = new ObservableCollection<DownloadModel>();
-            TrackListView.ItemsSource = Items;
-
-            foreach (string id in DownloadProcessing.GetDownloads().Keys)
-            {
-                DownloadModel model = DownloadProcessing.GetDownloads()[id];
-                Items.Add(new DownloadModel() { Name = model.Name, Url = model.Url, Progress = model.Progress });
-            }
-
+            downloadList.ItemsSource = Items = new ObservableCollection<DownloadListModel>();
             Device.StartTimer(TimeSpan.FromSeconds(0.5), Refresh);
+            Disappearing += DownloadPage_Disappearing;
+        }
+
+        private void DownloadPage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
         }
 
         private bool Refresh()
         {
+            downloadLabel.IsVisible = DownloadProcessing.GetDownloads().Count == 0;
             Items.Clear();
-            foreach (string id in DownloadProcessing.GetDownloads().Keys)
+
+            foreach (DownloadListModel model in DownloadProcessing.GetDownloads().Values)
             {
-                DownloadModel model = DownloadProcessing.GetDownloads()[id];
-                Items.Add(new DownloadModel() { Name = model.Name, Url = model.Url, Progress = model.Progress });
+                Items.Add(model);
             }
 
-            return true;
-        } 
+            return !stopTimer;
+        }
     }
 }

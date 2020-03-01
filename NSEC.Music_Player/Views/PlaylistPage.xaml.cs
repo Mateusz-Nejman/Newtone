@@ -1,12 +1,10 @@
-﻿using NSEC.Music_Player.Languages;
-using NSEC.Music_Player.Logic;
-using NSEC.Music_Player.Models;
-using NSEC.Music_Player.Views.CustomViews;
+﻿using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,66 +12,28 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PlaylistPage : ContentPage, IInvokePage
+    public partial class PlaylistPage : ContentPage
     {
-        public ObservableCollection<Track> MenuItems { get; set; }
-        public PlaylistPage(string playlist)
+        private ObservableCollection<PlaylistListModel> Items { get; set; }
+        public PlaylistPage()
         {
             InitializeComponent();
-            Title = playlist;
+            playlistList.ItemsSource = Items = new ObservableCollection<PlaylistListModel>();
 
-            this.Appearing += TracksTab_Appearing;
-            MenuItems = new ObservableCollection<Track>();
-
-            List<Track> playlistTracks = Global.Playlists[playlist];
-
-            foreach (Track track in playlistTracks)
+            foreach(string playlistName in Global.Playlists.Keys)
             {
-                MenuItems.Add(track);
-            }
-            PlaylistTrackListView.ItemSelected += async (sender, e) =>
-            {
-                if (e.SelectedItem == null)
-                    return;
-                Track item = e.SelectedItem as Track;
-
-                if (File.Exists(item.Container.FilePath))
-                {
-                    await Navigation.PushAsync(new PlayerPage(item, MenuItems.ToList(), e.SelectedItemIndex));
-                }
-                else
-                    SnackbarBuilder.Show(Localization.SnackFileExists);
-            };
-
-            PlaylistTrackListView.BindingContext = this;
-
-
-        }
-
-        private void TracksTab_Appearing(object sender, EventArgs e)
-        {
-            base.OnAppearing();
-            playerPanel.Refresh();
-            PlaylistTrackListView.SelectedItem = null;
-            //labelTest.Text += "a ";
-        }
-        void OnTrackSelected(object sender, SelectedItemChangedEventArgs args)
-        {
-
-
-            for (int a = 0; a < MenuItems.Count; a++)
-            {
-                MenuItems[a].Selected(args.SelectedItemIndex == a);
+                Items.Add(new PlaylistListModel() { Name = playlistName, TrackCount = Global.Playlists[playlistName].Count });
             }
         }
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            TrackProcessing.Process(sender, MenuItems, this, true, Title);
-        }
 
-        public void PageInvoke()
+        private void PlaylistList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            TracksTab_Appearing(null, null);
+            if (e.SelectedItem != null)
+            {
+                string playlist = Items[e.SelectedItemIndex].Name;
+                Navigation.PushAsync(new TrackListPage(Global.Playlists[playlist]));
+                playlistList.SelectedItem = null;
+            }
         }
     }
 }

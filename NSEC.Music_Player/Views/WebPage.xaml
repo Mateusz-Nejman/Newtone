@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.WebPage" NavigationPage.HasBackButton="False"
+             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+    <NavigationPage.TitleView>
+        <custom:CustomTitleView IsBackButton="True" Title="WWW" x:Name="titleView"/>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
+                <StackLayout x:Name="stackLayout">
+                </StackLayout>
+            </ScrollView>
+            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

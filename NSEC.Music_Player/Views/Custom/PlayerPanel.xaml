@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.Custom.PlayerPanel">
+  <ContentView.Content>
+        <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="image" WidthRequest="32" HeightRequest="32" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFill"/>
+            <Button Grid.Column="1" ImageSource="PlayIcon.png" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" x:Name="playButton" Clicked="PlayButton_Clicked"/>
+            <RelativeLayout Grid.Column="2" HeightRequest="32">
+                <Label x:Name="titleLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Black}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation "/>
+                <Label x:Name="artistLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.TextPrimary}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=18}"  LineBreakMode="TailTruncation "/>
+            </RelativeLayout>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

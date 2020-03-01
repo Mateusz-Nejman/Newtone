@@ -3,43 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.DownloadPage"
-             BackgroundImageSource="background.png">
+             NavigationPage.HasBackButton="False"
+             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+    <NavigationPage.TitleView>
+        <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.TitleDownloads}" IsDownloadButton="False"/>
+    </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout Spacing="0">
-            <ListView x:Name="TrackListView"
-                VerticalOptions="FillAndExpand"
-                HasUnevenRows="true"
-                      >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <RelativeLayout BackgroundColor="Transparent">
-                                <Label Text="{Binding Name}" 
-                                d:Text="{Binding .}"
-                                LineBreakMode="NoWrap" 
-                                Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" TextColor="White"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=5}"
-                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=10}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-10}"/>
-                                <Label Text="{Binding ProgressString}" 
-                                d:Text="Item descripton"
-                                LineBreakMode="NoWrap"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" TextColor="White"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=5}"
-                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=36}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-10}" Padding="0,0,0,10"
-                                       />
-                            </RelativeLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <views:PlayerPanel x:Name="playerPanel"/>
-        </StackLayout>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackLayout>
+                <Label Text="{x:Static localization:Localization.NoDownloads}" VerticalOptions="Center" HorizontalOptions="Center" x:Name="downloadLabel"
+                   FontSize="20" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Light}"/>
+                <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
+                    <ListView x:Name="downloadList" VerticalOptions="FillAndExpand" RowHeight="32">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <custom:DownloadListViewCell/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+                
+            </StackLayout>
+            
+            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+        </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

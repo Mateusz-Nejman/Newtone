@@ -13,7 +13,7 @@ using Android.Widget;
 namespace NSEC.Music_Player.Logic
 {
     [Service]
-    class BackgroundService : Service
+    public class BackgroundService : Service
     {
         public override IBinder OnBind(Intent intent)
         {

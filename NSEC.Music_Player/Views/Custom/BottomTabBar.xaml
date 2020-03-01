@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.Custom.BottomTabBar">
+  <ContentView.Content>
+        <Grid BackgroundColor="{x:Static local:Colors.ColorSecondary}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="0" x:Name="grid1">
+                <custom:IconView x:Name="button1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="32" HeightRequest="32" Source="HomeIcon.png" Tag="1"/>
+            </Grid>
+            <Grid Grid.Column="1" x:Name="grid2">
+                <custom:IconView x:Name="button2" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="32" HeightRequest="32" Source="SearchIcon.png" Tag="2"/>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="grid3">
+                <custom:IconView x:Name="button3" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="32" HeightRequest="32" Source="TrackIcon.png" Tag="3"/>
+            </Grid>
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

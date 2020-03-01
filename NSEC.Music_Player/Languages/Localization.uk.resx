@@ -118,37 +118,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutAuthor" xml:space="preserve">
-    <value>Автор: Mateusz Nejman</value>
+    <value>Автор: Матеуш Нейман</value>
   </data>
-  <data name="AboutButton" xml:space="preserve">
-    <value>авторский сайт</value>
+  <data name="AboutDesc" xml:space="preserve">
+    <value>Плеер позволяет слушать музыку как с YouTube, так и локально. Автор не несет ответственности за то, как пользователь использует медиа с веб-сайтов.</value>
   </data>
-  <data name="AboutText" xml:space="preserve">
-    <value>Приложение будет доступно на телефонах Android</value>
+  <data name="AboutWWW" xml:space="preserve">
+    <value>Авторский сайт</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Добавлять</value>
   </data>
+  <data name="AddTags" xml:space="preserve">
+    <value>Добавить теги?</value>
+  </data>
   <data name="Artist" xml:space="preserve">
     <value>Музыкант</value>
   </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Музыканты</value>
+  </data>
   <data name="BackPressed" xml:space="preserve">
-    <value>Нажмите еще раз чтобы выйти </value>
+    <value>Нажмите еще раз, чтобы выйти</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отменить</value>
   </data>
   <data name="ChoosePlaylist" xml:space="preserve">
-    <value>выберите список</value>
+    <value>Выберите список</value>
   </data>
-  <data name="ExploreLast" xml:space="preserve">
-    <value>недавно играл</value>
-  </data>
-  <data name="ExploreMost" xml:space="preserve">
-    <value>самые популярные</value>
+  <data name="Clear" xml:space="preserve">
+    <value>Ясно</value>
   </data>
   <data name="FileCorrupted" xml:space="preserve">
-    <value>Не могу открыть файл </value>
+    <value>Файл поврежден</value>
+  </data>
+  <data name="LastViews" xml:space="preserve">
+    <value>Недавно играл</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Библиотека</value>
+  </data>
+  <data name="MainPage" xml:space="preserve">
+    <value>Дома</value>
+  </data>
+  <data name="MostViews" xml:space="preserve">
+    <value>Самые популярные</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
     <value>Новый список</value>
@@ -159,26 +174,26 @@
   <data name="No" xml:space="preserve">
     <value>Не</value>
   </data>
-  <data name="PermissionsGrant" xml:space="preserve">
-    <value>предоставить разрешения</value>
+  <data name="NoDownloads" xml:space="preserve">
+    <value>Нет загрузки в процессе</value>
   </data>
-  <data name="PermissionsInfo" xml:space="preserve">
-    <value>Плеер требует разрешения на запись для прослушивания музыки в автономном режиме </value>
+  <data name="PermissionGrant" xml:space="preserve">
+    <value>Предоставить разрешения</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>играть</value>
+  <data name="PermissionInfo" xml:space="preserve">
+    <value>Плеер требует разрешения на сохранение данных, чтобы скачивать музыку и сохранять настройки</value>
   </data>
   <data name="Playlist" xml:space="preserve">
-    <value>список</value>
-  </data>
-  <data name="PlaylistCorrupted" xml:space="preserve">
-    <value>Не могу играть списка </value>
+    <value>Список</value>
   </data>
   <data name="PlaylistOrTrack" xml:space="preserve">
-    <value>Скачать песню или список</value>
+    <value>Скачать список или песню?</value>
+  </data>
+  <data name="Playlists" xml:space="preserve">
+    <value>Списки</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>вопрос</value>
+    <value>Вопрос</value>
   </data>
   <data name="QuestionDelete" xml:space="preserve">
     <value>Удалить файл</value>
@@ -186,23 +201,38 @@
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
     <value>из списка</value>
   </data>
-  <data name="QuestionDeletePlaylist" xml:space="preserve">
-    <value>Удалить список </value>
+  <data name="Ready" xml:space="preserve">
+    <value>Готовый</value>
   </data>
-  <data name="SettingsAddTags" xml:space="preserve">
-    <value>Добавить теги к файлам</value>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SearchHistory" xml:space="preserve">
+    <value>История поиска</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Поиск ...</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings0" xml:space="preserve">
+    <value>Создать теги для локальных файлов</value>
+  </data>
+  <data name="Settings1" xml:space="preserve">
+    <value>Автоматические теги</value>
+  </data>
+  <data name="Settings2" xml:space="preserve">
+    <value>Удалить все данные</value>
   </data>
   <data name="SettingsChanges" xml:space="preserve">
     <value>Изменения будут видны после перезапуска приложения</value>
-  </data>
-  <data name="SettingsClear" xml:space="preserve">
-    <value>Очистить данные</value>
   </data>
   <data name="SnackDelete" xml:space="preserve">
     <value>Успешно удален</value>
   </data>
   <data name="SnackFileExists" xml:space="preserve">
-    <value>Файл не существует </value>
+    <value>Файл не существует</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
     <value>Добавлено в список</value>
@@ -213,35 +243,23 @@
   <data name="Title" xml:space="preserve">
     <value>Название</value>
   </data>
-  <data name="TitleAbout" xml:space="preserve">
-    <value>Об авторе</value>
-  </data>
-  <data name="TitleArtists" xml:space="preserve">
-    <value>Музыканты</value>
-  </data>
-  <data name="TitleExplore" xml:space="preserve">
-    <value>Просмотр</value>
-  </data>
-  <data name="TitlePlaylists" xml:space="preserve">
-    <value>Списки</value>
-  </data>
-  <data name="TitleSettings" xml:space="preserve">
-    <value>Настройки</value>
-  </data>
-  <data name="TitleTracks" xml:space="preserve">
-    <value>Песни</value>
+  <data name="TitleDownloads" xml:space="preserve">
+    <value>Коллекция</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Песня</value>
   </data>
+  <data name="TrackCount" xml:space="preserve">
+    <value>Сохраненные песни</value>
+  </data>
+  <data name="TrackCountPlaylist" xml:space="preserve">
+    <value>Песни</value>
+  </data>
   <data name="TrackMenuDelete" xml:space="preserve">
     <value>Удалить</value>
   </data>
-  <data name="TrackMenuDeletePlaylist" xml:space="preserve">
-    <value>Удалить из списка</value>
-  </data>
   <data name="TrackMenuEdit" xml:space="preserve">
-    <value>Pедактировать</value>
+    <value>Редактировать</value>
   </data>
   <data name="TrackMenuPlaylist" xml:space="preserve">
     <value>Добавить в список</value>
@@ -249,37 +267,13 @@
   <data name="TrackMenuQueue" xml:space="preserve">
     <value>Добавить в очередь</value>
   </data>
-  <data name="TracksCount" xml:space="preserve">
-    <value>Песен</value>
+  <data name="Tracks" xml:space="preserve">
+    <value>Песни</value>
   </data>
   <data name="UnknownArtist" xml:space="preserve">
-    <value>Неизвестный музыкант</value>
+    <value>Неизвестный художник</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
-  </data>
-  <data name="YoutubeAddTags" xml:space="preserve">
-    <value>Добавить теги (mузыкант, название, обложка)</value>
-  </data>
-  <data name="YoutubeConvert" xml:space="preserve">
-    <value>Конвертировать в MP3</value>
-  </data>
-  <data name="YoutubeDownloading" xml:space="preserve">
-    <value>Загруженные</value>
-  </data>
-  <data name="YoutubeDownloadingFiles" xml:space="preserve">
-    <value>Скачивание  файлов</value>
-  </data>
-  <data name="YoutubeDownloadingTitle" xml:space="preserve">
-    <value>Загрузка заголовка</value>
-  </data>
-  <data name="YoutubeError" xml:space="preserve">
-    <value>Видео заблокировано или недоступно </value>
-  </data>
-  <data name="YoutubeReady" xml:space="preserve">
-    <value>Готовый</value>
-  </data>
-  <data name="YoutubeStart" xml:space="preserve">
-    <value>Начало загрузки</value>
   </data>
 </root>

@@ -10,7 +10,6 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Java.Interop;
 
 namespace NSEC.Music_Player.Media
 {
@@ -19,10 +18,8 @@ namespace NSEC.Music_Player.Media
 
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
-            ///TODO
-            Console.WriteLine("OnAudioFocusChange " + focusChange.ToString());
 
-            if(Global.MediaPlayer != null)
+            if (Global.MediaPlayer != null)
             {
                 if (focusChange == AudioFocus.Loss)
                     Global.MediaPlayer.Stop();

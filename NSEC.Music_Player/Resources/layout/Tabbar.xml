@@ -9,5 +9,6 @@
     app:tabIndicatorColor="#fb8c00"
     app:tabSelectedTextColor="#fb8c00"
     app:tabTextColor="@android:color/white"
+    app:tabIconTint="#f0f"
     app:tabGravity="fill"
     app:tabMode="scrollable" />

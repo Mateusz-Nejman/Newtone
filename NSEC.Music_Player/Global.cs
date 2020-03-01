@@ -1,60 +1,52 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+using Android.App;
 using Android.Content;
-using Android.Graphics;
+using Android.Media;
 using Android.OS;
-using Android.Support.V4.App;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
 using Nejman.NSEC2;
-using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
-using NSEC.Music_Player.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Xamarin.Forms;
-using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace NSEC.Music_Player
 {
     public static class Global
     {
-        /*
-         * Constants
-         */
-        public const string password = "gruby idzie";
-        public const int maxTracksInLastList = 5;
+        public const string PASSWORD = "gruby idzie";
+        public const string SEPARATOR = "[NSEC2_SEPARATOR]";
+        public const int MAXTRACKSINLASTLIST = 5;
 
-        /*
-         * Audio Controllers
-         */
+
         public static CustomMediaPlayer MediaPlayer { get; set; }
-        public static Android.Media.AudioManager AudioManager { get; set; }
+        public static AudioManager AudioManager { get; set; }
 
-        /*
-         * Track Containers
-         */
-        public static Dictionary<string, MediaProcessing.MediaTag> Audios { get; set; }
-        public static Dictionary<string, MediaProcessing.MediaTag> AudioTags { get; set; }
+        public static Dictionary<string, MediaSource> Audios { get; set; }
+        public static Dictionary<string, MediaSourceTag> AudioTags { get; set; }
         public static Dictionary<string, List<string>> Artists { get; set; }
-        public static string AudioPlayerTrack { get; set; }
-        public static List<Track> CurrentPlaylist { get; set; }
-        public static int CurrentPlaylistPosition { get; set; }
-        public static int CurrentQueuePosition { get; set; }
-        public static List<Track> CurrentQueue { get; set; }
-        public static MediaProcessing.MediaTag CurrentTrack { get; set; }
-        public static Dictionary<string, List<Track>> Playlists { get; set; }
+        public static Dictionary<string, List<string>> Playlists { get; set; }
+        public static List<MediaSource> CurrentPlaylist { get; set; }
+        public static List<MediaSource> CurrentQueue { get; set; }
+        public static string CurrentAudioPath { get; set; }
+        public static MediaSource.SourceType PlaylistType { get; set; }
+        public static int PlaylistPosition { get; set; }
+        public static int QueuePosition { get; set; }
+        public static MediaSource MediaSource { get; set; }
         public static TrackCounter[] LastTracks { get; set; }
         public static TrackCounter[] MostTracks { get; set; }
+        public static TrackCounter[] FavouritePlaylists { get; set; }
+        public static List<HistoryModel> History { get; set; }
         public static bool AudioFromIntent { get; set; }
 
-        /*
-         * Global app variables
-         */
+
         public static PlayerMode PlayerMode { get; set; }
         public static bool LastPlayerClick { get; set; }
         public static string DataPath { get; set; }
@@ -63,235 +55,310 @@ namespace NSEC.Music_Player
         public static NotificationManager NotificationManager { get; set; }
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
-        public static ImageSource EmptyTrack { get; set; }
+        public static ImageSource EmptyTrack
+        {
+            get
+            {
+                return ImageSource.FromFile("EmptyTrack.png");
+            }
+        }
         public static bool AutoTags { get; set; }
-        /*
-         * Global app controllers
-         */
-        public static AsyncEndController asyncEndController = new AsyncEndController();
+
+
+        public static AsyncEndController AsyncEndController = new AsyncEndController();
 
         public static void LoadConfig()
         {
-            if (File.Exists(DataPath + "/data.nsec2"))
+            Console.WriteLine("LoadConfig");
+            if (File.Exists(DataPath + "/newtone.nsec2"))
             {
-                MainActivity.Loaded = true;
-                NSEC2 nsec = new NSEC2(password);
-                FileStream fileStream = File.OpenRead(DataPath + "/data.nsec2");
-                nsec.Load(fileStream);
-                BinaryFormatter bf = new BinaryFormatter();
-                if (nsec.Exists("playlists"))
+                FileStream stream = File.OpenRead(DataPath + "/newtone.nsec2");
+                NSEC2 nsec = new NSEC2(PASSWORD);
+                nsec.Load(stream);
+
+                if(nsec.Exists("playlists"))
                 {
-                    byte[] playlistsData = nsec.Get("playlists");
-                    Dictionary<string, List<object[]>> playlistSerialize = (Dictionary<string, List<object[]>>)bf.Deserialize(new MemoryStream(playlistsData));
-                    Playlists.Clear();
+                    string buffer = System.Text.Encoding.UTF8.GetString(nsec.Get("playlists"));
+                    string[] playlists = buffer.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    Console.WriteLine("LoadConfig "+playlists.Length);
 
-                    foreach (string playlistName in playlistSerialize.Keys)
+                    foreach(string playlistBuffer in playlists)
                     {
-                        List<object[]> playlist = playlistSerialize[playlistName];
-                        List<Track> newPlaylist = new List<Track>();
+                        List<string> playlist = new List<string>();
+                        string[] parts = playlistBuffer.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+                        string name = parts[0];
+                        string[] items = parts[1].Split(';', StringSplitOptions.RemoveEmptyEntries);
 
-                        foreach (object[] playlistTrack in playlist)
+                        foreach (string filepath in items)
                         {
-                            MediaProcessing.MediaTag trackContainer = (MediaProcessing.MediaTag)playlistTrack[3];
-                            Console.WriteLine("Global.LoadConfig load " + trackContainer.FilePath + " -> " + File.Exists(trackContainer.FilePath));
-
-                            if (File.Exists(trackContainer.FilePath))
+                            if (File.Exists(filepath))
                             {
-
-                                Track track = new Track() { Text = (string)playlistTrack[0], Description = (string)playlistTrack[1], Container = trackContainer, Id = (string)playlistTrack[4] };
-                                newPlaylist.Add(track);
+                                playlist.Add(filepath);
                             }
                         }
 
-                        Playlists.Add(playlistName, new List<Track>(newPlaylist));
-                        newPlaylist.Clear();
+                        if(playlist.Count > 0)
+                        {
+                            Playlists.Add(name, playlist);
+                        }
                     }
+                }
+
+                if(nsec.Exists("mostTracks"))
+                {
+                    byte[] tracksData = nsec.Get("mostTracks");
+                    string[] tracks = System.Text.Encoding.UTF8.GetString(tracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+                    List<TrackCounter> trackList = new List<TrackCounter>();
+                    foreach(string track in tracks)
+                    {
+
+                        TrackCounter counter = TrackCounter.FromString(track);
+
+                        if (counter != null && File.Exists(counter.Media.FilePath) && trackList.Count < MAXTRACKSINLASTLIST)
+                        {
+                            
+                            trackList.Add(counter);
+                        }
+                    }
+
+                    trackList = trackList.OrderByDescending(o => o.Count).ToList();
+
+                    MostTracks = trackList.ToArray();
                 }
 
                 if (nsec.Exists("lastTracks"))
                 {
-                    byte[] lastTracksData = nsec.Get("lastTracks");
-                    string[] lastTracks = Encoding.UTF8.GetString(lastTracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
-                    List<TrackCounter> lastTracksList = new List<TrackCounter>();
-                    for (int a = 0; a < lastTracks.Length; a++)
+                    byte[] tracksData = nsec.Get("lastTracks");
+                    string[] tracks = System.Text.Encoding.UTF8.GetString(tracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+                    List<TrackCounter> trackList = new List<TrackCounter>();
+                    foreach (string track in tracks)
                     {
-                        TrackCounter trackCounter = TrackCounter.FromString(lastTracks[a]);
-                        if (File.Exists(trackCounter.Track))
-                            lastTracksList.Add(trackCounter);
+                        TrackCounter counter = TrackCounter.FromString(track);
+
+                        if (counter != null && File.Exists(counter.Media.FilePath) && trackList.Count < MAXTRACKSINLASTLIST)
+                        {
+                            trackList.Add(counter);
+                        }
                     }
 
-                    LastTracks = lastTracksList.ToArray();
+                    LastTracks = trackList.ToArray();
                 }
 
-                if (nsec.Exists("mostTracks"))
-                {
-                    byte[] mostTracksData = nsec.Get("mostTracks");
-                    string[] mostTracks = Encoding.UTF8.GetString(mostTracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
-                    List<TrackCounter> mostTrackList = new List<TrackCounter>();
-
-                    for (int a = 0; a < mostTracks.Length; a++)
-                    {
-                        TrackCounter trackCounter = TrackCounter.FromString(mostTracks[a]);
-                        if (File.Exists(trackCounter.Track) && a < maxTracksInLastList)
-                            mostTrackList.Add(trackCounter);
-                    }
-
-                    mostTrackList = mostTrackList.OrderByDescending(o => o.Count).ToList();
-
-                    MostTracks = mostTrackList.ToArray();
-                }
-
-                if (nsec.Exists("playerMode"))
+                if(nsec.Exists("playerMode"))
                 {
                     byte[] playerModeData = nsec.Get("playerMode");
-                    int playerMode = int.Parse(Encoding.ASCII.GetString(playerModeData));
+                    int playerMode = int.Parse(System.Text.Encoding.UTF8.GetString(playerModeData));
                     PlayerMode = (PlayerMode)playerMode;
                 }
 
                 if(nsec.Exists("autoTags"))
                 {
                     byte[] autoTagsData = nsec.Get("autoTags");
-                    string buff = Encoding.ASCII.GetString(autoTagsData);
+                    string buff = System.Text.Encoding.ASCII.GetString(autoTagsData);
 
                     AutoTags = buff == "auto";
+                }
+
+                if(nsec.Exists("history"))
+                {
+                    byte[] historyData = nsec.Get("history");
+                    string[] historyElems = System.Text.Encoding.UTF8.GetString(historyData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    History.Clear();
+                    foreach(string elem in historyElems)
+                    {
+                        History.Add(HistoryModel.FromString(elem));
+                    }
                 }
 
                 if(!AudioFromIntent)
                 {
                     int cpp = 0;
 
-                    if (nsec.Exists("currentPlaylistPosition"))
+                    if(nsec.Exists("playlistPosition"))
                     {
-                        byte[] currentPlaylistPositionData = nsec.Get("currentPlaylistPosition");
-                        string cpps = Encoding.ASCII.GetString(currentPlaylistPositionData);
-                        cpp = int.Parse(cpps);
-                        Console.WriteLine("LoadConfig cpp " + cpp);
+                        byte[] ppData = nsec.Get("playlistPosition");
+                        string pp = System.Text.Encoding.ASCII.GetString(ppData);
+                        cpp = int.Parse(pp);
                     }
 
-                    if (nsec.Exists("currentPlaylist"))
+                    if(nsec.Exists("playlist"))
                     {
-                        byte[] currentPlaylistData = nsec.Get("currentPlaylist");
-                        string[] files = Encoding.UTF8.GetString(currentPlaylistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
-                        CurrentPlaylist = new List<Track>();
+                        byte[] playlistData = nsec.Get("playlist");
+                        string[] files = System.Text.Encoding.UTF8.GetString(playlistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+                        CurrentPlaylist = new List<MediaSource>();
 
                         if (cpp >= files.Length)
+                        {
                             cpp = -1;
+                        }
                         else
                         {
-                            if (Audios.ContainsKey(files[cpp]))
+                            if(Audios.ContainsKey(files[cpp]))
                             {
-                                CurrentPlaylistPosition = cpp;
-                                CurrentTrack = Audios[files[cpp]];
-                                AudioPlayerTrack = CurrentTrack.FilePath;
-                                MediaPlayer.Load(FileProcessing.GetStreamFromFile(files[cpp]), files[cpp]);
+                                PlaylistPosition = cpp;
+                                MediaSource = Audios[files[cpp]];
+                                CurrentAudioPath = MediaSource.FilePath;
+                                MediaPlayer.Load(files[cpp]);
                             }
                         }
-                        for (int a = 0; a < files.Length; a++)
+
+                        foreach(string filepath in files)
                         {
-                            Console.WriteLine($"LoadConfig {a}. {files[a]}");
-                            if (File.Exists(files[a]) && Audios.ContainsKey(files[a]))
+                            if(File.Exists(filepath) && Audios.ContainsKey(filepath))
                             {
-                                CurrentPlaylist.Add(TrackProcessing.GetTrack(files[a]));
+                                CurrentPlaylist.Add(Audios[filepath]);
                             }
                         }
                     }
                 }
+
+                nsec.Dispose();
             }
         }
 
         public static void SaveConfig()
         {
-            NSEC2 nsec = new NSEC2(password);
-            nsec.SetDebug(false);
-            MemoryStream memoryStream = new MemoryStream();
-            BinaryFormatter bf = new BinaryFormatter();
+            NSEC2 nsec = new NSEC2(PASSWORD);
 
+            string buffer = "";
 
-            Dictionary<string, List<object[]>> playlists = new Dictionary<string, List<object[]>>();
-            foreach (string playlistName in Playlists.Keys)
+            if(Playlists.Count > 0)
             {
-                List<object[]> playlistSerialize = new List<object[]>();
-                List<Track> playlist = Playlists[playlistName];
-
-                foreach (Track playlistTrack in playlist)
+                foreach (string playlistName in Playlists.Keys)
                 {
-                    playlistSerialize.Add(playlistTrack.Serialize());
+
+                    List<string> playlist = Playlists[playlistName];
+
+                    if(playlist.Count > 0)
+                    {
+                        string playlistItem = playlistName + SEPARATOR;
+
+
+
+                        foreach (string item in playlist)
+                        {
+                            playlistItem += item + ';';
+                        }
+
+                        buffer += playlistItem + '\n';
+                    }
+                    
                 }
 
-                playlists.Add(playlistName, playlistSerialize);
+                nsec.AddFile("playlists", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
-            bf.Serialize(memoryStream, playlists);
-            byte[] playlistsData = memoryStream.ToArray();
-            nsec.AddFile("playlists", playlistsData);
 
+            int playerMode = (int)PlayerMode;
+            buffer = playerMode.ToString();
+            nsec.AddFile("playerMode", System.Text.Encoding.UTF8.GetBytes(buffer));
 
-            string lastTracks = "";
-            for (int a = 0; a < LastTracks.Length; a++)
-                lastTracks += LastTracks[a].ToString();
-            byte[] lastTracksData = Encoding.UTF8.GetBytes(lastTracks);
+            buffer = AutoTags ? "auto" : "none";
+            nsec.AddFile("autoTags", System.Text.Encoding.ASCII.GetBytes(buffer));
 
-            string mostTracks = "";
-            for (int a = 0; a < MostTracks.Length; a++)
-                mostTracks += MostTracks[a].ToString();
-            byte[] mostTracksData = Encoding.UTF8.GetBytes(mostTracks);
+            nsec.AddFile("playlistPosition", System.Text.Encoding.ASCII.GetBytes(PlaylistPosition.ToString()));
 
-            nsec.AddFile("lastTracks", lastTracksData);
-            nsec.AddFile("mostTracks", mostTracksData);
-
-            byte[] playerModeData = Encoding.ASCII.GetBytes(((int)PlayerMode).ToString());
-            Console.WriteLine("SaveConfig " + System.Globalization.CultureInfo.CurrentUICulture.Name);
-
-            nsec.AddFile("playerMode", playerModeData);
-
-            if (CurrentPlaylist.Count > 0)
+            if(CurrentPlaylist.Count > 0 && PlaylistType == MediaSource.SourceType.Local)
             {
-                byte[] currentPlaylistPositionData = Encoding.ASCII.GetBytes(CurrentPlaylistPosition.ToString());
-                nsec.AddFile("currentPlaylistPosition", currentPlaylistPositionData);
-
-                string currentPlaylistString = "";
-                for (int a = 0; a < CurrentPlaylist.Count; a++)
+                buffer = "";
+                foreach (MediaSource mediaSource in CurrentPlaylist)
                 {
-                    currentPlaylistString += CurrentPlaylist[a].Container.FilePath + ":";
+                    string item = mediaSource.FilePath;
+                    buffer += item + ';';
+                }
+                nsec.AddFile("playlist", System.Text.Encoding.UTF8.GetBytes(buffer));
+            }
+            buffer = "";
+
+            foreach (TrackCounter counter in MostTracks)
+            {
+                buffer += counter.ToString() + ":";
+            }
+
+            nsec.AddFile("mostTracks", System.Text.Encoding.UTF8.GetBytes(buffer));
+
+            buffer = "";
+
+            foreach (TrackCounter counter in LastTracks)
+            {
+                buffer += counter.ToString() + ":";
+            }
+
+            nsec.AddFile("lastTracks", System.Text.Encoding.UTF8.GetBytes(buffer));
+
+            if(History.Count > 0)
+            {
+                buffer = "";
+
+                foreach(HistoryModel model in History)
+                {
+                    buffer += model.ToString() + "\n";
                 }
 
-                nsec.AddFile("currentPlaylist", Encoding.UTF8.GetBytes(currentPlaylistString));
+                nsec.AddFile("history", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
 
-            nsec.AddFile("autoTags", Encoding.ASCII.GetBytes(AutoTags ? "auto" : "none"));
+            File.WriteAllBytes(DataPath + "/newtone.nsec2", nsec.Save());
 
-            SaveTags();
-
-            File.WriteAllBytes(DataPath + "/data.nsec2", nsec.Save());
+            nsec.Dispose();
         }
 
         public static void SaveTags()
         {
             if (AudioTags.Count > 0)
             {
-                NSEC2 nsec = new NSEC2(password);
+                NSEC2 nsec = new NSEC2(PASSWORD);
                 nsec.SetDebug(false);
-                BinaryFormatter bf = new BinaryFormatter();
-                using MemoryStream memoryStream = new MemoryStream();
-                bf.Serialize(memoryStream, AudioTags);
-                nsec.AddFile("tags", memoryStream.ToArray());
 
-                File.WriteAllBytes(DataPath + "/tags.nsec2", nsec.Save());
+                int counter = 0;
+                string buffer = "";
+                foreach(string filepath in AudioTags.Keys)
+                {
+                    MediaSourceTag mediaSource = AudioTags[filepath];
+
+                    string name = "image"+counter;
+                    nsec.AddFile(name, mediaSource.ImageSource ?? (new byte[0]));
+
+                    string bufferItem = filepath + SEPARATOR + mediaSource.Author + SEPARATOR + mediaSource.Title + SEPARATOR + name + "\n";
+                    buffer += bufferItem;
+                    counter += 1;
+                }
+
+                nsec.AddFile("tags", System.Text.Encoding.UTF8.GetBytes(buffer));
+
+                File.WriteAllBytes(DataPath + "/newtoneTags.nsec2", nsec.Save());
             }
         }
 
         public static void LoadTags()
         {
-            if (File.Exists(DataPath + "/tags.nsec2"))
+            if (File.Exists(DataPath + "/newtoneTags.nsec2"))
             {
-                NSEC2 nsec = new NSEC2(password);
-                nsec.SetDebug(false);
-                FileStream fileStream = File.OpenRead(DataPath + "/tags.nsec2");
+                AudioTags.Clear();
+                FileStream fileStream = File.OpenRead(DataPath + "/newtoneTags.nsec2");
+                NSEC2 nsec = new NSEC2(PASSWORD);
                 nsec.Load(fileStream);
+                nsec.SetDebug(false);
 
-                using MemoryStream memoryStream = new MemoryStream(nsec.Get("tags"));
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                AudioTags = (Dictionary<string, MediaProcessing.MediaTag>)binaryFormatter.Deserialize(memoryStream);
-                fileStream.Dispose();
+                string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get("tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach(string tagItem in tags)
+                {
+                    string[] values = tagItem.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+
+                    MediaSourceTag tag = new MediaSourceTag()
+                    {
+                        Author = values[1],
+                        Title = values[2],
+                        ImageSource = nsec.Get(values[3]).Length > 0 ? nsec.Get(values[3]) : null
+                    };
+
+                    AudioTags.Add(values[0], tag);
+                }
+
+                nsec.Dispose();
             }
         }
     }

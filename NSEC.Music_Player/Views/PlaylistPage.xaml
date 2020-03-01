@@ -3,58 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:NSEC.Music_Player.Views.CustomViews"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.PlaylistPage" Visual="Default" NavigationPage.HasNavigationBar="False" BackgroundImageSource="background.png">
+             x:Class="NSEC.Music_Player.Views.PlaylistPage"
+             NavigationPage.HasBackButton="False"
+             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+    <NavigationPage.TitleView>
+        <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Playlists}"/>
+    </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout Spacing="0">
-            <ListView x:Name="PlaylistTrackListView"
-                VerticalOptions="FillAndExpand"
-                HasUnevenRows="true"
-                      ItemSelected="OnTrackSelected"
-                      ItemsSource="{Binding MenuItems}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <RelativeLayout BackgroundColor="{Binding BackgroundColor}">
-                                <Frame CornerRadius="8" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=X,Constant=14}" 
-                                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y,Factor=1,Constant=4}"
-                                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}"
-                                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.0, Constant=60}" Padding="0">
-                                    <Image Source="{Binding Picture}"/>
-                                </Frame>
-                                <Label Text="{Binding Text}" 
-                                d:Text="{Binding .}"
-                                LineBreakMode="NoWrap" 
-                                Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" TextColor="{Binding LabelColor}"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=78}"
-                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=10}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}"/>
-                                <Label Text="{Binding Description}" 
-                                d:Text="Item descripton"
-                                LineBreakMode="NoWrap"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" TextColor="{Binding LabelColor}"
-                                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1.0, Constant=78}"
-                                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Y,Factor=1.0, Constant=36}"
-                                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-116}" Padding="0,0,0,10"
-                                       />
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-
-                                <views:CustomButton 
-                ImageSource="menuIcon.png" 
-                BackgroundColor="#00000000" 
-                WidthRequest="32" 
-                HeightRequest="32" 
-                Clicked="Button_Clicked" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1.0, Constant=-42}"
-                                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=1.0, Constant=16}" Tag="{Binding Tag}"/>
-                            </RelativeLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <views:PlayerPanel x:Name="playerPanel"/>
-        </StackLayout>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
+                <ListView x:Name="playlistList" VerticalOptions="FillAndExpand" ItemSelected="PlaylistList_ItemSelected" RowHeight="74">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <custom:PlaylistListViewCell/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

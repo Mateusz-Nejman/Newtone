@@ -22,7 +22,7 @@ namespace NSEC.Music_Player.Languages {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Localization {
+    internal class Localization {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace NSEC.Music_Player.Languages {
         /// Zwraca buforowane wystąpienie ResourceManager używane przez tę klasę.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NSEC.Music_Player.Languages.Localization", typeof(Localization).Assembly);
@@ -51,7 +51,7 @@ namespace NSEC.Music_Player.Languages {
         ///   przypadków przeszukiwania zasobów za pomocą tej klasy zasobów wymagającej zdefiniowania typu.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,52 +63,70 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Autor: Mateusz Nejman.
         /// </summary>
-        public static string AboutAuthor {
+        internal static string AboutAuthor {
             get {
                 return ResourceManager.GetString("AboutAuthor", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Strona autora.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odtwarzacz umożliwia słuchanie muzyki z youtube, oraz lokalnie. Autor nie ponosi odpowiedzialności za to, w jaki sposób użytkownik używa mediów z podanych serwisów..
         /// </summary>
-        public static string AboutButton {
+        internal static string AboutDesc {
             get {
-                return ResourceManager.GetString("AboutButton", resourceCulture);
+                return ResourceManager.GetString("AboutDesc", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Aplikacja docelowo będzie dostępna tylko na telefonach z systemem Android..
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Strona autora.
         /// </summary>
-        public static string AboutText {
+        internal static string AboutWWW {
             get {
-                return ResourceManager.GetString("AboutText", resourceCulture);
+                return ResourceManager.GetString("AboutWWW", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj.
         /// </summary>
-        public static string Add {
+        internal static string Add {
             get {
                 return ResourceManager.GetString("Add", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodać tagi?.
+        /// </summary>
+        internal static string AddTags {
+            get {
+                return ResourceManager.GetString("AddTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wykonawca.
         /// </summary>
-        public static string Artist {
+        internal static string Artist {
             get {
                 return ResourceManager.GetString("Artist", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, żeby wyjść.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wykonawcy.
         /// </summary>
-        public static string BackPressed {
+        internal static string Artists {
+            get {
+                return ResourceManager.GetString("Artists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, aby wyjść.
+        /// </summary>
+        internal static string BackPressed {
             get {
                 return ResourceManager.GetString("BackPressed", resourceCulture);
             }
@@ -117,7 +135,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Anuluj.
         /// </summary>
-        public static string Cancel {
+        internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -126,43 +144,70 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz playlistę.
         /// </summary>
-        public static string ChoosePlaylist {
+        internal static string ChoosePlaylist {
             get {
                 return ResourceManager.GetString("ChoosePlaylist", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ostatnio odtwarzane.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wycyść.
         /// </summary>
-        public static string ExploreLast {
+        internal static string Clear {
             get {
-                return ResourceManager.GetString("ExploreLast", resourceCulture);
+                return ResourceManager.GetString("Clear", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Najczęściej odtwarzane.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony.
         /// </summary>
-        public static string ExploreMost {
-            get {
-                return ResourceManager.GetString("ExploreMost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nie mogę otworzyć pliku.
-        /// </summary>
-        public static string FileCorrupted {
+        internal static string FileCorrupted {
             get {
                 return ResourceManager.GetString("FileCorrupted", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ostatnio odtwarzane.
+        /// </summary>
+        internal static string LastViews {
+            get {
+                return ResourceManager.GetString("LastViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Biblioteka.
+        /// </summary>
+        internal static string Library {
+            get {
+                return ResourceManager.GetString("Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Strona główna.
+        /// </summary>
+        internal static string MainPage {
+            get {
+                return ResourceManager.GetString("MainPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Najczęściej odtwarzane.
+        /// </summary>
+        internal static string MostViews {
+            get {
+                return ResourceManager.GetString("MostViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nowa playlista.
         /// </summary>
-        public static string NewPlaylist {
+        internal static string NewPlaylist {
             get {
                 return ResourceManager.GetString("NewPlaylist", resourceCulture);
             }
@@ -171,7 +216,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wprowadź nazwę playlisty.
         /// </summary>
-        public static string NewPlaylistHint {
+        internal static string NewPlaylistHint {
             get {
                 return ResourceManager.GetString("NewPlaylistHint", resourceCulture);
             }
@@ -180,70 +225,70 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nie.
         /// </summary>
-        public static string No {
+        internal static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Brak pobierania w toku.
+        /// </summary>
+        internal static string NoDownloads {
+            get {
+                return ResourceManager.GetString("NoDownloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Przyznaj uprawnienia.
         /// </summary>
-        public static string PermissionsGrant {
+        internal static string PermissionGrant {
             get {
-                return ResourceManager.GetString("PermissionsGrant", resourceCulture);
+                return ResourceManager.GetString("PermissionGrant", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia.
         /// </summary>
-        public static string PermissionsInfo {
+        internal static string PermissionInfo {
             get {
-                return ResourceManager.GetString("PermissionsInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odtwórz.
-        /// </summary>
-        public static string Play {
-            get {
-                return ResourceManager.GetString("Play", resourceCulture);
+                return ResourceManager.GetString("PermissionInfo", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Playlista.
         /// </summary>
-        public static string Playlist {
+        internal static string Playlist {
             get {
                 return ResourceManager.GetString("Playlist", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nie mogę odtworzyć playlisty.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrać playlistę czy utwór?.
         /// </summary>
-        public static string PlaylistCorrupted {
-            get {
-                return ResourceManager.GetString("PlaylistCorrupted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrać utwór czy playlistę.
-        /// </summary>
-        public static string PlaylistOrTrack {
+        internal static string PlaylistOrTrack {
             get {
                 return ResourceManager.GetString("PlaylistOrTrack", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pytanko.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Playlisty.
         /// </summary>
-        public static string Question {
+        internal static string Playlists {
+            get {
+                return ResourceManager.GetString("Playlists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pytanie.
+        /// </summary>
+        internal static string Question {
             get {
                 return ResourceManager.GetString("Question", resourceCulture);
             }
@@ -252,7 +297,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usunąć plik.
         /// </summary>
-        public static string QuestionDelete {
+        internal static string QuestionDelete {
             get {
                 return ResourceManager.GetString("QuestionDelete", resourceCulture);
             }
@@ -261,52 +306,97 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu z playlisty.
         /// </summary>
-        public static string QuestionDeleteFromPlaylist {
+        internal static string QuestionDeleteFromPlaylist {
             get {
                 return ResourceManager.GetString("QuestionDeleteFromPlaylist", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usunąć playlistę.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Gotowe.
         /// </summary>
-        public static string QuestionDeletePlaylist {
+        internal static string Ready {
             get {
-                return ResourceManager.GetString("QuestionDeletePlaylist", resourceCulture);
+                return ResourceManager.GetString("Ready", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj tagi do plików.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Szukaj.
         /// </summary>
-        public static string SettingsAddTags {
+        internal static string Search {
             get {
-                return ResourceManager.GetString("SettingsAddTags", resourceCulture);
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Historia wyszukiwania.
+        /// </summary>
+        internal static string SearchHistory {
+            get {
+                return ResourceManager.GetString("SearchHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyszukiwanie....
+        /// </summary>
+        internal static string Searching {
+            get {
+                return ResourceManager.GetString("Searching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ustawienia.
+        /// </summary>
+        internal static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wygeneruj tagi dla plików lokalnych.
+        /// </summary>
+        internal static string Settings0 {
+            get {
+                return ResourceManager.GetString("Settings0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Automatyczne tagi.
+        /// </summary>
+        internal static string Settings1 {
+            get {
+                return ResourceManager.GetString("Settings1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyczyść wszystkie dane.
+        /// </summary>
+        internal static string Settings2 {
+            get {
+                return ResourceManager.GetString("Settings2", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zmiany będą widoczne po ponownym uruchomieniu aplikacji.
         /// </summary>
-        public static string SettingsChanges {
+        internal static string SettingsChanges {
             get {
                 return ResourceManager.GetString("SettingsChanges", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyczyść dane.
-        /// </summary>
-        public static string SettingsClear {
-            get {
-                return ResourceManager.GetString("SettingsClear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pomyślnie usunięto.
         /// </summary>
-        public static string SnackDelete {
+        internal static string SnackDelete {
             get {
                 return ResourceManager.GetString("SnackDelete", resourceCulture);
             }
@@ -315,7 +405,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik nie istnieje.
         /// </summary>
-        public static string SnackFileExists {
+        internal static string SnackFileExists {
             get {
                 return ResourceManager.GetString("SnackFileExists", resourceCulture);
             }
@@ -324,7 +414,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodano do playlisty.
         /// </summary>
-        public static string SnackPlaylist {
+        internal static string SnackPlaylist {
             get {
                 return ResourceManager.GetString("SnackPlaylist", resourceCulture);
             }
@@ -333,7 +423,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodano do kolejki.
         /// </summary>
-        public static string SnackQueue {
+        internal static string SnackQueue {
             get {
                 return ResourceManager.GetString("SnackQueue", resourceCulture);
             }
@@ -342,97 +432,61 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Tytuł.
         /// </summary>
-        public static string Title {
+        internal static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu O autorze.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobieranie.
         /// </summary>
-        public static string TitleAbout {
+        internal static string TitleDownloads {
             get {
-                return ResourceManager.GetString("TitleAbout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wykonawcy.
-        /// </summary>
-        public static string TitleArtists {
-            get {
-                return ResourceManager.GetString("TitleArtists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Przeglądaj.
-        /// </summary>
-        public static string TitleExplore {
-            get {
-                return ResourceManager.GetString("TitleExplore", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Playlisty.
-        /// </summary>
-        public static string TitlePlaylists {
-            get {
-                return ResourceManager.GetString("TitlePlaylists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ustawienia.
-        /// </summary>
-        public static string TitleSettings {
-            get {
-                return ResourceManager.GetString("TitleSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utwory.
-        /// </summary>
-        public static string TitleTracks {
-            get {
-                return ResourceManager.GetString("TitleTracks", resourceCulture);
+                return ResourceManager.GetString("TitleDownloads", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utwór.
         /// </summary>
-        public static string Track {
+        internal static string Track {
             get {
                 return ResourceManager.GetString("Track", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zapisanych utworów.
+        /// </summary>
+        internal static string TrackCount {
+            get {
+                return ResourceManager.GetString("TrackCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utworów.
+        /// </summary>
+        internal static string TrackCountPlaylist {
+            get {
+                return ResourceManager.GetString("TrackCountPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usuń.
         /// </summary>
-        public static string TrackMenuDelete {
+        internal static string TrackMenuDelete {
             get {
                 return ResourceManager.GetString("TrackMenuDelete", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usuń z playlisty.
-        /// </summary>
-        public static string TrackMenuDeletePlaylist {
-            get {
-                return ResourceManager.GetString("TrackMenuDeletePlaylist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edytuj.
         /// </summary>
-        public static string TrackMenuEdit {
+        internal static string TrackMenuEdit {
             get {
                 return ResourceManager.GetString("TrackMenuEdit", resourceCulture);
             }
@@ -441,7 +495,7 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj do playlisty.
         /// </summary>
-        public static string TrackMenuPlaylist {
+        internal static string TrackMenuPlaylist {
             get {
                 return ResourceManager.GetString("TrackMenuPlaylist", resourceCulture);
             }
@@ -450,25 +504,25 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj do kolejki.
         /// </summary>
-        public static string TrackMenuQueue {
+        internal static string TrackMenuQueue {
             get {
                 return ResourceManager.GetString("TrackMenuQueue", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utworów.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utwory.
         /// </summary>
-        public static string TracksCount {
+        internal static string Tracks {
             get {
-                return ResourceManager.GetString("TracksCount", resourceCulture);
+                return ResourceManager.GetString("Tracks", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nieznany wykonawca.
         /// </summary>
-        public static string UnknownArtist {
+        internal static string UnknownArtist {
             get {
                 return ResourceManager.GetString("UnknownArtist", resourceCulture);
             }
@@ -477,81 +531,9 @@ namespace NSEC.Music_Player.Languages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Tak.
         /// </summary>
-        public static string Yes {
+        internal static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodać tagi(autor, tytuł, okładka).
-        /// </summary>
-        public static string YoutubeAddTags {
-            get {
-                return ResourceManager.GetString("YoutubeAddTags", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Konwertowanie do MP3.
-        /// </summary>
-        public static string YoutubeConvert {
-            get {
-                return ResourceManager.GetString("YoutubeConvert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobieranie plików.
-        /// </summary>
-        public static string YoutubeDownloadFiles {
-            get {
-                return ResourceManager.GetString("YoutubeDownloadFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrano.
-        /// </summary>
-        public static string YoutubeDownloading {
-            get {
-                return ResourceManager.GetString("YoutubeDownloading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobieranie tytułu.
-        /// </summary>
-        public static string YoutubeDownloadTitle {
-            get {
-                return ResourceManager.GetString("YoutubeDownloadTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Film posiada blokadę lub jest niedostępny.
-        /// </summary>
-        public static string YoutubeError {
-            get {
-                return ResourceManager.GetString("YoutubeError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Gotowe.
-        /// </summary>
-        public static string YoutubeReady {
-            get {
-                return ResourceManager.GetString("YoutubeReady", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Rozpoczynanie pobierania.
-        /// </summary>
-        public static string YoutubeStart {
-            get {
-                return ResourceManager.GetString("YoutubeStart", resourceCulture);
             }
         }
     }

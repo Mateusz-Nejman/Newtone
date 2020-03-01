@@ -120,20 +120,26 @@
   <data name="AboutAuthor" xml:space="preserve">
     <value>Author: Mateusz Nejman</value>
   </data>
-  <data name="AboutButton" xml:space="preserve">
-    <value>Author page</value>
+  <data name="AboutDesc" xml:space="preserve">
+    <value>The player allows you to listen to music from youtube, and locally. The author is not responsible for how the user uses the media from the websites.</value>
   </data>
-  <data name="AboutText" xml:space="preserve">
-    <value>Application will be available only on Android phones</value>
+  <data name="AboutWWW" xml:space="preserve">
+    <value>Author page</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="AddTags" xml:space="preserve">
+    <value>Add tags?</value>
+  </data>
   <data name="Artist" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Artists</value>
+  </data>
   <data name="BackPressed" xml:space="preserve">
-    <value>Click once more to exit</value>
+    <value>Press again to exit</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -141,14 +147,23 @@
   <data name="ChoosePlaylist" xml:space="preserve">
     <value>Select playlist</value>
   </data>
-  <data name="ExploreLast" xml:space="preserve">
-    <value>Last listen</value>
-  </data>
-  <data name="ExploreMost" xml:space="preserve">
-    <value>Most listen</value>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
   </data>
   <data name="FileCorrupted" xml:space="preserve">
-    <value>Can't open a file</value>
+    <value>File is corrupted</value>
+  </data>
+  <data name="LastViews" xml:space="preserve">
+    <value>Last played</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="MainPage" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="MostViews" xml:space="preserve">
+    <value>Most played</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
     <value>New playlist</value>
@@ -159,23 +174,23 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="PermissionsGrant" xml:space="preserve">
-    <value>Grant permission</value>
+  <data name="NoDownloads" xml:space="preserve">
+    <value>No downloads in background</value>
   </data>
-  <data name="PermissionsInfo" xml:space="preserve">
-    <value>This app requires permission to save data in order to download music and save settings</value>
+  <data name="PermissionGrant" xml:space="preserve">
+    <value>Grant permissions</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>Play</value>
+  <data name="PermissionInfo" xml:space="preserve">
+    <value>The player requires permission to save data in order to download music and save settings</value>
   </data>
   <data name="Playlist" xml:space="preserve">
     <value>Playlist</value>
   </data>
-  <data name="PlaylistCorrupted" xml:space="preserve">
-    <value>Can't play playlist</value>
-  </data>
   <data name="PlaylistOrTrack" xml:space="preserve">
-    <value>Would you download track or playlist</value>
+    <value>Download playlist or track?</value>
+  </data>
+  <data name="Playlists" xml:space="preserve">
+    <value>Playlists</value>
   </data>
   <data name="Question" xml:space="preserve">
     <value>Question</value>
@@ -186,23 +201,38 @@
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
     <value>from playlist</value>
   </data>
-  <data name="QuestionDeletePlaylist" xml:space="preserve">
-    <value>Delete</value>
+  <data name="Ready" xml:space="preserve">
+    <value>Ready</value>
   </data>
-  <data name="SettingsAddTags" xml:space="preserve">
-    <value>Add tags to files</value>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
-  <data name="SettingsChanges" xml:space="preserve">
-    <value>Changes will be visible after application restart</value>
+  <data name="SearchHistory" xml:space="preserve">
+    <value>Search history</value>
   </data>
-  <data name="SettingsClear" xml:space="preserve">
+  <data name="Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings0" xml:space="preserve">
+    <value>Generate tags for local files</value>
+  </data>
+  <data name="Settings1" xml:space="preserve">
+    <value>Auto tags</value>
+  </data>
+  <data name="Settings2" xml:space="preserve">
     <value>Clear data</value>
   </data>
+  <data name="SettingsChanges" xml:space="preserve">
+    <value>The changes will be visible after restarting the application</value>
+  </data>
   <data name="SnackDelete" xml:space="preserve">
-    <value>Successfully deleted</value>
+    <value>Deleted successfully</value>
   </data>
   <data name="SnackFileExists" xml:space="preserve">
-    <value>File don't exists</value>
+    <value>File dont exists</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
     <value>Added to playlist</value>
@@ -213,32 +243,20 @@
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="TitleAbout" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="TitleArtists" xml:space="preserve">
-    <value>Artists</value>
-  </data>
-  <data name="TitleExplore" xml:space="preserve">
-    <value>Explore</value>
-  </data>
-  <data name="TitlePlaylists" xml:space="preserve">
-    <value>Playlists</value>
-  </data>
-  <data name="TitleSettings" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="TitleTracks" xml:space="preserve">
-    <value>Tracks</value>
+  <data name="TitleDownloads" xml:space="preserve">
+    <value>Downloading</value>
   </data>
   <data name="Track" xml:space="preserve">
     <value>Track</value>
   </data>
+  <data name="TrackCount" xml:space="preserve">
+    <value>Saved tracks</value>
+  </data>
+  <data name="TrackCountPlaylist" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
   <data name="TrackMenuDelete" xml:space="preserve">
     <value>Delete</value>
-  </data>
-  <data name="TrackMenuDeletePlaylist" xml:space="preserve">
-    <value>Delete from playlist</value>
   </data>
   <data name="TrackMenuEdit" xml:space="preserve">
     <value>Edit</value>
@@ -249,7 +267,7 @@
   <data name="TrackMenuQueue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
-  <data name="TracksCount" xml:space="preserve">
+  <data name="Tracks" xml:space="preserve">
     <value>Tracks</value>
   </data>
   <data name="UnknownArtist" xml:space="preserve">
@@ -257,29 +275,5 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
-  </data>
-  <data name="YoutubeAddTags" xml:space="preserve">
-    <value>Do you want to add tags(artist, title, picture)</value>
-  </data>
-  <data name="YoutubeConvert" xml:space="preserve">
-    <value>Converting to MP3</value>
-  </data>
-  <data name="YoutubeDownloadFiles" xml:space="preserve">
-    <value>Downloading files</value>
-  </data>
-  <data name="YoutubeDownloading" xml:space="preserve">
-    <value>Downloading</value>
-  </data>
-  <data name="YoutubeDownloadTitle" xml:space="preserve">
-    <value>Downloading title</value>
-  </data>
-  <data name="YoutubeError" xml:space="preserve">
-    <value>This video is blocked or unavailable</value>
-  </data>
-  <data name="YoutubeReady" xml:space="preserve">
-    <value>Ready</value>
-  </data>
-  <data name="YoutubeStart" xml:space="preserve">
-    <value>Starting downloading</value>
   </data>
 </root>

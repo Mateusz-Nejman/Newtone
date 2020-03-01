@@ -1,9 +1,12 @@
-﻿using NSEC.Music_Player.Logic;
+﻿using NSEC.Music_Player.Loaders;
+using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,68 +14,48 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ArtistPage : ContentPage
+    public partial class ArtistPage : ContentPage, IAsyncEndListener, IInvokePage
     {
-        public ObservableCollection<Track> MenuItems { get; set; }
-        public ArtistPage(string artist)
+        private ObservableCollection<ArtistListModel> Items;
+        public event EventHandler AsyncEnded;
+        public ArtistPage()
         {
             InitializeComponent();
-            Title = artist;
+            artistList.ItemsSource = Items = new ObservableCollection<ArtistListModel>();
 
-            Appearing += TracksTab_Appearing;
-            MenuItems = new ObservableCollection<Track>();
-
-            List<Track> tracksBeforeSort = new List<Track>();
-            foreach (string filepath in Global.Artists[artist])
-            {
-                if (Global.Audios.ContainsKey(filepath))
-                {
-                    MediaProcessing.MediaTag container = Global.Audios[filepath];
-                    tracksBeforeSort.Add(new Track() { Id = container.Artist + container.Title, Text = container.Title, Description = container.Artist, Container = container });
-                }
-
-                //MenuItems.Add(new Track() { Id = container.Author + container.Title, Text = container.Title, Description = container.Author, Container = container });
-            }
-
-            List<Track> tracksAfterSort = tracksBeforeSort.OrderBy(o => o.Text).ToList();
-
-            foreach (Track track in tracksAfterSort)
-            {
-                MenuItems.Add(track);
-            }
-            ArtistTrackListView.ItemSelected += async (sender, e) =>
-            {
-                if (e.SelectedItem == null)
-                    return;
-                Track item = e.SelectedItem as Track;
-
-                await Navigation.PushAsync(new PlayerPage(item, MenuItems.ToList(), e.SelectedItemIndex));
-            };
-
-            ArtistTrackListView.BindingContext = this;
-
-
+            Global.AsyncEndController.Add("authorstab", this);
+            Appearing += ArtistPage_Appearing;
+            AsyncEnded += ArtistPage_AsyncEnded;
         }
 
-        private void TracksTab_Appearing(object sender, EventArgs e)
+        private void ArtistPage_AsyncEnded(object sender, EventArgs e)
         {
-            base.OnAppearing();
-            playerPanel.Refresh();
-            ArtistTrackListView.SelectedItem = null;
-            //labelTest.Text += "a ";
+            ArtistLoader.Load(ref Items);
         }
-        void OnTrackSelected(object sender, SelectedItemChangedEventArgs args)
+
+        private void ArtistPage_Appearing(object sender, EventArgs e)
         {
+            ArtistLoader.Reload(ref Items);
+        }
 
-
-            for (int a = 0; a < MenuItems.Count; a++)
+        private void ArtistList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if(e.SelectedItem != null)
             {
-                MenuItems[a].Selected(args.SelectedItemIndex == a);
+                string artist = Items[e.SelectedItemIndex].Name;
+                Navigation.PushAsync(new TrackListPage(Global.Artists[artist]));
+                artistList.SelectedItem = null;
             }
         }
-        private void Button_Clicked(object sender, EventArgs e)
+
+        public void AsyncEnd()
         {
-            TrackProcessing.Process(sender, MenuItems, this);
+            AsyncEnded.Invoke(this, new EventArgs());
+        }
+
+        public void PageInvoke()
+        {
+            ArtistPage_Appearing(null, null);
         }
     }
 }

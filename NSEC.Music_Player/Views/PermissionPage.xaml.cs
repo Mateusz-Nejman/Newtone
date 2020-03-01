@@ -28,16 +28,16 @@ namespace NSEC.Music_Player.Views
 
         private bool Check()
         {
-            Console.WriteLine("PermissionPage "+ ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage).ToString());
+            Console.WriteLine("PermissionPage " + ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage).ToString());
             if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
             {
                 Global.SaveConfig();
 
-                App.Instance.MainPage = new MainPage(new LobbyPage());
+                App.Instance.MainPage = new MainPage();
                 Task.Run(async () => {
                     await PopToRootAsync();
                 }).Wait();
-                
+
 
                 return false;
             }
@@ -49,13 +49,9 @@ namespace NSEC.Music_Player.Views
 
         private async Task PopToRootAsync()
         {
-            while (MainPage.Instance.Navigation.ModalStack.Count > 0)
+            while (App.Instance.MainPage.Navigation.ModalStack.Count > 0)
             {
-                await MainPage.Instance.Navigation.PopModalAsync(false);
-            }
-            while (MainPage.Instance.CurrentPage != MainPage.Instance.Navigation.NavigationStack[0])
-            {
-                await MainPage.Instance.PopAsync(false);
+                await App.Instance.MainPage.Navigation.PopModalAsync(false);
             }
         }
     }
