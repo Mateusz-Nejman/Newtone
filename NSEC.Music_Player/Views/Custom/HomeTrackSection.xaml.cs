@@ -27,17 +27,21 @@ namespace NSEC.Music_Player.Views.Custom
         {
             InitializeComponent();
             titleLabel.BindingContext = this;
-            AddItem("Title", "Author", "FilePath");
         }
 
-        public void AddItem(string title, string author, string filePath, ImageSource picture = null)
+        public void AddItem(string title, string author, string filePath, int index, bool mostTrack, ImageSource picture = null)
         {
-            Container.Children.Add(new HomeTrackSectionItem(title,author,filePath,picture));
+            Container.Children.Add(new HomeTrackSectionItem(title, author, filePath, index, mostTrack, picture));
         }
 
         public void Clear()
         {
             Container.Children.Clear();
+        }
+
+        public int Count()
+        {
+            return Container.Children.Count;
         }
     }
 }

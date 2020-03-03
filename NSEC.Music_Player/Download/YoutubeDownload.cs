@@ -83,6 +83,7 @@ namespace NSEC.Music_Player.Download
             Video video = await client.GetVideoAsync(id);
             MediaStreamInfoSet streamInfoSet = await client.GetVideoMediaStreamInfosAsync(id);
             AudioStreamInfo streamInfo = null;
+
             foreach(AudioStreamInfo audio in streamInfoSet.Audio)
             {
                 if(audio.AudioEncoding == AudioEncoding.Aac)
@@ -97,7 +98,9 @@ namespace NSEC.Music_Player.Download
                 DownloadProcessing.SetProgress(id, progressValue);
             });
 
-            await client.DownloadMediaStreamAsync(streamInfo, Global.MusicPath + "/" + video.Title + ".m4a", progress);
+            string fileName = video.Title.Replace('/', '_');
+
+            await client.DownloadMediaStreamAsync(streamInfo, Global.MusicPath + "/" + fileName + ".m4a", progress);
 
             MainPage.Instance.Dispatcher.BeginInvokeOnMainThread(async () =>
             {
@@ -115,6 +118,7 @@ namespace NSEC.Music_Player.Download
 
                     userArtist = userArtist == "" || userArtist == null ? artist : userArtist;
                     userTitle = userTitle == "" || userTitle == null ? title : userTitle;
+
                     byte[] picture = null;
                     try
                     {
@@ -126,7 +130,7 @@ namespace NSEC.Music_Player.Download
 
                     }
 
-                    if (Global.AudioTags.ContainsKey(Global.MusicPath + "/" + video.Title + ".m4a"))
+                    if (Global.AudioTags.ContainsKey(Global.MusicPath + "/" + fileName + ".m4a"))
                     {
                         string f = Global.MusicPath + "/" + video.Title + ".m4a";
                         Global.AudioTags[f].Author = userArtist;
@@ -135,11 +139,11 @@ namespace NSEC.Music_Player.Download
                     }
                     else
                     {
-                        Global.AudioTags.Add(Global.MusicPath + "/" + video.Title + ".m4a", new MediaSourceTag() { Author = userArtist, Title = userTitle, ImageSource = picture });
+                        Global.AudioTags.Add(Global.MusicPath + "/" + fileName + ".m4a", new MediaSourceTag() { Author = userArtist, Title = userTitle, ImageSource = picture });
                     }
                 }
 
-                MediaSource container = MediaProcessing.GetSource(Global.MusicPath + "/" + video.Title + ".m4a");
+                MediaSource container = MediaProcessing.GetSource(Global.MusicPath + "/" + fileName + ".m4a");
                 GlobalLoader.AddTrack(container);
                 Global.SaveConfig();
                 Global.SaveTags();
@@ -165,6 +169,7 @@ namespace NSEC.Music_Player.Download
                     Youtube = true, 
                     ThumbUrl = video.Thumbnails.MediumResUrl, 
                     Id = video.Id, 
+                    MixId = video.GetVideoMixPlaylistId(),
                     VideoData = $"{video.Title}{Global.SEPARATOR}{video.GetUrl()}" 
                 });
             }
@@ -174,7 +179,7 @@ namespace NSEC.Music_Player.Download
 
                 foreach (var video in videos)
                 {
-                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration.TotalSeconds, Title = video.Title, Youtube = true, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{Global.SEPARATOR}{video.GetUrl()}" });
+                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration.TotalSeconds, Title = video.Title, Youtube = true, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{Global.SEPARATOR}{video.GetUrl()}", MixId = video.GetVideoMixPlaylistId() });
                 }
             }
             else if (validators.ContainsKey(QueryEnum.Playlist))

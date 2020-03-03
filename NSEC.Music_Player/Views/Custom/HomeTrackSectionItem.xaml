@@ -9,8 +9,8 @@
   <ContentView.Content>
         <StackLayout Orientation="Vertical" Margin="10">
             <Image Source="EmptyTrack.png" x:Name="image" WidthRequest="108" HeightRequest="108" Aspect="AspectFill"/>
-            <Label x:Name="titleLabel" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
-            <Label x:Name="authorLabel" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Thin}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
+            <Label x:Name="titleLabel" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Regular}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
+            <Label x:Name="authorLabel" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Thin}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

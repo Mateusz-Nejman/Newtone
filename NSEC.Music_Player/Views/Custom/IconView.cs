@@ -68,5 +68,23 @@ namespace NSEC.Music_Player.Views.Custom
 		}
 
 		#endregion
+
+		#region ChangeColorProperty
+
+		public static readonly BindableProperty ChangeColorProperty = BindableProperty.Create(nameof(ChangeColor), typeof(bool), typeof(IconView), true);
+
+		public bool ChangeColor
+		{
+			get
+			{
+				return (bool)GetValue(ChangeColorProperty);
+			}
+			set
+			{
+				SetValue(ChangeColorProperty, value);
+			}
+		}
+
+		#endregion
 	}
 }

@@ -56,6 +56,7 @@ namespace NSEC.Music_Player.Views
         }
 
         private MediaSource MediaSource { get; set; }
+        private bool stopTimer = false;
         public PlayerPage(MediaSource source, List<MediaSource> playlist, int playlistPosition)
         {
             InitializeComponent();
@@ -73,6 +74,7 @@ namespace NSEC.Music_Player.Views
             Global.MediaSource = MediaSource;
 
             Appearing += PlayerPage_Appearing;
+            Disappearing += PlayerPage_Disappearing;
 
             if(source.FilePath == Global.CurrentAudioPath)
             {
@@ -106,6 +108,11 @@ namespace NSEC.Music_Player.Views
                 trackImage.Source = ImageSource.FromStream(() => new MemoryStream(source.Picture));
 
             Device.StartTimer(TimeSpan.FromMilliseconds(300), UpdatePosition);
+        }
+
+        private void PlayerPage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
         }
 
         private void PlayerPage_Appearing(object sender, EventArgs e)
@@ -208,7 +215,7 @@ namespace NSEC.Music_Player.Views
                 trackImage.Source = track.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(track.Picture));
             }
 
-            return true;
+            return !stopTimer;
         }
 
         private void Play()

@@ -14,6 +14,7 @@ using Android.Widget;
 using NSEC.Music_Player.Views.Custom;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Color = Xamarin.Forms.Color;
 
 #pragma warning disable CS0618 // Typ lub składowa jest przestarzała
 [assembly: ExportRendererAttribute(typeof(IconView), typeof(IconViewRenderer))]
@@ -68,8 +69,12 @@ namespace NSEC.Music_Player.Views.Custom
             if (!_isDisposed && !string.IsNullOrWhiteSpace(Element.Source))
             {
                 var d = Resources.GetDrawable(Element.Source).Mutate();
-                d.SetColorFilter(new LightingColorFilter(Element.Foreground.ToAndroid(), Element.Foreground.ToAndroid()));
-                d.Alpha = Element.Foreground.ToAndroid().A;
+
+                if(Element.ChangeColor)
+                {
+                    d.SetColorFilter(new LightingColorFilter(Element.Foreground.ToAndroid(), Element.Foreground.ToAndroid()));
+                    d.Alpha = Element.Foreground.ToAndroid().A;
+                }
                 Control.SetImageDrawable(d);
                 ((IVisualElementController)Element).NativeSizeChanged();
             }

@@ -4,16 +4,17 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:local="clr-namespace:NSEC.Music_Player"
-             mc:Ignorable="d"
+          xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+          mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.LibraryMenuViewCell">
   <ViewCell.View>
-        <Grid ColumnSpacing="10" Margin="0,0,0,1" BackgroundColor="{x:Static local:Colors.ColorSecondary}">
+        <Grid ColumnSpacing="10" Margin="0,0,0,1" BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding Image}" WidthRequest="32" HeightRequest="32" />
-            <Label Text="{Binding Title}" VerticalOptions="Center" Grid.Column="1" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation "/>
+            <custom:IconView Source="{Binding Image}" WidthRequest="32" HeightRequest="32" Foreground="{x:Static local:Colors.ContainerHeaderColor}" x:Name="image" ChangeColor="{Binding ChangeColor}"/>
+            <Label Text="{Binding Title}" VerticalOptions="Center" Grid.Column="1" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.ContainerTextColor}"  LineBreakMode="TailTruncation " x:Name="label"/>
         </Grid>
   </ViewCell.View>
 </ViewCell>

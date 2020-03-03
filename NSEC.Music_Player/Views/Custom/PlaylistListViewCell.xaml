@@ -8,7 +8,7 @@
           mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.PlaylistListViewCell">
   <ViewCell.View>
-        <Grid BackgroundColor="{x:Static local:Colors.ColorSecondary}">
+        <Grid BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="48"/>
@@ -17,9 +17,9 @@
                 <RowDefinition Height="74"/>
             </Grid.RowDefinitions>
             <RelativeLayout Grid.Column="0">
-                <Label Text="{Binding Name}" FontSize="16" FontFamily="{x:Static local:Fonts.Medium}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation "
+                <Label Text="{Binding Name}" FontSize="16" FontFamily="{x:Static local:Fonts.Medium}" TextColor="{x:Static local:Colors.ContainerTextColor}"  LineBreakMode="TailTruncation "
                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=8}" Margin="4,0,0,0"/>
-                <Label Text="{Binding TrackElem}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation "
+                <Label Text="{Binding TrackElem}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.ContainerTextColor}"  LineBreakMode="TailTruncation "
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=-28}" Margin="4,0,0,0"/>
             </RelativeLayout>
 

@@ -1,5 +1,6 @@
 ﻿using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
+using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.Custom;
 using System;
 using System.Collections.Generic;
@@ -19,38 +20,68 @@ namespace NSEC.Music_Player.Views
         public event EventHandler Appearing;
         public event EventHandler Disappearing;
         public event EventHandler AsyncEnded;
+        private bool stopTimer = false;
 
         public HomePage()
         {
             InitializeComponent();
             Appearing += HomePage_Appearing;
+            Disappearing += HomePage_Disappearing;
             AsyncEnded += HomePage_AsyncEnded;
             Global.AsyncEndController.Add("homepage", this);
             mostTracks.IsVisible = Global.MostTracks.Length > 0;
             lastTracks.IsVisible = Global.LastTracks.Length > 0;
+
+            Device.StartTimer(TimeSpan.FromSeconds(1), Refresh);
+        }
+
+        private void HomePage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
+        }
+
+        private bool Refresh()
+        {
+            mostTracks.IsVisible = Global.MostTracks.Length > 0;
+            lastTracks.IsVisible = Global.LastTracks.Length > 0;
+
+            if (mostTracks.Count() == 0)
+            {
+                mostTracks.Clear();
+
+                for (int a = 0; a < Global.MostTracks.Length; a++)
+                {
+                    TrackCounter counter = Global.MostTracks[a];
+                    mostTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, true, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
+                }
+            }
+
+            if (lastTracks.Count() == 0)
+            {
+                lastTracks.Clear();
+
+                for (int a = 0; a < Global.LastTracks.Length; a++)
+                {
+                    TrackCounter counter = Global.LastTracks[a];
+                    lastTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, false, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
+                }
+            }
+
+
+            return !stopTimer;
         }
 
         private void HomePage_AsyncEnded(object sender, EventArgs e)
         {
-            HomePage_Appearing(null, null);
+            Refresh();
         }
 
         private void HomePage_Appearing(object sender, EventArgs e)
         {
-            mostTracks.IsVisible = Global.MostTracks.Length > 0;
-            lastTracks.IsVisible = Global.LastTracks.Length > 0;
-            mostTracks.Clear();
-
-            foreach(var counter in Global.MostTracks)
+            if(stopTimer)
             {
-                mostTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
-            }
-
-            lastTracks.Clear();
-
-            foreach (var counter in Global.LastTracks)
-            {
-                lastTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
+                stopTimer = false;
+                Device.StartTimer(TimeSpan.FromSeconds(1), Refresh);
             }
         }
 

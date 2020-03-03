@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.HomePage">
     <ContentView.Content>
-        <StackLayout Orientation="Vertical" Spacing="20">
+        <StackLayout Orientation="Vertical" Spacing="20" BackgroundColor="{x:Static local:Colors.ContainerBackground}">
             <custom:HomeTrackSection Title="{x:Static localization:Localization.MostViews}" x:Name="mostTracks"/>
             <custom:HomeTrackSection Title="{x:Static localization:Localization.LastViews}" x:Name="lastTracks"/>
             <RelativeLayout IsVisible="False">

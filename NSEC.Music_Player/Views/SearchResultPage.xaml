@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.SearchResultPage"
              NavigationPage.HasBackButton="False"
-             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
     <NavigationPage.TitleView>
         <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Search}" x:Name="titleView"/>
     </NavigationPage.TitleView>
@@ -22,7 +22,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="{x:Static localization:Localization.Searching}" x:Name="searchLabel" HorizontalOptions="Center" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Medium}" FontSize="20"/>
+            <Label Text="{x:Static localization:Localization.Searching}" x:Name="searchLabel" HorizontalOptions="Center" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Medium}" FontSize="20"/>
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
                 <ListView x:Name="searchResultView" VerticalOptions="FillAndExpand" RowHeight="72" ItemSelected="SearchResultView_ItemSelected" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
                     <ListView.ItemTemplate>

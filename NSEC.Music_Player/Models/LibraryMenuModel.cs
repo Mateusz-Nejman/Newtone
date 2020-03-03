@@ -18,5 +18,6 @@ namespace NSEC.Music_Player.Models
     {
         public string Title { get; set; }
         public ImageSource Image { get; set; }
+        public bool ChangeColor { get; set; }
     }
 }

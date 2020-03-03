@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.TrackListPage"
              NavigationPage.HasBackButton="False"
-             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
     <NavigationPage.TitleView>
         <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Tracks}"/>
     </NavigationPage.TitleView>

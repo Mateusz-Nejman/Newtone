@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.WebPage" NavigationPage.HasBackButton="False"
-             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
     <NavigationPage.TitleView>
         <custom:CustomTitleView IsBackButton="True" Title="WWW" x:Name="titleView"/>
     </NavigationPage.TitleView>

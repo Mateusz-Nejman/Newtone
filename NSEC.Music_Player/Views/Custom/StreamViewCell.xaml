@@ -8,7 +8,7 @@
           mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.StreamViewCell">
   <ViewCell.View>
-        <Grid BackgroundColor="{x:Static local:Colors.ColorSecondary}">
+        <Grid BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="74"/>
                 <ColumnDefinition Width="*"/>
@@ -19,14 +19,14 @@
             </Grid.RowDefinitions>
             <Image Source="{Binding Picture}" WidthRequest="56" HeightRequest="56" VerticalOptions="Center" HorizontalOptions="Center" Aspect="AspectFill"/>
             <RelativeLayout Grid.Column="1">
-                <Label Text="{Binding Title}" FontSize="16" FontFamily="{x:Static local:Fonts.Medium}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation"
+                <Label Text="{Binding Title}" FontSize="16" FontFamily="{x:Static local:Fonts.Medium}" TextColor="{x:Static local:Colors.ContainerTextColor}"  LineBreakMode="TailTruncation"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=8}"/>
-                <Label Text="{Binding Author}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation"
+                <Label Text="{Binding Author}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.ContainerTextColor}"  LineBreakMode="TailTruncation"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=28}"/>
-                <Label Text="{Binding DurationString}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.TextPrimary}" LineBreakMode="TailTruncation"
+                <Label Text="{Binding DurationString}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.ContainerTextColor}" LineBreakMode="TailTruncation"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=-28}"/>
             </RelativeLayout>
-            <custom:CustomButton Grid.Column="2" ImageSource="DownloadIcon.png" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" Tag="{Binding VideoData}" Clicked="CustomButton_Clicked"/>
+            <custom:CustomButton Grid.Column="2" ImageSource="BlueDownloadIcon.png" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" Tag="{Binding VideoData}" Clicked="CustomButton_Clicked"/>
             
         </Grid>
   </ViewCell.View>

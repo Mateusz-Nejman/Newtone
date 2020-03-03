@@ -19,11 +19,13 @@ namespace NSEC.Music_Player.Views
     public partial class SearchResultPage : ContentPage
     {
         private ObservableCollection<SearchResultModel> Items { get; set; }
+        private bool stopTimer = false;
         public SearchResultPage(string searchText)
         {
             InitializeComponent();
             searchResultView.ItemsSource = Items = new ObservableCollection<SearchResultModel>();
             titleView.Title = searchText;
+            Disappearing += SearchResultPage_Disappearing;
 
             Device.StartTimer(TimeSpan.FromMilliseconds(300), Refresh);
 
@@ -48,30 +50,46 @@ namespace NSEC.Music_Player.Views
             });
         }
 
+        private void SearchResultPage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
+        }
+
         private bool Refresh()
         {
             searchLabel.IsVisible = Items.Count == 0;
-            return true;
+            return !stopTimer;
         }
         private void SearchResultView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if(e.SelectedItem != null)
             {
                 SearchResultModel model = Items[e.SelectedItemIndex];
-                MediaSource source = new MediaSource()
+
+                if(model.MixId == null || model.MixId == "")
                 {
-                    Artist = model.Author,
-                    Duration = model.Duration,
-                    ImageSource = model.Picture,
-                    Picture = model.ImageData,
-                    Title = model.Title,
-                    Type = MediaSource.SourceType.Web,
-                    FilePath = model.Id
-                    
-                };
-                Global.PlaylistType = MediaSource.SourceType.Web;
-                Console.WriteLine("Play " + model.Title);
-                Navigation.PushAsync(new StreamPlayerPage(source,Items.ToList(),e.SelectedItemIndex));
+                    MediaSource source = new MediaSource()
+                    {
+                        Artist = model.Author,
+                        Duration = model.Duration,
+                        ImageSource = model.Picture,
+                        Picture = model.ImageData,
+                        Title = model.Title,
+                        Type = MediaSource.SourceType.Web,
+                        FilePath = model.Id
+
+                    };
+                    Global.PlaylistType = MediaSource.SourceType.Web;
+                    Console.WriteLine("Play " + model.Title);
+                    Navigation.PushAsync(new StreamPlayerPage(source, Items.ToList(), e.SelectedItemIndex));
+                }
+                else
+                {
+                    Global.PlaylistType = MediaSource.SourceType.Web;
+                    Console.WriteLine("Play " + model.Title);
+                    Navigation.PushAsync(new StreamPlayerPage(model));
+                }
+               
 
                 searchResultView.SelectedItem = null;
 

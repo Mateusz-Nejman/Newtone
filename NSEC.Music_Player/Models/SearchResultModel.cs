@@ -22,6 +22,7 @@ namespace NSEC.Music_Player.Models
         public string Author { get; set; }
         public bool Youtube { get; set; }
         public string Id { get; set; }
+        public string MixId { get; set; }
         private ImageSource picture;
         public ImageSource Picture
         {

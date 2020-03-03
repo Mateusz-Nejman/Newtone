@@ -4,9 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
              xmlns:local="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.StreamPlayerPage" NavigationPage.HasNavigationBar="False" BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+             x:Class="NSEC.Music_Player.Views.StreamPlayerPage" NavigationPage.HasNavigationBar="False" BackgroundColor="{x:Static local:Colors.ContainerBackground}">
     <ContentPage.Content>
         <Grid RowSpacing="20">
             <Grid.RowDefinitions>
@@ -33,7 +34,7 @@
                 <RelativeLayout  RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1,Constant=-48}"
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=48}"
                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=48}" x:Name="downloadLayout">
-                    
+
                     <Frame CornerRadius="10" 
                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1,Constant=-20}"
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=20}"
@@ -47,7 +48,7 @@
                     HorizontalOptions="Center"
                        TextColor="{x:Static local:Colors.TextPrimary}" x:Name="downloadLabel"/>
                 </RelativeLayout>
-                
+
 
                 <StackLayout 
                 Orientation="Vertical"
@@ -88,7 +89,7 @@
                 </StackLayout>
             </RelativeLayout>
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Grid.Row="1">
-                <ListView x:Name="nextTrackList" RowHeight="72" VerticalOptions="StartAndExpand">
+                <ListView x:Name="nextTrackList" RowHeight="72" VerticalOptions="FillAndExpand" ItemSelected="NextTrackList_ItemSelected">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <custom:StreamViewCell/>

@@ -59,9 +59,9 @@ namespace NSEC.Music_Player.Views.Custom
         {
             IconView view = (IconView)sender;
 
-            button1.Foreground = view.Tag == "1" ? Colors.TextSecondary : Colors.TextPrimary;
-            button2.Foreground = view.Tag == "2" ? Colors.TextSecondary : Colors.TextPrimary;
-            button3.Foreground = view.Tag == "3" ? Colors.TextSecondary : Colors.TextPrimary;
+            button1.Foreground = view.Tag == "1" ? Colors.BottomBarSelected : Colors.BottomBarUnselected;
+            button2.Foreground = view.Tag == "2" ? Colors.BottomBarSelected : Colors.BottomBarUnselected;
+            button3.Foreground = view.Tag == "3" ? Colors.BottomBarSelected : Colors.BottomBarUnselected;
 
             TabButtonClicked?.Invoke(view, null);
         }

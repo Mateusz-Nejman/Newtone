@@ -9,12 +9,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using YoutubeExplode;
+using YoutubeExplode.Models;
 using YoutubeExplode.Models.MediaStreams;
 
 namespace NSEC.Music_Player.Views
@@ -64,6 +66,8 @@ namespace NSEC.Music_Player.Views
         private readonly MediaSource source;
         private readonly object playlist;
         private readonly int index;
+        private bool stopTimer = false;
+        private string MixId = "";
         public StreamPlayerPage(MediaSource source, List<MediaSource> playlist, int index)
         {
             InitializeComponent();
@@ -80,7 +84,44 @@ namespace NSEC.Music_Player.Views
             this.index = index;
             Device.StartTimer(TimeSpan.FromSeconds(1), InitTimer);
             Appearing += StreamPlayerPage_Appearing;
+            Disappearing += StreamPlayerPage_Disappearing;
             
+        }
+
+        public StreamPlayerPage(SearchResultModel searchResultModel)
+        {
+            InitializeComponent();
+            nextTrackList.ItemsSource = Items = new ObservableCollection<SearchResultModel>();
+            titleLabel.Text = searchResultModel.Title;
+            authorLabel.Text = searchResultModel.Author;
+            menuButton.Tag = searchResultModel.Id;
+            Global.PlaylistType = MediaSource.SourceType.Web;
+            Global.PlaylistPosition = 0;
+            MediaSource = new MediaSource()
+            {
+                Artist = searchResultModel.Author,
+                Duration = searchResultModel.Duration,
+                FilePath = searchResultModel.Id,
+                ImageSource = searchResultModel.Picture,
+                Picture = searchResultModel.ImageData,
+                Title = searchResultModel.Title,
+                Type = MediaSource.SourceType.Web
+            };
+            Global.CurrentPlaylist.Clear();
+            Global.CurrentPlaylist.Add(MediaSource);
+            trackImage.Source = MediaSource.ImageSource;
+            this.source = MediaSource;
+            this.index = 0;
+            Global.CurrentAudioPath = MediaSource.FilePath;
+            MixId = searchResultModel.MixId;
+            Device.StartTimer(TimeSpan.FromSeconds(1), InitTimer);
+            Appearing += StreamPlayerPage_Appearing;
+            Disappearing += StreamPlayerPage_Disappearing;
+        }
+
+        private void StreamPlayerPage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
         }
 
         private void StreamPlayerPage_Appearing(object sender, EventArgs e)
@@ -102,8 +143,13 @@ namespace NSEC.Music_Player.Views
             this.source = source;
             this.playlist = playlist;
             this.index = index;
+            Global.CurrentPlaylist = new List<MediaSource>
+            {
+                MediaSource
+            };
             Device.StartTimer(TimeSpan.FromSeconds(1), InitTimer);
             Appearing += StreamPlayerPage_Appearing;
+            Disappearing += StreamPlayerPage_Disappearing;
 
         }
 
@@ -119,31 +165,38 @@ namespace NSEC.Music_Player.Views
             tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             downloadLayout.GestureRecognizers.Add(tapGestureRecognizer);
             
-            if (playlist is List<MediaSource>)
-                Global.CurrentPlaylist = new List<MediaSource>((List<MediaSource>)playlist);
+            if(MixId == "")
+            {
+                if (playlist is List<MediaSource>)
+                    Global.CurrentPlaylist = new List<MediaSource>((List<MediaSource>)playlist);
+                else
+                {
+                    Global.CurrentPlaylist.Clear();
+                    foreach (var elem in (List<SearchResultModel>)playlist)
+                    {
+                        Global.CurrentPlaylist.Add(new MediaSource()
+                        {
+                            Artist = elem.Author,
+                            Duration = elem.Duration,
+                            FilePath = elem.Id,
+                            ImageSource = elem.Picture,
+                            Picture = elem.ImageData,
+                            Title = elem.Title,
+                            Type = MediaSource.SourceType.Web
+                        });
+                    }
+                }
+
+                MediaSource = source;
+                Global.PlaylistPosition = index;
+                Global.MediaSource = source;
+            }
             else
             {
-                Global.CurrentPlaylist.Clear();
-                foreach(var elem in (List<SearchResultModel>)playlist)
-                {
-                    Global.CurrentPlaylist.Add(new MediaSource()
-                    {
-                        Artist = elem.Author,
-                        Duration = elem.Duration,
-                        FilePath = elem.Id,
-                        ImageSource = elem.Picture,
-                        Picture = elem.ImageData,
-                        Title = elem.Title,
-                        Type = MediaSource.SourceType.Web
-                    });
-                }
+                Global.PlaylistPosition = 0;
+                Global.MediaSource = MediaSource;
+                Task.Run(DownloadMix);
             }
-
-            SetListWithFirst(index);
-
-            MediaSource = source;
-            Global.PlaylistPosition = index;
-            Global.MediaSource = source;
 
             if(Global.CurrentAudioPath == source.FilePath)
             {
@@ -214,6 +267,7 @@ namespace NSEC.Music_Player.Views
 
             Start = !Start;
             Global.LastPlayerClick = Start;
+            Console.WriteLine(nextTrackList.Height);
         }
 
         private void NextButton_Clicked(object sender, EventArgs e)
@@ -245,26 +299,31 @@ namespace NSEC.Music_Player.Views
         {
             downloadLayout.IsVisible = DownloadProcessing.GetDownloads().Count > 0;
             downloadLabel.Text = DownloadProcessing.BadgeCount < 10 ? DownloadProcessing.BadgeCount.ToString() : "9+";
-            MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
-            MediaSource = track;
-            titleLabel.Text = MediaSource.Title;
-            authorLabel.Text = MediaSource.Artist;
-            //lblPosition.Text = $"Postion: {(int)player.CurrentPosition} / {(int)player.Duration}";
 
-            SetSliderPosition(Global.MediaPlayer.CurrentPosition / Global.MediaPlayer.Duration);
-
-            endLabel.Text = TickParser.FormatTick(Global.MediaPlayer.Duration);
-            startLabel.Text = TickParser.FormatTick(Global.MediaPlayer.CurrentPosition);
-            Start = Global.MediaPlayer.IsPlaying;
-            PlayerMode = Global.PlayerMode;
-
-            if (oldTrack != track.FilePath)
+            if(Global.PlaylistPosition < Global.CurrentPlaylist.Count)
             {
-                oldTrack = track.FilePath;
-                trackImage.Source = track.Picture == null ? track.ImageSource : ImageSource.FromStream(() => new MemoryStream(track.Picture));
-            }
+                MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
+                MediaSource = track;
+                titleLabel.Text = MediaSource.Title;
+                authorLabel.Text = MediaSource.Artist;
+                //lblPosition.Text = $"Postion: {(int)player.CurrentPosition} / {(int)player.Duration}";
 
-            return true;
+                SetSliderPosition(Global.MediaPlayer.CurrentPosition / Global.MediaPlayer.Duration);
+
+                endLabel.Text = TickParser.FormatTick(Global.MediaPlayer.Duration);
+                startLabel.Text = TickParser.FormatTick(Global.MediaPlayer.CurrentPosition);
+                Start = Global.MediaPlayer.IsPlaying;
+                PlayerMode = Global.PlayerMode;
+
+                if (oldTrack != track.FilePath)
+                {
+                    oldTrack = track.FilePath;
+                    trackImage.Source = track.Picture == null ? track.ImageSource : ImageSource.FromStream(() => new MemoryStream(track.Picture));
+                }
+            }
+            
+
+            return !stopTimer;
         }
 
         private void Play()
@@ -275,6 +334,7 @@ namespace NSEC.Music_Player.Views
             slider.Maximum = 1;
             slider.IsEnabled = Global.MediaPlayer.CanSeek;
             Global.SaveConfig();
+            
         }
 
         private void Next()
@@ -330,30 +390,68 @@ namespace NSEC.Music_Player.Views
             slider.ValueChanged += Slider_ValueChanged;
         }
 
-        private void SetListWithFirst(int firstIndex)
+        private async Task DownloadMix()
         {
+            YoutubeClient client = new YoutubeClient();
+            Playlist mixList = await client.GetPlaylistAsync(MixId);
+
             Items.Clear();
-            for(int a = 0; a < Global.CurrentPlaylist.Count; a++)
+            
+
+            using WebClient webClient = new WebClient();
+            foreach(var video in mixList.Videos)
             {
-                int newIndex = a + firstIndex;
-
-                if (newIndex >= Global.CurrentPlaylist.Count)
-                    newIndex -= Global.CurrentPlaylist.Count;
-
-                MediaSource source = Global.CurrentPlaylist[newIndex];
-
+                byte[] pictureData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
                 Items.Add(new SearchResultModel()
                 {
-                    Author = source.Artist,
-                    Duration = source.Duration,
-                    Id = source.FilePath,
-                    ImageData = source.Picture,
-                    Picture = source.ImageSource,
-                    Title = source.Title,
+                    Author = video.Author,
+                    Duration = video.Duration.TotalSeconds,
+                    Id = video.Id,
+                    ImageData = pictureData,
+                    Picture = ImageSource.FromStream(() => new MemoryStream(pictureData)),
+                    ThumbUrl = video.Thumbnails.MediumResUrl,
+                    Title = video.Title,
                     Youtube = true,
-                    VideoData = $"{source.Title}{Global.SEPARATOR}https://youtube.com/watch?v={source.FilePath}"
+                    VideoData = $"{video.Title}{Global.SEPARATOR}https://youtube.com/watch?v={video.Id}"
+                });
+                Global.CurrentPlaylist.Add(new MediaSource()
+                {
+                    Artist = video.Author,
+                    Duration = video.Duration.TotalSeconds,
+                    FilePath = video.Id,
+                    ImageSource = ImageSource.FromStream(() => new MemoryStream(pictureData)),
+                    Picture = pictureData,
+                    Title = video.Title,
+                    Type = MediaSource.SourceType.Web
                 });
             }
+
+            MixId = "";
+        }
+
+        private void NextTrackList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            int index = e.SelectedItemIndex+1;
+
+            if(index >= 0 && index < Global.CurrentPlaylist.Count)
+            {
+                Console.WriteLine("StreamPlayerPage Click");
+                Global.PlaylistPosition = index;
+
+                if (Global.PlaylistPosition == Global.CurrentPlaylist.Count)
+                    Global.PlaylistPosition = 0;
+
+                MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
+                MediaSource = track;
+                Pause();
+                Global.MediaPlayer.Load(track.FilePath);
+                Global.MediaSource = track;
+                Global.CurrentAudioPath = track.FilePath;
+                SetSliderPosition(0);
+                if (Global.LastPlayerClick)
+                    Play();
+            }
+            
         }
     }
 }

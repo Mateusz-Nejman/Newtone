@@ -17,6 +17,7 @@ namespace NSEC.Music_Player.Views
     public partial class SearchPage : ContentView, IViewPage
     {
         private ObservableCollection<HistoryModel> Items { get; set; }
+        private bool stopTimer = false;
         public SearchPage()
         {
             InitializeComponent();
@@ -26,6 +27,23 @@ namespace NSEC.Music_Player.Views
             tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             clearLabel.GestureRecognizers.Add(tapGestureRecognizer);
             Device.StartTimer(TimeSpan.FromSeconds(0.5), Refresh);
+
+            Disappearing += SearchPage_Disappearing;
+            Appearing += SearchPage_Appearing;
+        }
+
+        private void SearchPage_Appearing(object sender, EventArgs e)
+        {
+            if(stopTimer)
+            {
+                stopTimer = false;
+                Device.StartTimer(TimeSpan.FromSeconds(0.5), Refresh);
+            }
+        }
+
+        private void SearchPage_Disappearing(object sender, EventArgs e)
+        {
+            stopTimer = true;
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -46,7 +64,7 @@ namespace NSEC.Music_Player.Views
             {
                 Items.Add(model);
             }
-            return true;
+            return !stopTimer;
         }
         public void InvokeD(object sender)
         {

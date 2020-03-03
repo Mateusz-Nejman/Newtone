@@ -23,11 +23,11 @@ namespace NSEC.Music_Player.Views
         {
             InitializeComponent();
             menuList.ItemsSource = MenuItems = new ObservableCollection<LibraryMenuModel>();
-            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("TrackIcon.png"), Title = Localization.Tracks });
-            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("ArtistIcon.png"), Title = Localization.Artists });
-            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("PlaylistIcon.png"), Title = Localization.Playlists });
-            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("YoutubeIcon.png"), Title = "Youtube" });
-            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("SettingsIcon.png"), Title = Localization.Settings });
+            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("TrackIcon.png"), Title = Localization.Tracks, ChangeColor = true });
+            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("ArtistIcon.png"), Title = Localization.Artists, ChangeColor = true });
+            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("PlaylistIcon.png"), Title = Localization.Playlists, ChangeColor = true });
+            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("YoutubeIcon.png"), Title = "Youtube", ChangeColor = false });
+            MenuItems.Add(new LibraryMenuModel() { Image = ImageSource.FromFile("SettingsIcon.png"), Title = Localization.Settings, ChangeColor = true });
 
             versionLabel.Text = "v"+ Global.Context.PackageManager.GetPackageInfo(Global.Context.PackageName, 0).VersionName;
         }

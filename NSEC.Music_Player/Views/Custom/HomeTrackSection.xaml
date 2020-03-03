@@ -7,17 +7,11 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.HomeTrackSection">
   <ContentView.Content>
-        <RelativeLayout BackgroundColor="{x:Static local:Colors.ColorSecondary}">
-            <Label x:Name="titleLabel" Text="{x:Binding Title}" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Bold}" FontSize="Title"/>
+        <RelativeLayout BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
+            <Label x:Name="titleLabel" Text="{x:Binding Title}" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Bold}" FontSize="Title"/>
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Horizontal" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=0, Constant=30}"
                         RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}">
                 <StackLayout Orientation="Horizontal" x:Name="Container">
-                    <StackLayout Orientation="Vertical" Margin="10">
-                        <Image Source="EmptyTrack.png" WidthRequest="108" HeightRequest="108" Aspect="AspectFill"/>
-                        <Label Text="Malinowyj zakat" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Regular}" FontSize="14" WidthRequest="108" LineBreakMode="TailTruncation " />
-                        <Label Text="Makc Korzh" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Thin}" FontSize="14" WidthRequest="108" LineBreakMode="TailTruncation "/>
-
-                    </StackLayout>
                 </StackLayout>
             </ScrollView>
         </RelativeLayout>
