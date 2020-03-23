@@ -33,10 +33,20 @@ namespace NSEC.Music_Player.Views
             {
                 Global.SaveConfig();
 
-                App.Instance.MainPage = new MainPage();
-                Task.Run(async () => {
-                    await PopToRootAsync();
-                }).Wait();
+                string theme = Global.LoadFirstStart();
+                if(theme == null)
+                {
+                    App.Instance.MainPage = new FirstStartPage();
+                }
+                else
+                {
+                    Colors.SetBase(theme);
+                    App.Instance.MainPage = new MainPage();
+                    Task.Run(async () => {
+                        await PopToRootAsync();
+                    }).Wait();
+                }
+                
 
 
                 return false;

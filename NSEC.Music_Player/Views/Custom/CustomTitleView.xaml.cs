@@ -63,6 +63,14 @@ namespace NSEC.Music_Player.Views.Custom
         {
             InitializeComponent();
             Device.StartTimer(TimeSpan.FromMilliseconds(300), Refresh);
+
+            TapGestureRecognizer downloadButtonTap = new TapGestureRecognizer();
+            downloadButtonTap.Tapped += DownloadButton_Clicked;
+            downloadButton.GestureRecognizers.Add(downloadButtonTap);
+
+            TapGestureRecognizer backButtonTap = new TapGestureRecognizer();
+            backButtonTap.Tapped += BackButton_Clicked;
+            backButton.GestureRecognizers.Add(backButtonTap);
         }
 
         private bool Refresh()

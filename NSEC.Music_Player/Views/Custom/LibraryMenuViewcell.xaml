@@ -8,7 +8,7 @@
           mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.LibraryMenuViewCell">
   <ViewCell.View>
-        <Grid ColumnSpacing="10" Margin="0,0,0,1" BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
+        <Grid ColumnSpacing="10" Margin="0,0,0,1" BackgroundColor="{x:Static local:Colors.ContainerBackground}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="*"/>

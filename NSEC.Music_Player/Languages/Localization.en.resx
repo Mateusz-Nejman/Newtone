@@ -171,6 +171,9 @@
   <data name="NewPlaylistHint" xml:space="preserve">
     <value>Enter playlist name</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
@@ -213,6 +216,9 @@
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>
   </data>
+  <data name="SearchTip" xml:space="preserve">
+    <value>In search you can paste track or playlist link, or type title name.</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -224,6 +230,9 @@
   </data>
   <data name="Settings2" xml:space="preserve">
     <value>Clear data</value>
+  </data>
+  <data name="Settings3" xml:space="preserve">
+    <value>Choose a theme</value>
   </data>
   <data name="SettingsChanges" xml:space="preserve">
     <value>The changes will be visible after restarting the application</value>
@@ -239,6 +248,15 @@
   </data>
   <data name="SnackQueue" xml:space="preserve">
     <value>Added to queue</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Light</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>

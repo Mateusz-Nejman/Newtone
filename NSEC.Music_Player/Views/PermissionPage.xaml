@@ -4,10 +4,11 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.PermissionPage" Visual="Material">
+             x:Class="NSEC.Music_Player.Views.PermissionPage" Visual="Material" NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <RelativeLayout>
+        <RelativeLayout BackgroundColor="{x:Static local:Colors.ColorPrimary}">
             <StackLayout BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="Fill" 
                      
                      RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=0.0,Constant=144}"

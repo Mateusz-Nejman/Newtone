@@ -18,7 +18,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=296}" HorizontalOptions="Center">
+            <StackLayout Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=296}" HorizontalOptions="Center" Padding="5">
                 <Label Text="Newtone" FontSize="48" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center"/>
                 <Label Text="v4.0" FontSize="16" TextColor="{x:Static local:Colors.ColorBadge}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center" x:Name="versionLabel"/>
                 <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Regular}"/>

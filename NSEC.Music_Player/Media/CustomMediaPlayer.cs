@@ -150,7 +150,6 @@ namespace NSEC.Music_Player.Media
                     {
                         Load(track.FilePath);
                         Global.MediaSource = track;
-                        Global.CurrentAudioPath = track.FilePath;
                         GlobalLoader.AddToCounter(track.FilePath, 1);
                         GlobalLoader.AddToLast(track.FilePath);
                     }
@@ -165,7 +164,6 @@ namespace NSEC.Music_Player.Media
                 {
                     Load(track.FilePath);
                     Global.MediaSource = track;
-                    Global.CurrentAudioPath = track.FilePath;
                 }
 
                 SetNotification(track);
@@ -196,7 +194,6 @@ namespace NSEC.Music_Player.Media
                     {
                         Load(track.FilePath);
                         Global.MediaSource = track;
-                        Global.CurrentAudioPath = track.FilePath;
                         GlobalLoader.AddToCounter(track.FilePath, 1);
                         GlobalLoader.AddToLast(track.FilePath);
                     }
@@ -211,7 +208,6 @@ namespace NSEC.Music_Player.Media
                 {
                     Load(track.FilePath);
                     Global.MediaSource = track;
-                    Global.CurrentAudioPath = track.FilePath;
                 }
 
                 SetNotification(track);

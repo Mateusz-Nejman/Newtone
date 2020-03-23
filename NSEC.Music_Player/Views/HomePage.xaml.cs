@@ -45,30 +45,24 @@ namespace NSEC.Music_Player.Views
             mostTracks.IsVisible = Global.MostTracks.Length > 0;
             lastTracks.IsVisible = Global.LastTracks.Length > 0;
 
-            if (mostTracks.Count() == 0)
-            {
-                mostTracks.Clear();
+            mostTracks.Clear();
 
-                for (int a = 0; a < Global.MostTracks.Length; a++)
-                {
-                    TrackCounter counter = Global.MostTracks[a];
-                    mostTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, true, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
-                }
+            for (int a = 0; a < Global.MostTracks.Length; a++)
+            {
+                TrackCounter counter = Global.MostTracks[a];
+                mostTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, true, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
             }
 
-            if (lastTracks.Count() == 0)
-            {
-                lastTracks.Clear();
+            lastTracks.Clear();
 
-                for (int a = 0; a < Global.LastTracks.Length; a++)
-                {
-                    TrackCounter counter = Global.LastTracks[a];
-                    lastTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, false, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
-                }
+            for (int a = 0; a < Global.LastTracks.Length; a++)
+            {
+                TrackCounter counter = Global.LastTracks[a];
+                lastTracks.AddItem(counter.Media.Title, counter.Media.Artist, counter.Media.FilePath, a, false, counter.Media.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(counter.Media.Picture)));
             }
 
 
-            return !stopTimer;
+            return false;
         }
 
         private void HomePage_AsyncEnded(object sender, EventArgs e)

@@ -16,6 +16,7 @@ using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
 using Xamarin.Forms;
+using MediaSource = NSEC.Music_Player.Media.MediaSource;
 
 namespace NSEC.Music_Player
 {
@@ -35,11 +36,17 @@ namespace NSEC.Music_Player
         public static Dictionary<string, List<string>> Playlists { get; set; }
         public static List<MediaSource> CurrentPlaylist { get; set; }
         public static List<MediaSource> CurrentQueue { get; set; }
-        public static string CurrentAudioPath { get; set; }
         public static MediaSource.SourceType PlaylistType { get; set; }
         public static int PlaylistPosition { get; set; }
         public static int QueuePosition { get; set; }
         public static MediaSource MediaSource { get; set; }
+        public static string MediaSourcePath
+        {
+            get
+            {
+                return MediaSource == null ? "" : MediaSource.FilePath;
+            }
+        }
         public static TrackCounter[] LastTracks { get; set; }
         public static TrackCounter[] MostTracks { get; set; }
         public static TrackCounter[] FavouritePlaylists { get; set; }
@@ -55,11 +62,27 @@ namespace NSEC.Music_Player
         public static NotificationManager NotificationManager { get; set; }
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
+
+        private static ImageSource _emptyTrack;
         public static ImageSource EmptyTrack
         {
             get
             {
-                return ImageSource.FromFile("EmptyTrack.png");
+                if (_emptyTrack == null)
+                    _emptyTrack = ImageSource.FromFile("EmptyTrack.png");
+                return _emptyTrack;
+            }
+        }
+
+        private static ImageSource _emptyTrackBlur;
+        public static ImageSource EmptyTrackBlur
+        {
+            get
+            {
+                if (_emptyTrackBlur == null)
+                    _emptyTrackBlur = ImageHelper.Blur(EmptyTrack);
+
+                return _emptyTrackBlur;
             }
         }
         public static bool AutoTags { get; set; }
@@ -67,8 +90,31 @@ namespace NSEC.Music_Player
 
         public static AsyncEndController AsyncEndController = new AsyncEndController();
 
+        public static string LoadFirstStart()
+        {
+            if (!File.Exists(DataPath + "/newtone.first.nsec2"))
+                return null;
+
+            FileStream stream = File.OpenRead(DataPath + "/newtone.first.nsec2");
+            NSEC2 nsec = new NSEC2(PASSWORD);
+            nsec.Load(stream);
+            byte[] themeData = nsec.Get("theme");
+            string theme = System.Text.Encoding.ASCII.GetString(themeData);
+            nsec.Dispose();
+            return theme;
+        }
+
+        public static void SaveFirstStart(string theme)
+        {
+            NSEC2 nsec = new NSEC2(PASSWORD);
+            nsec.AddFile("theme", System.Text.Encoding.ASCII.GetBytes(theme));
+            File.WriteAllBytes(DataPath + "/newtone.first.nsec2", nsec.Save());
+            nsec.Dispose();
+        }
+
         public static void LoadConfig()
         {
+            Directory.CreateDirectory(MusicPath);
             Console.WriteLine("LoadConfig");
             if (File.Exists(DataPath + "/newtone.nsec2"))
             {
@@ -200,7 +246,6 @@ namespace NSEC.Music_Player
                             {
                                 PlaylistPosition = cpp;
                                 MediaSource = Audios[files[cpp]];
-                                CurrentAudioPath = MediaSource.FilePath;
                                 MediaPlayer.Load(files[cpp]);
                             }
                         }

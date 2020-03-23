@@ -14,6 +14,7 @@ using Android.Widget;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
 using Xamarin.Forms;
+using MediaSource = NSEC.Music_Player.Media.MediaSource;
 
 namespace NSEC.Music_Player.Loaders
 {

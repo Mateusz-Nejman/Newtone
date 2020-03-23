@@ -1,4 +1,5 @@
-﻿using NSEC.Music_Player.Models;
+﻿using NSEC.Music_Player.Loaders;
+using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,26 +15,15 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlaylistPage : ContentPage
     {
-        private ObservableCollection<PlaylistListModel> Items { get; set; }
         public PlaylistPage()
         {
             InitializeComponent();
-            playlistList.ItemsSource = Items = new ObservableCollection<PlaylistListModel>();
-
-            foreach(string playlistName in Global.Playlists.Keys)
-            {
-                Items.Add(new PlaylistListModel() { Name = playlistName, TrackCount = Global.Playlists[playlistName].Count });
-            }
+            Appearing += PlaylistPage_Appearing;
         }
 
-        private void PlaylistList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void PlaylistPage_Appearing(object sender, EventArgs e)
         {
-            if (e.SelectedItem != null)
-            {
-                string playlist = Items[e.SelectedItemIndex].Name;
-                Navigation.PushAsync(new TrackListPage(Global.Playlists[playlist]));
-                playlistList.SelectedItem = null;
-            }
+            PlaylistLoader.LoadGrid(ref trackGrid);
         }
     }
 }

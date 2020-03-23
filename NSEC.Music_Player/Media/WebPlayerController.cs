@@ -24,6 +24,8 @@ namespace NSEC.Music_Player.Media
 
         public void Load(CustomMediaPlayer player, string filepath)
         {
+            player.MediaPlayer.Stop();
+            player.MediaPlayer.Reset();
             YoutubeClient client = new YoutubeClient();
             MediaStreamInfoSet msi = null;
             Task.Run(async () =>

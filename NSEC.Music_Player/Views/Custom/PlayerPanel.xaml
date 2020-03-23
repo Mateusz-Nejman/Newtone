@@ -7,22 +7,29 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.PlayerPanel">
   <ContentView.Content>
-        <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Image x:Name="image" WidthRequest="32" HeightRequest="32" HorizontalOptions="Center" VerticalOptions="Center" Aspect="AspectFill"/>
-            <Button Grid.Column="1" ImageSource="PlayIcon.png" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" x:Name="playButton" Clicked="PlayButton_Clicked"/>
-            <RelativeLayout Grid.Column="2" HeightRequest="32">
-                <Label x:Name="titleLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Black}" TextColor="{x:Static local:Colors.TextPrimary}"  LineBreakMode="TailTruncation "/>
-                <Label x:Name="artistLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.TextPrimary}"
+        <RelativeLayout BackgroundColor="{x:Static local:Colors.ColorPrimary}" HeightRequest="40">
+            <Image Source="EmptyTrack.png" Aspect="AspectFill"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1}" x:Name="trackImage" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"/>
+
+            <Image Source="DarkerImage.png" Aspect="AspectFill" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}"
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1}" x:Name="darker" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"/>
+            <Grid RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" ImageSource="PlayIcon.png" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" x:Name="playButton" Clicked="PlayButton_Clicked"/>
+                <RelativeLayout Grid.Column="1" HeightRequest="32">
+                    <Label x:Name="titleLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Black}" TextColor="{x:Static local:Colors.PlayerTextColor}"  LineBreakMode="TailTruncation "/>
+                    <Label x:Name="artistLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.PlayerTextColor}"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=18}"  LineBreakMode="TailTruncation "/>
-            </RelativeLayout>
-        </Grid>
+                </RelativeLayout>
+            </Grid>
+        </RelativeLayout>
+        
     </ContentView.Content>
 </ContentView>

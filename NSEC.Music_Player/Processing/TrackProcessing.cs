@@ -10,6 +10,7 @@ using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Views.Custom;
 using Xamarin.Forms;
+using MediaSource = NSEC.Music_Player.Media.MediaSource;
 
 namespace NSEC.Music_Player.Processing
 {
@@ -32,9 +33,18 @@ namespace NSEC.Music_Player.Processing
         }
         public static void Process(object sender, ObservableCollection<MediaSource> items, Page view, bool playlist, string playlistName)
         {
-            CustomButton button = (CustomButton)sender;
+            if(sender is CustomButton)
+            {
+                CustomButton button = (CustomButton)sender;
 
-            CurrentTag = button.Tag;
+                CurrentTag = button.Tag;
+            }
+            else
+            {
+                IconView button = (IconView)sender;
+                CurrentTag = button.Tag;
+            }
+            
             Items = items;
             View = view;
             Playlist = playlist;
@@ -109,7 +119,7 @@ namespace NSEC.Music_Player.Processing
 
                     if (answer == Localization.NewPlaylist)
                     {
-                        string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist);
+                        string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist,-1,null,Localization.NewPlaylist);
 
                         if (!string.IsNullOrEmpty(playlistName))
                         {
@@ -172,8 +182,8 @@ namespace NSEC.Music_Player.Processing
 
 
 
-                    string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist);
-                    string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title);
+                    string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist,-1,null,artist);
+                    string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title,-1,null,title);
 
                     if (userArtist != null && userTitle != null)
                     {

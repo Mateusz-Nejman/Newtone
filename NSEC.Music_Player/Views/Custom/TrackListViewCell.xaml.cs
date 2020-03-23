@@ -16,11 +16,15 @@ namespace NSEC.Music_Player.Views.Custom
         public TrackListViewCell()
         {
             InitializeComponent();
+
+            TapGestureRecognizer buttonTap = new TapGestureRecognizer();
+            buttonTap.Tapped += CustomButton_Clicked;
+            button.GestureRecognizers.Add(buttonTap);
         }
 
         private void CustomButton_Clicked(object sender, EventArgs e)
         {
-            string trackpath = ((CustomButton)sender).Tag;
+            string trackpath = ((IconView)sender).Tag;
 
             TrackProcessing.Process(sender, null, MainPage.Instance);
         }

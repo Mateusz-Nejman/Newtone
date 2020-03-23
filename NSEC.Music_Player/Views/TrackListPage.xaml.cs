@@ -23,24 +23,27 @@ namespace NSEC.Music_Player.Views
             trackList.ItemsSource = Items = new ObservableCollection<TrackListModel>();
             foreach(string filepath in tracks)
             {
-                MediaSource source = Global.Audios[filepath];
+                Media.MediaSource source = Global.Audios[filepath];
 
                 Items.Add(new TrackListModel() { Title = source.Title, Author = source.Artist, Tag = source.FilePath, Image = source.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(source.Picture)) });
             }
         }
 
-        private void TrackList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void TrackList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if(e.SelectedItem != null)
+            if(!PlayerPage.Showed)
             {
-                List<MediaSource> playlist = new List<MediaSource>();
-
-                foreach(TrackListModel model in Items)
+                if (e.SelectedItem != null)
                 {
-                    playlist.Add(Global.Audios[model.Tag]);
+                    List<Media.MediaSource> playlist = new List<Media.MediaSource>();
+
+                    foreach (TrackListModel model in Items)
+                    {
+                        playlist.Add(Global.Audios[model.Tag]);
+                    }
+                    await Navigation.PushModalAsync(new PlayerPage(Global.Audios[Items[e.SelectedItemIndex].Tag], playlist, e.SelectedItemIndex));
+                    trackList.SelectedItem = null;
                 }
-                Navigation.PushAsync(new PlayerPage(Global.Audios[Items[e.SelectedItemIndex].Tag], playlist, e.SelectedItemIndex));
-                trackList.SelectedItem = null;
             }
         }
     }

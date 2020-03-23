@@ -12,6 +12,8 @@ using Android.Views;
 using Android.Widget;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Views.Custom;
+using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Loaders
 {
@@ -26,7 +28,7 @@ namespace NSEC.Music_Player.Loaders
                 foreach (string playlist in Global.Playlists.Keys)
                 {
                     List<string> playlistItems = Global.Playlists[playlist];
-                    List<MediaSource> tracks = new List<MediaSource>();
+                    List<Media.MediaSource> tracks = new List<Media.MediaSource>();
 
                     foreach(string filepath in playlistItems)
                     {
@@ -49,6 +51,48 @@ namespace NSEC.Music_Player.Loaders
         {
             model.Clear();
             Load(ref model);
+        }
+
+        public static void LoadGrid(ref StackLayout grid)
+        {
+            List<PlaylistListModel> beforeSort = new List<PlaylistListModel>();
+
+            foreach (string playlist in Global.Playlists.Keys)
+            {
+                List<string> playlistItems = Global.Playlists[playlist];
+                List<Media.MediaSource> tracks = new List<Media.MediaSource>();
+
+                foreach (string filepath in playlistItems)
+                {
+                    tracks.Add(Global.Audios[filepath]);
+                }
+
+                beforeSort.Add(new PlaylistListModel() { });
+            }
+
+            List<PlaylistListModel> afterSort = beforeSort.OrderBy(o => o.Name).ToList();
+
+            grid.Children.Clear();
+
+            int pos = 0;
+            PlaylistListModel model0 = null;
+
+            foreach(PlaylistListModel playlist in afterSort)
+            {
+                if (pos == 0)
+                {
+                    model0 = playlist;
+                    pos = 1;
+                }
+                else
+                {
+                    Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
+                    layout.Children.Add(new PlaylistGridItem(model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
+                    layout.Children.Add(new PlaylistGridItem(playlist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
+                    grid.Children.Add(layout);
+                    pos = 0;
+                }
+            }
         }
     }
 }

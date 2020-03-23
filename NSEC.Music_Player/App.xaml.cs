@@ -18,7 +18,19 @@ namespace NSEC.Music_Player
             InitializeComponent();
             Instance = this;
             if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(Global.DataPath + "/newtone.nsec2"))
-                MainPage = new MainPage();
+            {
+                string theme = Global.LoadFirstStart();
+                if(theme == null)
+                {
+                    MainPage = new FirstStartPage();
+                }
+                else
+                {
+                    Colors.SetBase(theme);
+                    MainPage = new MainPage();
+                }
+                
+            }
             else
             {
                 MainPage = new PermissionPage();

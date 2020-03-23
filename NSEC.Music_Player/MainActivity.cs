@@ -13,6 +13,7 @@ using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Loaders;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
+using NSEC.Music_Player.Processing;
 using NSEC.Music_Player.Views;
 using Xamarin.Forms;
 
@@ -90,8 +91,8 @@ namespace NSEC.Music_Player
 
         public override void OnBackPressed()
         {
-
-            if (MainPage.NavigationInstance.NavigationStack.Count == 1)
+            PlayerPage.Showed = false;
+            if (MainPage.NavigationInstance.NavigationStack.Count == 1 && MainPage.NavigationInstance.ModalStack.Count == 0)
             {
                 if (backPressed)
                     base.OnBackPressed();
@@ -116,7 +117,7 @@ namespace NSEC.Music_Player
         protected override void OnStop()
         {
             Console.WriteLine("MainActivity OnStop");
-            if (Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying)
+            if (Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
                 Process.KillProcess(Process.MyPid());
 
             StartService(backgroundIntent);
@@ -152,11 +153,11 @@ namespace NSEC.Music_Player
             Global.PowerManager = (PowerManager)GetSystemService(PowerService);
             Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
             Global.WakeLock.Acquire();
-            Global.Audios = new Dictionary<string, MediaSource>();
+            Global.Audios = new Dictionary<string, Media.MediaSource>();
             Global.Artists = new Dictionary<string, List<string>>();
-            Global.CurrentPlaylist = new List<MediaSource>();
+            Global.CurrentPlaylist = new List<Media.MediaSource>();
             Global.PlaylistPosition = 0;
-            Global.CurrentQueue = new List<MediaSource>();
+            Global.CurrentQueue = new List<Media.MediaSource>();
             Global.QueuePosition = 0;
             Global.LastTracks = new Models.TrackCounter[0];
             Global.MostTracks = new Models.TrackCounter[0];
@@ -172,7 +173,7 @@ namespace NSEC.Music_Player
             Global.AudioFromIntent = false;
             Global.AutoTags = false;
             Global.History = new List<Models.HistoryModel>();
-            Global.PlaylistType = MediaSource.SourceType.Local;
+            Global.PlaylistType = Media.MediaSource.SourceType.Local;
         }
 
         private void ProcessNewIntent(Intent intent)
@@ -186,15 +187,14 @@ namespace NSEC.Music_Player
 
                 if (File.Exists(filepath))
                 {
-                    MediaSource source = MediaProcessing.GetSource(filepath);
+                    Media.MediaSource source = MediaProcessing.GetSource(filepath);
 
                     if (Global.MediaPlayer != null)
                         Global.MediaPlayer.Stop();
 
-                    Global.CurrentAudioPath = filepath;
                     Global.MediaSource = source;
                     Global.PlaylistPosition = 0;
-                    Global.CurrentPlaylist = new List<MediaSource>() { source };
+                    Global.CurrentPlaylist = new List<Media.MediaSource>() { source };
                     Global.MediaPlayer.Load(filepath);
                     Global.MediaPlayer.Play();
                     Global.MediaPlayer.SetNotification(source);

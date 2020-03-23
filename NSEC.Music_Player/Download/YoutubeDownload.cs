@@ -18,6 +18,7 @@ using Xamarin.Forms;
 using YoutubeExplode;
 using YoutubeExplode.Models;
 using YoutubeExplode.Models.MediaStreams;
+using MediaSource = NSEC.Music_Player.Media.MediaSource;
 
 namespace NSEC.Music_Player.Download
 {
@@ -113,8 +114,8 @@ namespace NSEC.Music_Player.Download
                     string title = splitted[splitted.Length == 1 ? 0 : 1];
 
 
-                    string userArtist = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Artysta", artist, "OK", Localization.Cancel, artist);
-                    string userTitle = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Tytuł", title, "OK", Localization.Cancel, title);
+                    string userArtist = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Artysta", artist, "OK", Localization.Cancel, artist,-1,null,artist);
+                    string userTitle = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Tytuł", title, "OK", Localization.Cancel, title,-1,null,artist);
 
                     userArtist = userArtist == "" || userArtist == null ? artist : userArtist;
                     userTitle = userTitle == "" || userTitle == null ? title : userTitle;
@@ -123,7 +124,7 @@ namespace NSEC.Music_Player.Download
                     try
                     {
                         using WebClient wc = new WebClient();
-                        picture = wc.DownloadData(video.Thumbnails.StandardResUrl);
+                        picture = wc.DownloadData(video.Thumbnails.MediumResUrl);
                     }
                     catch
                     {

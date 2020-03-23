@@ -59,8 +59,10 @@ namespace NSEC.Music_Player.Views
         private bool Refresh()
         {
             Items.Clear();
+            List<HistoryModel> list = new List<HistoryModel>(Global.History);
+            list.Reverse();
             
-            foreach(HistoryModel model in Global.History)
+            foreach(HistoryModel model in list)
             {
                 Items.Add(model);
             }
@@ -84,9 +86,11 @@ namespace NSEC.Music_Player.Views
 
         private void HistoryList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if(e.SelectedItemIndex >= 0 && e.SelectedItem != null)
+            List<HistoryModel> list = new List<HistoryModel>(Global.History);
+            list.Reverse();
+            if (e.SelectedItemIndex >= 0 && e.SelectedItem != null)
             {
-                Navigation.PushAsync(new SearchResultPage(Global.History[e.SelectedItemIndex].Text));
+                Navigation.PushAsync(new SearchResultPage(list[e.SelectedItemIndex].Text));
                 historyList.SelectedItem = null;
             }
         }

@@ -151,7 +151,7 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wycyść.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyczyść.
         /// </summary>
         internal static string Clear {
             get {
@@ -219,6 +219,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string NewPlaylistHint {
             get {
                 return ResourceManager.GetString("NewPlaylistHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dalej.
+        /// </summary>
+        internal static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -349,6 +358,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Do wyszukiwarki możesz wkleić link do utworu, playlisty, lub wpisać tytuł..
+        /// </summary>
+        internal static string SearchTip {
+            get {
+                return ResourceManager.GetString("SearchTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ustawienia.
         /// </summary>
         internal static string Settings {
@@ -381,6 +399,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string Settings2 {
             get {
                 return ResourceManager.GetString("Settings2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz motyw.
+        /// </summary>
+        internal static string Settings3 {
+            get {
+                return ResourceManager.GetString("Settings3", resourceCulture);
             }
         }
         
@@ -426,6 +453,33 @@ namespace NSEC.Music_Player.Languages {
         internal static string SnackQueue {
             get {
                 return ResourceManager.GetString("SnackQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ciemny.
+        /// </summary>
+        internal static string ThemeDark {
+            get {
+                return ResourceManager.GetString("ThemeDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Domyślny.
+        /// </summary>
+        internal static string ThemeDefault {
+            get {
+                return ResourceManager.GetString("ThemeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Jasny.
+        /// </summary>
+        internal static string ThemeLight {
+            get {
+                return ResourceManager.GetString("ThemeLight", resourceCulture);
             }
         }
         

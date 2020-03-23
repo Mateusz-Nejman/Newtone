@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -84,16 +85,23 @@ namespace NSEC.Music_Player.Processing
 
         private async static Task TaskAction()
         {
-            foreach (string id in downloads.Keys.ToList())
+            try
             {
+                foreach (string id in downloads.Keys.ToList())
+                {
 
-                DownloadListModel model = downloads[id];
+                    DownloadListModel model = downloads[id];
 
-                await GetDownloadInterface(model.Url).Download(id, model.Url);
-                //await YoutubeProcessing.DownloadVideoId(id);
-                downloads.Remove(id);
-                DownloadedFiles += 1;
+                    await GetDownloadInterface(model.Url).Download(id, model.Url);
+                    //await YoutubeProcessing.DownloadVideoId(id);
+                    downloads.Remove(id);
+                    DownloadedFiles += 1;
 
+                }
+            }
+            catch
+            {
+                Console.WriteLine("TaskAction Error");
             }
 
             if(downloads.Count > 0)

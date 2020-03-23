@@ -33,7 +33,7 @@ namespace NSEC.Music_Player.Views.Custom
 
         private void BottomTabPage_Disappearing(object sender, EventArgs e)
         {
-
+            ((IViewPage)this.content.Content)?.InvokeD(null);
         }
 
         private void BottomTabPage_Appearing(object sender, EventArgs e)
@@ -41,6 +41,9 @@ namespace NSEC.Music_Player.Views.Custom
             Page1 = new HomePage();
             Page2 = new SearchPage();
             Page3 = new LibraryPage();
+
+            ((IViewPage)this.content.Content)?.InvokeA(null);
+
             if (!MainActivity.Loaded)
             {
 

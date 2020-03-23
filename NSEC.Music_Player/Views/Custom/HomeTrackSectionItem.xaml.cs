@@ -35,16 +35,20 @@ namespace NSEC.Music_Player.Views.Custom
             GestureRecognizers.Add(tapGestureRecognizer);
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            List<MediaSource> playlist = new List<MediaSource>();
-
-            foreach(TrackCounter item in (Most ? Global.MostTracks : Global.LastTracks))
+            if(!PlayerPage.Showed)
             {
-                if(Global.Audios.ContainsKey(item.Media.FilePath))
-                    playlist.Add(Global.Audios[item.Media.FilePath]);
+                List<Media.MediaSource> playlist = new List<Media.MediaSource>();
+
+                foreach (TrackCounter item in (Most ? Global.MostTracks : Global.LastTracks))
+                {
+                    if (Global.Audios.ContainsKey(item.Media.FilePath))
+                        playlist.Add(Global.Audios[item.Media.FilePath]);
+                }
+                await Navigation.PushModalAsync(new PlayerPage(Global.Audios[FilePath], playlist, Index));
             }
-            Navigation.PushAsync(new PlayerPage(Global.Audios[FilePath], playlist, Index));
+            //Navigation.PushAsync(new PlayerPage(Global.Audios[FilePath], playlist, Index));
         }
     }
 }

@@ -66,28 +66,35 @@ namespace NSEC.Music_Player.Views
             {
                 SearchResultModel model = Items[e.SelectedItemIndex];
 
-                if(model.MixId == null || model.MixId == "")
+                List<Media.MediaSource> playlist = new List<Media.MediaSource>();
+
+                foreach (SearchResultModel listModel in Items)
+                    playlist.Add((Media.MediaSource)listModel);
+
+                if (model.MixId == null || model.MixId == "")
                 {
-                    MediaSource source = new MediaSource()
+                    Media.MediaSource source = new Media.MediaSource()
                     {
                         Artist = model.Author,
                         Duration = model.Duration,
                         ImageSource = model.Picture,
                         Picture = model.ImageData,
                         Title = model.Title,
-                        Type = MediaSource.SourceType.Web,
+                        Type = Media.MediaSource.SourceType.Web,
                         FilePath = model.Id
 
                     };
-                    Global.PlaylistType = MediaSource.SourceType.Web;
+                    
+                    Global.PlaylistType = Media.MediaSource.SourceType.Web;
                     Console.WriteLine("Play " + model.Title);
-                    Navigation.PushAsync(new StreamPlayerPage(source, Items.ToList(), e.SelectedItemIndex));
+                    Navigation.PushModalAsync(new PlayerPage(source, playlist, e.SelectedItemIndex));
                 }
                 else
                 {
-                    Global.PlaylistType = MediaSource.SourceType.Web;
+                    Global.PlaylistType = Media.MediaSource.SourceType.Web;
                     Console.WriteLine("Play " + model.Title);
-                    Navigation.PushAsync(new StreamPlayerPage(model));
+                    
+                    Navigation.PushModalAsync(new PlayerPage(model));
                 }
                
 

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             x:Class="NSEC.Music_Player.Views.Custom.PlaylistGridItem">
+  <ContentView.Content>
+        <RelativeLayout Margin="5" BackgroundColor="Red">
+            <Image Source="EmptyTrack.png" x:Name="image" 
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   Aspect="AspectFill"/>
+
+            <Image Source="DarkerImage.png"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-36}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=36}" Aspect="Fill" x:Name="darker"/>
+            <Label 
+                x:Name="playlistLabel" 
+                TextColor="White" 
+                FontFamily="{x:Static local:Fonts.Regular}" 
+                FontSize="14" 
+                WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-36}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
+            <Label 
+                x:Name="tracksLabel" 
+                TextColor="White" 
+                FontFamily="{x:Static local:Fonts.Thin}" 
+                FontSize="14" WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-22}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
+        </RelativeLayout>
+    </ContentView.Content>
+</ContentView>

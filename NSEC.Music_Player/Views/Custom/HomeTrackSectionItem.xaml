@@ -7,10 +7,35 @@
              xmlns:local="clr-namespace:NSEC.Music_Player"
              x:Class="NSEC.Music_Player.Views.Custom.HomeTrackSectionItem">
   <ContentView.Content>
-        <StackLayout Orientation="Vertical" Margin="10">
-            <Image Source="EmptyTrack.png" x:Name="image" WidthRequest="108" HeightRequest="108" Aspect="AspectFill"/>
-            <Label x:Name="titleLabel" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Regular}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
-            <Label x:Name="authorLabel" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Thin}" FontSize="14" WidthRequest="108"  LineBreakMode="TailTruncation "/>
-        </StackLayout>
+        <RelativeLayout Margin="10">
+            <Image Source="EmptyTrack.png" x:Name="image" 
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant,Constant=192}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant,Constant=192}" 
+                   Aspect="AspectFill"/>
+
+            <Image Source="DarkerImage.png"
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=156}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant,Constant=192}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=36}" Aspect="Fill" />
+            <Label 
+                x:Name="titleLabel" 
+                TextColor="White" 
+                FontFamily="{x:Static local:Fonts.Regular}" 
+                FontSize="14" 
+                WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=156}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=182}"/>
+            <Label 
+                x:Name="authorLabel" 
+                TextColor="White" 
+                FontFamily="{x:Static local:Fonts.Thin}" 
+                FontSize="14" WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=170}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=Constant, Constant=182}"/>
+        </RelativeLayout>
     </ContentView.Content>
 </ContentView>

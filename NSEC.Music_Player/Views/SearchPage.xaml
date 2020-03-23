@@ -9,7 +9,7 @@
              x:Class="NSEC.Music_Player.Views.SearchPage"
              BackgroundColor="{x:Static local:Colors.ContainerBackground}">
   <ContentView.Content>
-      <StackLayout Orientation="Vertical">
+      <StackLayout Orientation="Vertical" Padding="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -32,7 +32,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Grid BackgroundColor="{x:Static local:Colors.ContainerBackgroundSecond}">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="32"/>
                                         <ColumnDefinition Width="*"/>

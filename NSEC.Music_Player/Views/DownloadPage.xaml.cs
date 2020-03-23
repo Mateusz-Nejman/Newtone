@@ -33,11 +33,16 @@ namespace NSEC.Music_Player.Views
         private bool Refresh()
         {
             downloadLabel.IsVisible = DownloadProcessing.GetDownloads().Count == 0;
-            Items.Clear();
 
             foreach (DownloadListModel model in DownloadProcessing.GetDownloads().Values.ToList())
             {
-                Items.Add(model);
+                if(Items.Contains(model))
+                {
+                    int index = Items.IndexOf(model);
+                    Items[index].Progress = model.Progress;
+                }
+                else
+                    Items.Add(model);
             }
 
             return !stopTimer;

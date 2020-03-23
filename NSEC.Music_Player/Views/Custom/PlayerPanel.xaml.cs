@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSEC.Music_Player.Logic;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,17 +27,21 @@ namespace NSEC.Music_Player.Views.Custom
 
             artistLabel.GestureRecognizers.Add(tapGestureRecognizer);
             titleLabel.GestureRecognizers.Add(tapGestureRecognizer);
+            darker.GestureRecognizers.Add(tapGestureRecognizer);
 
             Device.StartTimer(TimeSpan.FromSeconds(0.5), UpdatePanel);
         }
 
         private async void Label_Tapped(object sender, EventArgs e)
         {
-            if(Global.PlaylistType == Media.MediaSource.SourceType.Local)
-                await Navigation.PushAsync(new PlayerPage(Global.CurrentPlaylist[Global.PlaylistPosition], Global.CurrentPlaylist, Global.PlaylistPosition));
-            else
+            if(!PlayerPage.Showed)
             {
-                await Navigation.PushAsync(new StreamPlayerPage(Global.MediaSource, Global.CurrentPlaylist,Global.PlaylistPosition));
+                if (Global.PlaylistType == Media.MediaSource.SourceType.Local)
+                    await Navigation.PushModalAsync(new PlayerPage(Global.CurrentPlaylist[Global.PlaylistPosition], Global.CurrentPlaylist, Global.PlaylistPosition));
+                else
+                {
+                    await Navigation.PushModalAsync(new PlayerPage(Global.MediaSource, Global.CurrentPlaylist, Global.PlaylistPosition));
+                }
             }
         }
 
@@ -60,14 +65,26 @@ namespace NSEC.Music_Player.Views.Custom
                 artistLabel.Text = Global.MediaSource.Artist;
                 bool start = Global.MediaPlayer.IsPlaying;
                 playButton.ImageSource = start ? ImageSource.FromFile("PauseIcon.png") : ImageSource.FromFile("PlayIcon.png");
-                if (Global.MediaSource.FilePath != oldTrack)
+                IsVisible = true;
+
+                if(oldTrack != Global.MediaSource.FilePath)
                 {
                     oldTrack = Global.MediaSource.FilePath;
-                    image.Source = Global.MediaSource.Picture != null ? ImageSource.FromStream(() => new MemoryStream(Global.MediaSource.Picture)) : ImageSource.FromFile("EmptyTrack.png");
+
+                    if(Global.MediaSource.Picture == null || ImageSource.FromStream(() => new MemoryStream(Global.MediaSource.Picture)) == Global.EmptyTrack)
+                    {
+                        trackImage.IsVisible = false;
+                        if(Colors.ColorPrimary != Colors.PlayerTextColor)
+                            darker.IsVisible = false;
+
+                    }
+                    else
+                    {
+                        trackImage.IsVisible = true;
+                        darker.IsVisible = true;
+                        trackImage.Source = ImageHelper.Blur(ImageSource.FromStream(() => new MemoryStream(Global.MediaSource.Picture)));
+                    }
                 }
-
-
-                IsVisible = true;
             }
             else
                 IsVisible = false;

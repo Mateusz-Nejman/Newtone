@@ -105,6 +105,7 @@
     <Compile Include="Logic\CacheString.cs" />
     <Compile Include="Logic\IAsyncEndListener.cs" />
     <Compile Include="Logic\IInvokePage.cs" />
+    <Compile Include="Logic\ImageHelper.cs" />
     <Compile Include="Logic\SnackbarBuilder.cs" />
     <Compile Include="Logic\TickParser.cs" />
     <Compile Include="Media\AudioFocusListener.cs" />
@@ -138,9 +139,17 @@
     <Compile Include="Views\ArtistPage.xaml.cs">
       <DependentUpon>ArtistPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CurrentPlaylistPage.xaml.cs">
+      <DependentUpon>CurrentPlaylistPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Custom\ArtistGridItem.xaml.cs">
+      <DependentUpon>ArtistGridItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Custom\ArtistListViewCell.xaml.cs">
       <DependentUpon>ArtistListViewCell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Custom\BlurredImage.cs" />
+    <Compile Include="Views\Custom\BlurredImageRenderer.cs" />
     <Compile Include="Views\Custom\BottomTabBar.xaml.cs">
       <DependentUpon>BottomTabBar.xaml</DependentUpon>
     </Compile>
@@ -149,6 +158,9 @@
     </Compile>
     <Compile Include="Views\Custom\BottomTabPage.xaml.cs">
       <DependentUpon>BottomTabPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Custom\CurrentPlaylistViewCell.xaml.cs">
+      <DependentUpon>CurrentPlaylistViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Custom\CustomButton.cs" />
     <Compile Include="Views\Custom\CustomTitleView.xaml.cs">
@@ -172,6 +184,9 @@
     <Compile Include="Views\Custom\PlayerPanel.xaml.cs">
       <DependentUpon>PlayerPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Custom\PlaylistGridItem.xaml.cs">
+      <DependentUpon>PlaylistGridItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Custom\PlaylistListViewCell.xaml.cs">
       <DependentUpon>PlaylistListViewCell.xaml</DependentUpon>
     </Compile>
@@ -187,6 +202,15 @@
     </Compile>
     <Compile Include="Views\DownloadPage.xaml.cs">
       <DependentUpon>DownloadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FirstStartPage.xaml.cs">
+      <DependentUpon>FirstStartPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FirstStart\FirstStartSearch.xaml.cs">
+      <DependentUpon>FirstStartSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FirstStart\FirstStartThemes.xaml.cs">
+      <DependentUpon>FirstStartThemes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
@@ -214,12 +238,6 @@
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StreamPlayerPage.xaml.cs">
-      <DependentUpon>StreamPlayerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TestPage.xaml.cs">
-      <DependentUpon>TestPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrackListPage.xaml.cs">
       <DependentUpon>TrackListPage.xaml</DependentUpon>
@@ -250,13 +268,13 @@
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991640</Version>
+      <Version>4.5.0.356</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>4.4.0.991640</Version>
+      <Version>4.5.0.356</Version>
     </PackageReference>
     <PackageReference Include="YoutubeExplode">
-      <Version>4.7.13</Version>
+      <Version>4.7.14</Version>
     </PackageReference>
     <PackageReference Include="z440.atl.core">
       <Version>3.1.0</Version>
@@ -367,11 +385,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\TestPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\Custom\HomeTrackSectionItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -424,11 +437,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\DarkerImage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\StreamPlayerPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Custom\BottomTabBarItem.xaml">
@@ -541,6 +549,60 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\BlueDownloadIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\CurrentPlaylistPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Custom\ArtistGridItem.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Custom\PlaylistGridItem.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Custom\CurrentPlaylistViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\CollapseIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ExpandIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\FirstStartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\DarkPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\DefaultPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\LightPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\SearchPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\FirstStart\FirstStartThemes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\FirstStart\FirstStartSearch.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

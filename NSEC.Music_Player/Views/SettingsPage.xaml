@@ -8,22 +8,21 @@
              xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.SettingsPage"
-             NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False"
              BackgroundColor="{x:Static local:Colors.ContainerBackground}">
-    <NavigationPage.TitleView>
-        <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Settings}"/>
-    </NavigationPage.TitleView>
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="0"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
+            <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Settings}"/>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" Grid.Row="1">
                 <StackLayout>
                     <ListView x:Name="settingsList" VerticalOptions="FillAndExpand" ItemSelected="SettingsList_ItemSelected" RowHeight="64">
                         <ListView.ItemTemplate>
@@ -34,7 +33,8 @@
                     </ListView>
                 </StackLayout>
             </ScrollView>
-            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+            <custom:PlayerPanel Grid.Row="2" HeightRequest="40"/>
+            <Label Grid.Row="3" x:Name="forSender"/>
         </Grid>
         
     </ContentPage.Content>

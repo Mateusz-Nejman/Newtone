@@ -2,7 +2,9 @@
 using NSEC.Music_Player.Loaders;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
+using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Processing;
+using NSEC.Music_Player.Views.Custom;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,14 +15,40 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using YoutubeExplode;
+using MediaSource = NSEC.Music_Player.Media.MediaSource;
 
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlayerPage : ContentPage
     {
+        public static bool Showed { get; set; }
         private string oldTrack = "";
         private bool start = false;
+        private ImageSource playIcon;
+        private ImageSource PlayIcon
+        {
+            get
+            {
+                if (playIcon == null)
+                    playIcon = ImageSource.FromFile("PlayIcon.png");
+
+                return playIcon;
+            }
+        }
+
+        private ImageSource pauseIcon;
+        private ImageSource PauseIcon
+        {
+            get
+            {
+                if (pauseIcon == null)
+                    pauseIcon = ImageSource.FromFile("PauseIcon.png");
+
+                return pauseIcon;
+            }
+        }
         private bool Start
         {
             get
@@ -31,7 +59,7 @@ namespace NSEC.Music_Player.Views
             {
                 start = value;
 
-                playButton.ImageSource = start ? ImageSource.FromFile("PauseIcon.png") : ImageSource.FromFile("PlayIcon.png");
+                playButton.ImageSource = start ? PauseIcon : PlayIcon;
             }
         }
 
@@ -57,10 +85,40 @@ namespace NSEC.Music_Player.Views
 
         private MediaSource MediaSource { get; set; }
         private bool stopTimer = false;
+
+        public PlayerPage(SearchResultModel model)
+        {
+            InitPlayerPage((MediaSource)model, new List<MediaSource>() { (MediaSource)model }, 0);
+
+            new Task(async () =>
+            {
+                string mixId = model.MixId;
+
+                YoutubeClient client = new YoutubeClient();
+                var playlist = await client.GetPlaylistAsync(mixId);
+
+                foreach (var vid in playlist.Videos)
+                {
+                    Global.CurrentPlaylist.Add((MediaSource)vid);
+                }
+                Console.WriteLine("Playlist count " + Global.CurrentPlaylist.Count);
+            }).Start();
+        }
         public PlayerPage(MediaSource source, List<MediaSource> playlist, int playlistPosition)
         {
+            InitPlayerPage(source, playlist, playlistPosition);
+        }
+
+        private void InitPlayerPage(MediaSource source, List<MediaSource> playlist, int playlistPosition)
+        {
+            Showed = true;
             InitializeComponent();
-            Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
+
+
+            if (source.Type == MediaSource.SourceType.Local)
+                Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
+            else
+                Global.MediaPlayer.SetPlayerController(new WebPlayerController());
 
             MediaSource = source;
 
@@ -69,14 +127,14 @@ namespace NSEC.Music_Player.Views
             menuButton.Tag = MediaSource.FilePath;
 
             Global.CurrentPlaylist = new List<MediaSource>(playlist);
-            Global.PlaylistType = MediaSource.SourceType.Local;
+            Global.PlaylistType = source.Type;
             Global.PlaylistPosition = playlistPosition;
-            Global.MediaSource = MediaSource;
 
             Appearing += PlayerPage_Appearing;
             Disappearing += PlayerPage_Disappearing;
 
-            if(source.FilePath == Global.CurrentAudioPath)
+
+            if (source.FilePath == Global.MediaSourcePath)
             {
                 BindPlayerControls();
                 Start = UpdatePosition();
@@ -87,16 +145,25 @@ namespace NSEC.Music_Player.Views
                 if (Global.MediaPlayer != null)
                     Global.MediaPlayer.Stop();
 
-                if(File.Exists(source.FilePath))
+                if (source.Type == MediaSource.SourceType.Web || File.Exists(source.FilePath))
                 {
-                    Global.CurrentAudioPath = source.FilePath;
-                    GlobalLoader.AddToCounter(source.FilePath, 1);
-                    GlobalLoader.AddToLast(source.FilePath);
+                    if (source.Type == MediaSource.SourceType.Local)
+                    {
+                        GlobalLoader.AddToCounter(source.FilePath, 1);
+                        GlobalLoader.AddToLast(source.FilePath);
+                    }
+
                     BindPlayerControls();
-                    Global.MediaPlayer.Load(source.FilePath);
-                    Play();
+                    new Task(() =>
+                    {
+                        Global.MediaPlayer.Load(source.FilePath);
+                        Play();
+                        
+                    }).Start();
+
                     Start = true;
                     Global.LastPlayerClick = Start;
+
                 }
                 else
                 {
@@ -104,31 +171,52 @@ namespace NSEC.Music_Player.Views
                 }
             }
 
-            if (source.Picture != null)
-                trackImage.Source = ImageSource.FromStream(() => new MemoryStream(source.Picture));
 
-            Device.StartTimer(TimeSpan.FromMilliseconds(300), UpdatePosition);
+            Global.MediaSource = MediaSource;
+
+            if (source.Picture != null)
+            {
+                trackImage.Source = ImageHelper.Blur(source.Picture);
+                trackImageSmall.Source = ImageSource.FromStream(() => new MemoryStream(source.Picture));
+            }
+            else
+            {
+                trackImage.Source = Global.EmptyTrackBlur;
+                trackImageSmall.Source = Global.EmptyTrack;
+            }
         }
 
         private void PlayerPage_Disappearing(object sender, EventArgs e)
         {
+            Showed = false;
             stopTimer = true;
         }
 
         private void PlayerPage_Appearing(object sender, EventArgs e)
         {
-            Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
+            menuButton.ImageSource = Global.MediaSource.Type == MediaSource.SourceType.Local ? "MenuIcon.png" : "DownloadIcon.png";
+            Showed = true;
+            stopTimer = false;
+            if (Global.MediaSource.Type == MediaSource.SourceType.Local)
+                Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
+            else
+                Global.MediaPlayer.SetPlayerController(new WebPlayerController());
             MediaSource = Global.MediaSource;
             titleLabel.Text = MediaSource.Title;
             authorLabel.Text = MediaSource.Artist;
-            trackImage.Source = MediaSource.Picture != null ? ImageSource.FromStream(() => new MemoryStream(MediaSource.Picture)) : Global.EmptyTrack;
+            trackImage.Source = MediaSource.Picture != null ? ImageHelper.Blur(MediaSource.Picture) : Global.EmptyTrackBlur;
+            trackImageSmall.Source = MediaSource.Picture != null ? ImageSource.FromStream(() => new MemoryStream(MediaSource.Picture)) : Global.EmptyTrack;
             Start = Global.MediaPlayer.IsPlaying;
+            //BindPlayerControls();
+            Device.StartTimer(TimeSpan.FromMilliseconds(300), UpdatePosition);
+            Console.WriteLine("PlayerPage appearing");
             SetSliderPosition(Global.MediaPlayer.CurrentPosition / Global.MediaPlayer.Duration);
+            
         }
 
         private void BackButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PopAsync();
+            Navigation.PopModalAsync(true);
         }
 
         private void RepeatButton_Clicked(object sender, EventArgs e)
@@ -168,15 +256,24 @@ namespace NSEC.Music_Player.Views
 
         private void MenuButton_Clicked(object sender, EventArgs e)
         {
-            ObservableCollection<MediaSource> tracks = new ObservableCollection<MediaSource>();
-
-            foreach (MediaSource track in Global.CurrentPlaylist)
+            if(Global.MediaSource.Type == MediaSource.SourceType.Local)
             {
-                tracks.Add(track);
-            }
+                ObservableCollection<MediaSource> tracks = new ObservableCollection<MediaSource>();
 
-            menuButton.Tag = Global.MediaSource.FilePath;
-            TrackProcessing.Process(sender, tracks, this);
+                foreach (MediaSource track in Global.CurrentPlaylist)
+                {
+                    tracks.Add(track);
+                }
+
+                menuButton.Tag = Global.MediaSource.FilePath;
+                TrackProcessing.Process(sender, tracks, this);
+            }
+            else
+            {
+                DownloadProcessing.AddToDownloadTask(Global.MediaSource.FilePath, Global.MediaSource.Title, true, $"https://youtube.com/watch?v={Global.MediaSource.FilePath}");
+                SnackbarBuilder.Show(Localization.TitleDownloads);
+            }
+            
         }
 
         private void BindPlayerControls()
@@ -196,6 +293,7 @@ namespace NSEC.Music_Player.Views
 
         private bool UpdatePosition()
         {
+            playButton.ImageSource = Global.MediaPlayer.IsPlaying ? PauseIcon : PlayIcon;
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;
             titleLabel.Text = MediaSource.Title;
@@ -212,7 +310,8 @@ namespace NSEC.Music_Player.Views
             if (oldTrack != track.FilePath)
             {
                 oldTrack = track.FilePath;
-                trackImage.Source = track.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(track.Picture));
+                trackImage.Source = track.Picture == null ? Global.EmptyTrackBlur : ImageHelper.Blur(track.Picture);
+                trackImageSmall.Source = track.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(track.Picture));
             }
 
             return !stopTimer;
@@ -237,11 +336,10 @@ namespace NSEC.Music_Player.Views
 
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;
-            if (File.Exists(MediaSource.FilePath))
+            if (MediaSource.Type == MediaSource.SourceType.Web || File.Exists(MediaSource.FilePath))
             {
                 Global.MediaPlayer.Load(track.FilePath);
                 Global.MediaSource = track;
-                Global.CurrentAudioPath = track.FilePath;
                 SetSliderPosition(0);
                 if (Global.LastPlayerClick)
                     Play();
@@ -262,11 +360,10 @@ namespace NSEC.Music_Player.Views
 
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;
-            if (File.Exists(MediaSource.FilePath))
+            if (MediaSource.Type == MediaSource.SourceType.Web || File.Exists(MediaSource.FilePath))
             {
                 Global.MediaPlayer.Load(track.FilePath);
                 Global.MediaSource = track;
-                Global.CurrentAudioPath = track.FilePath;
                 SetSliderPosition(0);
                 if (Global.LastPlayerClick)
                     Play();
@@ -288,6 +385,27 @@ namespace NSEC.Music_Player.Views
             slider.Maximum = 1;
             slider.Value = position;
             slider.ValueChanged += Slider_ValueChanged;
+        }
+
+        private async void ExpandButton_Clicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Expand Clicked");
+            await Navigation.PushModalAsync(new CurrentPlaylistPage(trackImage.Source,this));
+        }
+
+        public void ChangeTrack(int index)
+        {
+            if (index >= 0 && index < Global.CurrentPlaylist.Count)
+            {
+                MediaSource track = Global.CurrentPlaylist[index];
+                MediaSource = track;
+                Global.MediaPlayer.Load(track.FilePath);
+                Global.MediaSource = track;
+                Global.PlaylistPosition = index;
+                SetSliderPosition(0);
+                if (Global.LastPlayerClick)
+                    Play();
+            }
         }
     }
 }

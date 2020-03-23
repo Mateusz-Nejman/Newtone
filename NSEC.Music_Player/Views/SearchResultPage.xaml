@@ -9,22 +9,21 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.SearchResultPage"
              NavigationPage.HasBackButton="False"
-             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
-    <NavigationPage.TitleView>
-        <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Search}" x:Name="titleView"/>
-    </NavigationPage.TitleView>
+             BackgroundColor="{x:Static local:Colors.ContainerBackground}" NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="{x:Static localization:Localization.Searching}" x:Name="searchLabel" HorizontalOptions="Center" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Medium}" FontSize="20"/>
-            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
-                <ListView x:Name="searchResultView" VerticalOptions="FillAndExpand" RowHeight="72" ItemSelected="SearchResultView_ItemSelected" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+            <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Search}" x:Name="titleView"/>
+            <Label Text="{x:Static localization:Localization.Searching}" x:Name="searchLabel" HorizontalOptions="Center" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Medium}" FontSize="20" Grid.Row="1"/>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" Grid.Row="1">
+                <ListView x:Name="searchResultView" VerticalOptions="FillAndExpand" RowHeight="72" ItemSelected="SearchResultView_ItemSelected" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <custom:StreamViewCell/>
@@ -32,7 +31,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollView>
-            <custom:PlayerPanel Grid.Row="1" HeightRequest="40"/>
+            <custom:PlayerPanel Grid.Row="2" HeightRequest="40"/>
         </Grid>
         
     </ContentPage.Content>

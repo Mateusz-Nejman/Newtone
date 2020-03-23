@@ -37,6 +37,7 @@ namespace NSEC.Music_Player.Media
             else if (intent.Action == "close")
             {
                 Global.NotificationManager.CancelAll();
+                Global.NotificationManager.DeleteNotificationChannel("nsec music_player notification");
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
             }
             Console.WriteLine("MediaPlayerReceiver " + intent.Action);

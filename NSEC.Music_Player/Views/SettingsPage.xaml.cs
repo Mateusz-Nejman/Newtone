@@ -2,6 +2,7 @@
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.Views.Custom;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +27,7 @@ namespace NSEC.Music_Player.Views
             Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
             Items.Add(new SettingsListModel() { Name = Localization.Settings1, Description = "", Enabled = Global.AutoTags, HasCheckbox = true });
             Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
+            Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
             Appearing += SettingsPage_Appearing;
         }
 
@@ -35,6 +37,7 @@ namespace NSEC.Music_Player.Views
             Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
             Items.Add(new SettingsListModel() { Name = Localization.Settings1, Description = "", Enabled = Global.AutoTags, HasCheckbox = true });
             Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
+            Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
         }
 
         private void SettingsList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -48,7 +51,7 @@ namespace NSEC.Music_Player.Views
 
                         if (!Global.AudioTags.ContainsKey(filepath))
                         {
-                            MediaSource tag = Global.Audios[filepath];
+                            Media.MediaSource tag = Global.Audios[filepath];
                             if (tag.Artist == Localization.UnknownArtist)
                             {
                                 FileInfo fileInfo = new FileInfo(filepath);
@@ -82,8 +85,32 @@ namespace NSEC.Music_Player.Views
 
                     SnackbarBuilder.Show(Localization.Ready);
                 }
+                else if(e.SelectedItemIndex == 3)
+                {
+                    PopupMenu popup = new PopupMenu(Global.Context, forSender, Localization.ThemeDefault, Localization.ThemeLight, Localization.ThemeDark);
+                    popup.OnSelect += Menu_OnItemSelected;
+                    popup.Show();
+                }
                 settingsList.SelectedItem = null;
             }
+        }
+
+
+        private void Menu_OnItemSelected(string item)
+        {
+            if (item == Localization.ThemeLight)
+                ChangeTheme("Light");
+            else if (item == Localization.ThemeDark)
+                ChangeTheme("Dark");
+            else
+                ChangeTheme("Default");
+
+        }
+
+        private void ChangeTheme(string theme)
+        {
+            Global.SaveFirstStart(theme);
+            SnackbarBuilder.Show(Localization.SettingsChanges);
         }
     }
 }
