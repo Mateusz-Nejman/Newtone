@@ -7,6 +7,7 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Media;
+using Android.Net;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -63,6 +64,8 @@ namespace NSEC.Music_Player
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
 
+        public static ConnectivityManager ConnectivityManager { get; set; }
+
         private static ImageSource _emptyTrack;
         public static ImageSource EmptyTrack
         {
@@ -85,7 +88,6 @@ namespace NSEC.Music_Player
                 return _emptyTrackBlur;
             }
         }
-        public static bool AutoTags { get; set; }
 
 
         public static AsyncEndController AsyncEndController = new AsyncEndController();
@@ -199,14 +201,6 @@ namespace NSEC.Music_Player
                     PlayerMode = (PlayerMode)playerMode;
                 }
 
-                if(nsec.Exists("autoTags"))
-                {
-                    byte[] autoTagsData = nsec.Get("autoTags");
-                    string buff = System.Text.Encoding.ASCII.GetString(autoTagsData);
-
-                    AutoTags = buff == "auto";
-                }
-
                 if(nsec.Exists("history"))
                 {
                     byte[] historyData = nsec.Get("history");
@@ -214,7 +208,8 @@ namespace NSEC.Music_Player
                     History.Clear();
                     foreach(string elem in historyElems)
                     {
-                        History.Add(HistoryModel.FromString(elem));
+                        if(!History.Contains(HistoryModel.FromString(elem)))
+                            History.Add(HistoryModel.FromString(elem));
                     }
                 }
 
@@ -299,9 +294,6 @@ namespace NSEC.Music_Player
             int playerMode = (int)PlayerMode;
             buffer = playerMode.ToString();
             nsec.AddFile("playerMode", System.Text.Encoding.UTF8.GetBytes(buffer));
-
-            buffer = AutoTags ? "auto" : "none";
-            nsec.AddFile("autoTags", System.Text.Encoding.ASCII.GetBytes(buffer));
 
             nsec.AddFile("playlistPosition", System.Text.Encoding.ASCII.GetBytes(PlaylistPosition.ToString()));
 

@@ -90,7 +90,15 @@ namespace NSEC.Music_Player.Views
             list.Reverse();
             if (e.SelectedItemIndex >= 0 && e.SelectedItem != null)
             {
-                Navigation.PushAsync(new SearchResultPage(list[e.SelectedItemIndex].Text));
+                if(MainActivity.IsInternet())
+                {
+                    Navigation.PushAsync(new SearchResultPage(list[e.SelectedItemIndex].Text));
+                }
+                else
+                {
+                    MainPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                }
+                
                 historyList.SelectedItem = null;
             }
         }
@@ -99,14 +107,23 @@ namespace NSEC.Music_Player.Views
         {
             if(searchEntry.Text.Length > 0)
             {
-                Global.History.Add(new HistoryModel()
+                if(MainActivity.IsInternet())
                 {
-                    Text = searchEntry.Text,
-                    Youtube = true
-                });
-                Global.SaveConfig();
-                Navigation.PushAsync(new SearchResultPage(searchEntry.Text));
-                
+                    var model = new HistoryModel()
+                    {
+                        Text = searchEntry.Text,
+                        Youtube = true
+                    };
+
+                    if (!Global.History.Contains(model))
+                        Global.History.Add(model);
+                    Global.SaveConfig();
+                    Navigation.PushAsync(new SearchResultPage(searchEntry.Text));
+                }
+                else
+                {
+                    MainPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                }
             }
         }
     }

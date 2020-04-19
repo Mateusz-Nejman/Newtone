@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using YoutubeExplode;
 using MediaSource = NSEC.Music_Player.Media.MediaSource;
+using Range = NSEC.Music_Player.Logic.Range;
 
 namespace NSEC.Music_Player.Views
 {
@@ -168,6 +169,7 @@ namespace NSEC.Music_Player.Views
                 else
                 {
                     SnackbarBuilder.Show(Localization.SnackFileExists);
+                    Next();
                 }
             }
 
@@ -266,11 +268,11 @@ namespace NSEC.Music_Player.Views
                 }
 
                 menuButton.Tag = Global.MediaSource.FilePath;
-                TrackProcessing.Process(sender, tracks, this);
+                TrackProcessing.Process(sender, tracks, this,false,"");
             }
             else
             {
-                DownloadProcessing.AddToDownloadTask(Global.MediaSource.FilePath, Global.MediaSource.Title, true, $"https://youtube.com/watch?v={Global.MediaSource.FilePath}");
+                DownloadProcessing.AddToDownloadTask(Global.MediaSource.FilePath, Global.MediaSource.Title, true, $"https://youtube.com/watch?v={Global.MediaSource.FilePath}","");
                 SnackbarBuilder.Show(Localization.TitleDownloads);
             }
             
@@ -331,8 +333,7 @@ namespace NSEC.Music_Player.Views
         {
             Global.PlaylistPosition += 1;
 
-            if (Global.PlaylistPosition == Global.CurrentPlaylist.Count)
-                Global.PlaylistPosition = 0;
+            Global.PlaylistPosition = Range.GetRangeInt(0, Global.CurrentPlaylist.Count - 1, Global.PlaylistPosition);
 
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;
@@ -355,8 +356,7 @@ namespace NSEC.Music_Player.Views
         {
             Global.PlaylistPosition -= 1;
 
-            if (Global.PlaylistPosition == -1)
-                Global.PlaylistPosition = Global.CurrentPlaylist.Count - 1;
+            Global.PlaylistPosition = Range.GetRangeInt(0, Global.CurrentPlaylist.Count - 1, Global.PlaylistPosition);
 
             MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];
             MediaSource = track;

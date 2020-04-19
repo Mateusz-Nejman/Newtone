@@ -21,7 +21,7 @@ namespace NSEC.Music_Player.Download
             throw new NotImplementedException();
         }
 
-        public Task Download(string id, string url)
+        public Task<string> Download(string id, string url)
         {
             throw new NotImplementedException();
         }

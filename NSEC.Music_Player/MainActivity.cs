@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Media;
+using Android.Net;
 using Android.OS;
 using Android.Runtime;
 using NSEC.Music_Player.Languages;
@@ -151,6 +152,7 @@ namespace NSEC.Music_Player
             }
 
             Global.PowerManager = (PowerManager)GetSystemService(PowerService);
+            Global.ConnectivityManager = (ConnectivityManager)GetSystemService(ConnectivityService);
             Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
             Global.WakeLock.Acquire();
             Global.Audios = new Dictionary<string, Media.MediaSource>();
@@ -171,7 +173,6 @@ namespace NSEC.Music_Player
             Global.MediaPlayer = new CustomMediaPlayer();
             Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
             Global.AudioFromIntent = false;
-            Global.AutoTags = false;
             Global.History = new List<Models.HistoryModel>();
             Global.PlaylistType = Media.MediaSource.SourceType.Local;
         }
@@ -258,6 +259,31 @@ namespace NSEC.Music_Player
                     return retString;
             }
             return retString;
+        }
+
+        public static bool IsInternet()
+        {
+            bool haveConnectedWifi = false;
+            bool haveConnectedMobile = false;
+
+            NetworkInfo[] netInfo = Global.ConnectivityManager.GetAllNetworkInfo();
+
+            foreach(NetworkInfo info in netInfo)
+            {
+                if(info.TypeName.Contains("WIFI",StringComparison.OrdinalIgnoreCase))
+                {
+                    if (info.IsConnected)
+                        haveConnectedWifi = true;
+                }
+
+                if(info.TypeName.Contains("MOBILE",StringComparison.OrdinalIgnoreCase))
+                {
+                    if (info.IsConnected)
+                        haveConnectedMobile = true;
+                }
+            }
+
+            return haveConnectedWifi || haveConnectedMobile;
         }
     }
 }

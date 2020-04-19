@@ -19,5 +19,17 @@ namespace NSEC.Music_Player.Views.Custom
             get { return (string)GetValue(TagProperty); }
             set { SetValue(TagProperty, value); }
         }
+
+        public static readonly BindableProperty Tag1Property = BindableProperty.Create(
+    propertyName: "Tag1",
+    returnType: typeof(string),
+    declaringType: typeof(HomeTrackSection),
+    defaultValue: "");
+
+        public string Tag1
+        {
+            get { return (string)GetValue(Tag1Property); }
+            set { SetValue(Tag1Property, value); }
+        }
     }
 }

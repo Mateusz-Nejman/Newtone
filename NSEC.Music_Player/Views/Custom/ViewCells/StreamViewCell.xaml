@@ -26,8 +26,7 @@
                 <Label Text="{Binding DurationString}" FontSize="16" FontFamily="{x:Static local:Fonts.Thin}" TextColor="{x:Static local:Colors.ContainerTextColor}" LineBreakMode="TailTruncation"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=-28}"/>
             </RelativeLayout>
-            <custom:CustomButton Grid.Column="2" ImageSource="BlueDownloadIcon.png" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" Tag="{Binding VideoData}" Clicked="CustomButton_Clicked"/>
-            
+            <custom:IconView Grid.Column="2" Source="DownloadIcon.png" Foreground="{x:Static local:Colors.IconColor}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent" Tag="{Binding VideoData}" x:Name="button"/>
         </Grid>
   </ViewCell.View>
 </ViewCell>

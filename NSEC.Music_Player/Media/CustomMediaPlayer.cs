@@ -19,6 +19,7 @@ using NSEC.Music_Player.Logic;
 using YoutubeExplode;
 using YoutubeExplode.Models.MediaStreams;
 using static Android.Support.V4.Media.App.NotificationCompat;
+using Range = NSEC.Music_Player.Logic.Range;
 
 namespace NSEC.Music_Player.Media
 {
@@ -135,8 +136,7 @@ namespace NSEC.Music_Player.Media
                     {
                         Global.PlaylistPosition += Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
 
-                        if (Global.PlaylistPosition >= Global.CurrentPlaylist.Count)
-                            Global.PlaylistPosition -= Global.CurrentPlaylist.Count;
+                        Global.PlaylistPosition = Range.GetRangeInt(0, Global.CurrentPlaylist.Count - 1, Global.PlaylistPosition);
                     }
 
                     track = Global.CurrentPlaylist[Global.PlaylistPosition];
@@ -180,8 +180,7 @@ namespace NSEC.Music_Player.Media
                 {
                     Global.PlaylistPosition -= Global.PlayerMode == PlayerMode.All ? 1 : Random.Next(0, Global.CurrentPlaylist.Count);
 
-                    if (Global.PlaylistPosition < 0)
-                        Global.PlaylistPosition = Global.CurrentPlaylist.Count - Global.PlaylistPosition;
+                    Global.PlaylistPosition = Range.GetRangeInt(0, Global.CurrentPlaylist.Count - 1, Global.PlaylistPosition);
                 }
 
                 MediaSource track = Global.CurrentPlaylist[Global.PlaylistPosition];

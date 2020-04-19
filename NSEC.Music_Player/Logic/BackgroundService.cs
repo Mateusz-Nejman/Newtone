@@ -17,7 +17,7 @@ namespace NSEC.Music_Player.Logic
     {
         public override IBinder OnBind(Intent intent)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         [return: GeneratedEnum]

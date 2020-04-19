@@ -6,7 +6,7 @@ namespace NSEC.Music_Player.Download
 {
     public interface IDownload
     {
-        public Task Download(string id, string url);
+        public Task<string> Download(string id, string url);
         public Task AddToDownload(string id, string url, object additional = null);
         public Task Search(string text, ObservableCollection<SearchResultModel> model);
 

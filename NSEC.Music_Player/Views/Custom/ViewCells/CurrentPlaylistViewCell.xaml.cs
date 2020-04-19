@@ -11,20 +11,24 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views.Custom
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class StreamViewCell : ViewCell
+    public partial class CurrentPlaylistViewCell : ViewCell
     {
-        public StreamViewCell()
+        public CurrentPlaylistViewCell()
         {
             InitializeComponent();
         }
 
         private void CustomButton_Clicked(object sender, EventArgs e)
         {
-            CustomButton button = (CustomButton)sender;
-            string[] data = button.Tag.Split(Global.SEPARATOR);
-            string url = $"https://youtube.com/watch?v={button.Tag}";
+            string[] arr = ((CustomButton)sender).Tag.Split(Global.SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+            string trackpath = arr[1];
 
-            DownloadProcessing.GetDownloadInterface(url).AddToDownload("", data[1],data);
+            string name = "";
+
+            if (arr.Length > 2)
+                name = arr[2];
+
+            TrackProcessing.Process(sender, null, MainPage.Instance,trackpath == "true", name);
         }
     }
 }

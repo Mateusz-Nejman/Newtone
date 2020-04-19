@@ -30,7 +30,7 @@ namespace NSEC.Music_Player.Loaders
                 {
                     MediaSource source = Global.Audios[filePath];
 
-                    beforeSort.Add(new TrackListModel() { Author = source.Artist, Image = source.Picture != null ? ImageSource.FromStream(() => new MemoryStream(source.Picture)) : Global.EmptyTrack, Tag = filePath, Title = source.Title });
+                    beforeSort.Add(new TrackListModel() { Author = source.Artist, Image = source.Picture != null ? ImageSource.FromStream(() => new MemoryStream(source.Picture)) : Global.EmptyTrack, Tag = filePath+Global.SEPARATOR+"false", Title = source.Title, IsPlaylist = false });
                 }
 
                 List<TrackListModel> afterSort = beforeSort.OrderBy(o => o.Title).ToList();

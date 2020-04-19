@@ -22,29 +22,24 @@ namespace NSEC.Music_Player.Processing
         private static bool Playlist { get; set; }
         private static string PlaylistName { get; set; }
 
-        public static void Process(object sender, ObservableCollection<MediaSource> items, Page view)
-        {
-            Process(sender, items, view, false, "");
-        }
-
         public static MediaSource GetTrack(string filepath)
         {
             return Global.Audios[filepath];
         }
         public static void Process(object sender, ObservableCollection<MediaSource> items, Page view, bool playlist, string playlistName)
         {
-            if(sender is CustomButton)
+            if (sender is CustomButton)
             {
                 CustomButton button = (CustomButton)sender;
 
-                CurrentTag = button.Tag;
+                CurrentTag = button.Tag.Split(Global.SEPARATOR)[0];
             }
             else
             {
                 IconView button = (IconView)sender;
-                CurrentTag = button.Tag;
+                CurrentTag = button.Tag.Split(Global.SEPARATOR)[0];
             }
-            
+
             Items = items;
             View = view;
             Playlist = playlist;
@@ -68,6 +63,8 @@ namespace NSEC.Music_Player.Processing
                     bool answer = await View.DisplayAlert(Localization.Question, Localization.QuestionDelete + " " + track.Title + (Playlist ? " " + Localization.QuestionDeleteFromPlaylist + "?" : "?"), Localization.Yes, Localization.No);
                     if (answer)
                     {
+                        Console.WriteLine("Menu_OnItemSelected" + Playlist);
+                        Console.WriteLine("Menu_OnItemSelected" + PlaylistName);
                         if (!Playlist)
                         {
                             File.Delete(track.FilePath);
@@ -81,26 +78,11 @@ namespace NSEC.Music_Player.Processing
 
                         if (Global.Playlists.ContainsKey(PlaylistName))
                         {
-                            ObservableCollection<string> observableTracks = new ObservableCollection<string>(Global.Playlists[PlaylistName]);
-                            GlobalLoader.RemoveTrack(track.FilePath, Playlist, observableTracks);
+                            Global.Playlists[PlaylistName].Remove(track.FilePath);
 
-                            if (Playlist)
-                                Global.Playlists[PlaylistName] = observableTracks.ToList();
-
-
-                            foreach (MediaSource tr in Items)
-                            {
-                                if (tr.FilePath == track.FilePath)
-                                {
-                                    Items.Remove(tr);
-                                    break;
-                                }
-                            }
+                            if (Global.Playlists[PlaylistName].Count == 0)
+                                Global.Playlists.Remove(PlaylistName);
                         }
-
-                        if (Global.Audios.ContainsKey(track.FilePath))
-                            Global.Audios.Remove(track.FilePath);
-
 
                         Global.SaveConfig();
                         SnackbarBuilder.Show(Localization.SnackDelete);
@@ -119,7 +101,7 @@ namespace NSEC.Music_Player.Processing
 
                     if (answer == Localization.NewPlaylist)
                     {
-                        string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist,-1,null,Localization.NewPlaylist);
+                        string playlistName = await View.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist, -1, null, Localization.NewPlaylist);
 
                         if (!string.IsNullOrEmpty(playlistName))
                         {
@@ -182,8 +164,8 @@ namespace NSEC.Music_Player.Processing
 
 
 
-                    string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist,-1,null,artist);
-                    string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title,-1,null,title);
+                    string userArtist = await View.DisplayPromptAsync(Localization.Artist, artist, "OK", Localization.Cancel, artist, -1, null, artist);
+                    string userTitle = await View.DisplayPromptAsync(Localization.Title, title, "OK", Localization.Cancel, title, -1, null, title);
 
                     if (userArtist != null && userTitle != null)
                     {
@@ -205,6 +187,8 @@ namespace NSEC.Music_Player.Processing
                         SnackbarBuilder.Show(Localization.SettingsChanges);
                     }
                 }
+
+                Global.SaveConfig();
             }
 
             if (View is IInvokePage)

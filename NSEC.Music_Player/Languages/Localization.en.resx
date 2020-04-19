@@ -177,6 +177,9 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="NoConnection" xml:space="preserve">
+    <value>No internet connection</value>
+  </data>
   <data name="NoDownloads" xml:space="preserve">
     <value>No downloads in background</value>
   </data>
@@ -189,8 +192,14 @@
   <data name="Playlist" xml:space="preserve">
     <value>Playlist</value>
   </data>
+  <data name="PlaylistDownload" xml:space="preserve">
+    <value>Create playlist from downloaded tracks?</value>
+  </data>
   <data name="PlaylistOrTrack" xml:space="preserve">
     <value>Download playlist or track?</value>
+  </data>
+  <data name="PlaylistPlay" xml:space="preserve">
+    <value>Play</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>Playlists</value>
@@ -203,6 +212,9 @@
   </data>
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
     <value>from playlist</value>
+  </data>
+  <data name="QuestionDeletePlaylist" xml:space="preserve">
+    <value>Delete playlist</value>
   </data>
   <data name="Ready" xml:space="preserve">
     <value>Ready</value>
@@ -290,6 +302,9 @@
   </data>
   <data name="UnknownArtist" xml:space="preserve">
     <value>Unknown artist</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

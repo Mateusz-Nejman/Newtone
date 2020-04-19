@@ -22,7 +22,7 @@ namespace NSEC.Music_Player.Views.Custom
         private Context Context { get; set; }
         private View Anchor { get; set; }
         private string[] Items { get; set; }
-        public PopupMenuEventHandler OnSelect;
+        public event PopupMenuEventHandler OnSelect;
 
         private Android.Widget.PopupMenu Menu { get; set; }
         public PopupMenu(Context context, View anchor, params string[] items)

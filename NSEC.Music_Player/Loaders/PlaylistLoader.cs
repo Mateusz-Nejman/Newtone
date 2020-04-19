@@ -59,15 +59,8 @@ namespace NSEC.Music_Player.Loaders
 
             foreach (string playlist in Global.Playlists.Keys)
             {
-                List<string> playlistItems = Global.Playlists[playlist];
-                List<Media.MediaSource> tracks = new List<Media.MediaSource>();
 
-                foreach (string filepath in playlistItems)
-                {
-                    tracks.Add(Global.Audios[filepath]);
-                }
-
-                beforeSort.Add(new PlaylistListModel() { });
+                beforeSort.Add(new PlaylistListModel() { Name = playlist, TrackCount = Global.Playlists[playlist].Count });
             }
 
             List<PlaylistListModel> afterSort = beforeSort.OrderBy(o => o.Name).ToList();
@@ -92,6 +85,13 @@ namespace NSEC.Music_Player.Loaders
                     grid.Children.Add(layout);
                     pos = 0;
                 }
+            }
+
+            if (pos == 1)
+            {
+                Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
+                layout.Children.Add(new PlaylistGridItem(model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
+                grid.Children.Add(layout);
             }
         }
     }

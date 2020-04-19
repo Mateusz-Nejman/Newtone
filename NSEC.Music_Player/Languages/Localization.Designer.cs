@@ -241,6 +241,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Brak dostępu do internetu.
+        /// </summary>
+        internal static string NoConnection {
+            get {
+                return ResourceManager.GetString("NoConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Brak pobierania w toku.
         /// </summary>
         internal static string NoDownloads {
@@ -277,11 +286,29 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Utworzyć nową playlistę z pobranymi utworami?.
+        /// </summary>
+        internal static string PlaylistDownload {
+            get {
+                return ResourceManager.GetString("PlaylistDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrać playlistę czy utwór?.
         /// </summary>
         internal static string PlaylistOrTrack {
             get {
                 return ResourceManager.GetString("PlaylistOrTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odtwórz.
+        /// </summary>
+        internal static string PlaylistPlay {
+            get {
+                return ResourceManager.GetString("PlaylistPlay", resourceCulture);
             }
         }
         
@@ -318,6 +345,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string QuestionDeleteFromPlaylist {
             get {
                 return ResourceManager.GetString("QuestionDeleteFromPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usunąć playlistę.
+        /// </summary>
+        internal static string QuestionDeletePlaylist {
+            get {
+                return ResourceManager.GetString("QuestionDeletePlaylist", resourceCulture);
             }
         }
         
@@ -579,6 +615,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string UnknownArtist {
             get {
                 return ResourceManager.GetString("UnknownArtist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Uwaga.
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
         

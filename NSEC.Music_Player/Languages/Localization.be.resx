@@ -177,6 +177,9 @@
   <data name="No" xml:space="preserve">
     <value>Не</value>
   </data>
+  <data name="NoConnection" xml:space="preserve">
+    <value>Нет доступа в интернет</value>
+  </data>
   <data name="NoDownloads" xml:space="preserve">
     <value>Нет загрузки в процессе</value>
   </data>
@@ -189,8 +192,14 @@
   <data name="Playlist" xml:space="preserve">
     <value>Список</value>
   </data>
+  <data name="PlaylistDownload" xml:space="preserve">
+    <value>Создать новый список с загруженными песнями?</value>
+  </data>
   <data name="PlaylistOrTrack" xml:space="preserve">
     <value>Скачать список или песню?</value>
+  </data>
+  <data name="PlaylistPlay" xml:space="preserve">
+    <value>Играй</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>Списки</value>
@@ -203,6 +212,9 @@
   </data>
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
     <value>из списка</value>
+  </data>
+  <data name="QuestionDeletePlaylist" xml:space="preserve">
+    <value>Удалить список</value>
   </data>
   <data name="Ready" xml:space="preserve">
     <value>Готовый</value>
@@ -290,6 +302,9 @@
   </data>
   <data name="UnknownArtist" xml:space="preserve">
     <value>Неизвестный художник</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Внимание</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>

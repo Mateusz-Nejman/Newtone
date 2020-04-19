@@ -20,5 +20,6 @@ namespace NSEC.Music_Player.Models
         public string Author { get; set; }
         public string Tag { get; set; }
         public ImageSource Image { get; set; }
+        public bool IsPlaylist { get; set; }
     }
 }

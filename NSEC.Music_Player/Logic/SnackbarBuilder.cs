@@ -17,9 +17,7 @@ namespace NSEC.Music_Player.Logic
     {
         public static void Show(string text)
         {
-            var view = Global.Context.FindViewById(Android.Resource.Id.Content);
-            var snack = Snackbar.Make(view, text, Snackbar.LengthLong);
-            snack.Show();
+            Toast.MakeText(Global.Context, text, ToastLength.Short).Show();
         }
     }
 }

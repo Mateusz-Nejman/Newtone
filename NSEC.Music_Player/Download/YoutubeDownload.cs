@@ -29,6 +29,8 @@ namespace NSEC.Music_Player.Download
             YoutubeClient client = new YoutubeClient();
             string playlistId = "";
             Dictionary<QueryEnum, string> urlType = CheckLink(url);
+            string playlistName = "";
+            Playlist playlist = null;
 
             if (urlType.ContainsKey(QueryEnum.Playlist))
             {
@@ -42,6 +44,16 @@ namespace NSEC.Music_Player.Download
                     else
                     {
                         playlistId = urlType[QueryEnum.Playlist];
+
+                        bool toPlaylist = await MainPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No);
+
+                        if(toPlaylist)
+                        {
+                            playlist = await client.GetPlaylistAsync(playlistId);
+                            string newPlaylistName = await MainPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist, -1, null, playlist.Title);
+
+                            playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
+                        }
                     }
                 }
             }
@@ -65,20 +77,21 @@ namespace NSEC.Music_Player.Download
 
 
 
-                DownloadProcessing.AddToDownloadTask(urlType[QueryEnum.Video], title, true, _url);
+                DownloadProcessing.AddToDownloadTask(urlType[QueryEnum.Video], title, true, _url,playlistName);
             }
             else
             {
-                Playlist playlist = await client.GetPlaylistAsync(playlistId);
+                if(playlist == null)
+                    playlist = await client.GetPlaylistAsync(playlistId);
 
                 foreach(Video video in playlist.Videos)
                 {
-                    DownloadProcessing.AddToDownloadTask(video.Id, video.Title, true, video.GetUrl());
+                    DownloadProcessing.AddToDownloadTask(video.Id, video.Title, true, video.GetUrl(),playlistName);
                 }
             }
         }
 
-        public async Task Download(string id, string url)
+        public async Task<string> Download(string id, string url)
         {
             YoutubeClient client = new YoutubeClient();
             Video video = await client.GetVideoAsync(id);
@@ -105,43 +118,31 @@ namespace NSEC.Music_Player.Download
 
             MainPage.Instance.Dispatcher.BeginInvokeOnMainThread(async () =>
             {
-                bool answer = Global.AutoTags ? true : await MainPage.Instance.DisplayAlert(Localization.Question, Localization.AddTags, Localization.Yes, Localization.No);
+                string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
+                string artist = splitted.Length == 1 ? video.Author : splitted[0];
+                string title = splitted[splitted.Length == 1 ? 0 : 1];
 
-                if(answer)
+                byte[] picture = null;
+                try
                 {
-                    string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
-                    string artist = splitted.Length == 1 ? video.Author : splitted[0];
-                    string title = splitted[splitted.Length == 1 ? 0 : 1];
+                    using WebClient wc = new WebClient();
+                    picture = wc.DownloadData(video.Thumbnails.MediumResUrl);
+                }
+                catch
+                {
 
+                }
 
-                    string userArtist = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Artysta", artist, "OK", Localization.Cancel, artist,-1,null,artist);
-                    string userTitle = Global.AutoTags ? "" : await MainPage.Instance.DisplayPromptAsync("Tytuł", title, "OK", Localization.Cancel, title,-1,null,artist);
-
-                    userArtist = userArtist == "" || userArtist == null ? artist : userArtist;
-                    userTitle = userTitle == "" || userTitle == null ? title : userTitle;
-
-                    byte[] picture = null;
-                    try
-                    {
-                        using WebClient wc = new WebClient();
-                        picture = wc.DownloadData(video.Thumbnails.MediumResUrl);
-                    }
-                    catch
-                    {
-
-                    }
-
-                    if (Global.AudioTags.ContainsKey(Global.MusicPath + "/" + fileName + ".m4a"))
-                    {
-                        string f = Global.MusicPath + "/" + video.Title + ".m4a";
-                        Global.AudioTags[f].Author = userArtist;
-                        Global.AudioTags[f].Title = userTitle;
-                        Global.AudioTags[f].ImageSource = picture;
-                    }
-                    else
-                    {
-                        Global.AudioTags.Add(Global.MusicPath + "/" + fileName + ".m4a", new MediaSourceTag() { Author = userArtist, Title = userTitle, ImageSource = picture });
-                    }
+                if (Global.AudioTags.ContainsKey(Global.MusicPath + "/" + fileName + ".m4a"))
+                {
+                    string f = Global.MusicPath + "/" + video.Title + ".m4a";
+                    Global.AudioTags[f].Author = artist;
+                    Global.AudioTags[f].Title = title;
+                    Global.AudioTags[f].ImageSource = picture;
+                }
+                else
+                {
+                    Global.AudioTags.Add(Global.MusicPath + "/" + fileName + ".m4a", new MediaSourceTag() { Author = artist, Title = title, ImageSource = picture });
                 }
 
                 MediaSource container = MediaProcessing.GetSource(Global.MusicPath + "/" + fileName + ".m4a");
@@ -150,8 +151,9 @@ namespace NSEC.Music_Player.Download
                 Global.SaveTags();
                 CacheString.Save();
                 SnackbarBuilder.Show(Localization.Ready);
-            });
 
+            });
+            return Global.MusicPath + "/" + fileName + ".m4a";
 
         }
 

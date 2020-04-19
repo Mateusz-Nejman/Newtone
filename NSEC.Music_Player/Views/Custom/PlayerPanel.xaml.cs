@@ -22,27 +22,7 @@ namespace NSEC.Music_Player.Views.Custom
             HeightRequest = 64;
             VerticalOptions = LayoutOptions.End;
 
-            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += Label_Tapped;
-
-            artistLabel.GestureRecognizers.Add(tapGestureRecognizer);
-            titleLabel.GestureRecognizers.Add(tapGestureRecognizer);
-            darker.GestureRecognizers.Add(tapGestureRecognizer);
-
             Device.StartTimer(TimeSpan.FromSeconds(0.5), UpdatePanel);
-        }
-
-        private async void Label_Tapped(object sender, EventArgs e)
-        {
-            if(!PlayerPage.Showed)
-            {
-                if (Global.PlaylistType == Media.MediaSource.SourceType.Local)
-                    await Navigation.PushModalAsync(new PlayerPage(Global.CurrentPlaylist[Global.PlaylistPosition], Global.CurrentPlaylist, Global.PlaylistPosition));
-                else
-                {
-                    await Navigation.PushModalAsync(new PlayerPage(Global.MediaSource, Global.CurrentPlaylist, Global.PlaylistPosition));
-                }
-            }
         }
 
         private void PlayButton_Clicked(object sender, EventArgs e)
@@ -95,6 +75,19 @@ namespace NSEC.Music_Player.Views.Custom
         {
             Refresh();
             return true;
+        }
+
+        private async void Pressed(object sender, EventArgs e)
+        {
+            if (!PlayerPage.Showed)
+            {
+                if (Global.PlaylistType == Media.MediaSource.SourceType.Local)
+                    await Navigation.PushModalAsync(new PlayerPage(Global.CurrentPlaylist[Global.PlaylistPosition], Global.CurrentPlaylist, Global.PlaylistPosition));
+                else
+                {
+                    await Navigation.PushModalAsync(new PlayerPage(Global.MediaSource, Global.CurrentPlaylist, Global.PlaylistPosition));
+                }
+            }
         }
     }
 }

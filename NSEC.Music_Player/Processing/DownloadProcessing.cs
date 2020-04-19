@@ -40,7 +40,7 @@ namespace NSEC.Music_Player.Processing
             return downloads;
         }
 
-        public static void AddToDownloadTask(string id, string title, bool youtube, string url)
+        public static void AddToDownloadTask(string id, string title, bool youtube, string url, string playlist)
         {
             AllCompleted = false;
             if (!downloads.ContainsKey(id))
@@ -50,7 +50,8 @@ namespace NSEC.Music_Player.Processing
                     Progress = 0.0,
                     Image = youtube ? ImageSource.FromFile("YoutubeIcon.png") : ImageSource.FromFile("SoundcloudIcon.png"),
                     Downloaded = false,
-                    Url = youtube ? url : id //TODO
+                    Url = youtube ? url : id, //TODO
+                    PlaylistName = playlist
                 }); ;
 
             MaxFiles = downloads.Count;
@@ -92,7 +93,14 @@ namespace NSEC.Music_Player.Processing
 
                     DownloadListModel model = downloads[id];
 
-                    await GetDownloadInterface(model.Url).Download(id, model.Url);
+                    string filename = await GetDownloadInterface(model.Url).Download(id, model.Url);
+                    if(!string.IsNullOrWhiteSpace(model.PlaylistName))
+                    {
+                        if (!Global.Playlists.ContainsKey(model.PlaylistName))
+                            Global.Playlists.Add(model.PlaylistName, new List<string>());
+
+                        Global.Playlists[model.PlaylistName].Add(filename);
+                    }
                     //await YoutubeProcessing.DownloadVideoId(id);
                     downloads.Remove(id);
                     DownloadedFiles += 1;

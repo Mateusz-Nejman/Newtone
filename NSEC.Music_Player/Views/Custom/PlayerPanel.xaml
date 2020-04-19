@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:gestures="clr-namespace:NSEC.Music_Player.Views.Custom.Gestures"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.Custom.PlayerPanel">
   <ContentView.Content>
@@ -23,10 +24,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" ImageSource="PlayIcon.png" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" x:Name="playButton" Clicked="PlayButton_Clicked"/>
-                <RelativeLayout Grid.Column="1" HeightRequest="32">
+                <RelativeLayout Grid.Column="1">
                     <Label x:Name="titleLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Black}" TextColor="{x:Static local:Colors.PlayerTextColor}"  LineBreakMode="TailTruncation "/>
                     <Label x:Name="artistLabel" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{x:Static local:Colors.PlayerTextColor}"
                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=18}"  LineBreakMode="TailTruncation "/>
+
+                    <gestures:PressGestureMask RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" Pressed="Pressed"/>
                 </RelativeLayout>
             </Grid>
         </RelativeLayout>

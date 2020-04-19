@@ -49,7 +49,7 @@ namespace NSEC.Music_Player.Media
 
         public static implicit operator TrackListModel(MediaSource source)
         {
-            return new TrackListModel() { Title = source.Title, Author = source.Artist, Tag = source.FilePath, Image = source.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(source.Picture)) };
+            return new TrackListModel() { Title = source.Title, Author = source.Artist, Tag = source.FilePath+Global.SEPARATOR+"false", Image = source.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(source.Picture)), IsPlaylist = false };
         }
 
         public static explicit operator MediaSource(SearchResultModel model)

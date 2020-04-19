@@ -106,6 +106,7 @@
     <Compile Include="Logic\IAsyncEndListener.cs" />
     <Compile Include="Logic\IInvokePage.cs" />
     <Compile Include="Logic\ImageHelper.cs" />
+    <Compile Include="Logic\Range.cs" />
     <Compile Include="Logic\SnackbarBuilder.cs" />
     <Compile Include="Logic\TickParser.cs" />
     <Compile Include="Media\AudioFocusListener.cs" />
@@ -145,40 +146,42 @@
     <Compile Include="Views\Custom\ArtistGridItem.xaml.cs">
       <DependentUpon>ArtistGridItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\ArtistListViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\ArtistListViewCell.xaml.cs">
       <DependentUpon>ArtistListViewCell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\BlurredImage.cs" />
-    <Compile Include="Views\Custom\BlurredImageRenderer.cs" />
-    <Compile Include="Views\Custom\BottomTabBar.xaml.cs">
+    <Compile Include="Views\Custom\BottomBarNavigation\BottomTabBar.xaml.cs">
       <DependentUpon>BottomTabBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\BottomTabBarItem.xaml.cs">
+    <Compile Include="Views\Custom\BottomBarNavigation\BottomTabBarItem.xaml.cs">
       <DependentUpon>BottomTabBarItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\BottomTabPage.xaml.cs">
+    <Compile Include="Views\Custom\BottomBarNavigation\BottomTabPage.xaml.cs">
       <DependentUpon>BottomTabPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\CurrentPlaylistViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\CurrentPlaylistViewCell.xaml.cs">
       <DependentUpon>CurrentPlaylistViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Custom\CustomButton.cs" />
     <Compile Include="Views\Custom\CustomTitleView.xaml.cs">
       <DependentUpon>CustomTitleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\DownloadListViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\DownloadListViewCell.xaml.cs">
       <DependentUpon>DownloadListViewCell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Custom\Gestures\PressGestureMask.cs" />
+    <Compile Include="Views\Custom\Gestures\PressGestureMaskRenderer.cs" />
     <Compile Include="Views\Custom\HomeTrackSection.xaml.cs">
       <DependentUpon>HomeTrackSection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Custom\HomeTrackSectionItem.xaml.cs">
       <DependentUpon>HomeTrackSectionItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\IconView.cs" />
-    <Compile Include="Views\Custom\IconViewRenderer.cs" />
+    <Compile Include="Views\Custom\Images\IconView.cs" />
+    <Compile Include="Views\Custom\Images\IconViewRenderer.cs" />
+    <Compile Include="Views\Custom\Images\BlurredImage.cs" />
+    <Compile Include="Views\Custom\Images\BlurredImageRenderer.cs" />
     <Compile Include="Views\Custom\IViewPage.cs" />
-    <Compile Include="Views\Custom\LibraryMenuViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\LibraryMenuViewCell.xaml.cs">
       <DependentUpon>LibraryMenuViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Custom\PlayerPanel.xaml.cs">
@@ -187,17 +190,17 @@
     <Compile Include="Views\Custom\PlaylistGridItem.xaml.cs">
       <DependentUpon>PlaylistGridItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\PlaylistListViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\PlaylistListViewCell.xaml.cs">
       <DependentUpon>PlaylistListViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Custom\PopupMenu.cs" />
-    <Compile Include="Views\Custom\SettingsListViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\SettingsListViewCell.xaml.cs">
       <DependentUpon>SettingsListViewCell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\StreamViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\StreamViewCell.xaml.cs">
       <DependentUpon>StreamViewCell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Custom\TrackListViewCell.xaml.cs">
+    <Compile Include="Views\Custom\ViewCells\TrackListViewCell.xaml.cs">
       <DependentUpon>TrackListViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DownloadPage.xaml.cs">
@@ -390,7 +393,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\BottomTabBar.xaml">
+    <EmbeddedResource Include="Views\Custom\BottomBarNavigation\BottomTabBar.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -421,12 +424,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\BottomTabPage.xaml">
+    <EmbeddedResource Include="Views\Custom\BottomBarNavigation\BottomTabPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\StreamViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\StreamViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -439,7 +442,7 @@
     <AndroidResource Include="Resources\drawable\DarkerImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\BottomTabBarItem.xaml">
+    <EmbeddedResource Include="Views\Custom\BottomBarNavigation\BottomTabBarItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -449,7 +452,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\LibraryMenuViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\LibraryMenuViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -464,7 +467,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\TrackListViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\TrackListViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -474,12 +477,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\ArtistListViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\ArtistListViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\PlaylistListViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\PlaylistListViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -494,7 +497,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\DownloadListViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\DownloadListViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -504,7 +507,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\SettingsListViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\SettingsListViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -566,7 +569,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\Custom\CurrentPlaylistViewCell.xaml">
+    <EmbeddedResource Include="Views\Custom\ViewCells\CurrentPlaylistViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

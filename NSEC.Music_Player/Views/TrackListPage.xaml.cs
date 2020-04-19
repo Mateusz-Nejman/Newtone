@@ -17,16 +17,20 @@ namespace NSEC.Music_Player.Views
     public partial class TrackListPage : ContentPage
     {
         private ObservableCollection<TrackListModel> Items { get; set; }
-        public TrackListPage(List<string> tracks)
+        private bool Playlist { get; set; }
+        private string PlaylistName { get; set; }
+        public TrackListPage(List<string> tracks, string playlistName, bool playlist = false)
         {
             InitializeComponent();
             trackList.ItemsSource = Items = new ObservableCollection<TrackListModel>();
+            PlaylistName = playlistName;
             foreach(string filepath in tracks)
             {
                 Media.MediaSource source = Global.Audios[filepath];
 
-                Items.Add(new TrackListModel() { Title = source.Title, Author = source.Artist, Tag = source.FilePath, Image = source.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(source.Picture)) });
+                Items.Add(new TrackListModel() { Title = source.Title, Author = source.Artist, Tag = source.FilePath+Global.SEPARATOR+(playlist ? "true" : "false")+Global.SEPARATOR+PlaylistName, Image = source.Picture == null ? Global.EmptyTrack : ImageSource.FromStream(() => new MemoryStream(source.Picture)), IsPlaylist = Playlist });;
             }
+            Playlist = playlist;
         }
 
         private async void TrackList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -39,9 +43,9 @@ namespace NSEC.Music_Player.Views
 
                     foreach (TrackListModel model in Items)
                     {
-                        playlist.Add(Global.Audios[model.Tag]);
+                        playlist.Add(Global.Audios[model.Tag.Split(Global.SEPARATOR)[0]]);
                     }
-                    await Navigation.PushModalAsync(new PlayerPage(Global.Audios[Items[e.SelectedItemIndex].Tag], playlist, e.SelectedItemIndex));
+                    await Navigation.PushModalAsync(new PlayerPage(Global.Audios[Items[e.SelectedItemIndex].Tag.Split(Global.SEPARATOR)[0]], playlist, e.SelectedItemIndex));
                     trackList.SelectedItem = null;
                 }
             }

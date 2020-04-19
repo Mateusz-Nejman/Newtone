@@ -25,7 +25,6 @@ namespace NSEC.Music_Player.Views
             InitializeComponent();
             settingsList.ItemsSource = Items = new ObservableCollection<SettingsListModel>();
             Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings1, Description = "", Enabled = Global.AutoTags, HasCheckbox = true });
             Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
             Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
             Appearing += SettingsPage_Appearing;
@@ -35,7 +34,6 @@ namespace NSEC.Music_Player.Views
         {
             Items.Clear();
             Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings1, Description = "", Enabled = Global.AutoTags, HasCheckbox = true });
             Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
             Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
         }
@@ -70,12 +68,6 @@ namespace NSEC.Music_Player.Views
                 }
                 else if(e.SelectedItemIndex == 1)
                 {
-                    Global.AutoTags = !Global.AutoTags;
-                    SettingsPage_Appearing(null, null);
-                    Global.SaveConfig();
-                }
-                else if(e.SelectedItemIndex == 2)
-                {
                     string[] files = Directory.GetFiles(Global.DataPath, "*.nsec2");
 
                     foreach(string file in files)
@@ -85,7 +77,7 @@ namespace NSEC.Music_Player.Views
 
                     SnackbarBuilder.Show(Localization.Ready);
                 }
-                else if(e.SelectedItemIndex == 3)
+                else if(e.SelectedItemIndex == 2)
                 {
                     PopupMenu popup = new PopupMenu(Global.Context, forSender, Localization.ThemeDefault, Localization.ThemeLight, Localization.ThemeDark);
                     popup.OnSelect += Menu_OnItemSelected;

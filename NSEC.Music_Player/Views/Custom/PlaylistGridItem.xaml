@@ -5,9 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:gestures="clr-namespace:NSEC.Music_Player.Views.Custom.Gestures"
              x:Class="NSEC.Music_Player.Views.Custom.PlaylistGridItem">
   <ContentView.Content>
-        <RelativeLayout Margin="5" BackgroundColor="Red">
+        <RelativeLayout Margin="5" x:Name="layout">
             <Image Source="EmptyTrack.png" x:Name="image" 
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
@@ -36,6 +38,11 @@
                 RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-22}"
                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
+
+            <gestures:PressGestureMask RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" LongPressed="LongPressed" Pressed="Pressed"/>
         </RelativeLayout>
     </ContentView.Content>
 </ContentView>

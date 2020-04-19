@@ -41,6 +41,8 @@ namespace NSEC.Music_Player.Models
                 return string.Format("{0:0.00}", Progress * 100.0) + "%";
             }
         }
+
+        public string PlaylistName { get; set; }
         public ImageSource Image { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

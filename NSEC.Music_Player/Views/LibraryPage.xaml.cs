@@ -54,7 +54,7 @@ namespace NSEC.Music_Player.Views
             {
                 if(e.SelectedItemIndex == 0)
                 {
-                    Navigation.PushAsync(new TrackListPage(Global.Audios.Keys.ToList()));
+                    Navigation.PushAsync(new TrackListPage(Global.Audios.Keys.ToList(),""));
                 }
                 else if(e.SelectedItemIndex == 1)
                 {

@@ -58,7 +58,7 @@ namespace NSEC.Music_Player.Views.Custom
 
         private void UpdateBitmap(BlurredImage previous = null)
         {
-            
+
             if (!_isDisposed && Element.Source != null)
             {
                 IImageSourceHandler handler = null;
@@ -79,11 +79,11 @@ namespace NSEC.Music_Player.Views.Custom
 
                 var newB = CreateBlurredImage(b, 25);
                 Control.SetAdjustViewBounds(true);
-                
+
                 Control.SetScaleType(ImageView.ScaleType.FitCenter);
                 Control.SetImageBitmap(newB);
-               
-                
+
+
                 ((IVisualElementController)Element).NativeSizeChanged();
             }
         }
