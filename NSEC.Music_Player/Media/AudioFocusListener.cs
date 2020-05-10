@@ -10,6 +10,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtone.Core;
+using Newtone.Core.Logic;
 
 namespace NSEC.Music_Player.Media
 {
@@ -18,17 +20,20 @@ namespace NSEC.Music_Player.Media
 
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
-
-            if (Global.MediaPlayer != null)
+            ConsoleDebug.WriteLine("[Android Media] OnAudioFocusChange " + focusChange);
+            if (GlobalData.MediaPlayer != null)
             {
-                if (focusChange == AudioFocus.Loss)
-                    Global.MediaPlayer.Stop();
+                if (focusChange == AudioFocus.Loss && GlobalData.MediaPlayer.CurrentPosition > 10)
+                    MediaPlayerHelper.Stop();
+
+                if (focusChange == AudioFocus.LossTransientCanDuck)
+                    GlobalData.MediaPlayer.SetVolume(0.1f);
+
+                if (focusChange == AudioFocus.Gain)
+                    GlobalData.MediaPlayer.SetVolume(1f);
 
                 if (focusChange == AudioFocus.LossTransient)
-                    Global.MediaPlayer.SetVolume(0.1f);
-
-                if (focusChange > 0)
-                    Global.MediaPlayer.SetVolume(1f);
+                    MediaPlayerHelper.Pause();
             }
         }
     }

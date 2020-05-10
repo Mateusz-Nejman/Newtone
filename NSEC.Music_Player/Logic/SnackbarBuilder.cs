@@ -17,7 +17,7 @@ namespace NSEC.Music_Player.Logic
     {
         public static void Show(string text)
         {
-            Toast.MakeText(Global.Context, text, ToastLength.Short).Show();
+            Toast.MakeText(MainActivity.Instance, text, ToastLength.Short).Show();
         }
     }
 }

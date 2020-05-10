@@ -1,43 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
-             xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
+             xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.DownloadPage"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
-    <ContentPage.Content>
-        <Grid RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="48"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.TitleDownloads}" IsDownloadButton="False"/>
-            <StackLayout Grid.Row="1">
-                <Label Text="{x:Static localization:Localization.NoDownloads}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" x:Name="downloadLabel"
-                   FontSize="20" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Medium}"/>
-                <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
-                    <ListView x:Name="downloadList" VerticalOptions="FillAndExpand" RowHeight="32">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <custom:DownloadListViewCell/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </ScrollView>
-                
-            </StackLayout>
-            
-            <custom:PlayerPanel Grid.Row="2" HeightRequest="40"/>
-        </Grid>
-        
-    </ContentPage.Content>
-</ContentPage>
+             x:Class="NSEC.Music_Player.Views.DownloadPage">
+  <ContentView.Content>
+        <ListView x:Name="downloadListView" SelectionMode="Single" VerticalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <viewcells:DownloadViewCell/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentView.Content>
+</ContentView>

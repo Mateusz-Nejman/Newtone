@@ -22,7 +22,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="48"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Column="0"  Margin="10,0" VerticalOptions="Center" FontSize="24" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Black}" Text="{x:Static localization:Localization.Settings3}"/>
+                <Label Grid.Column="0"  Margin="10,0" VerticalOptions="Center" FontSize="24" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Black}" Text="{x:Static localization:Localization.Settings3}"/>
 
 
             </Grid>
@@ -38,17 +38,17 @@
                 </Grid.ColumnDefinitions>
 
                 <StackLayout x:Name="defaultTheme">
-                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDefault}"/>
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDefault}"/>
                     <Image Source="DefaultPreview.png" x:Name="defaultThemeImage"/>
                 </StackLayout>
 
                 <StackLayout Grid.Column="1" x:Name="lightTheme">
-                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeLight}"/>
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeLight}"/>
                     <Image Source="LightPreview.png" x:Name="lightThemeImage"/>
                 </StackLayout>
 
                 <StackLayout Grid.Row="1" x:Name="darkTheme">
-                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDark}"/>
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDark}"/>
                     <Image Source="DarkPreview.png" x:Name="darkThemeImage"/>
                 </StackLayout>
             </Grid>

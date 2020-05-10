@@ -10,8 +10,14 @@ using Android.Media;
 using Android.Net;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.Media;
+using Android.Support.V4.Media.Session;
+using Newtone.Core;
+using Newtone.Core.Loaders;
+using Newtone.Core.Logic;
+using Newtone.Core.Media;
+using Newtone.Core.Processing;
 using NSEC.Music_Player.Languages;
-using NSEC.Music_Player.Loaders;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Processing;
@@ -20,45 +26,30 @@ using Xamarin.Forms;
 
 namespace NSEC.Music_Player
 {
-    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Navigation | ConfigChanges.UiMode, MultiProcess = false, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
     [IntentFilter(new[] { Intent.ActionView}, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataSchemes = new[] { "file","content"}, DataMimeType = "audio/*")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public static MainActivity Instance { get; set; }
         public static bool Loaded = false;
         private bool backPressed = false;
-        private Intent backgroundIntent;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            
-            base.OnCreate(savedInstanceState);
-
-
-            Global.Context = this;
-
-            var customReceiver = new MediaPlayerReceiver();
-            var intentFilter = new IntentFilter();
-            intentFilter.AddAction("prev");
-            intentFilter.AddAction("next");
-            intentFilter.AddAction("play");
-            intentFilter.AddAction("pause");
-            intentFilter.AddAction("open");
-
-            intentFilter.AddAction("close");
-            RegisterReceiver(customReceiver, intentFilter);
-
+            Instance = this;
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            if (!Loaded)
-                InitializeGlobalVariables();
+            base.OnCreate(savedInstanceState);
 
-            Forms.Init(this, savedInstanceState);
-            FormsMaterial.Init(this, savedInstanceState);
-            ProcessNewIntent(Intent);
+            //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            InitializeGlobalVariables();
 
             LoadApplication(new App());
 
-            backgroundIntent = new Intent(this, typeof(BackgroundService));
+            Intent serviceIntent = new Intent(this, typeof(MediaPlayerService));
+            StartService(serviceIntent);
+
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -69,31 +60,21 @@ namespace NSEC.Music_Player
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            //Console.WriteLine("MainActivity Intent " + intent.Data.ToString());
-            Console.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
-            ProcessNewIntent(Intent);
+            //ConsoleDebug.WriteLine("MainActivity Intent " + intent.Data.ToString());
+            ConsoleDebug.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
+            ProcessNewIntent(intent);
         }
 
         protected override void OnResume()
         {
-            Console.WriteLine("MainActivity OnResume");
-            if(backgroundIntent != null)
-            StopService(backgroundIntent);
-            if (Loaded)
-            {
-
-                Task.Run(async () => {
-                    await GlobalLoader.Reload();
-                });
-
-            }
+            ConsoleDebug.WriteLine("MainActivity OnResume");
             base.OnResume();
         }
 
         public override void OnBackPressed()
         {
-            PlayerPage.Showed = false;
-            if (MainPage.NavigationInstance.NavigationStack.Count == 1 && MainPage.NavigationInstance.ModalStack.Count == 0)
+            Console.WriteLine("OnBackPressed " + NormalPage.NavigationInstance.NavigationStack.Count + " "+ NormalPage.NavigationInstance.ModalStack.Count);
+            if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)
             {
                 if (backPressed)
                     base.OnBackPressed();
@@ -115,14 +96,20 @@ namespace NSEC.Music_Player
 
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            Global.MediaBrowser.Connect();
+        }
+
         protected override void OnStop()
         {
-            Console.WriteLine("MainActivity OnStop");
-            if (Global.MediaPlayer != null && !Global.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
-                Process.KillProcess(Process.MyPid());
-
-            StartService(backgroundIntent);
             base.OnStop();
+            ConsoleDebug.WriteLine("MainActivity OnStop");
+            if (GlobalData.MediaPlayer != null && !GlobalData.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
+                Process.KillProcess(Process.MyPid());
+            MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
+            Global.MediaBrowser.Disconnect();
         }
 
         public void ForceRestart()
@@ -133,48 +120,69 @@ namespace NSEC.Music_Player
         private void InitializeGlobalVariables()
         {
 
+            //Global.PowerManager = (PowerManager)GetSystemService(PowerService);
+            Global.ConnectivityManager = (ConnectivityManager)GetSystemService(ConnectivityService);
             Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
-            Global.AudioManager = (AudioManager)GetSystemService(AudioService);
+            //Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
+            //Global.WakeLock.Acquire();
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                NotificationChannel notificationChannel = new NotificationChannel("nsec music_player notification", "NSEC Music Player", NotificationImportance.Default);
+                NotificationChannel notificationChannel = new NotificationChannel("newtone", "Newtone", NotificationImportance.Max);
                 notificationChannel.SetSound(null, null);
                 notificationChannel.SetVibrationPattern(new long[0]);
                 Global.NotificationManager.CreateNotificationChannel(notificationChannel);
+                Global.NotificationManager.CreateNotificationChannel(notificationChannel);
                 AudioFocusRequestClass afrc = new AudioFocusRequestClass.Builder(AudioFocus.GainTransient).SetOnAudioFocusChangeListener(new AudioFocusListener()).Build();
-                Global.AudioManager.RequestAudioFocus(afrc);
+                ((AudioManager)GetSystemService(AudioService)).RequestAudioFocus(afrc);
             }
             else
             {
 #pragma warning disable CS0618 // Typ lub składowa jest przestarzała
-                Global.AudioManager.RequestAudioFocus(new AudioFocusListener(), Android.Media.Stream.Music, AudioFocus.GainTransient);
+                ((AudioManager)GetSystemService(AudioService)).RequestAudioFocus(new AudioFocusListener(), Android.Media.Stream.Music, AudioFocus.GainTransient);
 #pragma warning restore CS0618 // Typ lub składowa jest przestarzała
             }
+            
+            
+            
+            Global.MetadataBuilder = new MediaMetadataCompat.Builder();
+            Global.StateBuilder = new PlaybackStateCompat.Builder();
+            Global.StateBuilder.SetActions(PlaybackStateCompat.ActionPlay | PlaybackStateCompat.ActionPlayPause | PlaybackStateCompat.ActionSkipToNext | PlaybackStateCompat.ActionSkipToPrevious | PlaybackStateCompat.ActionPause);
+            Global.ControllerCallback = new MediaControllerCallback();
+            Global.ConnectionCallback = new MediaBrowserConnectionCallback();
+            Global.AudioFocusListener = new AudioFocusListener();
+            Global.MediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, Java.Lang.Class.FromType(typeof(MediaPlayerService)).Name), Global.ConnectionCallback, null);
 
-            Global.PowerManager = (PowerManager)GetSystemService(PowerService);
-            Global.ConnectivityManager = (ConnectivityManager)GetSystemService(ConnectivityService);
-            Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
-            Global.WakeLock.Acquire();
-            Global.Audios = new Dictionary<string, Media.MediaSource>();
-            Global.Artists = new Dictionary<string, List<string>>();
-            Global.CurrentPlaylist = new List<Media.MediaSource>();
-            Global.PlaylistPosition = 0;
-            Global.CurrentQueue = new List<Media.MediaSource>();
-            Global.QueuePosition = 0;
-            Global.LastTracks = new Models.TrackCounter[0];
-            Global.MostTracks = new Models.TrackCounter[0];
-            Global.FavouritePlaylists = new Models.TrackCounter[0];
-            Global.Playlists = new Dictionary<string, List<string>>();
-            Global.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
-            Global.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
-            Global.PlayerMode = PlayerMode.All;
-            Global.LastPlayerClick = true;
-            Global.AudioTags = new Dictionary<string, Media.MediaSourceTag>();
-            Global.MediaPlayer = new CustomMediaPlayer();
-            Global.MediaPlayer.SetPlayerController(new LocalPlayerController());
-            Global.AudioFromIntent = false;
-            Global.History = new List<Models.HistoryModel>();
-            Global.PlaylistType = Media.MediaSource.SourceType.Local;
+            GlobalData.Artists = new Dictionary<string, List<string>>();
+            GlobalData.Audios = new Dictionary<string, Newtone.Core.Media.MediaSource>();
+            GlobalData.AudioTags = new Dictionary<string, MediaSourceTag>();
+            GlobalData.DownloadedIds = new List<string>();
+            GlobalData.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
+            GlobalData.CurrentQueue = new List<Newtone.Core.Media.MediaSource>();
+            GlobalData.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            GlobalData.LanguageUnknownArtist = Localization.UnknownArtist;
+            GlobalData.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+
+            //ConsoleDebug.WriteLine(GlobalData.DataPath);
+            //ConsoleDebug.WriteLine(GlobalData.MusicPath);
+
+            //Directory.CreateDirectory(GlobalData.DataPath);
+            //Directory.CreateDirectory(GlobalData.MusicPath);
+
+            GlobalData.History = new List<Newtone.Core.Models.HistoryModel>();
+            GlobalData.LastTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
+            GlobalData.MostTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
+
+            GlobalData.PlayerMode = PlayerMode.All;
+            GlobalData.Playlists = new Dictionary<string, List<string>>();
+            GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Local;
+            GlobalData.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
+            GlobalData.MediaPlayer.SetPlayerController(new LocalPlayerController());
+
+            GlobalData.ExcludedPaths = new List<string>();
+            GlobalData.IncludedPaths = new List<string>()
+            {
+                GlobalData.MusicPath
+            };
         }
 
         private void ProcessNewIntent(Intent intent)
@@ -183,22 +191,21 @@ namespace NSEC.Music_Player
 
             if (uri != null)
             {
-                Global.AudioFromIntent = true;
+                GlobalData.AudioFromIntent = true;
                 string filepath = HexToString(FilterUriString(uri.Path.Replace("/external_files", Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)));
 
                 if (File.Exists(filepath))
                 {
-                    Media.MediaSource source = MediaProcessing.GetSource(filepath);
+                    Newtone.Core.Media.MediaSource source = MediaProcessing.GetSource(filepath);
 
-                    if (Global.MediaPlayer != null)
-                        Global.MediaPlayer.Stop();
+                    if (GlobalData.MediaPlayer != null)
+                        GlobalData.MediaPlayer.Stop();
 
-                    Global.MediaSource = source;
-                    Global.PlaylistPosition = 0;
-                    Global.CurrentPlaylist = new List<Media.MediaSource>() { source };
-                    Global.MediaPlayer.Load(filepath);
-                    Global.MediaPlayer.Play();
-                    Global.MediaPlayer.SetNotification(source);
+                    GlobalData.MediaSource = source;
+                    GlobalData.PlaylistPosition = 0;
+                    GlobalData.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>() { source };
+                    GlobalData.MediaPlayer.Load(filepath);
+                    GlobalData.MediaPlayer.Play();
                 }
                 else
                 {

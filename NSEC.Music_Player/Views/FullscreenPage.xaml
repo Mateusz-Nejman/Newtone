@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
+             xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.FullScreenPage" BackgroundColor="{Static local:Colors.ColorPrimary}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid x:Name="backgroundGrid">
+                <Image Source="EmptyTrack.png" Aspect="AspectFill" x:Name="backgroundImage"/>
+                <Grid BackgroundColor="#99000000">
+
+                </Grid>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+
+                <Label Text="Tytuł" FontSize="16" FontFamily="{x:Static local:Fonts.Black}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0" x:Name="titleLabel"/>
+                <Label Text="Autor" Grid.Row="1" FontSize="16" FontFamily="{x:Static local:Fonts.Light}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0" x:Name="artistLabel"/>
+                <Image Source="EmptyTrack.png" Margin="16" Grid.Row="2" VerticalOptions="Fill" x:Name="trackImage" Aspect="AspectFit"/>
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="0:00" HorizontalOptions="Start" TextColor="{Static local:Colors.TextColor}" Margin="5,0,0,0" x:Name="timeCurrent"/>
+                    <Label Text="1:23" HorizontalOptions="End" Grid.Column="1" TextColor="{Static local:Colors.TextColor}" Margin="0,0,5,0" x:Name="timeMax"/>
+                </Grid>
+                <Grid Grid.Row="4" BackgroundColor="{Static local:Colors.ColorSecondary}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="15"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <custom:AudioSliderControl Margin="0,0,0,5" ThumbColor="Transparent" x:Name="audioSlider"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <images:CustomImageButton Source="RepeatIcon.png" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" x:Name="modeButton" Clicked="ModeButton_Clicked"/>
+                        </Grid>
+                        <images:CustomImageButton Source="PrevIcon.png" Grid.Column="1" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" Clicked="PrevButton_Clicked"/>
+                        <images:CustomImageButton Source="PlayIcon.png" Grid.Column="2" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" x:Name="playButton" Clicked="PlayButton_Clicked"/>
+                        <images:CustomImageButton Source="NextIcon.png" Grid.Column="3" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,0,0" Clicked="NextButton_Clicked"/>
+                        <Grid Grid.Column="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <images:CustomImageButton Grid.Column="1" Source="MenuIcon.png" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" x:Name="actionButton" Clicked="ActionButton_Clicked"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <images:CustomImageButton Source="ExpandIcon.png" Style="{StaticResource TransparentImageButton}" HorizontalOptions="Center" Clicked="ExpandButton_Clicked"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

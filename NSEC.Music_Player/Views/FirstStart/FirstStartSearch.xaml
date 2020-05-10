@@ -14,13 +14,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="48"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Margin="10" VerticalOptions="Center" FontSize="24" TextColor="{x:Static local:Colors.TextPrimary}" FontFamily="{x:Static local:Fonts.Black}" Text="{x:Static localization:Localization.SearchTip}"/>
+            <Label Grid.Row="0" Margin="10" VerticalOptions="Center" FontSize="24" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Black}" Text="{x:Static localization:Localization.SearchTip}"/>
             <Image Grid.Row="1" Source="SearchPreview.png"/>
 
             <Button Grid.Row="2" Margin="5" Text="{x:Static localization:Localization.Next}"
                         BackgroundColor="Transparent"
                             BorderColor="Black"
-                        TextColor="White" Clicked="Button_Clicked"/>
+                        TextColor="{Static local:Colors.TextColor}" Clicked="Button_Clicked"/>
         </Grid>
     </ContentView.Content>
 </ContentView>

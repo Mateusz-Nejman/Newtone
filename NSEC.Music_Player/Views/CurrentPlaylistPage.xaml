@@ -1,39 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
-             xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.CurrentPlaylistPage" BackgroundColor="{x:Static local:Colors.ContainerBackground}">
-    <ContentPage.Content>
-        <RelativeLayout>
-            <Image Source="EmptyTrack.png" Aspect="AspectFill"
-                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}"
-                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1}" x:Name="trackImage"/>
-
-            <Image Source="DarkerImage.png" Aspect="AspectFill" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1}"
-                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=1}" x:Name="darker"/>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Button BackgroundColor="Transparent" ImageSource="CollapseIcon.png" Clicked="Button_Clicked"/>
-                <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" Grid.Row="1">
-                    <StackLayout>
-                        <ListView x:Name="trackList" VerticalOptions="FillAndExpand" ItemSelected="TrackList_ItemSelected" RowHeight="74">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <custom:CurrentPlaylistViewCell/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                </ScrollView>
-            </Grid>
-        </RelativeLayout>
-    </ContentPage.Content>
-</ContentPage>
+             x:Class="NSEC.Music_Player.Views.CurrentPlaylistPage">
+  <ContentView.Content>
+        <ListView x:Name="trackListView" SelectionMode="Single" VerticalOptions="FillAndExpand" ItemSelected="TrackListView_ItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <viewcells:TrackViewCell/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentView.Content>
+</ContentView>

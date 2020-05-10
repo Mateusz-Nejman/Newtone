@@ -4,9 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
-             mc:Ignorable="d"
+                xmlns:views="clr-namespace:NSEC.Music_Player.Views"
+                mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.MainPage">
     <x:Arguments>
-        <custom:BottomTabPage/>
+        <views:NormalPage/>
     </x:Arguments>
 </NavigationPage>

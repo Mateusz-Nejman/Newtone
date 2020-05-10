@@ -9,7 +9,7 @@ namespace NSEC.Music_Player
     public class Colors
     {
         private static ColorsBase ColorsBase = new ColorsDefault();
-        
+
         public static Color ColorPrimary
         {
             get
@@ -26,107 +26,27 @@ namespace NSEC.Music_Player
             }
         }
 
-        public static Color ColorThirdary
+        public static Color TextColor
         {
             get
             {
-                return ColorsBase.ColorThirdary;
+                return ColorsBase.TextColor;
             }
         }
 
-        public static Color ColorBadge
+        public static Color BadgeColor
         {
             get
             {
-                return ColorsBase.ColorBadge;
+                return ColorsBase.BadgeColor;
             }
         }
 
-        public static Color TextPrimary
+        public static Color ProgressBarColor
         {
             get
             {
-                return ColorsBase.TextPrimary;
-            }
-        }
-
-        public static Color TextSecondary
-        {
-            get
-            {
-                return ColorsBase.TextSecondary;
-            }
-        }
-
-        public static Color BottomBarBackground
-        {
-            get
-            {
-                return ColorsBase.BottomBarBackground;
-            }
-        }
-
-        public static Color BottomBarUnselected
-        {
-            get
-            {
-                return ColorsBase.BottomBarUnselected;
-            }
-        }
-
-        public static Color BottomBarSelected
-        {
-            get
-            {
-                return ColorsBase.BottomBarSelected;
-            }
-        }
-
-        public static Color ContainerBackground
-        {
-            get
-            {
-                return ColorsBase.ContainerBackground;
-            }
-        }
-
-        public static Color ContainerBackgroundSecond
-        {
-            get
-            {
-                return ColorsBase.ContainerBackgroundSecond;
-            }
-        }
-
-        public static Color ContainerHeaderColor
-        {
-            get
-            {
-                return ColorsBase.ContainerHeaderColor;
-            }
-        }
-
-        public static Color ContainerTextColor
-        {
-            get
-            {
-                return ColorsBase.ContainerTextColor;
-            }
-        }
-
-        public static Color PlayerTextColor
-        {
-            get
-            {
-                return ColorsBase.PlayerTextColor;
-            }
-        }
-
-        public static Color IconColor
-        {
-            get
-            {
-                return ColorsBase.IconColor;
+                return ColorsBase.ProgressBarColor;
             }
         }
 
@@ -134,7 +54,7 @@ namespace NSEC.Music_Player
         {
             ColorsBase = new ColorsDefault();
             if (name == "Light")
-                ColorsBase = new ColorsLight();
+                ColorsBase = new ColorsRed();
             else if (name == "Dark")
                 ColorsBase = new ColorsDark();
             else
@@ -142,21 +62,15 @@ namespace NSEC.Music_Player
         }
     }
 
-    public class ColorsLight : ColorsBase
+    public class ColorsRed : ColorsBase
     {
-        public ColorsLight()
+        public ColorsRed()
         {
-            this.ColorPrimary = Color.White;
-            this.ColorSecondary = Color.FromHex("#FAFAFA");
-            this.ContainerBackground = this.ColorSecondary;
-
-            this.BottomBarBackground = this.ColorPrimary;
-            this.BottomBarSelected = Color.FromHex("#cd5900");
-            this.BottomBarUnselected = Color.FromHex("#263238");
-            this.ContainerHeaderColor = Color.FromHex("#263238");
-            this.TextPrimary = Color.Black;
-            this.ContainerTextColor = Color.FromHex("#263238");
-            this.IconColor = Color.Black;
+            this.ColorPrimary = Color.FromHex("#9a1f40");
+            this.ColorSecondary = Color.FromHex("#d9455f");
+            this.TextColor = Color.FromHex("#ffffff");
+            this.BadgeColor = Color.FromHex("#ff5200");
+            this.ProgressBarColor = Color.FromHex("#0f4c75");
         }
     }
 
@@ -164,14 +78,11 @@ namespace NSEC.Music_Player
     {
         public ColorsDark()
         {
-            this.ColorPrimary = Color.FromHex("#424242");
-            this.ColorSecondary = Color.FromHex("#212121");
-
-            this.ContainerBackground = this.ColorSecondary;
-
-            this.BottomBarBackground = this.ColorPrimary;
-            this.BottomBarUnselected = this.ColorPrimary;
-            this.BottomBarSelected = Color.White;
+            this.ColorPrimary = Color.FromHex("#121212");
+            this.ColorSecondary = Color.FromHex("#1f1f1f");
+            this.TextColor = Color.FromHex("#ffffff");
+            this.BadgeColor = Color.FromHex("#ff5200");
+            this.ProgressBarColor = Color.FromHex("#0f4c75");
         }
     }
 
@@ -182,23 +93,11 @@ namespace NSEC.Music_Player
 
     public abstract class ColorsBase
     {
-        public Color ColorPrimary = Color.FromHex("#0083b4");
-        public Color ColorSecondary = Color.FromHex("#006f99");
-        public Color ColorThirdary = Color.FromHex("#0c4297");
-        public Color ColorBadge = Color.FromHex("#FF6F00");
-        public Color TextPrimary = Color.White;
-        public Color TextSecondary = Color.FromHex("#FF6F00");
-
-        public Color BottomBarBackground = Color.FromHex("#FAFAFA");
-        public Color BottomBarUnselected = Color.FromHex("#263238");
-        public Color BottomBarSelected = Color.FromHex("#004a66");
-
-        public Color ContainerBackground = Color.FromHex("#006f99");
-        public Color ContainerBackgroundSecond = Color.White;
-        public Color ContainerHeaderColor = Color.FromHex("#FAFAFA");
-        public Color ContainerTextColor = Color.FromHex("#FAFAFA");
-
-        public Color PlayerTextColor = Color.White;
-        public Color IconColor = Color.White;
+        public Color ColorPrimary = Color.FromHex("#1b262c");
+        public Color ColorSecondary = Color.FromHex("#0f4c75");
+        public Color TextColor = Color.FromHex("#ffffff");
+        public Color BadgeColor = Color.FromHex("#ff5200");
+        public Color ProgressBarColor = Color.FromHex("#3282b8");
     }
+
 }

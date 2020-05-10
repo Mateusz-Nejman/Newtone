@@ -7,6 +7,7 @@ using Android;
 using System.Threading.Tasks;
 using System.IO;
 using NSEC.Music_Player.Views;
+using Newtone.Core;
 
 namespace NSEC.Music_Player
 {
@@ -17,9 +18,9 @@ namespace NSEC.Music_Player
         {
             InitializeComponent();
             Instance = this;
-            if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(Global.DataPath + "/newtone.nsec2"))
+            if (ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(GlobalData.DataPath + "/newtone.nsec2"))
             {
-                string theme = Global.LoadFirstStart();
+                string theme = GlobalData.LoadFirstStart();
                 if(theme == null)
                 {
                     MainPage = new FirstStartPage();
@@ -27,7 +28,7 @@ namespace NSEC.Music_Player
                 else
                 {
                     Colors.SetBase(theme);
-                    MainPage = new MainPage();
+                    MainPage = new NormalPage();
                 }
                 
             }

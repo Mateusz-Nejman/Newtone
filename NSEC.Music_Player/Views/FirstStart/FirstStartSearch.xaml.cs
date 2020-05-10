@@ -21,7 +21,7 @@ namespace NSEC.Music_Player.Views.FirstStart
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-            App.Instance.MainPage = new MainPage();
+            App.Instance.MainPage = new NormalPage();
             Task.Run(async () => {
                 await PopToRootAsync();
             }).Wait();

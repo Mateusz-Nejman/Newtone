@@ -22,7 +22,7 @@
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=0.0,Constant=144}" 
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1.0}">
                 <StackLayout Orientation="Vertical" Padding="16,40,16,40" Spacing="10">
-                    <Label FontSize="22" TextColor="White">
+                    <Label FontSize="22" TextColor="{Static local:Colors.TextColor}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <FormattedString.Spans>
@@ -35,7 +35,7 @@
                         Clicked="Button_Clicked"
                         BackgroundColor="Transparent"
                             BorderColor="Black"
-                        TextColor="White" x:Name="buttonGrant"/>
+                        TextColor="{Static local:Colors.TextColor}" x:Name="buttonGrant"/>
                 </StackLayout>
             </ScrollView>
 

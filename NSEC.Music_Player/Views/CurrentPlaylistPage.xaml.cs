@@ -1,4 +1,7 @@
-﻿using NSEC.Music_Player.Models;
+﻿using Newtone.Core;
+using Newtone.Core.Logic;
+using NSEC.Music_Player.Media;
+using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,36 +15,42 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CurrentPlaylistPage : ContentPage
+    public partial class CurrentPlaylistPage : ContentView, ITimerContent
     {
-        private ObservableCollection<TrackListModel> Items { get; set; }
-        private PlayerPage PlayerPage { get; set; }
-        public CurrentPlaylistPage(ImageSource currentBackground, PlayerPage playerPage)
+        private ObservableCollection<TrackModel> TrackItems { get; set; }
+        public CurrentPlaylistPage()
         {
             InitializeComponent();
-            PlayerPage = playerPage;
-            trackImage.Source = currentBackground;
-            trackList.ItemsSource = Items = new ObservableCollection<TrackListModel>();
-
-            new Task(() =>
+            trackListView.ItemsSource = TrackItems = new ObservableCollection<TrackModel>();
+            foreach (var track in GlobalData.CurrentPlaylist)
             {
-                foreach (Media.MediaSource source in Global.CurrentPlaylist)
-                {
-                    Items.Add(source);
-                }
-            }).Start();
-            
+                TrackItems.Add(new TrackModel(track, "", false));
+            }
         }
 
-        private void TrackList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        public void Tick()
         {
-            PlayerPage.ChangeTrack(e.SelectedItemIndex);
-            Navigation.PopModalAsync();
+            foreach (var model in TrackItems.ToList())
+            {
+                model.CheckChanges();
+            }
+
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void TrackListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            Navigation.PopModalAsync();
+            int index = e.SelectedItemIndex;
+
+            if (index >= 0 && index < TrackItems.Count)
+            {
+                var model = TrackItems[index];
+
+                GlobalData.MediaSource = GlobalData.CurrentPlaylist[index];
+                GlobalData.PlaylistPosition = index;
+                GlobalData.MediaPlayer.Load(model.FilePath);
+                MediaPlayerHelper.Play();
+                trackListView.SelectedItem = null;
+            }
         }
     }
 }

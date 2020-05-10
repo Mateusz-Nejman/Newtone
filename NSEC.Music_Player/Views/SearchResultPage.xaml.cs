@@ -1,10 +1,12 @@
-﻿using NSEC.Music_Player.Media;
+﻿using Newtone.Core;
+using Newtone.Core.Logic;
+using Newtone.Core.Media;
+using Newtone.Core.Processing;
+using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
-using NSEC.Music_Player.Processing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,96 +14,122 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using YoutubeExplode;
 
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SearchResultPage : ContentPage
+    public partial class SearchResultPage : ContentView
     {
         private ObservableCollection<SearchResultModel> Items { get; set; }
-        private bool stopTimer = false;
-        public SearchResultPage(string searchText)
+        private ObservableBridge<Newtone.Core.Models.SearchResultModel> RawItems { get; set; }
+        public SearchResultPage(string searchedText)
         {
             InitializeComponent();
-            searchResultView.ItemsSource = Items = new ObservableCollection<SearchResultModel>();
-            titleView.Title = searchText;
-            Disappearing += SearchResultPage_Disappearing;
 
-            Device.StartTimer(TimeSpan.FromMilliseconds(300), Refresh);
-
-            Task.Run(async () => 
+            searchListView.ItemsSource = Items = new ObservableCollection<SearchResultModel>();
+            RawItems = new ObservableBridge<Newtone.Core.Models.SearchResultModel>
             {
-                Items.Clear();
-                await DownloadProcessing.GetDownloadInterface("https://youtube.com").Search(searchText, Items);
-                using WebClient webClient = new WebClient();
+                Action = model => Items.Add(new SearchResultModel(model))
+            };
+
+            Task.Run(async () =>
+            {
+                //ConsoleDebug.WriteLine("Start task");
+                //Items.Clear();
+                //RawItems.Clear();
+                //ConsoleDebug.WriteLine("await");
+                await SearchProcessing.Search(searchedText, RawItems);
+                //ConsoleDebug.WriteLine("Searched");
+
                 for (int a = 0; a < Items.Count; a++)
                 {
-                    try
-                    {
-                        byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
-                        Items[a].Picture = ImageSource.FromStream(() => new MemoryStream(data));
-                        Items[a].ImageData = data;
-                    }
-                    catch
-                    {
+                    using WebClient webClient = new WebClient();
 
-                    }
+                    byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
+                    //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
+                    Items[a].Image = data;
+                    Items[a].CheckChanges();
                 }
             });
         }
 
-        private void SearchResultPage_Disappearing(object sender, EventArgs e)
+        private void SearchListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            stopTimer = true;
-        }
+            int index = e.SelectedItemIndex;
 
-        private bool Refresh()
-        {
-            searchLabel.IsVisible = Items.Count == 0;
-            return !stopTimer;
-        }
-        private void SearchResultView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            if(e.SelectedItem != null)
+            if(index >= 0 && index < Items.Count)
             {
-                SearchResultModel model = Items[e.SelectedItemIndex];
+                var item = Items[index];
 
-                List<Media.MediaSource> playlist = new List<Media.MediaSource>();
-
-                foreach (SearchResultModel listModel in Items)
-                    playlist.Add((Media.MediaSource)listModel);
-
-                if (model.MixId == null || model.MixId == "")
+                if(string.IsNullOrEmpty(item.MixId))
                 {
-                    Media.MediaSource source = new Media.MediaSource()
+                    GlobalData.PlaylistPosition = index;
+                    GlobalData.CurrentPlaylist.Clear();
+                    GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Web;
+                    foreach(var _item in Items)
                     {
-                        Artist = model.Author,
-                        Duration = model.Duration,
-                        ImageSource = model.Picture,
-                        Picture = model.ImageData,
-                        Title = model.Title,
-                        Type = Media.MediaSource.SourceType.Web,
-                        FilePath = model.Id
+                        GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                        {
+                            Artist = _item.Author,
+                            Duration = _item.Duration,
+                            FilePath = _item.Id,
+                            Image = _item.Image,
+                            Title = _item.Title,
+                            Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                        });
+                    }
 
-                    };
-                    
-                    Global.PlaylistType = Media.MediaSource.SourceType.Web;
-                    Console.WriteLine("Play " + model.Title);
-                    Navigation.PushModalAsync(new PlayerPage(source, playlist, e.SelectedItemIndex));
+                    GlobalData.MediaSource = GlobalData.CurrentPlaylist[index];
+                    GlobalData.MediaPlayer.SetPlayerController(new WebPlayerController());
+                    GlobalData.MediaPlayer.Load(GlobalData.MediaSource.FilePath);
+                    MediaPlayerHelper.Play();
                 }
                 else
                 {
-                    Global.PlaylistType = Media.MediaSource.SourceType.Web;
-                    Console.WriteLine("Play " + model.Title);
-                    
-                    Navigation.PushModalAsync(new PlayerPage(model));
+                    GlobalData.PlaylistPosition = 0;
+                    GlobalData.CurrentPlaylist.Clear();
+                    GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Web;
+
+                    GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                    {
+                        Artist = item.Author,
+                        Duration = item.Duration,
+                        FilePath = item.Id,
+                        Image = item.Image,
+                        Title = item.Title,
+                        Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                    });
+
+
+                    GlobalData.MediaSource = GlobalData.CurrentPlaylist[0];
+                    GlobalData.MediaPlayer.SetPlayerController(new WebPlayerController());
+                    GlobalData.MediaPlayer.Load(GlobalData.MediaSource.FilePath);
+                    MediaPlayerHelper.Play();
+
+                    Task.Run(async () =>
+                    {
+                        YoutubeClient youtubeClient = new YoutubeClient();
+                        var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).BufferAsync(20);
+
+                        using WebClient client = new WebClient();
+                        foreach (var _item in playlist)
+                        {
+                            byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
+                            GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                            {
+                                Artist = _item.Author,
+                                Duration = _item.Duration,
+                                FilePath = _item.Id,
+                                Image = data,
+                                Title = _item.Title,
+                                Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                            });
+                        }
+                    });
                 }
-               
-
-                searchResultView.SelectedItem = null;
-
+                searchListView.SelectedItem = null;
             }
-            
         }
     }
 }

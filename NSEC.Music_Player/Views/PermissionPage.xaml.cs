@@ -1,5 +1,7 @@
 ﻿using Android;
 using Android.Support.V4.App;
+using Newtone.Core;
+using Newtone.Core.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +25,17 @@ namespace NSEC.Music_Player.Views
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-            ActivityCompat.RequestPermissions(Global.Context, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
+            ActivityCompat.RequestPermissions(MainActivity.Instance, new string[] { Manifest.Permission.WriteExternalStorage }, 1);
         }
 
         private bool Check()
         {
-            Console.WriteLine("PermissionPage " + ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage).ToString());
-            if (ActivityCompat.CheckSelfPermission(Global.Context, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
+            ConsoleDebug.WriteLine("PermissionPage " + ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage).ToString());
+            if (ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
             {
-                Global.SaveConfig();
+                GlobalData.SaveConfig();
 
-                string theme = Global.LoadFirstStart();
+                string theme = GlobalData.LoadFirstStart();
                 if(theme == null)
                 {
                     App.Instance.MainPage = new FirstStartPage();
@@ -41,7 +43,7 @@ namespace NSEC.Music_Player.Views
                 else
                 {
                     Colors.SetBase(theme);
-                    App.Instance.MainPage = new MainPage();
+                    App.Instance.MainPage = new NormalPage();
                     Task.Run(async () => {
                         await PopToRootAsync();
                     }).Wait();

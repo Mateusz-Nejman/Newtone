@@ -1,0 +1,106 @@
+﻿using Microsoft.Win32;
+using Newtone.Core;
+using Newtone.Core.Loaders;
+using Newtone.Core.Media;
+using Newtone.Desktop.Processing;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace Newtone.Desktop.Views
+{
+    /// <summary>
+    /// Logika interakcji dla klasy EditWindow.xaml
+    /// </summary>
+    public partial class EditWindow : Window
+    {
+        private string FilePath { get; set; }
+        private bool IsImage {
+            get
+            {
+                return Image != null && Image.Length > 0;
+            }
+        }
+        private byte[] Image { get; set; }
+        public byte[] NewImage { get; private set; }
+        public static bool AfterEdit { get; set; }
+        public EditWindow(string filePath)
+        {
+            InitializeComponent();
+
+            FilePath = filePath;
+            MediaSource source = GlobalData.Audios[filePath];
+            artistBox.Text = source.Artist;
+            titleBox.Text = source.Title;
+            AfterEdit = false;
+            if(source.Image != null && source.Image.Length > 0)
+            {
+                Image = source.Image;
+                image.Source = ImageProcessing.FromArray(source.Image);
+            }
+
+        }
+
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if(!string.IsNullOrWhiteSpace(artistBox.Text) && !string.IsNullOrWhiteSpace(titleBox.Text))
+            {
+                MediaSource newSource = GlobalData.Audios[FilePath].Clone();
+                newSource.Title = titleBox.Text;
+                newSource.Artist = artistBox.Text;
+                if (NewImage != null && NewImage.Length > 0)
+                    newSource.Image = NewImage;
+                GlobalLoader.ChangeTrack(GlobalData.Audios[FilePath], newSource);
+                AfterEdit = true;
+                this.Close();
+            }
+            
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "PNG (*.png)|*.png"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    ImageSource test = ImageProcessing.FromArray(File.ReadAllBytes(openFileDialog.FileName));
+
+                    NewImage = File.ReadAllBytes(openFileDialog.FileName);
+
+                    image.Source = test;
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+           if(IsImage)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "PNG (*.png)|*.png"
+                };
+                if (saveFileDialog.ShowDialog(MainWindow.Instance) == true)
+                    File.WriteAllBytes(saveFileDialog.FileName+".png", Image);
+            }
+        }
+    }
+}

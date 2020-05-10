@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ArtistIcon.png" />
+    <None Remove="Resources\BackIcon.png" />
+    <None Remove="Resources\CollapseIcon.png" />
+    <None Remove="Resources\DownloadIcon.png" />
+    <None Remove="Resources\DownloadPageIcon.png" />
+    <None Remove="Resources\EmptyTrack.png" />
+    <None Remove="Resources\ExpandIcon.png" />
+    <None Remove="Resources\Fonts\Roboto-Black.ttf" />
+    <None Remove="Resources\Fonts\Roboto-Bold.ttf" />
+    <None Remove="Resources\Fonts\Roboto-Light.ttf" />
+    <None Remove="Resources\Fonts\Roboto-Medium.ttf" />
+    <None Remove="Resources\Fonts\Roboto-Regular.ttf" />
+    <None Remove="Resources\Fonts\Roboto-Thin.ttf" />
+    <None Remove="Resources\HomeIcon.png" />
+    <None Remove="Resources\MenuIcon.png" />
+    <None Remove="Resources\NextIcon.png" />
+    <None Remove="Resources\PauseIcon.png" />
+    <None Remove="Resources\PlayIcon.png" />
+    <None Remove="Resources\PlaylistIcon.png" />
+    <None Remove="Resources\PrevIcon.png" />
+    <None Remove="Resources\RandomIcon.png" />
+    <None Remove="Resources\RepeatIcon.png" />
+    <None Remove="Resources\RepeatOneIcon.png" />
+    <None Remove="Resources\SearchIcon.png" />
+    <None Remove="Resources\SettingsIcon.png" />
+    <None Remove="Resources\StopIcon.png" />
+    <None Remove="Resources\TrackIcon.png" />
+    <None Remove="Resources\VolumeDownIcon.png" />
+    <None Remove="Resources\VolumeIcon.png" />
+    <None Remove="Resources\VolumeUpIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="1.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Newtone.Core\Newtone.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ArtistIcon.png" />
+    <Resource Include="Resources\BackIcon.png" />
+    <Resource Include="Resources\CollapseIcon.png" />
+    <Resource Include="Resources\DownloadIcon.png" />
+    <Resource Include="Resources\DownloadPageIcon.png" />
+    <Resource Include="Resources\EmptyTrack.png" />
+    <Resource Include="Resources\ExpandIcon.png" />
+    <Resource Include="Resources\Fonts\Roboto-Black.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Bold.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Light.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Medium.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Roboto-Thin.ttf" />
+    <Resource Include="Resources\HomeIcon.png" />
+    <Resource Include="Resources\MenuIcon.png" />
+    <Resource Include="Resources\NextIcon.png" />
+    <Resource Include="Resources\PauseIcon.png" />
+    <Resource Include="Resources\PlayIcon.png" />
+    <Resource Include="Resources\PlaylistIcon.png" />
+    <Resource Include="Resources\PrevIcon.png" />
+    <Resource Include="Resources\RandomIcon.png" />
+    <Resource Include="Resources\RepeatIcon.png" />
+    <Resource Include="Resources\RepeatOneIcon.png" />
+    <Resource Include="Resources\SearchIcon.png" />
+    <Resource Include="Resources\SettingsIcon.png" />
+    <Resource Include="Resources\StopIcon.png" />
+    <Resource Include="Resources\TrackIcon.png" />
+    <Resource Include="Resources\VolumeDownIcon.png" />
+    <Resource Include="Resources\VolumeIcon.png" />
+    <Resource Include="Resources\VolumeUpIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

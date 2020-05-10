@@ -3,28 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
              xmlns:local="clr-namespace:NSEC.Music_Player"
              xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
-             mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.SearchPage"
-             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
+             x:Class="NSEC.Music_Player.Views.SearchPage">
   <ContentView.Content>
-      <StackLayout Orientation="Vertical" Padding="5">
+        <StackLayout Orientation="Vertical" Padding="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="38"/>
                 </Grid.ColumnDefinitions>
-                <Entry Grid.Column="0" Placeholder="{x:Static localization:Localization.Search}" PlaceholderColor="{x:Static local:Colors.ContainerTextColor}" TextColor="{x:Static local:Colors.ContainerTextColor}" Completed="Entry_Completed" x:Name="searchEntry"/>
-                <Image Source="YoutubeIcon.png" Grid.Column="1" WidthRequest="32" HeightRequest="32" HorizontalOptions="Center"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42"/>
+                </Grid.RowDefinitions>
+                <Entry Grid.Column="0" Placeholder="{x:Static localization:Localization.Search}" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" Completed="SearchEntry_Completed" x:Name="searchEntry"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="{x:Static localization:Localization.SearchHistory}" FontSize="14" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
-                <Label Grid.Column="1" Text="{x:Static localization:Localization.Clear}" Margin="0,0,8,0" FontSize="14" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Light}" x:Name="clearLabel"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42"/>
+                </Grid.RowDefinitions>
+                <Label Text="{x:Static localization:Localization.SearchHistory}" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                <Label Grid.Column="1" Text="{x:Static localization:Localization.Clear}" Margin="0,0,8,0" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}" x:Name="clearLabel"/>
             </Grid>
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
                 <ListView VerticalOptions="FillAndExpand" x:Name="historyList"
@@ -34,11 +37,9 @@
                             <ViewCell>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="32"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Picture}" WidthRequest="32" HeightRequest="32"/>
-                                    <Label Text="{Binding Text}" Grid.Column="1" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.ContainerTextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                                    <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
@@ -46,5 +47,5 @@
                 </ListView>
             </ScrollView>
         </StackLayout>
-  </ContentView.Content>
+    </ContentView.Content>
 </ContentView>

@@ -1,7 +1,8 @@
-﻿using NSEC.Music_Player.Languages;
+﻿using Newtone.Core;
+using Newtone.Core.Media;
+using Newtone.Core.Models;
+using NSEC.Music_Player.Languages;
 using NSEC.Music_Player.Logic;
-using NSEC.Music_Player.Media;
-using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.Custom;
 using System;
 using System.Collections.Generic;
@@ -17,76 +18,74 @@ using Xamarin.Forms.Xaml;
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SettingsPage : ContentPage
+    public partial class SettingsPage : ContentView
     {
-        private ObservableCollection<SettingsListModel> Items { get; set; }
+        private ObservableCollection<SettingsModel> Items { get; set; }
         public SettingsPage()
         {
             InitializeComponent();
-            settingsList.ItemsSource = Items = new ObservableCollection<SettingsListModel>();
-            Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
-            Appearing += SettingsPage_Appearing;
-        }
 
-        private void SettingsPage_Appearing(object sender, EventArgs e)
-        {
-            Items.Clear();
-            Items.Add(new SettingsListModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsListModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
+            settingsList.ItemsSource = Items = new ObservableCollection<SettingsModel>();
+            Items.Add(new SettingsModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
+            Items.Add(new SettingsModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
+            Items.Add(new SettingsModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
+
         }
 
         private void SettingsList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if(e.SelectedItemIndex > 0 && e.SelectedItem != null)
+            int index = e.SelectedItemIndex;
+
+            if(index >= 0 && index < Items.Count)
             {
-                if(e.SelectedItemIndex == 0)
+                if (e.SelectedItemIndex > 0 && e.SelectedItem != null)
                 {
-                    foreach (string filepath in Global.Audios.Keys)
+                    if (e.SelectedItemIndex == 0)
                     {
-
-                        if (!Global.AudioTags.ContainsKey(filepath))
+                        foreach (string filepath in GlobalData.Audios.Keys)
                         {
-                            Media.MediaSource tag = Global.Audios[filepath];
-                            if (tag.Artist == Localization.UnknownArtist)
+
+                            if (!GlobalData.AudioTags.ContainsKey(filepath))
                             {
-                                FileInfo fileInfo = new FileInfo(filepath);
+                                var tag = GlobalData.Audios[filepath];
+                                if (tag.Artist == Localization.UnknownArtist)
+                                {
+                                    FileInfo fileInfo = new FileInfo(filepath);
 
-                                string name = fileInfo.Name.Replace(fileInfo.Extension, "");
-                                string[] splitted = name.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
+                                    string name = fileInfo.Name.Replace(fileInfo.Extension, "");
+                                    string[] splitted = name.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
 
-                                string artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
-                                string title = splitted[splitted.Length == 1 ? 0 : 1];
-                                Global.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title});
+                                    string artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
+                                    string title = splitted[splitted.Length == 1 ? 0 : 1];
+                                    GlobalData.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
+                                }
                             }
                         }
+                        GlobalData.SaveTags();
+                        SnackbarBuilder.Show(Localization.Ready);
                     }
-                    Global.SaveTags();
-                    SnackbarBuilder.Show(Localization.Ready);
-                }
-                else if(e.SelectedItemIndex == 1)
-                {
-                    string[] files = Directory.GetFiles(Global.DataPath, "*.nsec2");
-
-                    foreach(string file in files)
+                    else if (e.SelectedItemIndex == 1)
                     {
-                        File.Delete(file);
-                    }
+                        string[] files = Directory.GetFiles(GlobalData.DataPath, "*.nsec2");
 
-                    SnackbarBuilder.Show(Localization.Ready);
-                }
-                else if(e.SelectedItemIndex == 2)
-                {
-                    PopupMenu popup = new PopupMenu(Global.Context, forSender, Localization.ThemeDefault, Localization.ThemeLight, Localization.ThemeDark);
-                    popup.OnSelect += Menu_OnItemSelected;
-                    popup.Show();
+                        foreach (string file in files)
+                        {
+                            File.Delete(file);
+                        }
+
+                        SnackbarBuilder.Show(Localization.Ready);
+                    }
+                    else if (e.SelectedItemIndex == 2)
+                    {
+                        PopupMenu popup = new PopupMenu(MainActivity.Instance, (View)sender, Localization.ThemeDefault, Localization.ThemeLight, Localization.ThemeDark);
+                        popup.OnSelect += Menu_OnItemSelected;
+                        popup.Show();
+                    }
+                    settingsList.SelectedItem = null;
                 }
                 settingsList.SelectedItem = null;
             }
         }
-
 
         private void Menu_OnItemSelected(string item)
         {
@@ -101,7 +100,7 @@ namespace NSEC.Music_Player.Views
 
         private void ChangeTheme(string theme)
         {
-            Global.SaveFirstStart(theme);
+            GlobalData.SaveFirstStart(theme);
             SnackbarBuilder.Show(Localization.SettingsChanges);
         }
     }

@@ -1,38 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
-             xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
+             xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.SearchResultPage"
-             NavigationPage.HasBackButton="False"
-             BackgroundColor="{x:Static local:Colors.ContainerBackground}" NavigationPage.HasNavigationBar="False">
-    <ContentPage.Content>
-        <Grid RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="48"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Search}" x:Name="titleView"/>
-            <Label Text="{x:Static localization:Localization.Searching}" x:Name="searchLabel" HorizontalOptions="Center" TextColor="{x:Static local:Colors.ContainerHeaderColor}" FontFamily="{x:Static local:Fonts.Medium}" FontSize="20" Grid.Row="1"/>
-            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" Grid.Row="1">
-                <ListView x:Name="searchResultView" VerticalOptions="FillAndExpand" RowHeight="72" ItemSelected="SearchResultView_ItemSelected" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <custom:StreamViewCell/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollView>
-            <custom:PlayerPanel Grid.Row="2" HeightRequest="40"/>
-        </Grid>
-        
-    </ContentPage.Content>
-</ContentPage>
+             x:Class="NSEC.Music_Player.Views.SearchResultPage">
+  <ContentView.Content>
+        <ListView x:Name="searchListView" SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <viewcells:SearchResultViewCell/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentView.Content>
+</ContentView>

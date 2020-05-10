@@ -511,7 +511,7 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Jasny.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Różowy.
         /// </summary>
         internal static string ThemeLight {
             get {

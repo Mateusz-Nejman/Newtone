@@ -10,45 +10,57 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using NSEC.Music_Player.Logic;
+using NSEC.Music_Player.Processing;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
 {
-    public class SearchResultModel : INotifyPropertyChanged
+    public class SearchResultModel : Newtone.Core.Models.SearchResultModel, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public bool Youtube { get; set; }
-        public string Id { get; set; }
-        public string MixId { get; set; }
-        private ImageSource picture;
-        public ImageSource Picture
+        private ImageSource thumb;
+
+        public ImageSource Thumb
         {
             get
             {
-                return picture;
+                if (thumb == null && Image != null)
+                {
+                    thumb = ImageProcessing.FromArray(Image);
+                    OnPropertyChanged("Thumb");
+                }
+                return thumb;
             }
             set
             {
-                picture = value;
-                OnPopertyChanged("Picture");
-            }
-        }
-        public byte[] ImageData { get; set; }
-        public double Duration { get; set; }
-        public string ThumbUrl { get; set; }
-        public string DurationString
-        {
-            get
-            {
-                return TickParser.FormatTick(Duration);
+                if (thumb != value)
+                {
+                    thumb = value;
+                    OnPropertyChanged("Thumb");
+                }
             }
         }
 
-        public string VideoData { get; set; }
-        void OnPopertyChanged(string propertyName)
+        public SearchResultModel(Newtone.Core.Models.SearchResultModel model)
+        {
+            this.Author = model.Author;
+            this.Duration = model.Duration;
+            this.Id = model.Id;
+            this.Image = model.Image;
+            this.MixId = model.MixId;
+            this.ThumbUrl = model.ThumbUrl;
+            this.Title = model.Title;
+            this.VideoData = model.VideoData;
+        }
+
+        public void CheckChanges()
+        {
+            var thumb = Thumb;
+            thumb.GetType(); //WTF
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

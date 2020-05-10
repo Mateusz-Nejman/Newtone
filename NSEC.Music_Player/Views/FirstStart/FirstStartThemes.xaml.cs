@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtone.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +51,7 @@ namespace NSEC.Music_Player.Views.FirstStart
 
         private void SetTheme(string theme)
         {
-            Global.SaveFirstStart(theme);
+            GlobalData.SaveFirstStart(theme);
             Colors.SetBase(theme);
             Page.SetPage(new FirstStartSearch(Page));
         }

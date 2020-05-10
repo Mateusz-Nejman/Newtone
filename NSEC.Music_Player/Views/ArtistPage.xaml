@@ -1,33 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
-             xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
              mc:Ignorable="d"
-             x:Class="NSEC.Music_Player.Views.ArtistPage"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="{x:Static local:Colors.ContainerBackground}">
-    <ContentPage.Content>
-        <Grid RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="48"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+             x:Class="NSEC.Music_Player.Views.ArtistPage">
+  <ContentView.Content>
+        <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical">
+            <StackLayout x:Name="trackGrid" VerticalOptions="FillAndExpand" Spacing="0">
 
-            <custom:CustomTitleView IsBackButton="True" Title="{x:Static localization:Localization.Artists}"/>
-            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Orientation="Vertical" Grid.Row="1">
-                <StackLayout x:Name="trackGrid" VerticalOptions="FillAndExpand" Spacing="0">
-
-                </StackLayout>
-            </ScrollView>
-            <custom:PlayerPanel Grid.Row="2" HeightRequest="40"/>
-        </Grid>
-    </ContentPage.Content>
-</ContentPage>
+            </StackLayout>
+        </ScrollView>
+    </ContentView.Content>
+</ContentView>
