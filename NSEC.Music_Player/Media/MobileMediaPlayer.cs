@@ -18,7 +18,7 @@ using Java.Interop;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Logic;
 using static Android.Support.V4.Media.App.NotificationCompat;
 
@@ -53,8 +53,8 @@ namespace NSEC.Music_Player.Media
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            Console.WriteLine("MediaPlayer Completion");
-            if (MediaPlayer.CurrentPosition > 0 && MediaPlayer.CurrentPosition <= MediaPlayer.Duration)
+            Console.WriteLine("MediaPlayer Completion "+MediaPlayer.CurrentPosition +" "+MediaPlayer.Duration);
+            if (MediaPlayer.CurrentPosition > 0)
                 GlobalData.MediaPlayer.Next();
         }
 
@@ -120,9 +120,13 @@ namespace NSEC.Music_Player.Media
         public void Pause()
         {
             MediaPlayer.Pause();
-            Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
-            Global.StateBuilder.SetState(PlaybackStateCompat.StatePaused, CurrentPosition, 1.0f);
-            Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            if(GlobalData.MediaSource != null)
+            {
+                Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
+                Global.StateBuilder.SetState(PlaybackStateCompat.StatePaused, CurrentPosition, 1.0f);
+                Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            }
+            
         }
 
         public void Play()
@@ -148,10 +152,10 @@ namespace NSEC.Music_Player.Media
             MediaPlayer.SeekTo((int)seek * 1000);
         }
 
-        public void SetNotification(MediaSource container)
+        public void SetNotification(bool isPlaying)
         {
             ConsoleDebug.WriteLine("Set Notification1 "+(MediaPlayerService.Instance == null ? "null" : "not null"));
-            MediaPlayerService.Instance.ShowNotification();
+            MediaPlayerService.Instance.ShowNotification(isPlaying);
         }
 
         public void SetVolume(float volume)

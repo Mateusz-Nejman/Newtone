@@ -40,7 +40,7 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
             {
                 if(urlType.ContainsKey(SearchProcessing.QueryEnum.Video))
                 {
-                    AlertWindow answer = new AlertWindow("Pytanie", "Pobrać utwór czy całą playlistę?", "Utwór", "Playlista")
+                    AlertWindow answer = new AlertWindow(Newtone.Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistOrTrack, Core.Languages.Localization.Track, Core.Languages.Localization.Playlist)
                     {
                         Owner = MainWindow.Instance
                     };
@@ -54,7 +54,7 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
                     else
                     {
                         playlistId = urlType[SearchProcessing.QueryEnum.Playlist];
-                        AlertWindow alert = new AlertWindow("Pytanie", "Czy chcesz pobrać playlistę?")
+                        AlertWindow alert = new AlertWindow(Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistDownload)
                         {
                             Owner = MainWindow.Instance
                         };
@@ -65,7 +65,7 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
                         if(toPlaylist)
                         {
                             var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.QueryEnum.Playlist]);
-                            PromptWindow prompt = new PromptWindow("Nazwa playlisty", playlist.Title)
+                            PromptWindow prompt = new PromptWindow(Core.Languages.Localization.NewPlaylist, playlist.Title)
                             {
                                 Owner = MainWindow.Instance
                             };

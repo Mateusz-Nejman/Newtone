@@ -1,4 +1,5 @@
-﻿using Newtone.Core.Logic;
+﻿using Newtone.Core.Languages;
+using Newtone.Core.Logic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,7 @@ namespace Newtone.Core.Media
                     return null;
                 container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;
 
-                container.Artist = audioFile.Artist == "" ? GlobalData.LanguageUnknownArtist : audioFile.Artist;
+                container.Artist = audioFile.Artist == "" ? Localization.UnknownArtist : audioFile.Artist;
 
 
                 for (int a = 0; a < audioFile.EmbeddedPictures.Count; a++)
@@ -46,7 +47,7 @@ namespace Newtone.Core.Media
             catch
             {
                 container.Title = new FileInfo(filePath).Name;
-                container.Artist = GlobalData.LanguageUnknownArtist;
+                container.Artist = Localization.UnknownArtist;
             }
 
             if (GlobalData.AudioTags.ContainsKey(filePath))
@@ -56,6 +57,9 @@ namespace Newtone.Core.Media
                 container.Artist = newTags.Author;
                 container.Title = newTags.Title;
                 container.Image ??= newTags.Image;
+
+                if (!string.IsNullOrEmpty(newTags.Id) && !GlobalData.DownloadedIds.Contains(newTags.Id))
+                    GlobalData.DownloadedIds.Add(newTags.Id);
             }
             return container;
         }

@@ -1,11 +1,12 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Loaders;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Views;
 using NSEC.Music_Player.Views.Custom;
 using System.Collections.Generic;
 using System.IO;
 using Xamarin.Forms;
+using Newtone.Core.Processing;
 
 namespace NSEC.Music_Player.Logic
 {
@@ -18,9 +19,39 @@ namespace NSEC.Music_Player.Logic
             CurrentModelInfo = modelInfo;
             View = sender;
 
-            PopupMenu menu = new PopupMenu(MainActivity.Instance, (View)sender, Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuDelete);
+            string[] elems = CurrentModelInfo.Split(GlobalData.SEPARATOR, System.StringSplitOptions.None);
+            string filePath = elems[0];
+            string playlistName = elems[1];
+
+            List<string> menuItems = new List<string>() { Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.SyncAdd };
+            if (!string.IsNullOrEmpty(playlistName))
+                menuItems.Add(Localization.SyncAddPlaylist);
+
+            menuItems.Add(Localization.TrackMenuDelete);
+
+            PopupMenu menu = new PopupMenu(MainActivity.Instance, (View)sender, menuItems.ToArray());
             menu.OnSelect += Menu_OnSelect;
             menu.Show();
+        }
+
+        public static void BuildForSyncList(View sender, string modelInfo)
+        {
+            CurrentModelInfo = modelInfo;
+            
+            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, Localization.TrackMenuDelete, Localization.Clear);
+            menu.OnSelect += SyncMenu_OnSelect;
+            menu.Show();
+        }
+
+        private static void SyncMenu_OnSelect(string item)
+        {
+            string[] elems = CurrentModelInfo.Split(GlobalData.SEPARATOR, System.StringSplitOptions.None);
+            string filePath = elems[0];
+
+            if (item == Localization.TrackMenuDelete)
+                SyncProcessing.Audios.Remove(filePath);
+            else if (item == Localization.Clear)
+                SyncProcessing.Audios.Clear();
         }
 
         private static async void Menu_OnSelect(string item)
@@ -141,6 +172,16 @@ namespace NSEC.Music_Player.Logic
                     GlobalData.SaveConfig();
                     SnackbarBuilder.Show(Localization.Ready);
                 }
+            }
+            else if(item == Localization.SyncAdd)
+            {
+                SyncProcessing.AddFile(filePath);
+                SnackbarBuilder.Show(Localization.Ready);
+            }
+            else if(item == Localization.SyncAddPlaylist)
+            {
+                SyncProcessing.AddFiles(GlobalData.Playlists[playlistName]);
+                SnackbarBuilder.Show(Localization.Ready);
             }
         }
     }

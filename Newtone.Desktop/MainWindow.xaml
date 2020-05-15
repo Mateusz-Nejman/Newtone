@@ -7,7 +7,7 @@
         xmlns:custom="clr-namespace:Newtone.Desktop.Views.Custom"
         xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
         mc:Ignorable="d"
-        Title="Newtone Desktop" Height="450" Width="800" Background="#1f1f1f" WindowStartupLocation="CenterScreen" UseLayoutRounding="True">
+        Title="Newtone Desktop" Height="600" Width="860" Background="#1f1f1f" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" MinWidth="860" MinHeight="600">
     <Window.Resources>
         <RoutedUICommand x:Key="prev"/>
         <RoutedUICommand x:Key="next"/>

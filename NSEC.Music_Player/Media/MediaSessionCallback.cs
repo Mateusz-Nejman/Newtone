@@ -38,7 +38,7 @@ namespace NSEC.Music_Player.Media
                 MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
                 Global.MediaSession.Active = true;
                 GlobalData.MediaPlayer.Play();
-                MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance.GetNotification());
+                MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance.GetNotification(true));
             }
                 
         }

@@ -1,4 +1,5 @@
 ﻿using Nejman.NSEC2;
+using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
@@ -18,8 +19,10 @@ namespace Newtone.Core
         public const string ERROR_FILE_EXISTS = "error_file_exists";
         public const string ERROR_CORRUPTED = "error_file_corupted";
         public const string ERROR_CONNECTION = "connection_error";
+        public const string SYNC_COMPLETED = "NSEC2C";
 
-        public const string RECEIVED_MESSAGE = "NSEC2 Received";
+        public const string RECEIVED_MESSAGE = "NSEC2R";
+        public const string SYNC_CODE = "NSEC2CD";
 
         public static bool IsDebugMode
         {
@@ -66,10 +69,9 @@ namespace Newtone.Core
 
         public static AsyncEndController AsyncEndController = new AsyncEndController();
 
-        public static string LanguageUnknownArtist { get; set; }
-
         public static List<string> ExcludedPaths { get; set; }
         public static List<string> IncludedPaths { get; set; }
+        public static string CurrentLanguage { get; set; }
 
         public static string LoadFirstStart()
         {
@@ -102,7 +104,11 @@ namespace Newtone.Core
                 FileStream stream = File.OpenRead(DataPath + "/newtone.nsec2");
                 NSEC2 nsec = new NSEC2(PASSWORD);
                 nsec.Load(stream);
-
+                if(nsec.Exists("language"))
+                {
+                    CurrentLanguage = System.Text.Encoding.ASCII.GetString(nsec.Get("language"));
+                    Localization.RefreshLanguage();
+                }
                 if(nsec.Exists("volume"))
                 {
                     string buffer = System.Text.Encoding.ASCII.GetString(nsec.Get("volume"));
@@ -194,8 +200,19 @@ namespace Newtone.Core
                     foreach (string elem in historyElems)
                     {
                         string[] text = elem.Split(SEPARATOR);
-                        if (History.FindIndex(model => model.Text == text[1]) == -1)
+                        if (text.Length >= 2 && History.FindIndex(model => model.Text == text[1]) == -1)
                             History.Add(new HistoryModel() { Text = text[1] });
+                    }
+                }
+
+                if(nsec.Exists("includedPaths"))
+                {
+                    byte[] pathData = nsec.Get("includedPaths");
+                    string[] paths = System.Text.Encoding.UTF8.GetString(pathData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    foreach(var item in paths)
+                    {
+                        if (Directory.Exists(item) && !IncludedPaths.Contains(item))
+                            IncludedPaths.Add(item);
                     }
                 }
 
@@ -252,6 +269,8 @@ namespace Newtone.Core
             string buffer = MediaPlayer.GetVolume().ToString();
 
             nsec.AddFile("volume", System.Text.Encoding.ASCII.GetBytes(buffer));
+            if (CurrentLanguage != null)
+                nsec.AddFile("language", System.Text.Encoding.ASCII.GetBytes(CurrentLanguage));
 
 
             buffer = "";
@@ -328,6 +347,18 @@ namespace Newtone.Core
                 }
 
                 nsec.AddFile("history", System.Text.Encoding.UTF8.GetBytes(buffer));
+            }
+
+            if(IncludedPaths.Count > 2)
+            {
+                buffer = "";
+
+                for(int a = 2; a < IncludedPaths.Count; a++)
+                {
+                    buffer += IncludedPaths[a] + "\n";
+                }
+
+                nsec.AddFile("includedPaths", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
 
             File.WriteAllBytes(DataPath + "/newtone.nsec2", nsec.Save());

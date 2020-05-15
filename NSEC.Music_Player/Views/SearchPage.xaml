@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
              x:Class="NSEC.Music_Player.Views.SearchPage">
   <ContentView.Content>
         <StackLayout Orientation="Vertical" Padding="5">

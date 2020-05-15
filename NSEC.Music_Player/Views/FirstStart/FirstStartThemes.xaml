@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.FirstStart.FirstStartThemes"
              xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:NSEC.Music_Player.Languages">
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core">
     <ContentView.Content>
         <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}">
             <Grid.RowDefinitions>

@@ -1,7 +1,7 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Processing;
 using System;
 using System.Collections.Generic;

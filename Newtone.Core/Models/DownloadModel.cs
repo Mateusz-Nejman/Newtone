@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Newtone.Core.Models
 {
-    public class DownloadModel: INotifyPropertyChanged
+    public class DownloadModel:INotifyPropertyChanged
     {
-        private double progress { get; set; }
+        private double progress;
         public string Id { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
@@ -19,12 +19,8 @@ namespace Newtone.Core.Models
             }
             set
             {
-                if(progress != value)
-                {
-                    progress = value;
-                    OnPropertyChanged("Progress");
-                    OnPropertyChanged("ProgressString");
-                }
+                progress = value;
+                OnPropertyChanged("ProgressString");
             }
         }
 
@@ -38,11 +34,11 @@ namespace Newtone.Core.Models
             }
         }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-}
 }

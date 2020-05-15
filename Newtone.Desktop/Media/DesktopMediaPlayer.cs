@@ -107,7 +107,7 @@ namespace Newtone.Desktop.Media
             CurrentFile.SetPosition(seek);
         }
 
-        public void SetNotification(MediaSource container)
+        public void SetNotification(bool isPlaying)
         {
             //TODO
         }

@@ -21,20 +21,20 @@ namespace Newtone.Core.Processing
                 GlobalData.History.Add(new HistoryModel() { Text = text });
 
             GlobalData.SaveConfig();
-            //ConsoleDebug.WriteLine("Start search");
+            ConsoleDebug.WriteLine("Start search");
             YoutubeClient client = new YoutubeClient();
-            //ConsoleDebug.WriteLine("init");
+            ConsoleDebug.WriteLine("init");
             var validators = CheckLink(text);
-            //ConsoleDebug.WriteLine(validators.Count);
+            ConsoleDebug.WriteLine(validators.Count);
 
             foreach(var val in validators.Keys)
             {
-                //ConsoleDebug.WriteLine(val);
+                ConsoleDebug.WriteLine(val);
             }
 
             if(validators.ContainsKey(QueryEnum.Video))
             {
-                //ConsoleDebug.WriteLine("Video");
+                ConsoleDebug.WriteLine("Video");
                 var video = await client.Videos.GetAsync(validators[QueryEnum.Video]);
 
                 model.Add(new SearchResultModel()
@@ -50,12 +50,12 @@ namespace Newtone.Core.Processing
             }
             else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
             {
-                //ConsoleDebug.WriteLine("Search None");
+                ConsoleDebug.WriteLine("Search None");
                 var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search]).BufferAsync(20);
-
+                Console.WriteLine("Search " + videos.Count);
                 foreach(var video in videos)
                 {
-                    //ConsoleDebug.WriteLine("Search " + video.Title);
+                    ConsoleDebug.WriteLine("Search " + video.Title);
                     model.Add(new SearchResultModel()
                     {
                         Author = video.Author,
@@ -70,7 +70,7 @@ namespace Newtone.Core.Processing
             }
             else if (validators.ContainsKey(QueryEnum.Playlist))
             {
-                //ConsoleDebug.WriteLine("Playlist");
+                ConsoleDebug.WriteLine("Playlist");
                 var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]);
                 foreach (var video in playlist)
                 {

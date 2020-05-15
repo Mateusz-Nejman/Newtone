@@ -53,7 +53,7 @@ namespace Newtone.Desktop.Models
         public void CheckChanges()
         {
             Visibility = FilePath == GlobalData.MediaSourcePath ? Visibility.Visible : Visibility.Hidden;
-            TrackString = this.Artist == GlobalData.LanguageUnknownArtist ? Title : $"{Artist} - {Title}";
+            TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

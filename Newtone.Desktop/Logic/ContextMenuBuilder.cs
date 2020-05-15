@@ -1,5 +1,7 @@
 ﻿using Newtone.Core;
+using Newtone.Core.Languages;
 using Newtone.Core.Loaders;
+using Newtone.Core.Processing;
 using Newtone.Desktop.Views;
 using System;
 using System.Collections.Generic;
@@ -21,19 +23,19 @@ namespace Newtone.Desktop.Logic
 
             MenuItem menuEdit = new MenuItem
             {
-                Header = "Edytuj"
+                Header = Localization.TrackMenuEdit
             };
             menuEdit.Click += MenuEdit_Click;
             menu.Items.Add(menuEdit);
 
             MenuItem ItemNew = new MenuItem
             {
-                Header = "Nowa playlista"
+                Header = Localization.NewPlaylist
             };
             ItemNew.Click += ItemNew_Click;
             MenuItem menuAdd = new MenuItem
             {
-                Header = "Dodaj do playlisty"
+                Header = Localization.TrackMenuPlaylist
             };
             menuAdd.Items.Add(ItemNew);
             foreach(var item in GlobalData.Playlists.Keys)
@@ -53,16 +55,106 @@ namespace Newtone.Desktop.Logic
                 menuAdd.Items.Add(playlistItem);
             }
 
+            MenuItem menuSync = new MenuItem
+            {
+                Header = Localization.SyncAdd
+            };
+            menuSync.Click += MenuSync_Click;
+
+            MenuItem menuSyncPlaylist = new MenuItem
+            {
+                Header = Localization.SyncAddPlaylist
+            };
+            menuSyncPlaylist.Click += MenuSyncPlaylist_Click;
+
+            
+
             MenuItem menuDelete = new MenuItem
             {
-                Header = "Usuń"
+                Header = Localization.TrackMenuDelete
             };
             menuDelete.Click += MenuDelete_Click;
 
             menu.Items.Add(menuAdd);
+            menu.Items.Add(menuSync);
+            if (!string.IsNullOrEmpty(Playlist))
+                menu.Items.Add(menuSyncPlaylist);
+
             menu.Items.Add(menuDelete);
 
             return menu;
+        }
+
+        public static ContextMenu BuildForSync(string filePath)
+        {
+            FilePath = filePath;
+            ContextMenu menu = new ContextMenu();
+
+            MenuItem menuSyncDelete = new MenuItem
+            {
+                Header = Localization.TrackMenuDelete
+            };
+            menuSyncDelete.Click += MenuSyncDelete_Click;
+            menu.Items.Add(menuSyncDelete);
+
+            MenuItem menuSyncClear = new MenuItem
+            {
+                Header = Localization.Clear
+            };
+            menuSyncClear.Click += MenuSyncClear_Click;
+
+            menu.Items.Add(menuSyncClear);
+
+
+            return menu;
+        }
+
+        public static ContextMenu BuildForLanguage()
+        {
+            ContextMenu menu = new ContextMenu();
+
+            MenuItem menuLangPL = new MenuItem
+            {
+                Header = Localization.LanguagePL
+            };
+            menuLangPL.Click += (sender, e) => { GlobalData.CurrentLanguage = "pl"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+            MenuItem menuLangEN = new MenuItem
+            {
+                Header = Localization.LanguageEN
+            };
+            menuLangEN.Click += (sender, e) => { GlobalData.CurrentLanguage = "en"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+            MenuItem menuLangRU = new MenuItem
+            {
+                Header = Localization.LanguageRU
+            };
+            menuLangRU.Click += (sender, e) => { GlobalData.CurrentLanguage = "ru"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+
+
+            menu.Items.Add(menuLangPL);
+            menu.Items.Add(menuLangEN);
+            menu.Items.Add(menuLangRU);
+
+            return menu;
+        }
+
+        private static void MenuSyncClear_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SyncProcessing.Audios.Clear();
+        }
+
+        private static void MenuSyncDelete_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SyncProcessing.Audios.Remove(FilePath);
+        }
+
+        private static void MenuSyncPlaylist_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SyncProcessing.AddFiles(GlobalData.Playlists[Playlist]);
+        }
+
+        private static void MenuSync_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SyncProcessing.AddFile(FilePath);
         }
 
         private static void MenuEdit_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -80,7 +172,7 @@ namespace Newtone.Desktop.Logic
         private static void MenuDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             FileInfo fileInfo = new FileInfo(FilePath);
-            AlertWindow prompt = new AlertWindow("Uwaga", "Usunąć plik "+fileInfo.Name+(Playlist == "" ? "?" : " z playlisty"))
+            AlertWindow prompt = new AlertWindow(Localization.Warning, Localization.QuestionDelete + " "+fileInfo.Name+(Playlist == "" ? "?" : " "+  Localization.QuestionDeleteFromPlaylist+"?"))
             {
                 Owner = MainWindow.Instance,
                 Left = MainWindow.Instance.Left,
@@ -111,7 +203,7 @@ namespace Newtone.Desktop.Logic
 
         private static void ItemNew_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            PromptWindow prompt = new PromptWindow("Nowa playlista", "Nazwa playlisty", "Dodaj","Anuluj")
+            PromptWindow prompt = new PromptWindow(Localization.NewPlaylist, Localization.NewPlaylistHint,Localization.Add,Localization.Cancel)
             {
                 Owner = MainWindow.Instance,
                 Left = MainWindow.Instance.Left,

@@ -36,5 +36,7 @@ namespace NSEC.Music_Player
         public static PlaybackStateCompat.Builder StateBuilder { get; set; }
         public static MediaMetadataCompat.Builder MetadataBuilder { get; set; }
         public static ConnectivityManager ConnectivityManager { get; set; }
+        public static PowerManager PowerManager { get; set; }
+        public static PowerManager.WakeLock WakeLock { get; set; }
     }
 }

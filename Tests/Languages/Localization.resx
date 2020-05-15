@@ -118,195 +118,270 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutAuthor" xml:space="preserve">
-    <value>Автор: Матеуш Нейман</value>
+    <value>Autor: Mateusz Nejman</value>
   </data>
   <data name="AboutDesc" xml:space="preserve">
-    <value>Плеер позволяет слушать музыку как с YouTube, так и локально. Автор не несет ответственности за то, как пользователь использует медиа с веб-сайтов.</value>
+    <value>Odtwarzacz umożliwia słuchanie muzyki z youtube, oraz lokalnie. Autor nie ponosi odpowiedzialności za to, w jaki sposób użytkownik używa mediów z podanych serwisów.</value>
   </data>
   <data name="AboutWWW" xml:space="preserve">
-    <value>Авторский сайт</value>
+    <value>Strona autora</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Добавлять</value>
+    <value>Dodaj</value>
   </data>
   <data name="AddTags" xml:space="preserve">
-    <value>Добавить теги?</value>
+    <value>Dodać tagi?</value>
   </data>
   <data name="Artist" xml:space="preserve">
-    <value>Музыкант</value>
+    <value>Wykonawca</value>
   </data>
   <data name="Artists" xml:space="preserve">
-    <value>Музыканты</value>
+    <value>Wykonawcy</value>
   </data>
   <data name="BackPressed" xml:space="preserve">
-    <value>Нажмите еще раз, чтобы выйти</value>
+    <value>Naciśnij jeszcze raz, aby wyjść</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Anuluj</value>
   </data>
   <data name="ChoosePlaylist" xml:space="preserve">
-    <value>Выберите список</value>
+    <value>Wybierz playlistę</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Ясно</value>
+    <value>Wyczyść</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Połącz</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Okładka</value>
+  </data>
+  <data name="CoverLoad" xml:space="preserve">
+    <value>Wczytaj okładkę</value>
+  </data>
+  <data name="CoverSave" xml:space="preserve">
+    <value>Zapisz okładkę</value>
   </data>
   <data name="FileCorrupted" xml:space="preserve">
-    <value>Файл поврежден</value>
+    <value>Plik jest uszkodzony</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instrukcja</value>
+  </data>
+  <data name="LanguageEN" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LanguagePL" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="LanguageRU" xml:space="preserve">
+    <value>Русский</value>
   </data>
   <data name="LastViews" xml:space="preserve">
-    <value>Недавно играл</value>
+    <value>Ostatnio odtwarzane</value>
   </data>
   <data name="Library" xml:space="preserve">
-    <value>Библиотека</value>
+    <value>Biblioteka</value>
   </data>
   <data name="MainPage" xml:space="preserve">
-    <value>Дома</value>
+    <value>Strona główna</value>
   </data>
   <data name="MostViews" xml:space="preserve">
-    <value>Самые популярные</value>
+    <value>Najczęściej odtwarzane</value>
   </data>
   <data name="NewPlaylist" xml:space="preserve">
-    <value>Новый список</value>
+    <value>Nowa playlista</value>
   </data>
   <data name="NewPlaylistHint" xml:space="preserve">
-    <value>Введите название списка</value>
+    <value>Wprowadź nazwę playlisty</value>
   </data>
   <data name="Next" xml:space="preserve">
-    <value>Далее</value>
+    <value>Dalej</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Не</value>
+    <value>Nie</value>
   </data>
   <data name="NoConnection" xml:space="preserve">
-    <value>Нет доступа в интернет</value>
+    <value>Brak dostępu do internetu</value>
   </data>
   <data name="NoDownloads" xml:space="preserve">
-    <value>Нет загрузки в процессе</value>
+    <value>Brak pobierania w toku</value>
   </data>
   <data name="PermissionGrant" xml:space="preserve">
-    <value>Предоставить разрешения</value>
+    <value>Przyznaj uprawnienia</value>
   </data>
   <data name="PermissionInfo" xml:space="preserve">
-    <value>Плеер требует разрешения на сохранение данных, чтобы скачивать музыку и сохранять настройки</value>
+    <value>Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia</value>
   </data>
   <data name="Playlist" xml:space="preserve">
-    <value>Список</value>
+    <value>Playlista</value>
   </data>
   <data name="PlaylistDownload" xml:space="preserve">
-    <value>Создать новый список с загруженными песнями?</value>
+    <value>Utworzyć nową playlistę z pobranymi utworami?</value>
   </data>
   <data name="PlaylistOrTrack" xml:space="preserve">
-    <value>Скачать список или песню?</value>
+    <value>Pobrać playlistę czy utwór?</value>
   </data>
   <data name="PlaylistPlay" xml:space="preserve">
-    <value>Играй</value>
+    <value>Odtwórz</value>
   </data>
   <data name="Playlists" xml:space="preserve">
-    <value>Списки</value>
+    <value>Playlisty</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Вопрос</value>
+    <value>Pytanie</value>
   </data>
   <data name="QuestionDelete" xml:space="preserve">
-    <value>Удалить файл</value>
+    <value>Usunąć plik</value>
   </data>
   <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
-    <value>из списка</value>
+    <value>z playlisty</value>
   </data>
   <data name="QuestionDeletePlaylist" xml:space="preserve">
-    <value>Удалить список</value>
+    <value>Usunąć playlistę</value>
   </data>
   <data name="Ready" xml:space="preserve">
-    <value>Готовый</value>
+    <value>Gotowe</value>
+  </data>
+  <data name="Receive" xml:space="preserve">
+    <value>Odbierz</value>
+  </data>
+  <data name="ReceiverCode" xml:space="preserve">
+    <value>Kod odbiorcy</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Szukaj</value>
   </data>
   <data name="SearchHistory" xml:space="preserve">
-    <value>История поиска</value>
+    <value>Historia wyszukiwania</value>
   </data>
   <data name="Searching" xml:space="preserve">
-    <value>Поиск ...</value>
+    <value>Wyszukiwanie...</value>
   </data>
   <data name="SearchTip" xml:space="preserve">
-    <value>Вы можете вставить ссылку на песню или плейлист в поисковую систему или ввести название.</value>
+    <value>Do wyszukiwarki możesz wkleić link do utworu, playlisty, lub wpisać tytuł.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Wyślij</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Ustawienia</value>
   </data>
   <data name="Settings0" xml:space="preserve">
-    <value>Создать теги для локальных файлов</value>
+    <value>Wygeneruj tagi dla plików lokalnych</value>
   </data>
   <data name="Settings1" xml:space="preserve">
-    <value>Автоматические теги</value>
+    <value>Automatyczne tagi</value>
   </data>
   <data name="Settings2" xml:space="preserve">
-    <value>Удалить все данные</value>
+    <value>Wyczyść wszystkie dane</value>
   </data>
   <data name="Settings3" xml:space="preserve">
-    <value>Выберите тему</value>
+    <value>Wybierz motyw</value>
+  </data>
+  <data name="Settings4" xml:space="preserve">
+    <value>Dodaj folder do listy skanowanych folderów</value>
+  </data>
+  <data name="Settings5" xml:space="preserve">
+    <value>Język</value>
   </data>
   <data name="SettingsChanges" xml:space="preserve">
-    <value>Изменения будут видны после перезапуска приложения</value>
+    <value>Zmiany będą widoczne po ponownym uruchomieniu aplikacji</value>
   </data>
   <data name="SnackDelete" xml:space="preserve">
-    <value>Успешно удален</value>
+    <value>Pomyślnie usunięto</value>
   </data>
   <data name="SnackFileExists" xml:space="preserve">
-    <value>Файл не существует</value>
+    <value>Plik nie istnieje</value>
   </data>
   <data name="SnackPlaylist" xml:space="preserve">
-    <value>Добавлено в список</value>
+    <value>Dodano do playlisty</value>
   </data>
   <data name="SnackQueue" xml:space="preserve">
-    <value>Добавлено в очередь</value>
+    <value>Dodano do kolejki</value>
+  </data>
+  <data name="SyncAdd" xml:space="preserve">
+    <value>Dodaj do wysłania</value>
+  </data>
+  <data name="SyncAddPlaylist" xml:space="preserve">
+    <value>Dodaj do wysłania (playlista)</value>
+  </data>
+  <data name="SyncHelp1" xml:space="preserve">
+    <value>1. Podłącz urządzenia do tej samej sieci</value>
+  </data>
+  <data name="SyncHelp2" xml:space="preserve">
+    <value>2. Wpisz kod lub poczekaj na połączenie</value>
+  </data>
+  <data name="SyncHelp2Desktop" xml:space="preserve">
+    <value>2. Wpisz kod</value>
+  </data>
+  <data name="SyncHelp3" xml:space="preserve">
+    <value>3. Wybierz odpowiednią opcję</value>
+  </data>
+  <data name="SyncReceiving" xml:space="preserve">
+    <value>Odbieranie plików</value>
+  </data>
+  <data name="SyncSending" xml:space="preserve">
+    <value>Wysyłanie plików</value>
+  </data>
+  <data name="SyncShowFiles" xml:space="preserve">
+    <value>Pokaż pliki do wysłania</value>
   </data>
   <data name="ThemeDark" xml:space="preserve">
-    <value>Темный</value>
+    <value>Ciemny</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Дефолт</value>
+    <value>Domyślny</value>
   </data>
   <data name="ThemeLight" xml:space="preserve">
-    <value>Розовый</value>
+    <value>Różowy</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Название</value>
+    <value>Tytuł</value>
   </data>
   <data name="TitleDownloads" xml:space="preserve">
-    <value>Коллекция</value>
+    <value>Pobieranie</value>
   </data>
   <data name="Track" xml:space="preserve">
-    <value>Песня</value>
+    <value>Utwór</value>
   </data>
   <data name="TrackCount" xml:space="preserve">
-    <value>Сохраненные песни</value>
+    <value>Zapisanych utworów</value>
   </data>
   <data name="TrackCountPlaylist" xml:space="preserve">
-    <value>Песни</value>
+    <value>Utworów</value>
   </data>
   <data name="TrackMenuDelete" xml:space="preserve">
-    <value>Удалить</value>
+    <value>Usuń</value>
   </data>
   <data name="TrackMenuEdit" xml:space="preserve">
-    <value>Редактировать</value>
+    <value>Edytuj</value>
   </data>
   <data name="TrackMenuPlaylist" xml:space="preserve">
-    <value>Добавить в список</value>
+    <value>Dodaj do playlisty</value>
   </data>
   <data name="TrackMenuQueue" xml:space="preserve">
-    <value>Добавить в очередь</value>
+    <value>Dodaj do kolejki</value>
   </data>
   <data name="Tracks" xml:space="preserve">
-    <value>Песни</value>
+    <value>Utwory</value>
   </data>
   <data name="UnknownArtist" xml:space="preserve">
-    <value>Неизвестный художник</value>
+    <value>Nieznany wykonawca</value>
+  </data>
+  <data name="Unpacked" xml:space="preserve">
+    <value>Wypakowano</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Внимание</value>
+    <value>Uwaga</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Да</value>
+    <value>Tak</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Twój kod</value>
   </data>
 </root>

@@ -23,7 +23,7 @@ namespace NSEC.Music_Player
                 string theme = GlobalData.LoadFirstStart();
                 if(theme == null)
                 {
-                    MainPage = new FirstStartPage();
+                    MainPage = new LanguageSelectPage("firststart");
                 }
                 else
                 {
@@ -34,7 +34,7 @@ namespace NSEC.Music_Player
             }
             else
             {
-                MainPage = new PermissionPage();
+                MainPage = new LanguageSelectPage("permissions");
             }
         }
 

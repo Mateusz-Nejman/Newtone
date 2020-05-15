@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Newtone.Core;
+using Newtone.Core.Languages;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
@@ -77,7 +78,7 @@ namespace NSEC.Music_Player.Models
         public void CheckChanges()
         {
             IsVisible = FilePath == GlobalData.MediaSourcePath;
-            TrackString = Artist == GlobalData.LanguageUnknownArtist ? Title : $"{Artist} - {Title}";
+            TrackString = Artist == Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

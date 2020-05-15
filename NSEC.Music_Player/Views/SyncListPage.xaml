@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
+             mc:Ignorable="d"
+             x:Class="NSEC.Music_Player.Views.SyncListPage">
+  <ContentView.Content>
+        <ListView x:Name="trackListView" SelectionMode="Single" VerticalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <viewcells:SyncViewCell/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentView.Content>
+</ContentView>

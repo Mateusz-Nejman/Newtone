@@ -26,6 +26,14 @@ namespace NSEC.Music_Player
             }
         }
 
+        public static Color ColorThirdary
+        {
+            get
+            {
+                return ColorsBase.ColorThirdary;
+            }
+        }
+
         public static Color TextColor
         {
             get
@@ -71,6 +79,7 @@ namespace NSEC.Music_Player
             this.TextColor = Color.FromHex("#ffffff");
             this.BadgeColor = Color.FromHex("#ff5200");
             this.ProgressBarColor = Color.FromHex("#0f4c75");
+            this.ColorThirdary = Color.FromHex("#9d2041");
         }
     }
 
@@ -83,6 +92,7 @@ namespace NSEC.Music_Player
             this.TextColor = Color.FromHex("#ffffff");
             this.BadgeColor = Color.FromHex("#ff5200");
             this.ProgressBarColor = Color.FromHex("#0f4c75");
+            this.ColorThirdary = Color.FromHex("#141414");
         }
     }
 
@@ -98,6 +108,7 @@ namespace NSEC.Music_Player
         public Color TextColor = Color.FromHex("#ffffff");
         public Color BadgeColor = Color.FromHex("#ff5200");
         public Color ProgressBarColor = Color.FromHex("#3282b8");
+        public Color ColorThirdary = Color.FromHex("#1c282e");
     }
 
 }

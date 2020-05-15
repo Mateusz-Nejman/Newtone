@@ -53,7 +53,6 @@ namespace Newtone.Desktop
             GlobalData.CurrentPlaylist = new List<Core.Media.MediaSource>();
             GlobalData.CurrentQueue = new List<Core.Media.MediaSource>();
             GlobalData.DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\NSEC.Newtone";
-            GlobalData.LanguageUnknownArtist = "Nieznany";
             GlobalData.MusicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\NSEC.Newtone";
 
             //ConsoleDebug.WriteLine(GlobalData.DataPath);

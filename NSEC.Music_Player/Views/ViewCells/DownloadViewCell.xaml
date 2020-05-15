@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Label Text="{Binding Title}" Style="{StaticResource ListViewText}"/>
-            <Label Text="{Binding ProgressString}" Grid.Column="1" Style="{StaticResource ListViewText}"/>
+            <Label Text="{Binding ProgressStringMobile}" Grid.Column="1" Style="{StaticResource ListViewText}"/>
         </Grid>
     </ViewCell.View>
 </ViewCell>

@@ -1,5 +1,5 @@
 ﻿using Newtone.Core;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Processing;
 using System;
 using System.Collections.Generic;

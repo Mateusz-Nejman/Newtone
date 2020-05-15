@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Tests
 {
@@ -11,52 +13,67 @@ namespace Tests
     {
         static void Main(string[] args)
         {
-            Uri uri = new Uri("C:\\Test\\");
+            //Generate language class from resx
 
-            Console.WriteLine(uri.AbsoluteUri);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(@"D:\Projekty\CS\NSEC.Music_Player\Tests\Languages\Localization.resx");
+            var root = doc.SelectSingleNode("root");
 
-            int intValue = 1;
-            // Convert integer 182 as a hex in a string variable
-            string hexValue = intValue.ToString("X");
-            // Convert the hex string back to the number
-            int intAgain = int.Parse(hexValue, System.Globalization.NumberStyles.HexNumber);
-            int intAgain1 = int.Parse("01", System.Globalization.NumberStyles.HexNumber);
-            Console.WriteLine(intAgain);
-            Console.WriteLine(intAgain1);
+            string buffer = "public abstract class LocalizationBase{\n";
+            string propertyBuffer = "";
 
-            IPAddress addr = new IPAddress(new byte[] { 192, 168, 8, 1 });
-            Console.WriteLine(addr.ToString());
-            int c1 = addr.GetAddressBytes()[0];
-            int c2 = addr.GetAddressBytes()[1];
-            int c3 = addr.GetAddressBytes()[2];
-            int c4 = addr.GetAddressBytes()[3];
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            List<string> names = new List<string>();
 
-            Console.WriteLine($"{c1}.{c2}.{c3}.{c4}");
-            string hex = ToHex(addr);
-            Console.WriteLine(hex);
-            Console.WriteLine(FromHex(hex).ToString());
+            foreach (XmlNode item in root.SelectNodes("data"))
+            {
+                string name = item.Attributes["name"].InnerText;
+                string value = item.SelectSingleNode("value").InnerText;
+                dict.Add(name, value);
+                names.Add(name);
+            }
 
-            Console.ReadLine();
+            names.Sort();
+
+            foreach(var name in names)
+            {
+                string value = dict[name];
+                buffer += $"public string {name} = \"{value}\";\n";
+                propertyBuffer += $"/// <summary>\n/// Wyszukuje zlokalizowany ciąg podobny do ciągu {value}\n/// </summary>\n";
+                propertyBuffer += $"public static string {name} {{ get {{ return CurrentLocalization.{name}; }} }}\n";
+            }
+
+            buffer += "}";
+            string template = File.ReadAllText("baseTemplate.txt");
+            template = template.Replace("[BODY]", propertyBuffer + "\n" + buffer);
+            File.WriteAllText(@"D:\Projekty\CS\NSEC.Music_Player\Newtone.Core\Languages\Localization.cs", template);
+
+            Generate("en");
+            Generate("ru");
+            Console.WriteLine("End");
         }
 
-        static string ToHex(IPAddress addr)
+        static void Generate(string lang)
         {
-            string c1 = ((int)addr.GetAddressBytes()[0]).ToString("X").PadLeft(2, '0');
-            string c2 = ((int)addr.GetAddressBytes()[1]).ToString("X").PadLeft(2, '0');
-            string c3 = ((int)addr.GetAddressBytes()[2]).ToString("X").PadLeft(2, '0');
-            string c4 = ((int)addr.GetAddressBytes()[3]).ToString("X").PadLeft(2, '0');
+            XmlDocument doc = new XmlDocument();
+            doc.Load(@"D:\Projekty\CS\NSEC.Music_Player\Tests\Languages\Localization." + lang + ".resx");
 
-            return $"{c1}{c2}{c3}{c4}";
+            var root = doc.SelectSingleNode("root");
+
+            string buffer = "public  class Localization"+lang.ToUpper()+" : Localization.LocalizationBase{\npublic Localization"+lang.ToUpper()+"(){\n";
+
+            foreach (XmlNode item in root.SelectNodes("data"))
+            {
+                string name = item.Attributes["name"].InnerText;
+                string value = item.SelectSingleNode("value").InnerText;
+                buffer += $"this.{name} = \"{value}\";\n";
+            }
+
+            buffer += "}}";
+            string template = File.ReadAllText("langTemplate.txt");
+            template = template.Replace("[BODY]", buffer);
+            File.WriteAllText(@"D:\Projekty\CS\NSEC.Music_Player\Newtone.Core\Languages\Localization" + lang.ToUpper()+".cs", template);
         }
 
-        static IPAddress FromHex(string hex)
-        {
-            string h1 = hex[0].ToString() + hex[1].ToString();
-            string h2 = hex[2].ToString() + hex[3].ToString();
-            string h3 = hex[4].ToString() + hex[5].ToString();
-            string h4 = hex[6].ToString() + hex[7].ToString();
-
-            return new IPAddress(new byte[] { (byte)int.Parse(h1, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h2, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h3, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h4, System.Globalization.NumberStyles.HexNumber) });
-        }
     }
 }

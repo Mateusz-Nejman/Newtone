@@ -1,6 +1,6 @@
 ﻿using Newtone.Core.Logic;
-using Newtone.Core.Models;
 using Newtone.Core.Processing;
+using NSEC.Music_Player.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,12 +30,13 @@ namespace NSEC.Music_Player.Views
             {
                 Items.Clear();
                 foreach (var item in DownloadProcessing.GetModels())
-                    Items.Add(item);
+                    Items.Add(new DownloadModel(item));
             }
 
             for (int a = 0; a < Items.Count; a++)
             {
                 Items[a].Progress = DownloadProcessing.GetDownloads()[Items[a].Id].Progress;
+                Items[a].ProgressStringMobile = DownloadProcessing.GetDownloads()[Items[a].Id].ProgressString;
                 //ConsoleDebug.WriteLine(Items[a].Progress);
             }
         }

@@ -2,7 +2,7 @@
 using Newtone.Core.Loaders;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Processing;
 using NSEC.Music_Player.Views.Images;
 using System;
@@ -37,14 +37,15 @@ namespace NSEC.Music_Player.Views
         public NormalPage()
         {
             InitializeComponent();
-            if(!MainActivity.Loaded)
+
+            Directory.CreateDirectory(GlobalData.MusicPath);
+            if (!MainActivity.Loaded)
             {
                 GlobalData.LoadTags();
                 Task.Run(async () => await GlobalLoader.Load()).Wait();
                 GlobalData.LoadConfig();
                 MainActivity.Loaded = true;
             }
-            Directory.CreateDirectory(GlobalData.MusicPath);
             Instance = this;
             ConsoleDebug.WriteLine("normal");
             Appearing += PageAppearing;
@@ -76,6 +77,9 @@ namespace NSEC.Music_Player.Views
         {
             badgeCount.Text = DownloadProcessing.BadgeCount.ToString();
             badgeBubble.IsVisible = DownloadProcessing.BadgeCount > 0;
+
+            badgeBubbleSync.IsVisible = SyncProcessing.Audios.Count > 0;
+            badgeCountSync.Text = SyncProcessing.Audios.Count.ToString();
             if (GlobalData.MediaSource != null)
             {
                 artistLabel.Text = GlobalData.MediaSource.Artist;
@@ -198,6 +202,11 @@ namespace NSEC.Music_Player.Views
             {
                 Navigation.PushModalAsync(new FullScreenPage());
             }
+        }
+
+        private void SyncButton_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ModalPage(new SyncPage(), "Synchronizacja", false));
         }
 
         private void DownloadButton_Clicked(object sender, EventArgs e)

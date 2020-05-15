@@ -1,8 +1,9 @@
-﻿using Newtone.Core;
+﻿using Android.Content;
+using Newtone.Core;
 using Newtone.Core.Media;
-using Newtone.Core.Models;
-using NSEC.Music_Player.Languages;
+using Newtone.Core.Languages;
 using NSEC.Music_Player.Logic;
+using NSEC.Music_Player.Models;
 using NSEC.Music_Player.Views.Custom;
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,16 @@ namespace NSEC.Music_Player.Views
         {
             InitializeComponent();
 
-            settingsList.ItemsSource = Items = new ObservableCollection<SettingsModel>();
-            Items.Add(new SettingsModel() { Name = Localization.Settings0, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsModel() { Name = Localization.Settings2, Description = "", Enabled = false, HasCheckbox = false });
-            Items.Add(new SettingsModel() { Name = Localization.Settings3, Description = Localization.SettingsChanges, Enabled = false, HasCheckbox = false });
-
+            settingsListView.ItemsSource = Items = new ObservableCollection<SettingsModel>();
+            Items.Add(new SettingsModel() { Name = Localization.Settings0});
+            Items.Add(new SettingsModel() { Name = Localization.Settings2});
+            Items.Add(new SettingsModel() { Name = Localization.Settings3});
+            Items.Add(new SettingsModel() { Name = Localization.Settings4 });
+            Items.Add(new SettingsModel() { Name = Localization.Settings5 });
+            versionLabel.Text = "v" + MainActivity.Instance.PackageManager.GetPackageInfo(MainActivity.Instance.PackageName, 0).VersionName;
         }
 
-        private void SettingsList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void SettingsList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             int index = e.SelectedItemIndex;
 
@@ -81,9 +84,28 @@ namespace NSEC.Music_Player.Views
                         popup.OnSelect += Menu_OnItemSelected;
                         popup.Show();
                     }
-                    settingsList.SelectedItem = null;
+                    else if(e.SelectedItemIndex == 3)
+                    {
+                        Intent intent = new Intent(Intent.ActionOpenDocumentTree);
+                        intent.AddCategory(Intent.CategoryDefault);
+                        MainActivity.Instance.StartActivityForResult(Intent.CreateChooser(intent, "Newtone"), 9999);
+                    }
+                    else if(e.SelectedItemIndex == 4)
+                    {
+                        string newLang = await NormalPage.Instance.DisplayActionSheet(Localization.Settings5, Localization.Cancel, null, Localization.LanguagePL, Localization.LanguageEN, Localization.LanguageRU);
+                        if (newLang == Localization.LanguagePL)
+                            GlobalData.CurrentLanguage = "pl";
+                        else if (newLang == Localization.LanguageEN)
+                            GlobalData.CurrentLanguage = "en";
+                        else if (newLang == Localization.LanguageRU)
+                            GlobalData.CurrentLanguage = "ru";
+
+                        Localization.RefreshLanguage();
+                        GlobalData.SaveConfig();
+                        SnackbarBuilder.Show(Localization.SettingsChanges);
+                    }
                 }
-                settingsList.SelectedItem = null;
+                settingsListView.SelectedItem = null;
             }
         }
 
@@ -96,12 +118,19 @@ namespace NSEC.Music_Player.Views
             else
                 ChangeTheme("Default");
 
+            SnackbarBuilder.Show(Localization.SettingsChanges);
+
         }
 
         private void ChangeTheme(string theme)
         {
             GlobalData.SaveFirstStart(theme);
             SnackbarBuilder.Show(Localization.SettingsChanges);
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            Device.OpenUri(new Uri("https://mateusz-nejman.pl/"));
         }
     }
 }

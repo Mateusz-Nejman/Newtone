@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Newtone.Desktop.Views"
+        xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
         mc:Ignorable="d"
         Title="AlertWindow" Height="140" Width="342" ResizeMode="NoResize">
     <Grid>
@@ -19,11 +20,11 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="yesButton" Click="YesButton_Click">
-                <TextBlock Text="Tak" Margin="16,0,16,0" x:Name="yesText"/>
+                <TextBlock Text="{x:Static localization:Localization.Yes}" Margin="16,0,16,0" x:Name="yesText"/>
             </Button>
 
             <Button x:Name="noButton" Grid.Column="2" Click="NoButton_Click">
-                <TextBlock Text="Nie" Margin="16 0 16 0" x:Name="noText"/>
+                <TextBlock Text="{x:Static localization:Localization.No}" Margin="16 0 16 0" x:Name="noText"/>
             </Button>
         </Grid>
     </Grid>

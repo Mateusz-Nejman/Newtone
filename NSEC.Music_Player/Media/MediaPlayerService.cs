@@ -73,7 +73,7 @@ namespace NSEC.Music_Player.Media
             result.SendResult(null);
         }
 
-        public Notification GetNotification()
+        public Notification GetNotification(bool IsPlaying = false)
         {
             MediaControllerCompat controller = Global.MediaSession.Controller;
 
@@ -96,7 +96,7 @@ namespace NSEC.Music_Player.Media
                 .SetOngoing(true)
                 .SetLargeIcon(bitmap)
                 .AddAction(new NotificationCompat.Action(Resource.Drawable.PrevIconNotification,"prev",MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToPrevious)))
-                .AddAction(new NotificationCompat.Action(GlobalData.MediaPlayer.IsPlaying ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, GlobalData.MediaPlayer.IsPlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
+                .AddAction(new NotificationCompat.Action((GlobalData.MediaPlayer.IsPlaying || IsPlaying) ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, GlobalData.MediaPlayer.IsPlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
                 .AddAction(new NotificationCompat.Action(Resource.Drawable.NextIconNotification, "next", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToNext)))
                 .SetStyle(new MediaStyle()
                 .SetMediaSession(Global.MediaSession.SessionToken)
@@ -106,11 +106,11 @@ namespace NSEC.Music_Player.Media
 
             return builder.Build();
         }
-        public void ShowNotification()
+        public void ShowNotification(bool isPlaying)
         {
 
             ConsoleDebug.WriteLine("[Android Media] Show Notification");
-            var n = GetNotification();
+            var n = GetNotification(isPlaying);
             StartForeground(0, n);
             Global.NotificationManager.Notify(0, n);
         }

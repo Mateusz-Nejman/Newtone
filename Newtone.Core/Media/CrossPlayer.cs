@@ -73,19 +73,19 @@ namespace Newtone.Core.Media
         public void Play()
         {
             BasePlayer?.Play();
-            BasePlayer?.SetNotification(GlobalData.MediaSource);
+            BasePlayer?.SetNotification(true);
         }
 
         public void Stop()
         {
             BasePlayer?.Stop();
-            BasePlayer?.SetNotification(GlobalData.MediaSource);
+            BasePlayer?.SetNotification(false);
         }
 
         public void Pause()
         {
             BasePlayer?.Pause();
-            BasePlayer?.SetNotification(GlobalData.MediaSource);
+            BasePlayer?.SetNotification(false);
         }
 
         public void Next()
@@ -140,7 +140,7 @@ namespace Newtone.Core.Media
                     GlobalData.MediaSource = track;
                 }
 
-                BasePlayer?.SetNotification(track);
+                BasePlayer?.SetNotification(true);
 
 
             }
@@ -187,7 +187,7 @@ namespace Newtone.Core.Media
                     GlobalData.MediaSource = track;
                 }
 
-                BasePlayer?.SetNotification(track);
+                BasePlayer?.SetNotification(true);
 
             }
         }
@@ -195,7 +195,7 @@ namespace Newtone.Core.Media
         public void Reset()
         {
             BasePlayer?.Stop();
-            BasePlayer?.SetNotification(GlobalData.MediaSource);
+            BasePlayer?.SetNotification(false);
         }
 
         public void Seek(double seek)

@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon />
+    <ApplicationIcon>NewtoneIcon.ico</ApplicationIcon>
     <StartupObject />
+    <Authors>Mateusz Nejman</Authors>
+    <Product>Newtone Music Player</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,6 +38,7 @@
     <None Remove="Resources\SettingsIcon.png" />
     <None Remove="Resources\StopIcon.png" />
     <None Remove="Resources\TrackIcon.png" />
+    <None Remove="Resources\UploadPageIcon.png" />
     <None Remove="Resources\VolumeDownIcon.png" />
     <None Remove="Resources\VolumeIcon.png" />
     <None Remove="Resources\VolumeUpIcon.png" />
@@ -77,6 +80,7 @@
     <Resource Include="Resources\SettingsIcon.png" />
     <Resource Include="Resources\StopIcon.png" />
     <Resource Include="Resources\TrackIcon.png" />
+    <Resource Include="Resources\UploadPageIcon.png" />
     <Resource Include="Resources\VolumeDownIcon.png" />
     <Resource Include="Resources\VolumeIcon.png" />
     <Resource Include="Resources\VolumeUpIcon.png" />

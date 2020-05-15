@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NSEC.Music_Player.Languages {
+namespace Tests.Languages {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace NSEC.Music_Player.Languages {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NSEC.Music_Player.Languages.Localization", typeof(Localization).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Tests.Languages.Localization", typeof(Localization).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -160,11 +160,83 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Połącz.
+        /// </summary>
+        internal static string Connect {
+            get {
+                return ResourceManager.GetString("Connect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Okładka.
+        /// </summary>
+        internal static string Cover {
+            get {
+                return ResourceManager.GetString("Cover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wczytaj okładkę.
+        /// </summary>
+        internal static string CoverLoad {
+            get {
+                return ResourceManager.GetString("CoverLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zapisz okładkę.
+        /// </summary>
+        internal static string CoverSave {
+            get {
+                return ResourceManager.GetString("CoverSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony.
         /// </summary>
         internal static string FileCorrupted {
             get {
                 return ResourceManager.GetString("FileCorrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Instrukcja.
+        /// </summary>
+        internal static string Instruction {
+            get {
+                return ResourceManager.GetString("Instruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu English.
+        /// </summary>
+        internal static string LanguageEN {
+            get {
+                return ResourceManager.GetString("LanguageEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Polski.
+        /// </summary>
+        internal static string LanguagePL {
+            get {
+                return ResourceManager.GetString("LanguagePL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Русский.
+        /// </summary>
+        internal static string LanguageRU {
+            get {
+                return ResourceManager.GetString("LanguageRU", resourceCulture);
             }
         }
         
@@ -367,6 +439,33 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odbierz.
+        /// </summary>
+        internal static string Receive {
+            get {
+                return ResourceManager.GetString("Receive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Kod odbiorcy.
+        /// </summary>
+        internal static string ReceiverCode {
+            get {
+                return ResourceManager.GetString("ReceiverCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zapisz.
+        /// </summary>
+        internal static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Szukaj.
         /// </summary>
         internal static string Search {
@@ -399,6 +498,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string SearchTip {
             get {
                 return ResourceManager.GetString("SearchTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyślij.
+        /// </summary>
+        internal static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
             }
         }
         
@@ -448,6 +556,24 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj folder do listy skanowanych folderów.
+        /// </summary>
+        internal static string Settings4 {
+            get {
+                return ResourceManager.GetString("Settings4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Język.
+        /// </summary>
+        internal static string Settings5 {
+            get {
+                return ResourceManager.GetString("Settings5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zmiany będą widoczne po ponownym uruchomieniu aplikacji.
         /// </summary>
         internal static string SettingsChanges {
@@ -489,6 +615,87 @@ namespace NSEC.Music_Player.Languages {
         internal static string SnackQueue {
             get {
                 return ResourceManager.GetString("SnackQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj do wysłania.
+        /// </summary>
+        internal static string SyncAdd {
+            get {
+                return ResourceManager.GetString("SyncAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dodaj do wysłania (playlista).
+        /// </summary>
+        internal static string SyncAddPlaylist {
+            get {
+                return ResourceManager.GetString("SyncAddPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Podłącz urządzenia do tej samej sieci.
+        /// </summary>
+        internal static string SyncHelp1 {
+            get {
+                return ResourceManager.GetString("SyncHelp1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 2. Wpisz kod lub poczekaj na połączenie.
+        /// </summary>
+        internal static string SyncHelp2 {
+            get {
+                return ResourceManager.GetString("SyncHelp2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 2. Wpisz kod.
+        /// </summary>
+        internal static string SyncHelp2Desktop {
+            get {
+                return ResourceManager.GetString("SyncHelp2Desktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 3. Wybierz odpowiednią opcję.
+        /// </summary>
+        internal static string SyncHelp3 {
+            get {
+                return ResourceManager.GetString("SyncHelp3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odbieranie plików.
+        /// </summary>
+        internal static string SyncReceiving {
+            get {
+                return ResourceManager.GetString("SyncReceiving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wysyłanie plików.
+        /// </summary>
+        internal static string SyncSending {
+            get {
+                return ResourceManager.GetString("SyncSending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pokaż pliki do wysłania.
+        /// </summary>
+        internal static string SyncShowFiles {
+            get {
+                return ResourceManager.GetString("SyncShowFiles", resourceCulture);
             }
         }
         
@@ -619,6 +826,15 @@ namespace NSEC.Music_Player.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wypakowano.
+        /// </summary>
+        internal static string Unpacked {
+            get {
+                return ResourceManager.GetString("Unpacked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Uwaga.
         /// </summary>
         internal static string Warning {
@@ -633,6 +849,15 @@ namespace NSEC.Music_Player.Languages {
         internal static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Twój kod.
+        /// </summary>
+        internal static string YourCode {
+            get {
+                return ResourceManager.GetString("YourCode", resourceCulture);
             }
         }
     }

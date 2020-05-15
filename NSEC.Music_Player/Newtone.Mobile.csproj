@@ -88,11 +88,6 @@
     <Compile Include="Colors.cs" />
     <Compile Include="Fonts.cs" />
     <Compile Include="Global.cs" />
-    <Compile Include="Languages\Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="Logic\ContextMenuBuilder.cs" />
     <Compile Include="Logic\SnackbarBuilder.cs" />
     <Compile Include="MainActivity.cs" />
@@ -105,9 +100,11 @@
     <Compile Include="Media\MediaSourceExtensions.cs" />
     <Compile Include="Media\MobileMediaPlayer.cs" />
     <Compile Include="Media\NotificationButtonReceiver.cs" />
+    <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\ExploreModel.cs" />
     <Compile Include="Models\LibraryMenuModel.cs" />
     <Compile Include="Models\SearchResultModel.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\TrackModel.cs" />
     <Compile Include="Processing\ImageProcessing.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -143,6 +140,9 @@
     <Compile Include="Views\Images\CustomImageButton.cs" />
     <Compile Include="Views\Images\IconView.cs" />
     <Compile Include="Views\Images\IconViewRenderer.cs" />
+    <Compile Include="Views\LanguageSelectPage.xaml.cs">
+      <DependentUpon>LanguageSelectPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModalPage.xaml.cs">
       <DependentUpon>ModalPage.xaml</DependentUpon>
     </Compile>
@@ -168,6 +168,12 @@
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SyncListPage.xaml.cs">
+      <DependentUpon>SyncListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SyncPage.xaml.cs">
+      <DependentUpon>SyncPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TracksPage.xaml.cs">
       <DependentUpon>TracksPage.xaml</DependentUpon>
     </Compile>
@@ -185,6 +191,9 @@
     </Compile>
     <Compile Include="Views\ViewCells\SettingsViewCell.xaml.cs">
       <DependentUpon>SettingsViewCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewCells\SyncViewCell.xaml.cs">
+      <DependentUpon>SyncViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewCells\TrackViewCell.xaml.cs">
       <DependentUpon>TrackViewCell.xaml</DependentUpon>
@@ -216,7 +225,7 @@
       <Version>4.6.0.726</Version>
     </PackageReference>
     <PackageReference Include="YoutubeExplode">
-      <Version>5.0.3</Version>
+      <Version>5.0.4</Version>
     </PackageReference>
     <PackageReference Include="z440.atl.core">
       <Version>3.4.1</Version>
@@ -309,16 +318,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\DownloadPageIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Languages\Localization.be.resx" />
-    <EmbeddedResource Include="Languages\Localization.en.resx" />
-    <EmbeddedResource Include="Languages\Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Languages\Localization.ru.resx" />
-    <EmbeddedResource Include="Languages\Localization.uk.resx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MainPage.xaml">
@@ -477,6 +476,38 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\ViewCells\SettingsViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SyncPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\UploadPageIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\LanguageSelectPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\EnglandFlag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\PolandFlag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\RussiaFlag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ViewCells\SyncViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SyncListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

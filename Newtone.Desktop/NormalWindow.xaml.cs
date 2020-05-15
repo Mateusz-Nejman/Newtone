@@ -29,10 +29,13 @@ namespace Newtone.Desktop
         {
             InitializeComponent();
 
-            topPanelButtons = new Button[] { topPanelTracksButton, topPanelArtistsButton, topPanelPlaylistsButton, topPanelSearchButton };
+            topPanelButtons = new Button[] { topPanelTracksButton, topPanelArtistsButton, topPanelPlaylistsButton, topPanelSearchButton, topPanelSettingsButton };
             TopPanelButton_Click(CurrentTopPanelButtonIndex);
             windowContainer.Children.Clear();
             windowContainer.Children.Add(new TrackPage());
+
+            downloadButton.Source = "DownloadPageIcon.png";
+            uploadButton.Source = "UploadPageIcon.png";
             Timer = new Timer
             {
                 Interval = 500
@@ -44,7 +47,8 @@ namespace Newtone.Desktop
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Dispatcher.Invoke(() => {
-                badgeButton.BadgeCount = DownloadProcessing.BadgeCount;
+                downloadButton.BadgeCount = DownloadProcessing.BadgeCount;
+                uploadButton.BadgeCount = SyncProcessing.Audios.Count;
                 if (windowContainer.Children.Count > 0 && windowContainer.Children[0] is ITimerContent)
                 {
                     ((ITimerContent)windowContainer.Children[0]).Tick();
@@ -115,6 +119,12 @@ namespace Newtone.Desktop
 
         private void TopPanelSettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentTopPanelButtonIndex != 4)
+            {
+                windowContainer.Children.Clear();
+                windowContainer.Children.Add(new SettingsPage());
+            }
+
             TopPanelButton_Click(4);
         }
 
@@ -128,7 +138,14 @@ namespace Newtone.Desktop
             }
         }
 
-        private void BadgeButton_Click(object sender, RoutedEventArgs e)
+        private void UploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            TopPanelButton_Click(-1);
+            windowContainer.Children.Clear();
+            windowContainer.Children.Add(new SyncPage());
+        }
+
+        private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             TopPanelButton_Click(-1);
             windowContainer.Children.Clear();

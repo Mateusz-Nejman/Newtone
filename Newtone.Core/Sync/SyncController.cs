@@ -19,10 +19,16 @@ namespace Newtone.Core.Sync
          * Paczka właściwa zostaje wysłana
          * po odebraniu paczki dane są przetwarzane do poprawnego działania na urządzeniu odbiorcy
          */
-        private int port = 8888; //transfer}
+        private readonly int port = 8888; //transfer}
+        private MemoryStream currentBuffer;
+
+        public double Progress { get; private set; } = 0;
+
+        private List<string> Audios { get; set; }
 
         public SyncController()
         {
+            currentBuffer = new MemoryStream();
         }
 
         public void Receive()
@@ -42,8 +48,8 @@ namespace Newtone.Core.Sync
                     int packetType = 0;
                     int dataLength = 0;
 
-                    MemoryStream memoryStream = new MemoryStream();
-
+                    currentBuffer = new MemoryStream();
+                    Progress = 0;
                     while(true)
                     {
                         int numByte = client.Receive(buffer);
@@ -56,12 +62,14 @@ namespace Newtone.Core.Sync
                         }
                         else if(packetType == 1)
                         {
-                            memoryStream.Write(buffer, 0, numByte);
+                            currentBuffer.Write(buffer, 0, numByte);
+                            Progress = dataLength == 0 ? 0 : ((currentBuffer.Length / dataLength) * 100.0d);
                             client.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                         }
 
-                        if (memoryStream.Length == dataLength)
+                        if (currentBuffer.Length == dataLength)
                         {
+                            client.Send(Encoding.ASCII.GetBytes(GlobalData.SYNC_COMPLETED));
                             client.Shutdown(SocketShutdown.Both);
                             client.Close();
                             break;
@@ -75,11 +83,11 @@ namespace Newtone.Core.Sync
             }
         }
 
-        public void SendTo(string code, List<string> files)
+        public void SendTo(string code)
         {
             if(Verify(code))
             {
-                byte[] bufferData = PrepareFilesToSend(files);
+                byte[] bufferData = PrepareFilesToSend(Audios);
                 byte[] bufferLength = GetPacketFromString(bufferData.Length.ToString());
 
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -121,6 +129,20 @@ namespace Newtone.Core.Sync
                 {
 
                 }
+            }
+        }
+
+        public void AddFile(string filepath)
+        {
+            if (!Audios.Contains(filepath))
+                Audios.Add(filepath);
+        }
+
+        public void AddFiles(IEnumerable<string> files)
+        {
+            foreach(string file in files)
+            {
+                AddFile(file);
             }
         }
 

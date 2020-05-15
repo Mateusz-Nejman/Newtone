@@ -44,7 +44,7 @@ namespace Newtone.Core.Processing
             if (id == "")
                 YoutubeExplodeExtensions.TryParseVideoId(url, out id);
 
-            if(!Downloads.ContainsKey(id))
+            if(!Downloads.ContainsKey(id) && !GlobalData.DownloadedIds.Contains(id))
             {
                 Downloads.Add(id, new DownloadModel()
                 {
@@ -59,6 +59,7 @@ namespace Newtone.Core.Processing
                 {
                     downloadTask = new Task(async () => await TaskAction());
                     downloadTask.Start();
+                    Console.WriteLine("Task started");
                 }
             }
         }
@@ -85,10 +86,18 @@ namespace Newtone.Core.Processing
                             GlobalData.Playlists.Add(model.PlaylistName, new List<string>());
 
                         if (!GlobalData.Playlists[model.PlaylistName].Contains(filename))
+                        {
                             GlobalData.Playlists[model.PlaylistName].Add(filename);
+                            GlobalData.SaveConfig();
+                        }
                     }
                     Downloads.Remove(id);
                 }
+
+                if (Downloads.Count > 0)
+                    await TaskAction();
+                else
+                    downloadTask = null;
             }
             catch(Exception e)
             {
@@ -112,7 +121,15 @@ namespace Newtone.Core.Processing
             });
 
 
-            string fileName = video.Title.Replace('/', '_');
+            string fileName = video.Title
+                .Replace('/', '_').
+                Replace('\\', '_').
+                Replace(':', '_').
+                Replace('*', '_').
+                Replace('"', '_').
+                Replace('<', '_').
+                Replace('>', '_').
+                Replace('|', '_');
             FileInfo fileInfo = new FileInfo(GlobalData.MusicPath + "/" + fileName + ".m4a");
 
             if (GlobalData.DownloadedIds.Contains(id))

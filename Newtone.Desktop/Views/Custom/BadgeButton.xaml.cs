@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtone.Desktop.Processing;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -32,6 +33,27 @@ namespace Newtone.Desktop.Views.Custom
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                return (string)base.GetValue(SourceProperty);
+            }
+            set
+            {
+                base.SetValue(SourceProperty, value);
+
+                if (Source == "DownloadPageIcon.png")
+                {
+                    badgeImage.Source = ImageProcessing.FromArray(Properties.Resources.DownloadPageIcon);
+                }
+                else if(Source == "UploadPageIcon.png")
+                {
+                    badgeImage.Source = ImageProcessing.FromArray(Properties.Resources.UploadPageIcon);
+                }
+            }
+        }
+
         public RoutedEventHandler Click
         {
             get
@@ -40,12 +62,13 @@ namespace Newtone.Desktop.Views.Custom
             }
             set
             {
-                base.SetValue(ClipProperty, value);
+                base.SetValue(ClickProperty, value);
             }
 
         }
         public static readonly DependencyProperty ClickProperty = DependencyProperty.Register("Click", typeof(RoutedEventHandler), typeof(BadgeButton));
-            
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(string), typeof(BadgeButton));
+
         public BadgeButton()
         {
             InitializeComponent();

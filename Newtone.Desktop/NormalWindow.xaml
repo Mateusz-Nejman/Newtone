@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Newtone.Desktop"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
              xmlns:custom="clr-namespace:Newtone.Desktop.Views.Custom"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="860">
     <UserControl.Resources>
         <Style TargetType="Button" x:Key="TopPanelButton" x:Name="TopPanelButtonStyle">
             <Setter Property="Background" Value="#1f1f1f"/>
@@ -49,7 +50,6 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -58,13 +58,15 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Utwory" Style="{StaticResource TopPanelButton}" Grid.Column="1" x:Name="topPanelTracksButton" Click="TopPanelTracksButton_Click"/>
-            <Button Content="Wykonawcy" Style="{StaticResource TopPanelButton}" Grid.Column="2" x:Name="topPanelArtistsButton" Click="TopPanelArtistsButton_Click"/>
-            <Button Content="Playlisty" Style="{StaticResource TopPanelButton}" Grid.Column="3" x:Name="topPanelPlaylistsButton" Click="TopPanelPlaylistsButton_Click"/>
-            <Button Content="Szukaj" Style="{StaticResource TopPanelButton}" Grid.Column="4" x:Name="topPanelSearchButton" Click="TopPanelSearchButton_Click"/>
-            <!--<Button Content="Ustawienia" Style="{StaticResource TopPanelButton}" Grid.Column="4" x:Name="topPanelSettingsButton" Click="TopPanelSettingsButton_Click"/>-->
-            <custom:BadgeButton x:Name="badgeButton" Grid.Column="7" Width="32" Click="BadgeButton_Click"/>
+            <Button Content="{x:Static localization:Localization.Tracks}" Style="{StaticResource TopPanelButton}" Grid.Column="0" x:Name="topPanelTracksButton" Click="TopPanelTracksButton_Click"/>
+            <Button Content="{x:Static localization:Localization.Artists}" Style="{StaticResource TopPanelButton}" Grid.Column="1" x:Name="topPanelArtistsButton" Click="TopPanelArtistsButton_Click"/>
+            <Button Content="{x:Static localization:Localization.Playlists}" Style="{StaticResource TopPanelButton}" Grid.Column="2" x:Name="topPanelPlaylistsButton" Click="TopPanelPlaylistsButton_Click"/>
+            <Button Content="{x:Static localization:Localization.Search}" Style="{StaticResource TopPanelButton}" Grid.Column="3" x:Name="topPanelSearchButton" Click="TopPanelSearchButton_Click"/>
+            <Button Content="{x:Static localization:Localization.Settings}" Style="{StaticResource TopPanelButton}" Grid.Column="4" x:Name="topPanelSettingsButton" Click="TopPanelSettingsButton_Click"/>
+            <custom:BadgeButton x:Name="uploadButton" Grid.Column="6" Width="32" Click="UploadButton_Click"/>
+            <custom:BadgeButton x:Name="downloadButton" Grid.Column="7" Width="32" Click="DownloadButton_Click"/>
             <TextBox Width="200" Height="30" x:Name="searchBox" Grid.Column="8" KeyUp="SearchBox_KeyUp" Margin="0,0,10,0" Style="{StaticResource DefaultTextBox}"/>
         </Grid>
 

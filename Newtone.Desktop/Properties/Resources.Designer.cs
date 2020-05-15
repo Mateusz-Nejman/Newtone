@@ -273,6 +273,16 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
+        internal static byte[] UploadPageIcon {
+            get {
+                object obj = ResourceManager.GetObject("UploadPageIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
+        /// </summary>
         internal static byte[] VolumeDownIcon {
             get {
                 object obj = ResourceManager.GetObject("VolumeDownIcon", resourceCulture);

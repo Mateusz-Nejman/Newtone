@@ -4,23 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Newtone.Desktop.Views"
+        xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
         mc:Ignorable="d"
-        Title="Edytuj" Height="460" Width="240" ResizeMode="NoResize" Background="#1f1f1f">
+        Title="{x:Static localization:Localization.TrackMenuEdit}" Height="460" Width="240" ResizeMode="NoResize" Background="#1f1f1f">
     <StackPanel Margin="5">
-        <TextBlock Text="Tytuł" Margin="4" Foreground="White"/>
+        <TextBlock Text="{x:Static localization:Localization.Title}" Margin="4" Foreground="White"/>
         <TextBox x:Name="titleBox" Style="{StaticResource DefaultTextBox}"/>
-        <TextBlock Text="Wykonawca" Margin="4" Foreground="White"/>
+        <TextBlock Text="{x:Static localization:Localization.Artist}" Margin="4" Foreground="White"/>
         <TextBox x:Name="artistBox" Style="{StaticResource DefaultTextBox}"/>
-        <TextBlock Text="Okładka" Margin="4" Foreground="White"/>
+        <TextBlock Text="{x:Static localization:Localization.Cover}" Margin="4" Foreground="White"/>
         <Image Source="../Resources/EmptyTrack.png" Stretch="UniformToFill" x:Name="image"/>
         <Grid Margin="0,5,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Wczytaj okładkę" Name="loadButton" Click="LoadButton_Click" Margin="0 0 2 0" Style="{StaticResource DefaultButton}"/>
-            <Button Grid.Column="1" Content="Zapisz okładkę" Name="saveButton" Click="SaveButton_Click" Margin="2 0 0 0" Style="{StaticResource DefaultButton}"/>
+            <Button Content="{x:Static localization:Localization.CoverLoad}" Name="loadButton" Click="LoadButton_Click" Margin="0 0 2 0" Style="{StaticResource DefaultButton}"/>
+            <Button Grid.Column="1" Content="{x:Static localization:Localization.CoverSave}" Name="saveButton" Click="SaveButton_Click" Margin="2 0 0 0" Style="{StaticResource DefaultButton}"/>
         </Grid>
-        <Button x:Name="submitButton" Content="Zapisz" Click="SubmitButton_Click" Style="{StaticResource DefaultButton}"/>
+        <Button x:Name="submitButton" Content="{x:Static localization:Localization.Save}" Click="SubmitButton_Click" Style="{StaticResource DefaultButton}"/>
     </StackPanel>
 </Window>

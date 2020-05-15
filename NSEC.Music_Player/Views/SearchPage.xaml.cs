@@ -1,5 +1,6 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Models;
+using Newtone.Core.Languages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,7 +43,10 @@ namespace NSEC.Music_Player.Views
         {
             if(!string.IsNullOrEmpty(searchEntry.Text))
             {
-                NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(searchEntry.Text),searchEntry.Text));
+                if(MainActivity.IsInternet())
+                    NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(searchEntry.Text), searchEntry.Text));
+                else
+                    NormalPage.Instance.DisplayAlert(Localization.Warning, "Nie masz neta typie", "OK");
             }
         }
 
@@ -52,7 +56,11 @@ namespace NSEC.Music_Player.Views
 
             if(index >= 0 && index < Items.Count)
             {
-                NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(Items[index].Text), Items[index].Text));
+                if (MainActivity.IsInternet())
+                    NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(Items[index].Text), Items[index].Text));
+                else
+                    NormalPage.Instance.DisplayAlert(Localization.Warning, "Nie masz neta typie", "OK");
+                
                 historyList.SelectedItem = null;
             }
         }

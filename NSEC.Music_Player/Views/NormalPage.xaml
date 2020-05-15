@@ -20,6 +20,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" x:Name="titleLabel"/>
                 <Grid Grid.Column="1">
@@ -31,7 +32,21 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
+                    <images:CustomImageButton Source="UploadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="16" Clicked="SyncButton_Clicked"/>
+                    <Grid Grid.Row="1" x:Name="badgeBubbleSync">
+                        <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
+                        <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="1" TextColor="{Static local:Colors.TextColor}" x:Name="badgeCountSync"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <images:CustomImageButton Source="DownloadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="16" Clicked="DownloadButton_Clicked"/>
                     <Grid Grid.Row="1" x:Name="badgeBubble">
                         <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
