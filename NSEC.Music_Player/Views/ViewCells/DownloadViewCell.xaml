@@ -11,8 +11,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Label Text="{Binding Title}" Style="{StaticResource ListViewText}"/>
-            <Label Text="{Binding ProgressStringMobile}" Grid.Column="1" Style="{StaticResource ListViewText}"/>
+            <Label Text="{Binding Title}" Style="{StaticResource ListViewText}" VerticalTextAlignment="Center"/>
+            <Label Text="{Binding ProgressString}" Grid.Column="1" Style="{StaticResource ListViewText}" VerticalTextAlignment="Center"/>
         </Grid>
     </ViewCell.View>
 </ViewCell>

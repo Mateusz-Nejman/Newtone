@@ -1,4 +1,6 @@
 ﻿using Nejman.NSEC2;
+using Newtone.Core.Loaders;
+using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using System;
 using System.Collections.Generic;
@@ -13,11 +15,17 @@ namespace Newtone.Core.Processing
 {
     public static class SyncProcessing
     {
-        public static List<string> Audios { get; private set; } = new List<string>();
+        #region Fields
         private static readonly int port = 9050; //transfer}
         private static MemoryStream currentBuffer;
         private static Task task;
         private static Task receiverTask;
+        private const int BufferSize = 65536;
+        private const int MessSize = 1024;
+        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        #endregion
+        #region Properties
+        public static List<string> Audios { get; private set; } = new List<string>();
         public static double Progress { get; private set; } = 0;
         public static double Size { get; private set; } = 0;
         public static int FilesReceived { get; private set; } = 0;
@@ -28,9 +36,9 @@ namespace Newtone.Core.Processing
         public static Socket CurrentConnection { get; private set; }
         public static int State { get; private set; } = 0;
         public static bool Started { get; private set; } = false;
-        private const int BufferSize = 65536;
-        private const int MessSize = 1024;
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public static Action ReceivingAction { get; set; }
+        public static string PlaylistName { get; set; }
+        public static List<string> ReceivedTracks { get; private set; }
 
         private static IPAddress IpAddress
         {
@@ -47,18 +55,41 @@ namespace Newtone.Core.Processing
                 return ToHex(IpAddress);
             }
         }
+        #endregion
 
+        #region Public Methods
         public static void Connect(string code)
         {
             if(Verify(code))
             {
-                CurrentConnectionIp = FromHex(code);
-                CurrentConnection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                try
                 {
-                    SendTimeout = 100
-                };
-                CurrentConnection.Connect(CurrentConnectionIp, port);
+                    CurrentConnectionIp = FromHex(code);
+                    CurrentConnection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                    {
+                        SendTimeout = 100
+                    };
+                    CurrentConnection.Connect(CurrentConnectionIp, port);
+                }
+                catch
+                {
+                    Disconnect();
+                }
             }
+        }
+
+        public static void Disconnect()
+        {
+            CurrentConnectionIp = null;
+            if(CurrentConnection != null)
+            {
+                CurrentConnection.Close();
+                CurrentConnection.Dispose();
+                CurrentConnection = null;
+            }
+            SocketMode = 0;
+            State = 0;
+            Started = false;
         }
 
         public static void ListenReceiver()
@@ -71,7 +102,7 @@ namespace Newtone.Core.Processing
                     State = 0;
                     try
                     {
-                        Console.WriteLine("SYNC Binding");
+                        ConsoleDebug.WriteLine("SYNC Binding");
                         socket.Bind(new IPEndPoint(IpAddress, port));
                         socket.Listen(10);
                         //socket.Connect(FromHex(code), port);
@@ -79,10 +110,10 @@ namespace Newtone.Core.Processing
                         //socket.Disconnect(true);
 
                         byte[] buffer = new byte[BufferSize];
-                        Console.WriteLine("SYNC Waiting");
+                        ConsoleDebug.WriteLine("SYNC Waiting");
                         Socket client = socket.Accept();
 
-                        Console.WriteLine("SYNC Accepted");
+                        ConsoleDebug.WriteLine("SYNC Accepted");
                         CurrentConnectionIp = (client.RemoteEndPoint as IPEndPoint).Address;
                         CurrentConnection = client;
                     }
@@ -103,7 +134,7 @@ namespace Newtone.Core.Processing
             {
                 task = new Task(() =>
                 {
-                    Console.WriteLine("SYNC Start");
+                    ConsoleDebug.WriteLine("SYNC Start");
                     Started = true;
                     SocketMode = 1;
                     //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -130,7 +161,7 @@ namespace Newtone.Core.Processing
                                 {
                                     dataLength = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
                                     Size = dataLength / 1024 / 1024;
-                                    //Console.WriteLine("SYNC dataLength = " + dataLength);
+                                    //ConsoleDebug.WriteLine("SYNC dataLength = " + dataLength);
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                     packetType = 1;
                                 }
@@ -144,36 +175,38 @@ namespace Newtone.Core.Processing
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                 }
 
-                                //Console.WriteLine("SYNC "+currentBuffer.Length+" "+dataLength);
+                                //ConsoleDebug.WriteLine("SYNC "+currentBuffer.Length+" "+dataLength);
 
                                 if (currentBuffer.Length >= dataLength)
                                 {
-                                    Console.WriteLine("Buffer: " + currentBuffer.Length + " data: " + dataLength);
-                                    Console.WriteLine("SYNC Close");
+                                    ConsoleDebug.WriteLine("Buffer: " + currentBuffer.Length + " data: " + dataLength);
+                                    ConsoleDebug.WriteLine("SYNC Close");
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.SYNC_COMPLETED));
                                     CurrentConnection.Close();
-                                    Console.WriteLine("SYNC Closed");
+                                    ConsoleDebug.WriteLine("SYNC Closed");
                                     break;
                                 }
                             }
                         }
                         //File.WriteAllBytes(GlobalData.MusicPath + "/mobile.nsec2", currentBuffer.ToArray());
                         State = 1;
+                        PlaylistName = "";
+                        
                         Unpack(currentBuffer);
                         State = 2;
 
                         Audios.Clear();
+                        ReceivingAction?.Invoke();
                     }
                     catch
                     {
-                        if (CurrentConnection.Connected)
-                            CurrentConnection.Disconnect(false);
-                        CurrentConnection.Close();
+                        Disconnect();
                     }
                     currentBuffer.Close();
                     SocketMode = 0;
                     Started = false;
                     task = null;
+
                 });
                 task.Start();
             }
@@ -190,8 +223,9 @@ namespace Newtone.Core.Processing
             {
                 Started = true;
                 SocketMode = 2;
-                Console.WriteLine("SYNC Verified");
+                ConsoleDebug.WriteLine("SYNC Verified");
                 byte[] bufferData = PrepareFilesToSend(Audios);
+                Size = bufferData.Length / 1024 / 1024;
                 //File.WriteAllBytes(GlobalData.MusicPath + "/desktop.nsec2", bufferData);
                 byte[] bufferLength = Encoding.ASCII.GetBytes(bufferData.Length.ToString());
                 byte[] receiveBuffer = new byte[MessSize];
@@ -202,10 +236,10 @@ namespace Newtone.Core.Processing
 
                     byte[] buffer = new byte[BufferSize];
                     int bytesR = CurrentConnection.Receive(receiveBuffer);
-                    Console.WriteLine("SYNC bytesR = " + bytesR);
+                    ConsoleDebug.WriteLine("SYNC bytesR = " + bytesR);
 
                     string message = Encoding.ASCII.GetString(receiveBuffer, 0, bytesR);
-                    Console.WriteLine(message);
+                    ConsoleDebug.WriteLine(message);
 
                     if (message.Contains(GlobalData.RECEIVED_MESSAGE))
                     {
@@ -214,12 +248,12 @@ namespace Newtone.Core.Processing
                         int progress = 0;
                         while ((read = memoryStream.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            //Console.WriteLine("SYNC read = " + read);
+                            //ConsoleDebug.WriteLine("SYNC read = " + read);
                             CurrentConnection.Send(buffer);
                             progress += read;
-                            Progress = bufferData.Length == 0 ? 0.0d : ((((double)progress) / ((double)bufferData.Length)) * 100.0d);
+                            Progress = progress / 1024 / 1024;
 
-                            //Console.WriteLine("Sync Receive");
+                            //ConsoleDebug.WriteLine("Sync Receive");
                             bytesR = CurrentConnection.Receive(receiveBuffer);
                         }
                     }
@@ -228,7 +262,7 @@ namespace Newtone.Core.Processing
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine(e);
+                    ConsoleDebug.WriteLine(e);
                     GlobalData.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)
                         CurrentConnection.Disconnect(false);
@@ -250,10 +284,32 @@ namespace Newtone.Core.Processing
         {
             foreach (string file in files)
             {
+                ConsoleDebug.WriteLine("Sync Add");
                 AddFile(file);
             }
         }
 
+        public static bool Verify(string hex)
+        {
+            if (hex.Length != 8)
+                return false;
+            string availableChars = "abcdefABCDEF1234567890";
+
+            foreach (char c in hex)
+            {
+                if (!availableChars.Contains(c))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool ChceckEnabled(bool started, int mode, bool connection)
+        {
+            return Started == started && SocketMode == mode && (CurrentConnection != null) == connection;
+        }
+        #endregion
+        #region Private Methods
         private static byte[] PrepareFilesToSend(List<string> files)
         {
             NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
@@ -294,24 +350,24 @@ namespace Newtone.Core.Processing
 
         private static void Unpack(MemoryStream stream)
         {
-            Console.WriteLine("Unpack");
+            ConsoleDebug.WriteLine("Unpack");
             NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
-            Console.WriteLine("Unpack load");
+            ConsoleDebug.WriteLine("Unpack load");
             nsec.SetDebug(true);
             nsec.Load(stream);
-            Console.WriteLine("Unpack loaded");
+            ConsoleDebug.WriteLine("Unpack loaded");
             
 
             string tagsBuffer = Encoding.UTF8.GetString(nsec.Get("tags"));
             string filesBuffer = Encoding.UTF8.GetString(nsec.Get("list"));
 
-            //Console.WriteLine("Unpack " + tagsBuffer + " " + filesBuffer);
+            //ConsoleDebug.WriteLine("Unpack " + tagsBuffer + " " + filesBuffer);
             foreach(string bufferItem in tagsBuffer.Split("\n",StringSplitOptions.RemoveEmptyEntries))
             {
-                //Console.WriteLine("Unpack " + bufferItem);
+                //ConsoleDebug.WriteLine("Unpack " + bufferItem);
                 string[] elems = bufferItem.Split(GlobalData.SEPARATOR);
                 string name = new FileInfo(GlobalData.MusicPath + "/" + elems[0]).FullName;
-                Console.WriteLine(name);
+                ConsoleDebug.WriteLine(name);
                 string author = elems[1];
                 string title = elems[2];
                 string imageName = elems[3];
@@ -331,6 +387,7 @@ namespace Newtone.Core.Processing
             string[] files = filesBuffer.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             FilesReceived = files.Length;
 
+            ReceivedTracks = new List<string>();
             for(int a = 0; a < files.Length; a++)
             {
                 string file = files[a];
@@ -338,11 +395,15 @@ namespace Newtone.Core.Processing
                 FileInfo info = new FileInfo(GlobalData.MusicPath + "/" + file);
                 CurrentFileName = file;
                 CurrentFileReceived = a;
-                //Console.WriteLine("Unpack " + info.FullName);
+                //ConsoleDebug.WriteLine("Unpack " + info.FullName);
                 File.WriteAllBytes(info.FullName, nsec.Get(file));
+                GlobalLoader.AddTrack(MediaProcessing.GetSource(info.FullName));
+
+                ReceivedTracks.Add(info.FullName);
             }
 
             GlobalData.SaveTags();
+            GlobalData.SaveConfig();
         }
 
         private static string ToHex(IPAddress addr)
@@ -363,25 +424,6 @@ namespace Newtone.Core.Processing
 
             return new IPAddress(new byte[] { (byte)int.Parse(h1, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h2, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h3, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h4, System.Globalization.NumberStyles.HexNumber) });
         }
-
-        public static bool Verify(string hex)
-        {
-            if (hex.Length != 8)
-                return false;
-            string availableChars = "abcdefABCDEF1234567890";
-
-            foreach (char c in hex)
-            {
-                if (!availableChars.Contains(c))
-                    return false;
-            }
-
-            return true;
-        }
-
-        public static bool ChceckEnabled(bool started, int mode, bool connection)
-        {
-            return Started == started && SocketMode == mode && (CurrentConnection != null) == connection;
-        }
+        #endregion
     }
 }

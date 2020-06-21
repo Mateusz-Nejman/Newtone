@@ -7,9 +7,11 @@ namespace Newtone.Core.Logic
 {
     public class TrackCounter
     {
+        #region Properties
         public MediaSource Media { get; set; }
         public int Count { get; set; }
-
+        #endregion
+        #region Constructors
         public TrackCounter()
         {
             Media = new MediaSource();
@@ -21,7 +23,9 @@ namespace Newtone.Core.Logic
             Media = media;
             Count = count;
         }
+        #endregion
 
+        #region Public Methods
         public override string ToString()
         {
             return $"{Media?.FilePath}{GlobalData.SEPARATOR}{Count}:";
@@ -34,5 +38,6 @@ namespace Newtone.Core.Logic
             string[] elems = fromString.Split(GlobalData.SEPARATOR);
             return GlobalData.Audios.ContainsKey(elems[0]) ? new TrackCounter(GlobalData.Audios[elems[0]], int.Parse(elems[1])) : null;
         }
+        #endregion
     }
 }

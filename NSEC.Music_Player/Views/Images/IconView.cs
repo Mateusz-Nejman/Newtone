@@ -15,7 +15,7 @@ namespace NSEC.Music_Player.Views.Images
 {
 	public class IconView : Xamarin.Forms.View
 	{
-		#region ForegroundProperty
+		#region Properties
 
 		public static readonly BindableProperty ForegroundProperty = BindableProperty.Create(nameof(Foreground), typeof(Color), typeof(IconView), default(Color));
 
@@ -31,10 +31,6 @@ namespace NSEC.Music_Player.Views.Images
 			}
 		}
 
-		#endregion
-
-		#region SourceProperty
-
 		public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(IconView), default(string));
 
 		public string Source
@@ -49,10 +45,6 @@ namespace NSEC.Music_Player.Views.Images
 			}
 		}
 
-		#endregion
-
-		#region TagProperty
-
 		public static readonly BindableProperty TagProperty = BindableProperty.Create(nameof(Tag), typeof(string), typeof(IconView), default(string));
 
 		public string Tag
@@ -66,10 +58,6 @@ namespace NSEC.Music_Player.Views.Images
 				SetValue(TagProperty, value);
 			}
 		}
-
-		#endregion
-
-		#region ChangeColorProperty
 
 		public static readonly BindableProperty ChangeColorProperty = BindableProperty.Create(nameof(ChangeColor), typeof(bool), typeof(IconView), true);
 

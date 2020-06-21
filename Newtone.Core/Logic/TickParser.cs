@@ -6,6 +6,7 @@ namespace Newtone.Core.Logic
 {
     public class TickParser
     {
+        #region Public Methods
         public static string FormatTick(double ticks)
         {
             int totalSeconds = (int)ticks;
@@ -19,5 +20,6 @@ namespace Newtone.Core.Logic
 
             return format;
         }
+        #endregion
     }
 }

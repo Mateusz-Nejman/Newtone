@@ -1,6 +1,11 @@
-﻿using Newtone.Desktop.Processing;
+﻿using Newtone.Core.Logic;
+using Newtone.Core.Models;
+using Newtone.Desktop.Processing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +24,13 @@ namespace Newtone.Desktop.Views.Custom
     /// </summary>
     public partial class BadgeButton : UserControl
     {
+        #region Fields
         private int badgeCount;
+        #endregion
+        #region Properties
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(BadgeButton));
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(BadgeButton));
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(string), typeof(BadgeButton));
         public int BadgeCount
         {
             get
@@ -54,29 +65,40 @@ namespace Newtone.Desktop.Views.Custom
             }
         }
 
-        public RoutedEventHandler Click
+        public object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
+        #endregion
+        #region Commands
+        public ICommand Command
         {
             get
             {
-                return (RoutedEventHandler)base.GetValue(ClickProperty);
+                ConsoleDebug.WriteLine("Click");
+                return (ICommand)base.GetValue(CommandProperty);
             }
             set
             {
-                base.SetValue(ClickProperty, value);
+                base.SetValue(CommandProperty, value);
+                button.Command = Command;
             }
 
         }
-        public static readonly DependencyProperty ClickProperty = DependencyProperty.Register("Click", typeof(RoutedEventHandler), typeof(BadgeButton));
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(string), typeof(BadgeButton));
-
+        
+        #endregion
+        #region Constructors
         public BadgeButton()
         {
             InitializeComponent();
         }
-
+        #endregion
+        #region Private Methods
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Click?.Invoke(sender, e);
+            Command?.Execute(CommandParameter);
         }
+        #endregion
     }
 }

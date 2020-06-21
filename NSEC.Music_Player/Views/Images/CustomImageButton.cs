@@ -8,8 +8,10 @@ namespace NSEC.Music_Player.Views.Images
 {
     public class CustomImageButton : ImageButton
     {
+        #region Events
         public event EventHandler<ToggledEventArgs> Toggled;
-
+        #endregion
+        #region Properties
         public static BindableProperty IsToggledProperty =
             BindableProperty.Create("IsToggled", typeof(bool), typeof(CustomImageButton), false,
                                     propertyChanged: OnIsToggledChanged);
@@ -28,12 +30,9 @@ namespace NSEC.Music_Player.Views.Images
             set { SetValue(TagProperty, value); }
             get { return (string)GetValue(TagProperty); }
         }
-        public CustomImageButton()
-        {
-            
-        }
-
-        static void OnIsToggledChanged(BindableObject bindable, object oldValue, object newValue)
+        #endregion
+        #region Private Methods
+        private static void OnIsToggledChanged(BindableObject bindable, object oldValue, object newValue)
         {
             CustomImageButton toggleButton = (CustomImageButton)bindable;
             bool isToggled = (bool)newValue;
@@ -44,5 +43,6 @@ namespace NSEC.Music_Player.Views.Images
             // Set the visual state
             VisualStateManager.GoToState(toggleButton, isToggled ? "ToggledOn" : "Normal");
         }
+        #endregion
     }
 }

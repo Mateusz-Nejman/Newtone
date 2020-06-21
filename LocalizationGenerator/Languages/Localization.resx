@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutAuthor" xml:space="preserve">
+    <value>Autor: Mateusz Nejman</value>
+  </data>
+  <data name="AboutDesc" xml:space="preserve">
+    <value>Odtwarzacz umożliwia słuchanie muzyki z youtube, oraz lokalnie. Autor nie ponosi odpowiedzialności za to, w jaki sposób użytkownik używa mediów z podanych serwisów.</value>
+  </data>
+  <data name="AboutWWW" xml:space="preserve">
+    <value>Strona autora</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="AddTags" xml:space="preserve">
+    <value>Dodać tagi?</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Wykonawca</value>
+  </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Wykonawcy</value>
+  </data>
+  <data name="BackPressed" xml:space="preserve">
+    <value>Naciśnij jeszcze raz, aby wyjść</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="ChangeName" xml:space="preserve">
+    <value>Zmień nazwę</value>
+  </data>
+  <data name="ChoosePlaylist" xml:space="preserve">
+    <value>Wybierz playlistę</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Wyczyść</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Połącz</value>
+  </data>
+  <data name="Conversion" xml:space="preserve">
+    <value>Konwersja</value>
+  </data>
+  <data name="ConversionInputFiles" xml:space="preserve">
+    <value>Pliki wejściowe</value>
+  </data>
+  <data name="ConversionOutputFolder" xml:space="preserve">
+    <value>Folder wyjściowy</value>
+  </data>
+  <data name="ConversionOutputFormat" xml:space="preserve">
+    <value>Format wyjściowy</value>
+  </data>
+  <data name="Convert" xml:space="preserve">
+    <value>Konwertuj</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Okładka</value>
+  </data>
+  <data name="CoverLoad" xml:space="preserve">
+    <value>Wczytaj okładkę</value>
+  </data>
+  <data name="CoverSave" xml:space="preserve">
+    <value>Zapisz okładkę</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Rozłącz</value>
+  </data>
+  <data name="FileCorrupted" xml:space="preserve">
+    <value>Plik jest uszkodzony</value>
+  </data>
+  <data name="FolderExists" xml:space="preserve">
+    <value>Folder nie istnieje</value>
+  </data>
+  <data name="Informations" xml:space="preserve">
+    <value>Informacje</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instrukcja</value>
+  </data>
+  <data name="LanguageEN" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LanguagePL" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="LanguageRU" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="LastViews" xml:space="preserve">
+    <value>Ostatnio odtwarzane</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Biblioteka</value>
+  </data>
+  <data name="MainPage" xml:space="preserve">
+    <value>Strona główna</value>
+  </data>
+  <data name="MostViews" xml:space="preserve">
+    <value>Najczęściej odtwarzane</value>
+  </data>
+  <data name="NewPlaylist" xml:space="preserve">
+    <value>Nowa playlista</value>
+  </data>
+  <data name="NewPlaylistHint" xml:space="preserve">
+    <value>Wprowadź nazwę playlisty</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Dalej</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nie</value>
+  </data>
+  <data name="NoConnection" xml:space="preserve">
+    <value>Brak dostępu do internetu</value>
+  </data>
+  <data name="NoDownloads" xml:space="preserve">
+    <value>Brak pobierania w toku</value>
+  </data>
+  <data name="PermissionGrant" xml:space="preserve">
+    <value>Przyznaj uprawnienia</value>
+  </data>
+  <data name="PermissionInfo" xml:space="preserve">
+    <value>Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>Playlista</value>
+  </data>
+  <data name="PlaylistDownload" xml:space="preserve">
+    <value>Utworzyć nową playlistę z pobranymi utworami?</value>
+  </data>
+  <data name="PlaylistExists" xml:space="preserve">
+    <value>Istnieje już playlista z taką nazwą</value>
+  </data>
+  <data name="PlaylistOrTrack" xml:space="preserve">
+    <value>Pobrać playlistę czy utwór?</value>
+  </data>
+  <data name="PlaylistPlay" xml:space="preserve">
+    <value>Odtwórz</value>
+  </data>
+  <data name="Playlists" xml:space="preserve">
+    <value>Playlisty</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Postęp</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pytanie</value>
+  </data>
+  <data name="QuestionDelete" xml:space="preserve">
+    <value>Usunąć plik</value>
+  </data>
+  <data name="QuestionDeleteFromPlaylist" xml:space="preserve">
+    <value>z playlisty</value>
+  </data>
+  <data name="QuestionDeletePlaylist" xml:space="preserve">
+    <value>Usunąć playlistę</value>
+  </data>
+  <data name="QuestionDeletePlaylistg" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Gotowe</value>
+  </data>
+  <data name="Receive" xml:space="preserve">
+    <value>Odbierz</value>
+  </data>
+  <data name="ReceiverCode" xml:space="preserve">
+    <value>Kod odbiorcy</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Szukaj</value>
+  </data>
+  <data name="SearchHistory" xml:space="preserve">
+    <value>Historia wyszukiwania</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Wyszukiwanie...</value>
+  </data>
+  <data name="SearchTip" xml:space="preserve">
+    <value>Do wyszukiwarki możesz wkleić link do utworu, playlisty, lub wpisać tytuł.</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Wybierz</value>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>Wybierz folder</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Wyślij</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="Settings0" xml:space="preserve">
+    <value>Wygeneruj tagi dla plików lokalnych</value>
+  </data>
+  <data name="Settings1" xml:space="preserve">
+    <value>Automatyczne tagi</value>
+  </data>
+  <data name="Settings2" xml:space="preserve">
+    <value>Wyczyść wszystkie dane</value>
+  </data>
+  <data name="Settings3" xml:space="preserve">
+    <value>Wybierz motyw</value>
+  </data>
+  <data name="Settings4" xml:space="preserve">
+    <value>Dodaj folder do listy skanowanych folderów</value>
+  </data>
+  <data name="Settings5" xml:space="preserve">
+    <value>Język</value>
+  </data>
+  <data name="SettingsChanges" xml:space="preserve">
+    <value>Zmiany będą widoczne po ponownym uruchomieniu aplikacji</value>
+  </data>
+  <data name="SnackDelete" xml:space="preserve">
+    <value>Pomyślnie usunięto</value>
+  </data>
+  <data name="SnackFileExists" xml:space="preserve">
+    <value>Plik nie istnieje</value>
+  </data>
+  <data name="SnackPlaylist" xml:space="preserve">
+    <value>Dodano do playlisty</value>
+  </data>
+  <data name="SnackQueue" xml:space="preserve">
+    <value>Dodano do kolejki</value>
+  </data>
+  <data name="SyncAdd" xml:space="preserve">
+    <value>Dodaj do wysłania</value>
+  </data>
+  <data name="SyncAddPlaylist" xml:space="preserve">
+    <value>Dodaj do wysłania (playlista)</value>
+  </data>
+  <data name="SyncHelp1" xml:space="preserve">
+    <value>1. Podłącz urządzenia do tej samej sieci</value>
+  </data>
+  <data name="SyncHelp2" xml:space="preserve">
+    <value>2. Wpisz kod lub poczekaj na połączenie</value>
+  </data>
+  <data name="SyncHelp2Desktop" xml:space="preserve">
+    <value>2. Wpisz kod</value>
+  </data>
+  <data name="SyncHelp3" xml:space="preserve">
+    <value>3. Wybierz odpowiednią opcję</value>
+  </data>
+  <data name="SyncPhone" xml:space="preserve">
+    <value>Synchronizacja z telefonem</value>
+  </data>
+  <data name="SyncReceiving" xml:space="preserve">
+    <value>Odbieranie plików</value>
+  </data>
+  <data name="SyncSending" xml:space="preserve">
+    <value>Wysyłanie plików</value>
+  </data>
+  <data name="SyncShowFiles" xml:space="preserve">
+    <value>Pokaż pliki do wysłania</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Ciemny</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Domyślny</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Różowy</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Tytuł</value>
+  </data>
+  <data name="TitleDownloads" xml:space="preserve">
+    <value>Pobieranie</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Utwór</value>
+  </data>
+  <data name="TrackCount" xml:space="preserve">
+    <value>Zapisanych utworów</value>
+  </data>
+  <data name="TrackCountPlaylist" xml:space="preserve">
+    <value>Utworów</value>
+  </data>
+  <data name="TrackMenuDelete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="TrackMenuEdit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="TrackMenuPlaylist" xml:space="preserve">
+    <value>Dodaj do playlisty</value>
+  </data>
+  <data name="TrackMenuQueue" xml:space="preserve">
+    <value>Dodaj do kolejki</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Utwory</value>
+  </data>
+  <data name="UnknownArtist" xml:space="preserve">
+    <value>Nieznany wykonawca</value>
+  </data>
+  <data name="Unpacked" xml:space="preserve">
+    <value>Wypakowano</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Uwaga</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Twój kod</value>
+  </data>
+</root>

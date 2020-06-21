@@ -5,26 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Newtone.Desktop.Views"
         xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
+        xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
         mc:Ignorable="d"
-        Title="AlertWindow" Height="140" Width="342" ResizeMode="NoResize">
+        Title="{Binding Title}" Height="140" Width="342" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Info" Margin="5" x:Name="messageText" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding Text}" Margin="5" TextWrapping="Wrap"/>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="yesButton" Click="YesButton_Click">
-                <TextBlock Text="{x:Static localization:Localization.Yes}" Margin="16,0,16,0" x:Name="yesText"/>
+            <Button Command="{Binding YesCommand}">
+                <TextBlock Text="{Binding Yes}" Margin="16,0,16,0"/>
             </Button>
 
-            <Button x:Name="noButton" Grid.Column="2" Click="NoButton_Click">
-                <TextBlock Text="{x:Static localization:Localization.No}" Margin="16 0 16 0" x:Name="noText"/>
+            <Button Grid.Column="2" Command="{Binding NoCommand}">
+                <TextBlock Text="{Binding No}" Margin="16 0 16 0"/>
             </Button>
         </Grid>
     </Grid>

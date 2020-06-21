@@ -1,17 +1,22 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Media;
+using Newtone.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Text;
 using System.Windows;
 
 namespace Newtone.Desktop.Models
 {
-    public class TrackModel : Newtone.Core.Models.TrackModel, INotifyPropertyChanged
+    public class TrackModel : Newtone.Core.Models.TrackModel
     {
+        #region Fields
         private Visibility visibility = Visibility.Hidden;
         private string trackString;
+        #endregion
+        #region Properties
         public Visibility Visibility
         {
             get { return visibility; }
@@ -20,7 +25,7 @@ namespace Newtone.Desktop.Models
                if(visibility != value)
                 {
                     visibility = value;
-                    OnPropertyChanged("Visibility");
+                    OnPropertyChanged(() => Visibility);
                 }
             }
         }
@@ -37,11 +42,12 @@ namespace Newtone.Desktop.Models
                 if(newValue != trackString)
                 {
                     trackString = newValue;
-                    OnPropertyChanged("TrackString");
+                    OnPropertyChanged(() => TrackString);
                 }
             }
         }
-
+        #endregion
+        #region Constructors
         public TrackModel(Newtone.Core.Models.TrackModel model)
         {
             this.Artist = model.Artist;
@@ -49,18 +55,15 @@ namespace Newtone.Desktop.Models
             this.FilePath = model.FilePath;
             this.Title = model.Title;
         }
+        #endregion
+        #region Public Methods
 
-        public void CheckChanges()
+        public TrackModel CheckChanges()
         {
             Visibility = FilePath == GlobalData.MediaSourcePath ? Visibility.Visible : Visibility.Hidden;
             TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
+            return this;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        #endregion
     }
 }

@@ -19,6 +19,7 @@ namespace NSEC.Music_Player.Views.Custom
 {
     public class AudioSliderControlRenderer : SliderRenderer
     {
+        #region Protected Methods
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Slider> e)
         {
             base.OnElementChanged(e);
@@ -39,12 +40,13 @@ namespace NSEC.Music_Player.Views.Custom
 
                 GradientDrawable p = new GradientDrawable();
                 p.SetColor(Android.Graphics.Color.Rgb((int)Colors.ProgressBarColor.R, (int)Colors.ProgressBarColor.G, (int)Colors.ProgressBarColor.B));
-                ClipDrawable progress = new ClipDrawable(p, GravityFlags.Left, ClipDrawable.Horizontal);
+                ClipDrawable progress = new ClipDrawable(p, GravityFlags.Left, ClipDrawableOrientation.Horizontal);
                 GradientDrawable background = new GradientDrawable();
                 background.SetColor(Android.Graphics.Color.Rgb(26, 26, 26));
                 LayerDrawable pd = new LayerDrawable(new Drawable[] { background, progress });
                 Control.SetProgressDrawableTiled(pd);
             }
         }
+        #endregion
     }
 }

@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <logic:StringToImageSourceConverter x:Key="convert"/>
     </UserControl.Resources>
-    <Button Style="{StaticResource TransparentButton}" Click="Button_Click" x:Name="button">
+    <Button Style="{StaticResource TransparentButton}" Command="{Binding Command}" CommandParameter="{Binding CommandParameter}" x:Name="button" Click="Button_Click">
         <Grid>
             <Image x:Name="badgeImage"/>
             <Grid>

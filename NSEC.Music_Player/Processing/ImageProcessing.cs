@@ -19,6 +19,7 @@ namespace NSEC.Music_Player.Processing
 {
     public static class ImageProcessing
     {
+        #region Public Methods
         public static ImageSource Blur(byte[] source)
         {
             Bitmap b = BitmapFactory.DecodeByteArray(source, 0, source.Length);
@@ -65,6 +66,13 @@ namespace NSEC.Music_Player.Processing
             return ImageSource.FromStream(() => new MemoryStream(bitmapData));
         }
 
+        public static ImageSource FromArray(byte[] source)
+        {
+            return ImageSource.FromStream(() => new MemoryStream(source));
+        }
+        #endregion
+
+        #region Private Methods
         private static Bitmap CreateBlurredImage(Bitmap originalBitmap, int radius)
         {
             // Create another bitmap that will hold the results of the filter.  
@@ -97,10 +105,6 @@ namespace NSEC.Music_Player.Processing
 
             return blurredBitmap;
         }
-
-        public static ImageSource FromArray(byte[] source)
-        {
-            return ImageSource.FromStream(() => new MemoryStream(source));
-        }
+        #endregion
     }
 }

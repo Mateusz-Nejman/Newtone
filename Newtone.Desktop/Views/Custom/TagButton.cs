@@ -8,6 +8,7 @@ namespace Newtone.Desktop.Views.Custom
 {
     public class TagButton:Button
     {
+        #region Properties
         public string Value
         {
             get
@@ -21,5 +22,6 @@ namespace Newtone.Desktop.Views.Custom
         }
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(string), typeof(TagButton));
+        #endregion
     }
 }

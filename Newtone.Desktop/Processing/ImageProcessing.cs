@@ -8,6 +8,7 @@ namespace Newtone.Desktop.Processing
 {
     public static class ImageProcessing
     {
+        #region Public Methods
         public static BitmapImage FromArray(byte[] array)
         {
             MemoryStream memoryStream = new MemoryStream(array);
@@ -20,5 +21,6 @@ namespace Newtone.Desktop.Processing
 
             return bitmapImage;
         }
+        #endregion
     }
 }

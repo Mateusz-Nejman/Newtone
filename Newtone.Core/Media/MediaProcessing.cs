@@ -9,7 +9,10 @@ namespace Newtone.Core.Media
 {
     public class MediaProcessing
     {
+        #region Constants
         private const int MINIMUM_TRACK_DURATION = 10;
+        #endregion
+        #region Properties
         public static MediaSource GetSource(string filePath)
         {
             ConsoleDebug.WriteLine("GS: " + filePath);
@@ -63,5 +66,6 @@ namespace Newtone.Core.Media
             }
             return container;
         }
+        #endregion
     }
 }

@@ -100,15 +100,38 @@
     <Compile Include="Media\MediaSourceExtensions.cs" />
     <Compile Include="Media\MobileMediaPlayer.cs" />
     <Compile Include="Media\NotificationButtonReceiver.cs" />
+    <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\ExploreModel.cs" />
     <Compile Include="Models\LibraryMenuModel.cs" />
+    <Compile Include="Models\PlaylistModel.cs" />
     <Compile Include="Models\SearchResultModel.cs" />
-    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\TrackModel.cs" />
     <Compile Include="Processing\ImageProcessing.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ArtistViewModel.cs" />
+    <Compile Include="ViewModels\CurrentPlaylistViewModel.cs" />
+    <Compile Include="ViewModels\CurrentTracksViewModel.cs" />
+    <Compile Include="ViewModels\Custom\PlayerPanelViewModel.cs" />
+    <Compile Include="ViewModels\DownloadViewModel.cs" />
+    <Compile Include="ViewModels\FirstStart\FirstStartSearchViewModel.cs" />
+    <Compile Include="ViewModels\FullScreenViewModel.cs" />
+    <Compile Include="ViewModels\LanguageSelectViewModel.cs" />
+    <Compile Include="ViewModels\ModalViewModel.cs" />
+    <Compile Include="ViewModels\NormalViewModel.cs" />
+    <Compile Include="ViewModels\PermissionViewModel.cs" />
+    <Compile Include="ViewModels\PlaylistViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SyncListViewModel.cs" />
+    <Compile Include="ViewModels\SyncViewModel.cs" />
+    <Compile Include="ViewModels\TrackViewModel.cs" />
+    <Compile Include="ViewModels\ViewCells\ArtistGridItemViewModel.cs" />
+    <Compile Include="ViewModels\ViewCells\PlaylistGridItemViewModel.cs" />
+    <Compile Include="ViewModels\ViewCells\SearchResultViewCellViewModel.cs" />
+    <Compile Include="ViewModels\ViewCells\SyncViewCellViewModel.cs" />
     <Compile Include="Views\ArtistPage.xaml.cs">
       <DependentUpon>ArtistPage.xaml</DependentUpon>
     </Compile>
@@ -120,6 +143,9 @@
     </Compile>
     <Compile Include="Views\Custom\AudioSliderControl.cs" />
     <Compile Include="Views\Custom\AudioSliderControlRenderer.cs" />
+    <Compile Include="Views\Custom\PlayerPanel.xaml.cs">
+      <DependentUpon>PlayerPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Custom\PopupMenu.cs" />
     <Compile Include="Views\Custom\PressGestureMaskRenderer.cs" />
     <Compile Include="Views\DownloadPage.xaml.cs">
@@ -219,16 +245,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.6.0.726</Version>
+      <Version>4.7.0.968</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>4.6.0.726</Version>
-    </PackageReference>
-    <PackageReference Include="YoutubeExplode">
-      <Version>5.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="z440.atl.core">
-      <Version>3.4.1</Version>
+      <Version>4.7.0.968</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +528,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\SyncListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Custom\PlayerPanel.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

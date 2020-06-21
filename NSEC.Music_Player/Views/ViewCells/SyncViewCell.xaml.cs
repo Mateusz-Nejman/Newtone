@@ -14,15 +14,11 @@ namespace NSEC.Music_Player.Views.ViewCells
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SyncViewCell : ViewCell
     {
+        #region Constructors
         public SyncViewCell()
         {
             InitializeComponent();
         }
-
-        private void CustomImageButton_Clicked(object sender, EventArgs e)
-        {
-            ContextMenuBuilder.BuildForSyncList((View)sender, ((CustomImageButton)sender).Tag);
-
-        }
+        #endregion
     }
 }

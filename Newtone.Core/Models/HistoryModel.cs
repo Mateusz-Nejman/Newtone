@@ -4,8 +4,21 @@ using System.Text;
 
 namespace Newtone.Core.Models
 {
-    public class HistoryModel
+    public class HistoryModel:PropertyChangedBase
     {
-        public string Text { get; set; }
+        #region Fields
+        private string text;
+        #endregion
+        #region Properties
+        public string Text
+        {
+            get => text;
+            set
+            {
+                text = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
     }
 }

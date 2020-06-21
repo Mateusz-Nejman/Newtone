@@ -15,9 +15,11 @@ namespace NSEC.Music_Player.Logic
 {
     public class SnackbarBuilder
     {
+        #region Public Methods
         public static void Show(string text)
         {
-            Toast.MakeText(MainActivity.Instance, text, ToastLength.Short).Show();
+            MainActivity.Instance.RunOnUiThread(() => Toast.MakeText(MainActivity.Instance, text, ToastLength.Short).Show());
         }
+        #endregion
     }
 }

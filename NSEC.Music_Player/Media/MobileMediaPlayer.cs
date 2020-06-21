@@ -26,38 +26,37 @@ namespace NSEC.Music_Player.Media
 {
     public class MobileMediaPlayer : IBasePlayer
     {
+        #region Properties
+        public static bool EntityClicked { get; set; }
         private MediaPlayer MediaPlayer { get; set; }
-
-        private long CurrentPosition
-        {
-            get
-            {
-                return (long)GetCurrentPosition() * 1000;
-            }
-        }
-
+        #endregion
+        #region Constructors
         public MobileMediaPlayer()
         {
             MediaPlayer = new MediaPlayer();
             MediaPlayer.SetAudioStreamType(Stream.Music);
             MediaPlayer.Completion += MediaPlayer_Completion;
             MediaPlayer.Prepared += MediaPlayer_Prepared;
+            EntityClicked = false;
             
         }
-
+        #endregion
+        #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
-            Console.WriteLine("MediaPlayer Prepared");
+            ConsoleDebug.WriteLine("MediaPlayer Prepared");
             Play();
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            Console.WriteLine("MediaPlayer Completion "+MediaPlayer.CurrentPosition +" "+MediaPlayer.Duration);
-            if (MediaPlayer.CurrentPosition > 0)
+            ConsoleDebug.WriteLine("MediaPlayer Completion "+MediaPlayer.CurrentPosition +" "+MediaPlayer.Duration);
+            if (MediaPlayer.CurrentPosition > 0 && !EntityClicked)
                 GlobalData.MediaPlayer.Next();
+            EntityClicked = false;
         }
-
+        #endregion
+        #region Public Methods
         public void AfterNext()
         {
             //throw new NotImplementedException();
@@ -122,9 +121,7 @@ namespace NSEC.Music_Player.Media
             MediaPlayer.Pause();
             if(GlobalData.MediaSource != null)
             {
-                Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
-                Global.StateBuilder.SetState(PlaybackStateCompat.StatePaused, CurrentPosition, 1.0f);
-                Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+                Global.SetNotificationData(PlaybackStateCompat.StatePaused);
             }
             
         }
@@ -132,9 +129,7 @@ namespace NSEC.Music_Player.Media
         public void Play()
         {
             MediaPlayer.Start();
-            Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
-            Global.StateBuilder.SetState(PlaybackStateCompat.StatePlaying, CurrentPosition, 1.0f);
-            Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            Global.SetNotificationData(PlaybackStateCompat.StatePlaying);
         }
 
         public void Prepare()
@@ -154,8 +149,7 @@ namespace NSEC.Music_Player.Media
 
         public void SetNotification(bool isPlaying)
         {
-            ConsoleDebug.WriteLine("Set Notification1 "+(MediaPlayerService.Instance == null ? "null" : "not null"));
-            MediaPlayerService.Instance.ShowNotification(isPlaying);
+            MediaPlayerService.Instance.ShowNotification();
         }
 
         public void SetVolume(float volume)
@@ -166,9 +160,8 @@ namespace NSEC.Music_Player.Media
         public void Stop()
         {
             MediaPlayer?.Stop();
-            Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
-            Global.StateBuilder.SetState(PlaybackStateCompat.StateStopped, CurrentPosition, 1.0f);
-            Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            Global.SetNotificationData(PlaybackStateCompat.StateStopped);
         }
+        #endregion
     }
 }

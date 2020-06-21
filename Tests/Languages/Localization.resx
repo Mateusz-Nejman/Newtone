@@ -162,6 +162,9 @@
   <data name="CoverSave" xml:space="preserve">
     <value>Zapisz okładkę</value>
   </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Rozłącz</value>
+  </data>
   <data name="FileCorrupted" xml:space="preserve">
     <value>Plik jest uszkodzony</value>
   </data>

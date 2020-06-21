@@ -16,6 +16,7 @@ using Android.Support.V4.Media.Session;
 using Android.Views;
 using Android.Widget;
 using Nejman.NSEC2;
+using Newtone.Core;
 using NSEC.Music_Player.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
@@ -26,6 +27,7 @@ namespace NSEC.Music_Player
 {
     public static class Global
     {
+        #region Properties
         public static MediaBrowserCompat MediaBrowser { get; set; }
         public static MediaSessionCompat MediaSession { get; set; }
         public static MediaBrowserCompat.ConnectionCallback ConnectionCallback { get; set; }
@@ -38,5 +40,16 @@ namespace NSEC.Music_Player
         public static ConnectivityManager ConnectivityManager { get; set; }
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
+        public static int PlaybackState { get; set; }
+        #endregion
+        #region Public Methods
+        public static void SetNotificationData(int state)
+        {
+            PlaybackState = state;
+            MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
+            StateBuilder.SetState(state, (long)GlobalData.MediaPlayer.CurrentPosition, 1.0f);
+            MediaSession.SetPlaybackState(StateBuilder.Build());
+        }
+        #endregion
     }
 }

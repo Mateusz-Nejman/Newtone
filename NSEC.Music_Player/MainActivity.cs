@@ -27,13 +27,18 @@ using Xamarin.Forms;
 
 namespace NSEC.Music_Player
 {
-    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop, ScreenOrientation = ScreenOrientation.Portrait)]
     [IntentFilter(new[] { Intent.ActionView}, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataSchemes = new[] { "file","content"}, DataMimeType = "audio/*")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        public static MainActivity Instance { get; set; }
+        #region Fields
         public static bool Loaded = false;
         private bool backPressed = false;
+        #endregion
+        #region Properties
+        public static MainActivity Instance { get; set; }
+        #endregion
+        #region Protected Methods
         protected override void OnCreate(Bundle savedInstanceState)
         {
             Instance = this;
@@ -49,15 +54,101 @@ namespace NSEC.Music_Player
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             InitializeGlobalVariables();
 
-            Console.WriteLine(SyncProcessing.Code);
+            ConsoleDebug.WriteLine(SyncProcessing.Code);
 
             LoadApplication(new App());
 
             Intent serviceIntent = new Intent(this, typeof(MediaPlayerService));
             StartService(serviceIntent);
+        }
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            //ConsoleDebug.WriteLine("MainActivity Intent " + intent.Data.ToString());
+            ConsoleDebug.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
+            ProcessNewIntent(intent);
+        }
+
+        protected override void OnResume()
+        {
+            ConsoleDebug.WriteLine("MainActivity OnResume");
+            base.OnResume();
+        }
+        protected override void OnStart()
+        {
+            base.OnStart();
+            try
+            {
+                Global.MediaBrowser.Connect();
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            ConsoleDebug.WriteLine("MainActivity OnStop");
+            //if (GlobalData.MediaPlayer != null && !GlobalData.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
+            //    Process.KillProcess(Process.MyPid());
+            MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
+            try
+            {
+                Global.MediaBrowser.Disconnect();
+            }
+            catch
+            {
+
+            }
 
         }
 
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+
+            ConsoleDebug.WriteLine("Result");
+            if (requestCode == 9999 && data != null)
+            {
+                string[] elems = data.Data.Path.Split(':');
+
+                string rootPath = "";
+                string volume = elems[0].Replace("/tree/", "");
+
+                if (volume == "primary")
+                    rootPath = Android.OS.Environment.ExternalStorageDirectory + "/";
+
+                foreach (var item in GetExternalMediaDirs())
+                {
+                    string path = item.AbsolutePath.Substring(0, item.AbsolutePath.IndexOf("Android"));
+
+                    if (path.Contains(volume))
+                        rootPath = path;
+                }
+
+                string newPath = rootPath + elems[1];
+
+                if (!GlobalData.IncludedPaths.Contains(newPath))
+                {
+                    GlobalData.IncludedPaths.Add(newPath);
+                    Task.Run(async () => {
+                        var files = await FileProcessing.Scan(newPath, new List<string>());
+
+                        foreach (var file in files)
+                        {
+                            GlobalLoader.AddTrack(file);
+                        }
+                    });
+                    GlobalData.SaveConfig();
+                    SnackbarBuilder.Show(Localization.Ready);
+                }
+
+            }
+        }
+        #endregion
+        #region Private Methods
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             StreamWriter streamWriter = new StreamWriter(GlobalData.MusicPath + "/log.txt", true);
@@ -90,115 +181,6 @@ namespace NSEC.Music_Player
             streamWriter.WriteLine("Source: " + e.Exception.Source);
             streamWriter.WriteLine("ERROR END");
             streamWriter.Close();
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-        protected override void OnNewIntent(Intent intent)
-        {
-            base.OnNewIntent(intent);
-            //ConsoleDebug.WriteLine("MainActivity Intent " + intent.Data.ToString());
-            ConsoleDebug.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
-            ProcessNewIntent(intent);
-        }
-
-        protected override void OnResume()
-        {
-            ConsoleDebug.WriteLine("MainActivity OnResume");
-            base.OnResume();
-        }
-
-        public override void OnBackPressed()
-        {
-            Console.WriteLine("OnBackPressed " + NormalPage.NavigationInstance.NavigationStack.Count + " "+ NormalPage.NavigationInstance.ModalStack.Count);
-            if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)
-            {
-                if (backPressed)
-                    base.OnBackPressed();
-                else
-                {
-                    SnackbarBuilder.Show(Localization.BackPressed);
-                    backPressed = true;
-                    Task.Run(() => {
-                        Thread.Sleep(2000);
-                        backPressed = false;
-                    });
-                }
-
-            }
-            else
-            {
-                base.OnBackPressed();
-            }
-
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-            Global.MediaBrowser.Connect();
-        }
-
-        protected override void OnStop()
-        {
-            base.OnStop();
-            ConsoleDebug.WriteLine("MainActivity OnStop");
-            //if (GlobalData.MediaPlayer != null && !GlobalData.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
-            //    Process.KillProcess(Process.MyPid());
-            MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
-            Global.MediaBrowser.Disconnect();
-        }
-
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
-        {
-            base.OnActivityResult(requestCode, resultCode, data);
-
-            Console.WriteLine("Result");
-            if (requestCode == 9999 && data != null)
-            {
-                string[] elems = data.Data.Path.Split(':');
-
-                string rootPath = "";
-                string volume = elems[0].Replace("/tree/", "");
-
-                if (volume == "primary")
-                    rootPath = Android.OS.Environment.ExternalStorageDirectory + "/";
-
-                foreach (var item in GetExternalMediaDirs())
-                {
-                    string path = item.AbsolutePath.Substring(0, item.AbsolutePath.IndexOf("Android"));
-
-                    if (path.Contains(volume))
-                        rootPath = path;
-                }
-
-                string newPath = rootPath + elems[1];
-
-                if(!GlobalData.IncludedPaths.Contains(newPath))
-                {
-                    GlobalData.IncludedPaths.Add(newPath);
-                    Task.Run(async () => {
-                        var files = await FileProcessing.Scan(newPath, new List<string>());
-
-                        foreach(var file in files)
-                        {
-                            GlobalLoader.AddTrack(file);
-                        }
-                    });
-                    GlobalData.SaveConfig();
-                    SnackbarBuilder.Show(Localization.Ready);
-                }
-
-            }
-        }
-
-        public void ForceRestart()
-        {
-            OnStop();
-            OnRestart();
         }
         private void InitializeGlobalVariables()
         {
@@ -260,7 +242,6 @@ namespace NSEC.Music_Player
             GlobalData.Playlists = new Dictionary<string, List<string>>();
             GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Local;
             GlobalData.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
-            GlobalData.MediaPlayer.SetPlayerController(new LocalPlayerController());
 
             GlobalData.ExcludedPaths = new List<string>();
             GlobalData.IncludedPaths = new List<string>()
@@ -351,6 +332,43 @@ namespace NSEC.Music_Player
             }
             return retString;
         }
+        #endregion
+        #region Public Methods
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        public override void OnBackPressed()
+        {
+            ConsoleDebug.WriteLine("OnBackPressed " + NormalPage.NavigationInstance.NavigationStack.Count + " "+ NormalPage.NavigationInstance.ModalStack.Count);
+            if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)
+            {
+                if (backPressed)
+                    base.OnBackPressed();
+                else
+                {
+                    SnackbarBuilder.Show(Localization.BackPressed);
+                    backPressed = true;
+                    Task.Run(() => {
+                        Thread.Sleep(2000);
+                        backPressed = false;
+                    });
+                }
+
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
+
+        }
+        public void ForceRestart()
+        {
+            OnStop();
+            OnRestart();
+        }
+        
 
         public static bool IsInternet()
         {
@@ -376,6 +394,7 @@ namespace NSEC.Music_Player
 
             return haveConnectedWifi || haveConnectedMobile;
         }
+        #endregion
     }
 }
 

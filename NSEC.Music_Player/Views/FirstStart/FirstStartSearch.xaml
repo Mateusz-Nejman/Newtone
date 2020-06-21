@@ -6,7 +6,11 @@
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.FirstStart.FirstStartSearch"
              xmlns:local="clr-namespace:NSEC.Music_Player"
-             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core">
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
+             xmlns:firststart="clr-namespace:NSEC.Music_Player.ViewModels.FirstStart">
+    <ContentView.BindingContext>
+        <firststart:FirstStartSearchViewModel/>
+    </ContentView.BindingContext>
   <ContentView.Content>
         <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}">
             <Grid.RowDefinitions>
@@ -20,7 +24,7 @@
             <Button Grid.Row="2" Margin="5" Text="{x:Static localization:Localization.Next}"
                         BackgroundColor="Transparent"
                             BorderColor="Black"
-                        TextColor="{Static local:Colors.TextColor}" Clicked="Button_Clicked"/>
+                        TextColor="{Static local:Colors.TextColor}" Command="{Binding Next}"/>
         </Grid>
     </ContentView.Content>
 </ContentView>

@@ -63,6 +63,10 @@ public static string BackPressed { get { return CurrentLocalization.BackPressed;
 /// </summary>
 public static string Cancel { get { return CurrentLocalization.Cancel; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Zmień nazwę
+/// </summary>
+public static string ChangeName { get { return CurrentLocalization.ChangeName; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz playlistę
 /// </summary>
 public static string ChoosePlaylist { get { return CurrentLocalization.ChoosePlaylist; } }
@@ -74,6 +78,26 @@ public static string Clear { get { return CurrentLocalization.Clear; } }
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Połącz
 /// </summary>
 public static string Connect { get { return CurrentLocalization.Connect; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Konwersja
+/// </summary>
+public static string Conversion { get { return CurrentLocalization.Conversion; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Pliki wejściowe
+/// </summary>
+public static string ConversionInputFiles { get { return CurrentLocalization.ConversionInputFiles; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Folder wyjściowy
+/// </summary>
+public static string ConversionOutputFolder { get { return CurrentLocalization.ConversionOutputFolder; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Format wyjściowy
+/// </summary>
+public static string ConversionOutputFormat { get { return CurrentLocalization.ConversionOutputFormat; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Konwertuj
+/// </summary>
+public static string Convert { get { return CurrentLocalization.Convert; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Okładka
 /// </summary>
@@ -87,9 +111,21 @@ public static string CoverLoad { get { return CurrentLocalization.CoverLoad; } }
 /// </summary>
 public static string CoverSave { get { return CurrentLocalization.CoverSave; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Rozłącz
+/// </summary>
+public static string Disconnect { get { return CurrentLocalization.Disconnect; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony
 /// </summary>
 public static string FileCorrupted { get { return CurrentLocalization.FileCorrupted; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Folder nie istnieje
+/// </summary>
+public static string FolderExists { get { return CurrentLocalization.FolderExists; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Informacje
+/// </summary>
+public static string Informations { get { return CurrentLocalization.Informations; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Instrukcja
 /// </summary>
@@ -163,6 +199,10 @@ public static string Playlist { get { return CurrentLocalization.Playlist; } }
 /// </summary>
 public static string PlaylistDownload { get { return CurrentLocalization.PlaylistDownload; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Istnieje już playlista z taką nazwą
+/// </summary>
+public static string PlaylistExists { get { return CurrentLocalization.PlaylistExists; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrać playlistę czy utwór?
 /// </summary>
 public static string PlaylistOrTrack { get { return CurrentLocalization.PlaylistOrTrack; } }
@@ -174,6 +214,10 @@ public static string PlaylistPlay { get { return CurrentLocalization.PlaylistPla
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Playlisty
 /// </summary>
 public static string Playlists { get { return CurrentLocalization.Playlists; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Postęp
+/// </summary>
+public static string Progress { get { return CurrentLocalization.Progress; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pytanie
 /// </summary>
@@ -190,6 +234,10 @@ public static string QuestionDeleteFromPlaylist { get { return CurrentLocalizati
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Usunąć playlistę
 /// </summary>
 public static string QuestionDeletePlaylist { get { return CurrentLocalization.QuestionDeletePlaylist; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu 
+/// </summary>
+public static string QuestionDeletePlaylistg { get { return CurrentLocalization.QuestionDeletePlaylistg; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Gotowe
 /// </summary>
@@ -222,6 +270,14 @@ public static string Searching { get { return CurrentLocalization.Searching; } }
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Do wyszukiwarki możesz wkleić link do utworu, playlisty, lub wpisać tytuł.
 /// </summary>
 public static string SearchTip { get { return CurrentLocalization.SearchTip; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz
+/// </summary>
+public static string Select { get { return CurrentLocalization.Select; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz folder
+/// </summary>
+public static string SelectFolder { get { return CurrentLocalization.SelectFolder; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wyślij
 /// </summary>
@@ -298,6 +354,10 @@ public static string SyncHelp2Desktop { get { return CurrentLocalization.SyncHel
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu 3. Wybierz odpowiednią opcję
 /// </summary>
 public static string SyncHelp3 { get { return CurrentLocalization.SyncHelp3; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Synchronizacja z telefonem
+/// </summary>
+public static string SyncPhone { get { return CurrentLocalization.SyncPhone; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Odbieranie plików
 /// </summary>
@@ -393,13 +453,22 @@ public string Artist = "Wykonawca";
 public string Artists = "Wykonawcy";
 public string BackPressed = "Naciśnij jeszcze raz, aby wyjść";
 public string Cancel = "Anuluj";
+public string ChangeName = "Zmień nazwę";
 public string ChoosePlaylist = "Wybierz playlistę";
 public string Clear = "Wyczyść";
 public string Connect = "Połącz";
+public string Conversion = "Konwersja";
+public string ConversionInputFiles = "Pliki wejściowe";
+public string ConversionOutputFolder = "Folder wyjściowy";
+public string ConversionOutputFormat = "Format wyjściowy";
+public string Convert = "Konwertuj";
 public string Cover = "Okładka";
 public string CoverLoad = "Wczytaj okładkę";
 public string CoverSave = "Zapisz okładkę";
+public string Disconnect = "Rozłącz";
 public string FileCorrupted = "Plik jest uszkodzony";
+public string FolderExists = "Folder nie istnieje";
+public string Informations = "Informacje";
 public string Instruction = "Instrukcja";
 public string LanguageEN = "English";
 public string LanguagePL = "Polski";
@@ -418,13 +487,16 @@ public string PermissionGrant = "Przyznaj uprawnienia";
 public string PermissionInfo = "Odtwarzacz wymaga uprawnień do zapisu danych po to, aby móc pobierać muzykę oraz zapisywać ustawienia";
 public string Playlist = "Playlista";
 public string PlaylistDownload = "Utworzyć nową playlistę z pobranymi utworami?";
+public string PlaylistExists = "Istnieje już playlista z taką nazwą";
 public string PlaylistOrTrack = "Pobrać playlistę czy utwór?";
 public string PlaylistPlay = "Odtwórz";
 public string Playlists = "Playlisty";
+public string Progress = "Postęp";
 public string Question = "Pytanie";
 public string QuestionDelete = "Usunąć plik";
 public string QuestionDeleteFromPlaylist = "z playlisty";
 public string QuestionDeletePlaylist = "Usunąć playlistę";
+public string QuestionDeletePlaylistg = "";
 public string Ready = "Gotowe";
 public string Receive = "Odbierz";
 public string ReceiverCode = "Kod odbiorcy";
@@ -433,6 +505,8 @@ public string Search = "Szukaj";
 public string SearchHistory = "Historia wyszukiwania";
 public string Searching = "Wyszukiwanie...";
 public string SearchTip = "Do wyszukiwarki możesz wkleić link do utworu, playlisty, lub wpisać tytuł.";
+public string Select = "Wybierz";
+public string SelectFolder = "Wybierz folder";
 public string Send = "Wyślij";
 public string Settings = "Ustawienia";
 public string Settings0 = "Wygeneruj tagi dla plików lokalnych";
@@ -452,6 +526,7 @@ public string SyncHelp1 = "1. Podłącz urządzenia do tej samej sieci";
 public string SyncHelp2 = "2. Wpisz kod lub poczekaj na połączenie";
 public string SyncHelp2Desktop = "2. Wpisz kod";
 public string SyncHelp3 = "3. Wybierz odpowiednią opcję";
+public string SyncPhone = "Synchronizacja z telefonem";
 public string SyncReceiving = "Odbieranie plików";
 public string SyncSending = "Wysyłanie plików";
 public string SyncShowFiles = "Pokaż pliki do wysłania";

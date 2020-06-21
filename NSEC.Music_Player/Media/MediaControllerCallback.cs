@@ -17,6 +17,7 @@ namespace NSEC.Music_Player.Media
 {
     public class MediaControllerCallback:MediaControllerCompat.Callback
     {
+        #region Public Methods
         public override void OnMetadataChanged(MediaMetadataCompat metadata)
         {
             base.OnMetadataChanged(metadata);
@@ -28,5 +29,6 @@ namespace NSEC.Music_Player.Media
             base.OnPlaybackStateChanged(state);
             ConsoleDebug.WriteLine("[Android Media] MeCoCa OnPlaybackStateChanged");
         }
+        #endregion
     }
 }

@@ -17,14 +17,14 @@ namespace NSEC.Music_Player.Media
 {
     public class AudioFocusListener : Java.Lang.Object, AudioManager.IOnAudioFocusChangeListener
     {
-
+        #region Public Methods
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
             ConsoleDebug.WriteLine("[Android Media] OnAudioFocusChange " + focusChange);
             if (GlobalData.MediaPlayer != null)
             {
                 if (focusChange == AudioFocus.Loss && GlobalData.MediaPlayer.CurrentPosition > 10)
-                    MediaPlayerHelper.Stop();
+                    MediaPlayerHelper.Pause();
 
                 if (focusChange == AudioFocus.LossTransientCanDuck)
                     GlobalData.MediaPlayer.SetVolume(0.1f);
@@ -36,5 +36,6 @@ namespace NSEC.Music_Player.Media
                     MediaPlayerHelper.Pause();
             }
         }
+        #endregion
     }
 }

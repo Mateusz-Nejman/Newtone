@@ -12,6 +12,7 @@ namespace Newtone.Core
 {
     public class GlobalData
     {
+        #region Constants
         public const string PASSWORD = "gruby idzie";
         public const string SEPARATOR = "[NSEC2_SEPARATOR]";
         public const int MAXTRACKSINLASTLIST = 5;
@@ -20,10 +21,13 @@ namespace Newtone.Core
         public const string ERROR_CORRUPTED = "error_file_corupted";
         public const string ERROR_CONNECTION = "connection_error";
         public const string SYNC_COMPLETED = "NSEC2C";
+        public const string SYNC_DISCONNECT = "NSEC2D";
 
         public const string RECEIVED_MESSAGE = "NSEC2R";
         public const string SYNC_CODE = "NSEC2CD";
+        #endregion
 
+        #region Properties
         public static bool IsDebugMode
         {
             get
@@ -72,6 +76,8 @@ namespace Newtone.Core
         public static List<string> ExcludedPaths { get; set; }
         public static List<string> IncludedPaths { get; set; }
         public static string CurrentLanguage { get; set; }
+        #endregion
+        #region Public Methods
 
         public static string LoadFirstStart()
         {
@@ -438,5 +444,6 @@ namespace Newtone.Core
                 nsec.Dispose();
             }
         }
+        #endregion
     }
 }

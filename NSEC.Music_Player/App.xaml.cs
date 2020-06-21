@@ -13,7 +13,10 @@ namespace NSEC.Music_Player
 {
     public partial class App : Application
     {
+        #region Properties
         public static App Instance { get; set; }
+        #endregion
+        #region Constructors
         public App()
         {
             InitializeComponent();
@@ -37,20 +40,6 @@ namespace NSEC.Music_Player
                 MainPage = new LanguageSelectPage("permissions");
             }
         }
-
-        public void OnCreate()
-        {
-
-        }
-
-        protected override void OnSleep()
-        {
-        }
-
-        protected override void OnResume()
-        {
-        }
-
-
+        #endregion
     }
 }

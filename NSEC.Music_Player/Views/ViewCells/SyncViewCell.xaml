@@ -4,16 +4,20 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
+          xmlns:viewcells="clr-namespace:NSEC.Music_Player.ViewModels.ViewCells"
           mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.ViewCells.SyncViewCell">
+    <ViewCell.BindingContext>
+        <viewcells:SyncViewCellViewModel/>
+    </ViewCell.BindingContext>
   <ViewCell.View>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Label Text="{Binding TrackString}" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation"/>
-            <images:CustomImageButton Grid.Column="1" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" Clicked="CustomImageButton_Clicked" Tag="{Binding Info}" IsVisible="{Binding AllowContextMenu}"/>
+            <Label Text="{Binding TrackString}" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation" VerticalTextAlignment="Center"/>
+            <images:CustomImageButton Grid.Column="1" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" x:Name="menuButton" Command="{Binding OpenMenu}" CommandParameter="{x:Reference menuButton}" Tag="{Binding Info}" IsVisible="{Binding AllowContextMenu}" Padding="10"/>
         </Grid>
     </ViewCell.View>
 </ViewCell>

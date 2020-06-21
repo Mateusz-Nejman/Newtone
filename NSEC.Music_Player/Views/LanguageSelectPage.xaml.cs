@@ -1,5 +1,6 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Languages;
+using NSEC.Music_Player.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,38 +15,12 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LanguageSelectPage : ContentPage
     {
-        private string NextPage { get; set; }
+        #region Constructors
         public LanguageSelectPage( string nextPage)
         {
             InitializeComponent();
-            NextPage = nextPage;
+            BindingContext = new LanguageSelectViewModel(nextPage);
         }
-
-        private void ChangeLanguage(string lang)
-        {
-            GlobalData.CurrentLanguage = lang;
-            Localization.RefreshLanguage();
-            if (NextPage == "permissions")
-                App.Instance.MainPage = new PermissionPage();
-            else if (NextPage == "firststart")
-                App.Instance.MainPage = new FirstStartPage();
-        }
-
-        private void PolandFlag_Clicked(object sender, EventArgs e)
-        {
-            ChangeLanguage("pl");
-        }
-
-        private void EnglandFlag_Clicked(object sender, EventArgs e)
-        {
-            ChangeLanguage("us");
-        }
-
-        private void RussiaFlag_Clicked(object sender, EventArgs e)
-        {
-            ChangeLanguage("ru");
-        }
-
-
+        #endregion
     }
 }

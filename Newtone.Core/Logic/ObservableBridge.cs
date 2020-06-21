@@ -7,12 +7,18 @@ namespace Newtone.Core.Logic
 {
     public class ObservableBridge<T>
     {
+        #region Fields
         public Action<T> Action;
         private List<T> Items;
+        #endregion
+        #region Constructors
         public ObservableBridge()
         {
             Items = new List<T>();
         }
+        #endregion
+
+        #region Public Methods
 
         public void Add(T item)
         {
@@ -30,5 +36,6 @@ namespace Newtone.Core.Logic
         {
             Items.Clear();
         }
+        #endregion
     }
 }

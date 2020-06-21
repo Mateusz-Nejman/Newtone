@@ -5,9 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Newtone.Desktop.Views"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
-             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
+             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates" xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:SyncViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,29 +27,29 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{x:Static localization:Localization.ReceiverCode}" Style="{StaticResource ListViewText}" TextWrapping="Wrap"/>
-                <TextBox Style="{StaticResource DefaultTextBox}" x:Name="deviceCode" Margin="5"/>
-                <Button Content="{x:Static localization:Localization.Connect}" Style="{StaticResource DefaultButton}" Margin="5" x:Name="connectButton" Click="ConnectButton_Click"/>
-                <Button Content="{x:Static localization:Localization.Receive}" Style="{StaticResource DefaultButton}" Margin="5" x:Name="receiveButton" Click="ReceiveButton_Click"/>
-                <Button Content="{x:Static localization:Localization.Send}" Style="{StaticResource DefaultButton}" Margin="5" x:Name="sendButton" Click="SendButton_Click"/>
+                <TextBox Style="{StaticResource DefaultTextBox}" Text="{Binding DeviceCode, Mode=TwoWay}" Margin="5"/>
+                <Button Content="{x:Static localization:Localization.Connect}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Connect}"/>
+                <Button Content="{x:Static localization:Localization.Receive}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Receive}"/>
+                <Button Content="{x:Static localization:Localization.Send}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Send}"/>
                 <TextBlock Text="{x:Static localization:Localization.Instruction}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
                 <TextBlock Text="{x:Static localization:Localization.SyncHelp1}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
                 <TextBlock Text="{x:Static localization:Localization.SyncHelp2Desktop}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
                 <TextBlock Text="{x:Static localization:Localization.SyncHelp3}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
             </StackPanel>
-            <Grid Grid.Column="1" Background="#121212" Visibility="Hidden" x:Name="receiveGrid">
+            <Grid Grid.Column="1" Background="#121212" Visibility="{Binding ReceiveGridVisibility}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="{x:Static localization:Localization.SyncReceiving}" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center"/>
-                    <TextBlock Text="" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center" x:Name="progressText"/>
-                    <TextBlock Text="" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center" x:Name="fileText"/>
+                    <TextBlock Text="{Binding ProgressText}" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding FileText}" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Column="1" Background="#121212" Visibility="Hidden" x:Name="sendGrid">
+            <Grid Grid.Column="1" Background="#121212" Visibility="{Binding SendGridVisibility}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="{x:Static localization:Localization.SyncSending}" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center"/>
-                    <TextBlock Text="" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center" x:Name="sendProgressText"/>
+                    <TextBlock Text="{Binding SendProgressText}" Foreground="White" FontSize="20" FontFamily="Roboto Medium" Margin="5" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
-            <ListView Grid.Column="1" Background="#121212" x:Name="syncListView" PreviewMouseRightButtonUp="SyncListView_PreviewMouseRightButtonUp">
+            <ListView Grid.Column="1" Background="#121212" x:Name="syncListView" ItemsSource="{Binding Items}" Visibility="{Binding SyncViewVisbility}" PreviewMouseRightButtonUp="SyncListView_PreviewMouseRightButtonUp">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <datatemplates:SyncDataTemplate/>

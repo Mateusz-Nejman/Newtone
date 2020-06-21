@@ -7,7 +7,8 @@ namespace Newtone.Desktop.Logic
 {
     public static class NAudioExtensions
     {
-        public static void SetPosition(this AudioFileReader strm, long position)
+        #region Public Methods
+        public static void SetPosition(this WaveStream strm, long position)
         {
             // distance from block boundary (may be 0)
             long adj = position % strm.WaveFormat.BlockAlign;
@@ -18,7 +19,7 @@ namespace Newtone.Desktop.Logic
         }
 
         // Set playback position of WaveStream by seconds
-        public static void SetPosition(this AudioFileReader strm, double seconds)
+        public static void SetPosition(this WaveStream strm, double seconds)
         {
             strm.SetPosition((long)(seconds * strm.WaveFormat.AverageBytesPerSecond));
         }
@@ -30,9 +31,10 @@ namespace Newtone.Desktop.Logic
         }
 
         // Set playback position of WaveStream relative to current position
-        public static void Seek(this AudioFileReader strm, double offset)
+        public static void Seek(this WaveStream strm, double offset)
         {
             strm.SetPosition(strm.Position + (long)(offset * strm.WaveFormat.AverageBytesPerSecond));
         }
+        #endregion
     }
 }

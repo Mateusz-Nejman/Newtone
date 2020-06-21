@@ -18,6 +18,7 @@ namespace NSEC.Music_Player.Media
     [IntentFilter(new[] { "android.intent.action.MEDIA_BUTTON" })]
     public class NotificationButtonReceiver:MediaButtonReceiver
     {
+        #region Public Methods
         public override void OnReceive(Context context, Intent intent)
         {
             KeyEvent ev = (KeyEvent)intent.GetParcelableExtra(Intent.ExtraKeyEvent);
@@ -42,5 +43,6 @@ namespace NSEC.Music_Player.Media
                 }
             }
         }
+        #endregion
     }
 }

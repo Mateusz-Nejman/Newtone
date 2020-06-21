@@ -20,8 +20,10 @@ namespace NSEC.Music_Player.Views.Custom
 {
     public class PressGestureMaskRenderer : ImageRenderer
     {
+        #region Fields
         PressGestureMask view;
-
+        #endregion
+        #region Constructors
         public PressGestureMaskRenderer(Context context) : base(context)
         {
             this.LongClick += (sender, args) => {
@@ -32,7 +34,8 @@ namespace NSEC.Music_Player.Views.Custom
                 view?.HandlePress(sender, args);
             };
         }
-
+        #endregion
+        #region Protected Methods
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Image> e)
         {
             base.OnElementChanged(e);
@@ -42,5 +45,6 @@ namespace NSEC.Music_Player.Views.Custom
                 view = e.NewElement as PressGestureMask;
             }
         }
+        #endregion
     }
 }

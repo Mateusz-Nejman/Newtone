@@ -9,34 +9,7 @@ namespace Newtone.Core.Processing
 {
     public class FileProcessing
     {
-        public static async Task<MediaSource[]> LoadFiles(string directory)
-        {
-            /*if (File.Exists(GlobalData.DataPath + "/cache.nsec2"))
-            {
-                List<string> cache = CacheString.Load();
-
-                if (cache.Count > 0)
-                {
-                    List<MediaSource> files = new List<MediaSource>();
-
-                    foreach (string filepath in cache)
-                    {
-                        files.Add(MediaProcessing.GetSource(filepath));
-                    }
-
-                    return files.ToArray();
-                }
-                else
-                    
-
-            }
-            else
-            {
-                return await Scan(directory);
-            }*/
-            return await Scan(directory);
-        }
-
+        #region Public Methods
         public static async Task<MediaSource[]> Scan(string directory, List<string> listed = null)
         {
             if (listed == null)
@@ -76,5 +49,6 @@ namespace Newtone.Core.Processing
                 return containers.ToArray();
             });
         }
+        #endregion
     }
 }

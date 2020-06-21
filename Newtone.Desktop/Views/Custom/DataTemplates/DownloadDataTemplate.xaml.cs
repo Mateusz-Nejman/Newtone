@@ -18,9 +18,11 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
     /// </summary>
     public partial class DownloadDataTemplate : UserControl
     {
+        #region Constructors
         public DownloadDataTemplate()
         {
             InitializeComponent();
         }
+        #endregion
     }
 }

@@ -18,6 +18,7 @@ namespace NSEC.Music_Player.Media
 {
     public class MediaSessionCallback:MediaSessionCompat.Callback
     {
+        #region Public Methods
         public override void OnPlay()
         {
             ConsoleDebug.WriteLine("[Android Media] MeSeCa OnPlay");
@@ -26,7 +27,7 @@ namespace NSEC.Music_Player.Media
             AudioAttributes attrs = new AudioAttributes.Builder()
                 .SetContentType(AudioContentType.Music).Build();
 
-            Global.AudioFocusRequest = new AudioFocusRequestClass.Builder(AudioManager.AudiofocusGain)
+            Global.AudioFocusRequest = new AudioFocusRequestClass.Builder(AudioFocus.Gain)
                 .SetOnAudioFocusChangeListener(Global.AudioFocusListener)
                 .SetAudioAttributes(attrs)
                 .Build();
@@ -38,7 +39,7 @@ namespace NSEC.Music_Player.Media
                 MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
                 Global.MediaSession.Active = true;
                 GlobalData.MediaPlayer.Play();
-                MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance.GetNotification(true));
+                MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance?.GetNotification());
             }
                 
         }
@@ -47,7 +48,8 @@ namespace NSEC.Music_Player.Media
         {
             ConsoleDebug.WriteLine("[Android Media] MeSeCa OnStop");
             AudioManager am = (AudioManager)MainActivity.Instance.GetSystemService(Context.AudioService);
-            am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
+            if(Global.AudioFocusRequest != null)
+                am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
 
             MediaPlayerService.Instance.StopSelf();
             Global.MediaSession.Active = false;
@@ -102,5 +104,6 @@ namespace NSEC.Music_Player.Media
             
             return true;
         }
+        #endregion
     }
 }

@@ -8,7 +8,10 @@ namespace Newtone.Desktop.Models
 {
     public class SearchResultModel : Newtone.Core.Models.SearchResultModel
     {
+        #region Fields
         private ImageSource thumb;
+        #endregion
+        #region Properties
         public ImageSource Thumb
         {
             get
@@ -18,7 +21,8 @@ namespace Newtone.Desktop.Models
                 return thumb;
             }
         }
-
+        #endregion
+        #region Constructors
         public SearchResultModel(Core.Models.SearchResultModel model)
         {
             this.Author = model.Author;
@@ -30,5 +34,6 @@ namespace Newtone.Desktop.Models
             this.Title = model.Title;
             this.VideoData = model.VideoData;
         }
+        #endregion
     }
 }

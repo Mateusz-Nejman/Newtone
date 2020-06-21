@@ -8,8 +8,10 @@ namespace NSEC.Music_Player
 {
     public class Colors
     {
+        #region Fields
         private static ColorsBase ColorsBase = new ColorsDefault();
-
+        #endregion
+        #region Properties
         public static Color ColorPrimary
         {
             get
@@ -57,7 +59,8 @@ namespace NSEC.Music_Player
                 return ColorsBase.ProgressBarColor;
             }
         }
-
+        #endregion
+        #region Public Methods
         public static void SetBase(string name)
         {
             ColorsBase = new ColorsDefault();
@@ -68,10 +71,12 @@ namespace NSEC.Music_Player
             else
                 ColorsBase = new ColorsDefault();
         }
+        #endregion
     }
 
     public class ColorsRed : ColorsBase
     {
+        #region Constructors
         public ColorsRed()
         {
             this.ColorPrimary = Color.FromHex("#9a1f40");
@@ -81,10 +86,12 @@ namespace NSEC.Music_Player
             this.ProgressBarColor = Color.FromHex("#0f4c75");
             this.ColorThirdary = Color.FromHex("#9d2041");
         }
+        #endregion
     }
 
     public class ColorsDark : ColorsBase
     {
+        #region Constructors
         public ColorsDark()
         {
             this.ColorPrimary = Color.FromHex("#121212");
@@ -94,6 +101,7 @@ namespace NSEC.Music_Player
             this.ProgressBarColor = Color.FromHex("#0f4c75");
             this.ColorThirdary = Color.FromHex("#141414");
         }
+        #endregion
     }
 
     public class ColorsDefault : ColorsBase
@@ -103,12 +111,14 @@ namespace NSEC.Music_Player
 
     public abstract class ColorsBase
     {
+        #region Fields
         public Color ColorPrimary = Color.FromHex("#1b262c");
         public Color ColorSecondary = Color.FromHex("#0f4c75");
         public Color TextColor = Color.FromHex("#ffffff");
         public Color BadgeColor = Color.FromHex("#ff5200");
         public Color ProgressBarColor = Color.FromHex("#3282b8");
         public Color ColorThirdary = Color.FromHex("#1c282e");
+        #endregion
     }
 
 }

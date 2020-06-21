@@ -7,6 +7,7 @@ namespace Newtone.Core.Media
 {
     public class LocalPlayerController : IPlayerController
     {
+        #region Public Methods
         public void Completed(CrossPlayer player)
         {
             player.Next();
@@ -14,12 +15,6 @@ namespace Newtone.Core.Media
 
         public void Load(CrossPlayer player, string filepath)
         {
-            //string path = System.IO.Path.Combine(GlobalData.MusicPath, $"cache.wav");
-
-            //if (File.Exists(path))
-            //    File.Delete(path);
-
-            //File.Copy(filepath, path, true);
             player.BasePlayer.Load(filepath);
         }
 
@@ -27,5 +22,6 @@ namespace Newtone.Core.Media
         {
             player.Play();
         }
+        #endregion
     }
 }

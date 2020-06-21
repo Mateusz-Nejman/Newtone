@@ -6,8 +6,9 @@
              mc:Ignorable="d"
           xmlns:local="clr-namespace:NSEC.Music_Player"
           xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
+          xmlns:viewcells="clr-namespace:NSEC.Music_Player.ViewModels.ViewCells"
           x:Class="NSEC.Music_Player.Views.ViewCells.SearchResultViewCell">
-  <ViewCell.View>
+    <ViewCell.View>
         <Grid Margin="5" HeightRequest="56">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="56"/>
@@ -25,7 +26,7 @@
                 <Label Text="{Binding Author}" FontFamily="{Static local:Fonts.Thin}" FontSize="16" TextColor="{Static local:Colors.TextColor}" LineBreakMode="TailTruncation"/>
             </StackLayout>
             <Label Text="{Binding DurationString}" VerticalOptions="Center" Grid.Column="2" FontFamily="{Static local:Fonts.Thin}" FontSize="16" TextColor="{Static local:Colors.TextColor}"/>
-            <images:CustomImageButton Source="DownloadIcon.png" Tag="{Binding VideoData}" Grid.Column="3" Style="{StaticResource TransparentImageButton}" Clicked="DownloadButton_Clicked"/>
+            <images:CustomImageButton Source="DownloadIcon.png" Tag="{Binding VideoData}" Grid.Column="3" Style="{StaticResource TransparentImageButton}" x:Name="downloadButton" Command="{Binding DownloadClicked}" CommandParameter="{Binding VideoData}"/>
         </Grid>
   </ViewCell.View>
 </ViewCell>

@@ -5,9 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Newtone.Desktop.Views"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
-             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
+             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates" xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:PlaylistViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -20,14 +23,14 @@
 
         <TextBlock Text="{x:Static localization:Localization.Playlists}" Style="{StaticResource PageTitle}"/>
 
-        <ListView Grid.Row="1" Background="#141414" x:Name="listView" SelectionChanged="ListView_SelectionChanged">
+        <ListView Grid.Row="1" Background="#141414" x:Name="listView" SelectionChanged="ListView_SelectionChanged" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding TrackElem}" Style="{StaticResource ListViewText}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView Grid.Row="1" Grid.Column="1" Background="#121212" x:Name="trackListView" PreviewMouseLeftButtonUp="TrackListView_PreviewMouseLeftButtonUp" PreviewMouseRightButtonUp="TrackListView_PreviewMouseRightButtonUp">
+        <ListView Grid.Row="1" Grid.Column="1" Background="#121212" x:Name="trackListView" PreviewMouseLeftButtonUp="TrackListView_PreviewMouseLeftButtonUp" PreviewMouseRightButtonUp="TrackListView_PreviewMouseRightButtonUp" ItemsSource="{Binding TrackItems}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <datatemplates:TrackDataTemplate/>

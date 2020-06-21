@@ -7,13 +7,17 @@ namespace NSEC.Music_Player.Views.Custom
 {
     public class PopupMenu
     {
+        #region Events & Delegates
         public delegate void PopupMenuEventHandler(string item);
+        public event PopupMenuEventHandler OnSelect;
+        #endregion
+        #region Properties
         private Context Context { get; set; }
         private View Anchor { get; set; }
         private string[] Items { get; set; }
-        public event PopupMenuEventHandler OnSelect;
-
         private Android.Widget.PopupMenu Menu { get; set; }
+        #endregion
+        #region Constructors
         public PopupMenu(Context context, View anchor, params string[] items)
         {
             Context = context;
@@ -30,15 +34,20 @@ namespace NSEC.Music_Player.Views.Custom
             }
             Menu.MenuItemClick += Menu_MenuItemClick;
         }
+        #endregion
+        #region Private Methods
 
         private void Menu_MenuItemClick(object sender, Android.Widget.PopupMenu.MenuItemClickEventArgs e)
         {
             OnSelect?.Invoke(e.Item.TitleFormatted.ToString());
         }
-
+        #endregion
+        #region Public Methods
         public void Show()
         {
             Menu.Show();
         }
+
+        #endregion
     }
 }

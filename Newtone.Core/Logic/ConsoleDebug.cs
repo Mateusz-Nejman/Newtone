@@ -6,7 +6,10 @@ namespace Newtone.Core.Logic
 {
     public static class ConsoleDebug
     {
+        #region Fields
         private static string filter = "";
+        #endregion
+        #region Public Methods
         public static void WriteLine(string text)
         {
             if (GlobalData.IsDebugMode && text.Contains(filter))
@@ -29,5 +32,6 @@ namespace Newtone.Core.Logic
         {
             filter = newFilter;
         }
+        #endregion
     }
 }

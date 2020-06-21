@@ -19,10 +19,12 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
     /// </summary>
     public partial class TrackDataTemplate : UserControl
     {
+        #region Constructors
         public TrackDataTemplate()
         {
             InitializeComponent();
             
         }
+        #endregion
     }
 }

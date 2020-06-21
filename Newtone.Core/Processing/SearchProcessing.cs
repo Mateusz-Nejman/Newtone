@@ -15,6 +15,7 @@ namespace Newtone.Core.Processing
 {
     public class SearchProcessing
     {
+        #region Public Methods
         public async static Task Search(string text, ObservableBridge<SearchResultModel> model)
         {
             if (GlobalData.History.FindIndex(model => model.Text == text) == -1)
@@ -52,7 +53,7 @@ namespace Newtone.Core.Processing
             {
                 ConsoleDebug.WriteLine("Search None");
                 var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search]).BufferAsync(20);
-                Console.WriteLine("Search " + videos.Count);
+                ConsoleDebug.WriteLine("Search " + videos.Count);
                 foreach(var video in videos)
                 {
                     ConsoleDebug.WriteLine("Search " + video.Title);
@@ -74,7 +75,7 @@ namespace Newtone.Core.Processing
                 var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]);
                 foreach (var video in playlist)
                 {
-                    Console.WriteLine("Video " + video.Id);
+                    ConsoleDebug.WriteLine("Video " + video.Id);
                     model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}&list={validators[QueryEnum.Playlist]}" });
                 }
             }
@@ -112,7 +113,8 @@ namespace Newtone.Core.Processing
 
             return returnDict;
         }
-
+        #endregion
+        #region Enums
         public enum QueryEnum
         {
             None,
@@ -121,5 +123,6 @@ namespace Newtone.Core.Processing
             Playlist,
             Search
         }
+        #endregion
     }
 }

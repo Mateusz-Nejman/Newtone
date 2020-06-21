@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtone.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,25 +18,12 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class AlertWindow : Window
     {
-        public AlertWindow(string title, string message, string confirmText = "Tak", string cancelText = "Nie")
+        #region Constructors
+        public AlertWindow(string title, string message, string confirm, string cancel)
         {
             InitializeComponent();
-            Title = title;
-            messageText.Text = message;
-            yesText.Text = confirmText;
-            noText.Text = cancelText;
+            DataContext = new AlertViewModel(this, title, message, confirm,cancel);
         }
-
-        private void YesButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
-
-        private void NoButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
+        #endregion
     }
 }

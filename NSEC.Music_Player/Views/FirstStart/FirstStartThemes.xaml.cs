@@ -13,11 +13,10 @@ namespace NSEC.Music_Player.Views.FirstStart
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FirstStartThemes : ContentView
     {
-        private FirstStartPage Page { get; set; }
-        public FirstStartThemes(FirstStartPage page)
+        #region Constructors
+        public FirstStartThemes()
         {
             InitializeComponent();
-            Page = page;
 
             TapGestureRecognizer defTap = new TapGestureRecognizer();
             defTap.Tapped += DefTap_Tapped;
@@ -33,7 +32,8 @@ namespace NSEC.Music_Player.Views.FirstStart
             lightThemeImage.GestureRecognizers.Add(ligTap);
             darkThemeImage.GestureRecognizers.Add(darTap);
         }
-
+        #endregion
+        #region Private Methods
         private void DarTap_Tapped(object sender, EventArgs e)
         {
             SetTheme("Dark");
@@ -53,7 +53,8 @@ namespace NSEC.Music_Player.Views.FirstStart
         {
             GlobalData.SaveFirstStart(theme);
             Colors.SetBase(theme);
-            Page.SetPage(new FirstStartSearch(Page));
+            FirstStartPage.Instance.SetPage(new FirstStartSearch());
         }
+        #endregion
     }
 }

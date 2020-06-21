@@ -1,0 +1,47 @@
+﻿<Window x:Class="Newtone.Desktop.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Newtone.Desktop"
+        xmlns:custom="clr-namespace:Newtone.Desktop.Views.Custom"
+        xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
+        xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
+        mc:Ignorable="d"
+    WindowStyle="None"
+    WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Title="Newtone Desktop" Height="600" Width="978" Background="#1f1f1f" UseLayoutRounding="True" MinWidth="978" MinHeight="600">
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <RoutedUICommand x:Key="prev"/>
+        <RoutedUICommand x:Key="next"/>
+        <RoutedUICommand x:Key="play"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource next}" Executed="MediaNext_Executed"/>
+        <CommandBinding Command="{StaticResource prev}" Executed="MediaPrev_Executed"/>
+        <CommandBinding Command="{StaticResource play}" Executed="MediaPlay_Executed"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="MediaNextTrack" Command="{StaticResource next}"/>
+        <KeyBinding Key="MediaPreviousTrack" Command="{StaticResource prev}"/>
+        <KeyBinding Key="MediaPlayPause" Command="{StaticResource play}"/>
+    </Window.InputBindings>
+    <Grid x:Name="mainGrid">
+        <Grid x:Name="container">
+        </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Background="#99000000" Grid.Row="1" CornerRadius="20" Margin="80,10" Visibility="{Binding SnackbarVisibility}">
+                <TextBlock Foreground="White" Text="{Binding SnackbarText}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

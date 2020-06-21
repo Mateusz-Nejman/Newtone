@@ -5,12 +5,52 @@ using System.Text;
 
 namespace Newtone.Core.Models
 {
-    public class TrackModel
+    public class TrackModel:PropertyChangedBase
     {
-        public string FilePath { get; set; }
-        public string Title { get; set; }
-        public string Duration { get; set; }
+        #region Fields
+        private string filePath;
+        private string title;
+        private string duration;
+        private string artist;
+        #endregion
+        #region Properties
+        public string FilePath
+        {
+            get => filePath;
+            set
+            {
+                filePath = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Duration
+        {
+            get => duration;
+            set
+            {
+                duration = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Artist { get; set; }
+        public string Artist
+        {
+            get => artist;
+            set
+            {
+                artist = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
     }
 }

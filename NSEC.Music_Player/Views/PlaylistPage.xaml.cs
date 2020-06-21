@@ -14,10 +14,17 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlaylistPage : ContentView
     {
+        #region Constructors
         public PlaylistPage()
         {
             InitializeComponent();
 
+            Init();
+        }
+        #endregion
+        #region Public Methods
+        public void Init()
+        {
             trackGrid.Children.Clear();
 
             int pos = 0;
@@ -33,8 +40,8 @@ namespace NSEC.Music_Player.Views
                 else
                 {
                     Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                    layout.Children.Add(new PlaylistGridItem(model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
-                    layout.Children.Add(new PlaylistGridItem(playlist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
+                    layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(100));
+                    layout.Children.Add(new PlaylistGridItem(this, playlist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(100));
                     trackGrid.Children.Add(layout);
                     pos = 0;
                 }
@@ -43,9 +50,10 @@ namespace NSEC.Music_Player.Views
             if (pos == 1)
             {
                 Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                layout.Children.Add(new PlaylistGridItem(model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.RelativeToParent(parent => parent.Width * 0.5));
+                layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(150));
                 trackGrid.Children.Add(layout);
             }
         }
+        #endregion
     }
 }

@@ -4,10 +4,11 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.SearchResultPage">
-  <ContentView.Content>
-        <ListView x:Name="searchListView" SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected">
+    <ContentView.Content>
+        <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <viewcells:SearchResultViewCell/>

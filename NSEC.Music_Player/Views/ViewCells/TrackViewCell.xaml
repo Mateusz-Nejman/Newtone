@@ -4,9 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
+          xmlns:viewcells="clr-namespace:NSEC.Music_Player.ViewModels.ViewCells"
           mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.ViewCells.TrackViewCell">
-  <ViewCell.View>
+    <ViewCell.View>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -14,10 +15,10 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Label Text="{Binding TrackString}" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation"/>
-            <Image Source="PlayIcon" Grid.Column="1" Aspect="AspectFit" WidthRequest="16" HeightRequest="16" x:Name="playIcon" IsVisible="{Binding IsVisible}"/>
-            <Label Text="{Binding Duration}" Grid.Column="2" Style="{StaticResource ListViewText}"/>
-            <images:CustomImageButton Grid.Column="3" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" Clicked="CustomImageButton_Clicked" Tag="{Binding Info}" IsVisible="{Binding AllowContextMenu}"/>
+            <Label Text="{Binding TrackString}" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation" VerticalTextAlignment="Center"/>
+            <Image Source="PlayIcon.png" Grid.Column="1" Aspect="AspectFit" WidthRequest="16" HeightRequest="16" IsVisible="{Binding IsVisible}"/>
+            <Label Text="{Binding Duration}" Grid.Column="2" Style="{StaticResource ListViewText}" VerticalTextAlignment="Center"/>
+            <images:CustomImageButton Grid.Column="3" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" x:Name="menuButton" Command="{Binding OpenMenu}" CommandParameter="{x:Reference menuButton}" Tag="{Binding Info}" IsVisible="{Binding AllowContextMenu}" Padding="10"/>
         </Grid>
   </ViewCell.View>
 </ViewCell>

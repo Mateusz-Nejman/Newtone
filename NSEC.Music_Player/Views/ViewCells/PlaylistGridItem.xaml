@@ -6,41 +6,42 @@
              mc:Ignorable="d"
              xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:viewcells="clr-namespace:NSEC.Music_Player.ViewModels.ViewCells"
              x:Class="NSEC.Music_Player.Views.ViewCells.PlaylistGridItem">
-  <ContentView.Content>
-        <RelativeLayout Margin="5">
-            <Image Source="EmptyTrack.png" x:Name="image" 
+    <ContentView.Content>
+        <RelativeLayout Margin="5" HeightRequest="100">
+            <Image Source="{Binding Image}"
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
-                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" 
                    Aspect="AspectFill"/>
 
-            <Grid BackgroundColor="#99000000" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-36}"
+            <Grid BackgroundColor="#99000000" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-36}"
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=36}"/>
             <Label 
-                x:Name="playlistLabel" 
+                Text="{Binding PlaylistName}"
                 TextColor="{Static local:Colors.TextColor}" 
                 FontFamily="{x:Static local:Fonts.Regular}" 
                 FontSize="14" 
                 WidthRequest="108"  
                 LineBreakMode="TailTruncation"
                 RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
-                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-36}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-36}"
                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
             <Label 
-                x:Name="tracksLabel" 
+                Text="{Binding TracksText}"
                 TextColor="{Static local:Colors.TextColor}" 
                 FontFamily="{x:Static local:Fonts.Thin}" 
                 FontSize="14" WidthRequest="108"  
                 LineBreakMode="TailTruncation"
                 RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
-                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1,Constant=-22}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-22}"
                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
 
             <custom:PressGestureMask RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"
                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
-                                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" LongPressed="LongPressed" Pressed="Pressed"/>
+                                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" LongPressedCommand="{Binding LongPressedCommand}" PressedCommand="{Binding PressedCommand}"/>
         </RelativeLayout>
     </ContentView.Content>
 </ContentView>

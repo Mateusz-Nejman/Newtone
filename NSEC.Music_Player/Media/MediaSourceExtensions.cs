@@ -16,6 +16,7 @@ namespace NSEC.Music_Player.Media
 {
     public static class MediaSourceExtensions
     {
+        #region Public Methods
         public static MediaMetadataCompat ToMetadata(this MediaSource source)
         {
             Global.MetadataBuilder.PutString(MediaMetadataCompat.MetadataKeyTitle, source.Title);
@@ -23,5 +24,6 @@ namespace NSEC.Music_Player.Media
             Global.MetadataBuilder.PutLong(MediaMetadataCompat.MetadataKeyDuration, (long)source.Duration.TotalMilliseconds);
             return Global.MetadataBuilder.Build();
         }
+        #endregion
     }
 }

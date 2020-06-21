@@ -10,59 +10,33 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using NSEC.Music_Player.ViewModels;
 
 namespace NSEC.Music_Player.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SearchPage : ContentView
     {
-        private ObservableCollection<HistoryModel> Items { get; set; }
+        #region Properties
+        private SearchViewModel ViewModel { get; set; }
+        #endregion
+        #region Constructors
         public SearchPage()
         {
             InitializeComponent();
-
-            historyList.ItemsSource = Items = new ObservableCollection<HistoryModel>();
-
-            foreach(var item in GlobalData.History)
-            {
-                Items.Add(item);
-            }
-            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
-            clearLabel.GestureRecognizers.Add(tapGestureRecognizer);
+            ViewModel = BindingContext as SearchViewModel;
         }
-
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-        {
-            Items.Clear();
-            GlobalData.History.Clear();
-            GlobalData.SaveConfig();
-        }
-
+        #endregion
+        #region Private Methods
         private void SearchEntry_Completed(object sender, EventArgs e)
         {
-            if(!string.IsNullOrEmpty(searchEntry.Text))
-            {
-                if(MainActivity.IsInternet())
-                    NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(searchEntry.Text), searchEntry.Text));
-                else
-                    NormalPage.Instance.DisplayAlert(Localization.Warning, "Nie masz neta typie", "OK");
-            }
+            ViewModel?.SearchEntry_Completed(sender, e);
         }
 
         private void HistoryList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            int index = e.SelectedItemIndex;
-
-            if(index >= 0 && index < Items.Count)
-            {
-                if (MainActivity.IsInternet())
-                    NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(Items[index].Text), Items[index].Text));
-                else
-                    NormalPage.Instance.DisplayAlert(Localization.Warning, "Nie masz neta typie", "OK");
-                
-                historyList.SelectedItem = null;
-            }
+            ViewModel?.Item_Selected(sender, e);
         }
+        #endregion
     }
 }

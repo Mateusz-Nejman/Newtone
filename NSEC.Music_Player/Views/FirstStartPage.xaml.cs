@@ -13,16 +13,23 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FirstStartPage : ContentPage
     {
+        #region Properties
+        public static FirstStartPage Instance { get; private set; }
+        #endregion
+        #region Constructors
         public FirstStartPage()
         {
             InitializeComponent();
-            SetPage(new FirstStartThemes(this));
+            Instance = this;
+            SetPage(new FirstStartThemes());
         }
-
+        #endregion
+        #region Public Methods
         public void SetPage(ContentView view)
         {
             mainGrid.Children.Clear();
             mainGrid.Children.Add(view, 0, 0);
         }
+        #endregion
     }
 }

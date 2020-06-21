@@ -1,4 +1,5 @@
-﻿using Newtone.Core.Loaders;
+﻿using Newtone.Core.Languages;
+using Newtone.Core.Loaders;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
@@ -17,8 +18,10 @@ namespace Newtone.Core.Processing
 {
     public static class DownloadProcessing
     {
+        #region Fields
         private static Task downloadTask;
-
+        #endregion
+        #region Properties
         public static Dictionary<string, DownloadModel> Downloads { get; } = new Dictionary<string, DownloadModel>();
 
         public static int BadgeCount
@@ -28,7 +31,8 @@ namespace Newtone.Core.Processing
                 return Downloads.Count;
             }
         }
-
+        #endregion
+        #region Public Methods
         public static IEnumerable<DownloadModel> GetModels()
         {
             return Downloads.Values;
@@ -59,10 +63,12 @@ namespace Newtone.Core.Processing
                 {
                     downloadTask = new Task(async () => await TaskAction());
                     downloadTask.Start();
-                    Console.WriteLine("Task started");
+                    ConsoleDebug.WriteLine("Task started");
                 }
             }
         }
+        #endregion
+        #region Private Methods
 
         private static void SetProgress(string id, double progress)
         {
@@ -138,12 +144,13 @@ namespace Newtone.Core.Processing
             IStreamInfo streamInfo = null;
             foreach (var item in manifest.GetAudio())
             {
+                ConsoleDebug.WriteLine("Item Type " + item.AudioCodec);
                 if(item.AudioCodec.Contains("mp4a"))
                 {
                     if (streamInfo == null)
                         streamInfo = item;
 
-                    if (streamInfo.Bitrate.BitsPerSecond < item.Bitrate.BitsPerSecond)
+                    if (streamInfo.Bitrate.BitsPerSecond > item.Bitrate.BitsPerSecond)
                         streamInfo = item;
                 }
                 
@@ -184,10 +191,12 @@ namespace Newtone.Core.Processing
             GlobalData.SaveConfig();
             GlobalData.SaveTags();
             //CacheString.Save();
+            GlobalData.MediaPlayer.Error(Localization.Ready);
             //SnackbarBuilder.Show(Localization.Ready);
             //TODO
 
             return fileInfo.FullName;
         }
+        #endregion
     }
 }

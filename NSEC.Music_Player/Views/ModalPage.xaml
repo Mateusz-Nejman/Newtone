@@ -6,6 +6,8 @@
              xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
+             xmlns:custom="clr-namespace:NSEC.Music_Player.Views.Custom"
              x:Class="NSEC.Music_Player.Views.ModalPage">
     <ContentPage.Content>
         <Grid BackgroundColor="Red" RowSpacing="0">
@@ -14,12 +16,12 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" HeightRequest="60" x:Name="topPanel">
+            <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" HeightRequest="60" x:Name="topPanel" IsVisible="{Binding TopPanelVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" x:Name="titleLabel"/>
+                <Label Text="{Binding ModalTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" x:Name="titleLabel"/>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -30,10 +32,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <images:CustomImageButton Source="DownloadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="16" Clicked="DownloadButton_Clicked"/>
-                    <Grid Grid.Row="1" x:Name="badgeBubble">
+                    <images:CustomImageButton Source="DownloadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="16" Command="{Binding ToDownloadPage}"/>
+                    <Grid Grid.Row="1" IsVisible="{Binding BadgeVisible}">
                         <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
-                        <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="1" TextColor="{Static local:Colors.TextColor}" x:Name="badgeCount"/>
+                        <Label Text="{Binding Badge}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="{Static local:Colors.TextColor}"/>
                     </Grid>
                 </Grid>
 
@@ -41,27 +43,7 @@
             <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" x:Name="container">
 
             </Grid>
-            <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="60"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.ColumnSpan="3" x:Name="backgroundGrid" IsVisible="False">
-                    <Image Source="EmptyTrack.png" Aspect="AspectFill" VerticalOptions="Center" HorizontalOptions="Fill" x:Name="backgroundImage"/>
-                    <Grid BackgroundColor="#99000000"/>
-                </Grid>
-                <images:CustomImageButton Source="EmptyTrack.png" Margin="4" x:Name="trackImage" Aspect="AspectFill" Clicked="TrackImage_Clicked"/>
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Text="" FontSize="14" FontFamily="{x:Static local:Fonts.Black}" TextColor="{Static local:Colors.TextColor}" Margin="0,4,0,0" LineBreakMode="TailTruncation" x:Name="trackLabel"/>
-                    <Label Text="" FontSize="14" FontFamily="{x:Static local:Fonts.Light}" TextColor="{Static local:Colors.TextColor}" Margin="0,0,0,4" LineBreakMode="TailTruncation" Grid.Row="1" x:Name="artistLabel"/>
-                </Grid>
-                <images:CustomImageButton Source="PlayIcon.png" Grid.Column="2" Style="{StaticResource TransparentImageButton}" Padding="16" x:Name="playButton" Clicked="PlayButton_Clicked"/>
-            </Grid>
+            <custom:PlayerPanel Grid.Row="2" x:Name="playerPanel"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

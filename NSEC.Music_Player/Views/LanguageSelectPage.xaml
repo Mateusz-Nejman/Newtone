@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:images="clr-namespace:NSEC.Music_Player.Views.Images"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.LanguageSelectPage" BackgroundColor="{x:Static local:Colors.ColorPrimary}">
     <ContentPage.Content>
@@ -19,9 +20,9 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <images:CustomImageButton Grid.Column="1" Source="PolandFlag.png" x:Name="polandFlag" Clicked="PolandFlag_Clicked" Style="{StaticResource TransparentImageButton}"/>
-            <images:CustomImageButton Grid.Row="1" Grid.Column="1" Source="EnglandFlag.png" x:Name="englandFlag" Clicked="EnglandFlag_Clicked" Style="{StaticResource TransparentImageButton}"/>
-            <images:CustomImageButton Grid.Row="2" Grid.Column="1" Source="RussiaFlag.png" x:Name="russiaFlag" Clicked="RussiaFlag_Clicked" Style="{StaticResource TransparentImageButton}"/>
+            <images:CustomImageButton Grid.Column="1" Source="PolandFlag.png" Command="{Binding Polish}" Style="{StaticResource TransparentImageButton}"/>
+            <images:CustomImageButton Grid.Row="1" Grid.Column="1" Source="EnglandFlag.png" Command="{Binding English}" Style="{StaticResource TransparentImageButton}"/>
+            <images:CustomImageButton Grid.Row="2" Grid.Column="1" Source="RussiaFlag.png" Command="{Binding Russian}" Style="{StaticResource TransparentImageButton}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

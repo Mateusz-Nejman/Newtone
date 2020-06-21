@@ -26,9 +26,15 @@ namespace NSEC.Music_Player.Media
     [IntentFilter(new String[] { "android.media.browse.MediaBrowserService" })]
     public class MediaPlayerService : MediaBrowserServiceCompat
     {
-        public static MediaPlayerService Instance { get; set; }
+        #region Fields
         private PlaybackStateCompat.Builder stateBuilder;
+        #endregion
+        #region Properties
+        public static MediaPlayerService Instance { get; set; }
+        #endregion
 
+
+        #region Public Methods
         [return: GeneratedEnum]
         public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
         {
@@ -73,46 +79,51 @@ namespace NSEC.Music_Player.Media
             result.SendResult(null);
         }
 
-        public Notification GetNotification(bool IsPlaying = false)
+        public Notification GetNotification()
         {
-            MediaControllerCompat controller = Global.MediaSession.Controller;
+            if(Global.MediaSession != null && Global.MediaSession.Controller != null)
+            {
+                MediaControllerCompat controller = Global.MediaSession.Controller;
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(BaseContext, "newtone");
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(BaseContext, "newtone");
 
-            Bitmap bitmap;
+                Bitmap bitmap;
 
-            if (GlobalData.MediaSource.Image == null || GlobalData.MediaSource.Image.Length == 0)
-                bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.EmptyTrack);
-            else
-                bitmap = BitmapFactory.DecodeByteArray(GlobalData.MediaSource.Image, 0, GlobalData.MediaSource.Image.Length);
-            builder
-                .SetContentTitle(GlobalData.MediaSource.Title)
-                .SetContentText(GlobalData.MediaSource.Artist)
+                if (GlobalData.MediaSource.Image == null || GlobalData.MediaSource.Image.Length == 0)
+                    bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.EmptyTrack);
+                else
+                    bitmap = BitmapFactory.DecodeByteArray(GlobalData.MediaSource.Image, 0, GlobalData.MediaSource.Image.Length);
+                builder
+                    .SetContentTitle(GlobalData.MediaSource.Title)
+                    .SetContentText(GlobalData.MediaSource.Artist)
 
-                .SetContentIntent(controller.SessionActivity)
-                .SetDeleteIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop))
-                .SetVisibility(NotificationCompat.VisibilityPublic)
-                .SetSmallIcon(Resource.Drawable.PlayIconNotification)
-                .SetOngoing(true)
-                .SetLargeIcon(bitmap)
-                .AddAction(new NotificationCompat.Action(Resource.Drawable.PrevIconNotification,"prev",MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToPrevious)))
-                .AddAction(new NotificationCompat.Action((GlobalData.MediaPlayer.IsPlaying || IsPlaying) ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, GlobalData.MediaPlayer.IsPlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
-                .AddAction(new NotificationCompat.Action(Resource.Drawable.NextIconNotification, "next", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToNext)))
-                .SetStyle(new MediaStyle()
-                .SetMediaSession(Global.MediaSession.SessionToken)
-                .SetShowActionsInCompactView(0)
-                .SetShowCancelButton(true)
-                .SetCancelButtonIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop)));
+                    .SetContentIntent(controller.SessionActivity)
+                    .SetDeleteIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop))
+                    .SetVisibility(NotificationCompat.VisibilityPublic)
+                    .SetSmallIcon(Resource.Drawable.PlayIconNotification)
+                    .SetOngoing(true)
+                    .SetLargeIcon(bitmap)
+                    .AddAction(new NotificationCompat.Action(Resource.Drawable.PrevIconNotification, "prev", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToPrevious)))
+                    .AddAction(new NotificationCompat.Action(Global.PlaybackState == PlaybackStateCompat.StatePlaying ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, Global.PlaybackState == PlaybackStateCompat.StatePlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
+                    .AddAction(new NotificationCompat.Action(Resource.Drawable.NextIconNotification, "next", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToNext)))
+                    .SetStyle(new MediaStyle()
+                    .SetMediaSession(Global.MediaSession.SessionToken)
+                    .SetShowActionsInCompactView(0)
+                    .SetShowCancelButton(true)
+                    .SetCancelButtonIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop)));
 
-            return builder.Build();
+                return builder.Build();
+            }
+
+            return null;
         }
-        public void ShowNotification(bool isPlaying)
+        public void ShowNotification()
         {
-
-            ConsoleDebug.WriteLine("[Android Media] Show Notification");
-            var n = GetNotification(isPlaying);
-            StartForeground(0, n);
-            Global.NotificationManager.Notify(0, n);
+            var n = GetNotification();
+            if(n != null)
+                StartForeground(0, n);
+            Global.NotificationManager?.Notify(0, n);
         }
+        #endregion
     }
 }

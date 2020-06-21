@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-
+using System.Windows.Input;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -12,17 +12,35 @@ using Android.Views;
 using Android.Widget;
 using Newtone.Core;
 using Newtone.Core.Languages;
+using Newtone.Core.Logic;
+using NSEC.Music_Player.Logic;
+using NSEC.Music_Player.Views.Images;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
 {
-    public class TrackModel : Newtone.Core.Models.TrackModel, INotifyPropertyChanged
+    public class TrackModel : Newtone.Core.Models.TrackModel
     {
+        #region Fields
         //TODO Visibility
         private bool isVisible;
         private string trackString;
+        private string playlistName;
+        private ImageSource image;
+        private bool allowContextMenu;
+        #endregion
 
-        public string PlaylistName { get; set; }
+        #region Properties
+        public string PlaylistName
+        {
+            get => playlistName;
+            set
+            {
+                playlistName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(() => Info);
+            }
+        }
         public string Info
         {
             get
@@ -39,7 +57,7 @@ namespace NSEC.Music_Player.Models
                 if (isVisible != value)
                 {
                     isVisible = value;
-                    OnPropertyChanged("IsVisible");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -56,14 +74,46 @@ namespace NSEC.Music_Player.Models
                 if (newValue != trackString)
                 {
                     trackString = newValue;
-                    OnPropertyChanged("TrackString");
+                    OnPropertyChanged();
                 }
             }
         }
-        public ImageSource Image { get; set; }
+        public ImageSource Image
+        {
+            get => image;
+            set
+            {
+                image = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool AllowContextMenu { get; set; }
+        public bool AllowContextMenu
+        {
+            get => allowContextMenu;
+            set
+            {
+                allowContextMenu = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+        #region Commands
+        private ICommand openMenu;
+        public ICommand OpenMenu
+        {
+            get
+            {
+                if (openMenu == null)
+                    openMenu = new ActionCommand(parameter =>
+                    {
+                        ContextMenuBuilder.BuildForTrack((Xamarin.Forms.View)parameter, ((CustomImageButton)parameter).Tag);
+                    });
 
+                return openMenu;
+            }
+        }
+        #endregion
 
         public TrackModel(Newtone.Core.Models.TrackModel model, string playlist = "", bool allowContextMenu = true)
         {
@@ -75,17 +125,14 @@ namespace NSEC.Music_Player.Models
             this.AllowContextMenu = allowContextMenu;
         }
 
-        public void CheckChanges()
+        #region Public Methods
+
+        public TrackModel CheckChanges()
         {
             IsVisible = FilePath == GlobalData.MediaSourcePath;
             TrackString = Artist == Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
+            return this;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        #endregion
     }
 }

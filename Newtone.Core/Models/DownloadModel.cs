@@ -5,12 +5,43 @@ using System.Text;
 
 namespace Newtone.Core.Models
 {
-    public class DownloadModel:INotifyPropertyChanged
+    public class DownloadModel:PropertyChangedBase
     {
+        #region Fields
         private double progress;
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string Url { get; set; }
+        private string id;
+        private string title;
+        private string url;
+        private string playlistName;
+        #endregion
+        #region Properties
+        public string Id
+        {
+            get => id;
+            set
+            {
+                id = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Url
+        {
+            get => url;
+            set
+            {
+                url = value;
+                OnPropertyChanged();
+            }
+        }
         public double Progress
         {
             get
@@ -20,11 +51,20 @@ namespace Newtone.Core.Models
             set
             {
                 progress = value;
-                OnPropertyChanged("ProgressString");
+                OnPropertyChanged();
+                OnPropertyChanged(() => ProgressString);
             }
         }
 
-        public string PlaylistName { get; set; }
+        public string PlaylistName
+        {
+            get => playlistName;
+            set
+            {
+                playlistName = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string ProgressString
         {
@@ -33,12 +73,6 @@ namespace Newtone.Core.Models
                 return string.Format("{0:0.00}", Progress * 100.0) + "%";
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        #endregion
     }
 }

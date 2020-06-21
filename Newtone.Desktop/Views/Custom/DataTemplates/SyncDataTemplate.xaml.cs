@@ -18,9 +18,11 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
     /// </summary>
     public partial class SyncDataTemplate : UserControl
     {
+        #region Constructors
         public SyncDataTemplate()
         {
             InitializeComponent();
         }
+        #endregion
     }
 }

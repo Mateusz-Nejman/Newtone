@@ -83,6 +83,16 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
+        internal static byte[] CloseIcon {
+            get {
+                object obj = ResourceManager.GetObject("CloseIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
+        /// </summary>
         internal static byte[] CollapseIcon {
             get {
                 object obj = ResourceManager.GetObject("CollapseIcon", resourceCulture);
@@ -143,9 +153,49 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
+        internal static byte[] Maximize1Icon {
+            get {
+                object obj = ResourceManager.GetObject("Maximize1Icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
+        /// </summary>
+        internal static byte[] MaximizeIcon {
+            get {
+                object obj = ResourceManager.GetObject("MaximizeIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
+        /// </summary>
         internal static byte[] MenuIcon {
             get {
                 object obj = ResourceManager.GetObject("MenuIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
+        /// </summary>
+        internal static byte[] MinimizeIcon {
+            get {
+                object obj = ResourceManager.GetObject("MinimizeIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] NewtoneIcon {
+            get {
+                object obj = ResourceManager.GetObject("NewtoneIcon", resourceCulture);
                 return ((byte[])(obj));
             }
         }

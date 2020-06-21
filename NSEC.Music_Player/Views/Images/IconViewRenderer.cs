@@ -22,15 +22,16 @@ namespace NSEC.Music_Player.Views.Images
 {
     public class IconViewRenderer : ViewRenderer<IconView, ImageView>
     {
+        #region Fields
         private bool _isDisposed;
-
-
+        #endregion
+        #region Constructors
         public IconViewRenderer()
         {
             base.AutoPackage = false;
         }
-
-
+        #endregion
+        #region Protected Methods
         protected override void Dispose(bool disposing)
         {
             if (_isDisposed)
@@ -63,7 +64,8 @@ namespace NSEC.Music_Player.Views.Images
                 UpdateBitmap(null);
             }
         }
-
+        #endregion
+        #region Private Methods
         private void UpdateBitmap(IconView previous = null)
         {
             if (!_isDisposed && !string.IsNullOrWhiteSpace(Element.Source))
@@ -79,6 +81,7 @@ namespace NSEC.Music_Player.Views.Images
                 ((IVisualElementController)Element).NativeSizeChanged();
             }
         }
+        #endregion
     }
 }
 #pragma warning restore CS0618 // Typ lub składowa jest przestarzała

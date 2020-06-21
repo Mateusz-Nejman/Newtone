@@ -4,10 +4,14 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewcells="clr-namespace:NSEC.Music_Player.Views.ViewCells"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.DownloadPage">
+    <ContentView.BindingContext>
+        <viewmodels:DownloadViewModel/>
+    </ContentView.BindingContext>
   <ContentView.Content>
-        <ListView x:Name="downloadListView" SelectionMode="Single" VerticalOptions="FillAndExpand">
+        <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <viewcells:DownloadViewCell/>

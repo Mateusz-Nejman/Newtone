@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtone.Core.Logic;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,16 @@ namespace Newtone.Core.Media
 {
     public class WebPlayerController : IPlayerController
     {
+        #region Public Methods
         public void Completed(CrossPlayer player)
         {
+            ConsoleDebug.WriteLine("WPC " + player.CurrentPosition + ":" + player.Duration);
             player.Next();
         }
 
         public void Load(CrossPlayer player, string filepath)
         {
-            Console.WriteLine(filepath);
+            ConsoleDebug.WriteLine(filepath);
             player.Reset(); //Stop & reset
             YoutubeClient client = new YoutubeClient();
             StreamManifest manifest = null;
@@ -24,6 +27,7 @@ namespace Newtone.Core.Media
             {
                 manifest = await client.Videos.Streams.GetManifestAsync(filepath);
             }).Wait();
+            ConsoleDebug.WriteLine("URL: " + manifest.GetAudioOnly().WithHighestBitrate().Url);
             player.BasePlayer.Load(manifest.GetAudioOnly().WithHighestBitrate().Url);
         }
 
@@ -31,5 +35,6 @@ namespace Newtone.Core.Media
         {
             player.Play();
         }
+        #endregion
     }
 }

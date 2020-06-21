@@ -8,6 +8,11 @@ namespace Newtone.Core.Media
 {
     public class CrossPlayer
     {
+        #region Fields
+        private readonly IPlayerController webPC;
+        private readonly IPlayerController localPC;
+        #endregion
+        #region Properties
         public IBasePlayer BasePlayer { get; private set; }
         private IPlayerController PlayerController { get; set; }
         private Random Random { get; set; }
@@ -42,22 +47,22 @@ namespace Newtone.Core.Media
                 return BasePlayer.GetCanSeek();
             }
         }
-
+        #endregion
+        #region Constructors
         public CrossPlayer(IBasePlayer basePlayer)
         {
             BasePlayer = basePlayer;
+            webPC = new WebPlayerController();
+            localPC = new LocalPlayerController();
 
             Random = new Random(GlobalData.PASSWORD.GetHashCode());
         }
-
-        public void SetPlayerController(IPlayerController playerController)
-        {
-            PlayerController = playerController;
-        }
-
+        #endregion
+        #region Public Methods
         public void Load(string filename)
         {
             BasePlayer.Reset();
+            SetPlayerController(filename.Length == 11 ? webPC : localPC);
             PlayerController?.Load(this, filename);
 
             try
@@ -200,6 +205,7 @@ namespace Newtone.Core.Media
 
         public void Seek(double seek)
         {
+            ConsoleDebug.WriteLine("Seek " + seek);
             if (BasePlayer.GetCanSeek())
                 BasePlayer?.Seek(seek);
                 //BasePlayer.Seek((int)seek * 1000);
@@ -219,5 +225,12 @@ namespace Newtone.Core.Media
         {
             BasePlayer?.Error(error);
         }
+        #endregion
+        #region Private Methods
+        private void SetPlayerController(IPlayerController playerController)
+        {
+            PlayerController = playerController;
+        }
+        #endregion
     }
 }

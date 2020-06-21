@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:Newtone.Desktop.Views"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
              xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
+             xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:DownloadViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -17,7 +21,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{x:Static localization:Localization.TitleDownloads}" Style="{StaticResource PageTitle}"/>
-        <ListView Grid.Row="1" Background="#121212" x:Name="downloadListView">
+        <ListView Grid.Row="1" Background="#121212" x:Name="downloadListView" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <datatemplates:DownloadDataTemplate/>

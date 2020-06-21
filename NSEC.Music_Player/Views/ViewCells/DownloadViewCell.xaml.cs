@@ -12,9 +12,11 @@ namespace NSEC.Music_Player.Views.ViewCells
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DownloadViewCell : ViewCell
     {
+        #region Constructors
         public DownloadViewCell()
         {
             InitializeComponent();
         }
+        #endregion
     }
 }

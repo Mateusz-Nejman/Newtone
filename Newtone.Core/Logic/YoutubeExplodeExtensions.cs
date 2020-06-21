@@ -8,6 +8,7 @@ namespace Newtone.Core.Logic
 {
     public static class YoutubeExplodeExtensions
     {
+        #region Public Methods
         public static string GetVideoMixPlaylistId(this Video video)
         {
             return "RD" + video.Id;
@@ -216,5 +217,6 @@ namespace Newtone.Core.Logic
 
             return false;
         }
+        #endregion
     }
 }

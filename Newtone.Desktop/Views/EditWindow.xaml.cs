@@ -2,9 +2,11 @@
 using Newtone.Core;
 using Newtone.Core.Loaders;
 using Newtone.Core.Media;
+using Newtone.Desktop.Logic;
 using Newtone.Desktop.Processing;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -15,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WaveFormRendererLib;
 
 namespace Newtone.Desktop.Views
 {
@@ -23,6 +26,8 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class EditWindow : Window
     {
+        //TODO Cut files
+        #region Properties
         private string FilePath { get; set; }
         private bool IsImage {
             get
@@ -33,6 +38,8 @@ namespace Newtone.Desktop.Views
         private byte[] Image { get; set; }
         public byte[] NewImage { get; private set; }
         public static bool AfterEdit { get; set; }
+        #endregion
+        #region Constructors
         public EditWindow(string filePath)
         {
             InitializeComponent();
@@ -42,14 +49,10 @@ namespace Newtone.Desktop.Views
             artistBox.Text = source.Artist;
             titleBox.Text = source.Title;
             AfterEdit = false;
-            if(source.Image != null && source.Image.Length > 0)
-            {
-                Image = source.Image;
-                image.Source = ImageProcessing.FromArray(source.Image);
-            }
-
+  
         }
-
+        #endregion
+        #region Private Methods
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -62,6 +65,7 @@ namespace Newtone.Desktop.Views
                     newSource.Image = NewImage;
                 GlobalLoader.ChangeTrack(GlobalData.Audios[FilePath], newSource);
                 AfterEdit = true;
+                SnackbarBuilder.Show(Core.Languages.Localization.Ready);
                 this.Close();
             }
             
@@ -102,5 +106,6 @@ namespace Newtone.Desktop.Views
                     File.WriteAllBytes(saveFileDialog.FileName+".png", Image);
             }
         }
+        #endregion
     }
 }

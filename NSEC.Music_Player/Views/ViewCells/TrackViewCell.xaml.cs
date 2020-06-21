@@ -14,15 +14,11 @@ namespace NSEC.Music_Player.Views.ViewCells
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TrackViewCell : ViewCell
     {
+        #region Constructors
         public TrackViewCell()
         {
             InitializeComponent();
         }
-
-        private void CustomImageButton_Clicked(object sender, EventArgs e)
-        {
-            ContextMenuBuilder.BuildForTrack((View)sender, ((CustomImageButton)sender).Tag);
-
-        }
+        #endregion
     }
 }

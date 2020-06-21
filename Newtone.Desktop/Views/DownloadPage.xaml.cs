@@ -1,6 +1,7 @@
 ﻿using Newtone.Core.Logic;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
+using Newtone.Desktop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,30 +23,21 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class DownloadPage : UserControl, ITimerContent
     {
-        private ObservableCollection<DownloadModel> Items { get; set; }
+        #region Properties
+        private DownloadViewModel ViewModel { get; set; }
+        #endregion
+        #region Constructors
         public DownloadPage()
         {
             InitializeComponent();
-            Items = new ObservableCollection<DownloadModel>();
-            downloadListView.ItemsSource = Items;
+            ViewModel = DataContext as DownloadViewModel;
         }
-
+        #endregion
+        #region Public Methods
         public void Tick()
         {
-            if(Items.Count != DownloadProcessing.GetDownloads().Count)
-            {
-                Items.Clear();
-                foreach (var item in DownloadProcessing.GetModels())
-                    Items.Add(item);
-            }
-
-            for(int a = 0; a < Items.Count; a++)
-            {
-                Items[a].Progress = DownloadProcessing.GetDownloads()[Items[a].Id].Progress;
-                //ConsoleDebug.WriteLine(Items[a].Progress);
-            }
-
-            downloadListView.Items.Refresh();
+            ViewModel?.Tick(downloadListView);
         }
+        #endregion
     }
 }

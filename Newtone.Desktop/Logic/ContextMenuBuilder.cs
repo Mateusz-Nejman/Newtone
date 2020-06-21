@@ -13,8 +13,11 @@ namespace Newtone.Desktop.Logic
 {
     public static class ContextMenuBuilder
     {
+        #region Properties
         private static string FilePath { get; set; }
         private static string Playlist { get; set; }
+        #endregion
+        #region Public Methods
         public static ContextMenu BuildForTrack(string filePath, string playlist = "")
         {
             FilePath = filePath;
@@ -117,17 +120,17 @@ namespace Newtone.Desktop.Logic
             {
                 Header = Localization.LanguagePL
             };
-            menuLangPL.Click += (sender, e) => { GlobalData.CurrentLanguage = "pl"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+            menuLangPL.Click += (sender, e) => { GlobalData.CurrentLanguage = "pl"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
             MenuItem menuLangEN = new MenuItem
             {
                 Header = Localization.LanguageEN
             };
-            menuLangEN.Click += (sender, e) => { GlobalData.CurrentLanguage = "en"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+            menuLangEN.Click += (sender, e) => { GlobalData.CurrentLanguage = "en"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
             MenuItem menuLangRU = new MenuItem
             {
                 Header = Localization.LanguageRU
             };
-            menuLangRU.Click += (sender, e) => { GlobalData.CurrentLanguage = "ru"; Localization.RefreshLanguage(); GlobalData.SaveConfig(); };
+            menuLangRU.Click += (sender, e) => { GlobalData.CurrentLanguage = "ru"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
 
 
             menu.Items.Add(menuLangPL);
@@ -137,34 +140,67 @@ namespace Newtone.Desktop.Logic
             return menu;
         }
 
+        public static ContextMenu BuildForIcon()
+        {
+            ContextMenu menu = new ContextMenu();
+
+            MenuItem menuConvert = new MenuItem
+            {
+                Header = Localization.Conversion
+            };
+            menuConvert.Click += (sender, e) =>
+            {
+                ConvertWindow window = new ConvertWindow();
+                window.CenterToMainWindow();
+                window.ShowDialog();
+            };
+
+            MenuItem menuInfo = new MenuItem
+            {
+                Header = Localization.Informations,
+            };
+            menuInfo.Click += (sender, e) =>
+            {
+                AboutWindow about = new AboutWindow();
+                about.CenterToMainWindow();
+                about.ShowDialog();
+            };
+            menu.Items.Add(menuConvert);
+            menu.Items.Add(menuInfo);
+            
+            return menu;
+        }
+        #endregion
+
+        #region Private Methods
         private static void MenuSyncClear_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SyncProcessing.Audios.Clear();
+            SnackbarBuilder.Show(Localization.Ready);
         }
 
         private static void MenuSyncDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SyncProcessing.Audios.Remove(FilePath);
+            SnackbarBuilder.Show(Localization.Ready);
         }
 
         private static void MenuSyncPlaylist_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SyncProcessing.AddFiles(GlobalData.Playlists[Playlist]);
+            SnackbarBuilder.Show(Localization.Ready);
         }
 
         private static void MenuSync_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             SyncProcessing.AddFile(FilePath);
+            SnackbarBuilder.Show(Localization.Ready);
         }
 
         private static void MenuEdit_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            EditWindow editWindow = new EditWindow(FilePath)
-            {
-                Owner = MainWindow.Instance,
-                Left = MainWindow.Instance.Left,
-                Top = MainWindow.Instance.Top
-            };
+            EditWindow editWindow = new EditWindow(FilePath);
+            editWindow.CenterToMainWindow();
             editWindow.ShowDialog();
             //editWindow.Show();
         }
@@ -172,12 +208,8 @@ namespace Newtone.Desktop.Logic
         private static void MenuDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             FileInfo fileInfo = new FileInfo(FilePath);
-            AlertWindow prompt = new AlertWindow(Localization.Warning, Localization.QuestionDelete + " "+fileInfo.Name+(Playlist == "" ? "?" : " "+  Localization.QuestionDeleteFromPlaylist+"?"))
-            {
-                Owner = MainWindow.Instance,
-                Left = MainWindow.Instance.Left,
-                Top = MainWindow.Instance.Top
-            };
+            AlertWindow prompt = new AlertWindow(Localization.Warning, Localization.QuestionDelete + " " + fileInfo.Name + (Playlist == "" ? "?" : " " + Localization.QuestionDeleteFromPlaylist + "?"), Localization.Yes, Localization.No);
+            prompt.CenterToMainWindow();
             bool? answer = prompt.ShowDialog();
 
             if(answer == true)
@@ -197,18 +229,15 @@ namespace Newtone.Desktop.Logic
                 }
             }
 
+            SnackbarBuilder.Show(Localization.Ready);
             GlobalData.SaveConfig();
             GlobalData.SaveTags();
         }
 
         private static void ItemNew_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            PromptWindow prompt = new PromptWindow(Localization.NewPlaylist, Localization.NewPlaylistHint,Localization.Add,Localization.Cancel)
-            {
-                Owner = MainWindow.Instance,
-                Left = MainWindow.Instance.Left,
-                Top = MainWindow.Instance.Top
-            };
+            PromptWindow prompt = new PromptWindow(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel);
+            prompt.CenterToMainWindow();
             bool? answer = prompt.ShowDialog();
 
             if (answer == true && !string.IsNullOrEmpty(prompt.Value))
@@ -220,7 +249,10 @@ namespace Newtone.Desktop.Logic
 
                 
             }
+
+            SnackbarBuilder.Show(Localization.Ready);
             GlobalData.SaveConfig();
         }
+        #endregion
     }
 }

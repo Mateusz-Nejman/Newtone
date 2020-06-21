@@ -3,6 +3,7 @@ using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Desktop.Logic;
 using Newtone.Desktop.Models;
+using Newtone.Desktop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,88 +26,33 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class TrackPage : UserControl, ITimerContent
     {
-        private ObservableCollection<TrackModel> TrackItems { get; set; }
-
-        private string CurrentTrackPath
-        {
-            get
-            {
-                return TrackItems.Count == 0 ? "" : TrackItems[trackListView.SelectedIndex].FilePath;
-            }
-        }
+        #region Properties
+        private TrackViewModel ViewModel { get; set; }
+        #endregion
+        #region Constructors
         public TrackPage()
         {
             InitializeComponent();
 
-            trackListView.ItemsSource = TrackItems = new ObservableCollection<TrackModel>();
-
-            foreach(var source in GlobalData.Audios.Values)
-            {
-                TrackItems.Add(new TrackModel(source));
-            }
+            ViewModel = DataContext as TrackViewModel;
         }
-
+        #endregion
+        #region Private Methods
         private void TrackListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            int index = trackListView.SelectedIndex;
-
-            if (index >= 0 && index < TrackItems.Count)
-            {
-                MediaSource source = GlobalData.Audios[CurrentTrackPath];
-                GlobalData.CurrentPlaylist.Clear();
-
-                GlobalData.CurrentPlaylist.AddRange(GlobalData.Audios.Values);
-
-                GlobalData.MediaSource = source;
-                GlobalData.PlaylistPosition = index;
-                GlobalData.PlaylistType = MediaSource.SourceType.Local;
-
-                GlobalData.MediaPlayer.Stop();
-                GlobalData.MediaPlayer.Reset();
-                GlobalData.MediaPlayer.Load(source.FilePath);
-                GlobalData.MediaPlayer.Play();
-            }
-            trackListView.SelectedItem = null;
+            ViewModel?.SelectedItemLeft.Execute(trackListView);
         }
 
         private void TrackListView_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            int index = trackListView.SelectedIndex;
-
-            if (index >= 0 && index < TrackItems.Count)
-            {
-                ContextMenu menu = ContextMenuBuilder.BuildForTrack(CurrentTrackPath);
-                menu.IsOpen = true;
-                menu.PlacementTarget = trackListView;
-            }
-            
+            ViewModel?.SelectedItemRight.Execute(trackListView);
         }
-
+        #endregion
+        #region Public Methods
         public void Tick()
         {
-            bool needRefresh = false;
-            foreach(var model in TrackItems.ToList())
-            {
-                
-                if (GlobalData.Audios.ContainsKey(model.FilePath))
-                {
-                    MediaSource source = GlobalData.Audios[model.FilePath];
-                    if(model.Artist != source.Artist || model.Title != source.Title)
-                    {
-                        int index = TrackItems.IndexOf(model);
-                        TrackItems[index].Title = source.Title;
-                        TrackItems[index].Artist = source.Artist;
-                    }
-                    model.CheckChanges();
-                }
-                else
-                {
-                    TrackItems.Remove(model);
-                    needRefresh = true;
-                }
-            }
-            if(needRefresh)
-                trackListView.Items.Refresh();
+            ViewModel?.Tick(trackListView);
         }
+        #endregion
     }
 }

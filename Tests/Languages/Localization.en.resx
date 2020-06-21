@@ -144,6 +144,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ChangeName" xml:space="preserve">
+    <value>Change name</value>
+  </data>
   <data name="ChoosePlaylist" xml:space="preserve">
     <value>Select playlist</value>
   </data>
@@ -161,6 +164,9 @@
   </data>
   <data name="CoverSave" xml:space="preserve">
     <value>Save cover</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
   </data>
   <data name="FileCorrupted" xml:space="preserve">
     <value>File is corrupted</value>

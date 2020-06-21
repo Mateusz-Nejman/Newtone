@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtone.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,32 +18,19 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class PromptWindow : Window
     {
+        #region Properties
+        private PromptViewModel ViewModel { get; set; }
         public string Value
         {
-            get
-            {
-                return valueBox.Text;
-            }
+            get => ViewModel?.Value;
         }
+        #endregion
+        #region Constructors
         public PromptWindow(string title, string defaultValue, string confirmText = "Tak", string cancelText = "Nie")
         {
             InitializeComponent();
-            Title = title;
-            valueBox.Text = defaultValue;
-            yesText.Text = confirmText;
-            noText.Text = cancelText;
+            DataContext = ViewModel = new PromptViewModel(title, confirmText, cancelText, defaultValue);
         }
-
-        private void YesButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
-
-        private void NoButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
+        #endregion
     }
 }

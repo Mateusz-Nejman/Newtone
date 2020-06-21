@@ -10,14 +10,46 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtone.Core.Models;
 using Xamarin.Forms;
 
 namespace NSEC.Music_Player.Models
 {
-    public class ExploreModel
+    public class ExploreModel:PropertyChangedBase
     {
-        public string Artist { get; set; }
-        public string Title { get; set; }
-        public ImageSource ImageSource;
+        #region Fields
+        private string artist;
+        private string title;
+        private ImageSource imageSource;
+        #endregion
+        #region Properties
+        public string Artist
+        {
+            get => artist;
+            set
+            {
+                artist = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged();
+            }
+        }
+        public ImageSource ImageSource
+        {
+            get => imageSource;
+            set
+            {
+                imageSource = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
     }
 }

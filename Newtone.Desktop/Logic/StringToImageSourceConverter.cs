@@ -12,6 +12,7 @@ namespace Newtone.Desktop.Logic
     [ValueConversion(typeof(string), typeof(ImageSource))]
     public class StringToImageSourceConverter : MarkupExtension, IValueConverter
     {
+        #region Public Methods
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return new BitmapImage(new Uri("Resources/"+(value as string), UriKind.Relative)); ;
@@ -26,5 +27,6 @@ namespace Newtone.Desktop.Logic
         {
             return this;
         }
+        #endregion
     }
 }

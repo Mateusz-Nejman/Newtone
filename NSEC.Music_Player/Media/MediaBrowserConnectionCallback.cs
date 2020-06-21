@@ -17,6 +17,7 @@ namespace NSEC.Music_Player.Media
 {
     public class MediaBrowserConnectionCallback:MediaBrowserCompat.ConnectionCallback
     {
+        #region Public Methods
         public override void OnConnected()
         {
             base.OnConnected();
@@ -37,5 +38,6 @@ namespace NSEC.Music_Player.Media
             mediaController.RegisterCallback(Global.ControllerCallback);
 
         }
+        #endregion
     }
 }

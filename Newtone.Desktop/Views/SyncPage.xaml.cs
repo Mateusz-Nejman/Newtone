@@ -3,6 +3,7 @@ using Newtone.Core.Logic;
 using Newtone.Core.Processing;
 using Newtone.Desktop.Logic;
 using Newtone.Desktop.Models;
+using Newtone.Desktop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,83 +25,34 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class SyncPage : UserControl, ITimerContent
     {
-        private ObservableCollection<TrackModel> Items { get; set; }
+        #region Properties
+        private SyncViewModel ViewModel { get; set; }
+        #endregion
+        #region Constructors
         public SyncPage()
         {
             InitializeComponent();
-            syncListView.ItemsSource = Items = new ObservableCollection<TrackModel>();
-            SyncProcessing.ListenReceiver();
+            ViewModel = DataContext as SyncViewModel;
         }
-
+        #endregion
+        #region Public Methods
         public void Tick()
         {
-            deviceCode.IsEnabled = SyncProcessing.CurrentConnection == null || !SyncProcessing.CurrentConnection.Connected;
-            connectButton.IsEnabled = SyncProcessing.CurrentConnection == null || !SyncProcessing.CurrentConnection.Connected;
-            sendButton.IsEnabled = SyncProcessing.Audios.Count > 0 && !SyncProcessing.Started;
-            receiveButton.IsEnabled = !SyncProcessing.Started;
-            
-            if (SyncProcessing.State == 0)
-                progressText.Text = SyncProcessing.Progress == 0 ? "" : $"{Math.Round(SyncProcessing.Progress, 2)}MB / {Math.Round(SyncProcessing.Size, 2)}MB";
-            else if (SyncProcessing.State == 1)
-            {
-                progressText.Text = $"{SyncProcessing.CurrentFileReceived} / {SyncProcessing.FilesReceived}";
-                fileText.Text = SyncProcessing.CurrentFileName;
-            }
-            else if (SyncProcessing.State == 2)
-            {
-                progressText.Text = Core.Languages.Localization.Ready;
-                fileText.Text = "";
-            }
-
-            receiveGrid.Visibility = SyncProcessing.SocketMode == 1 ? Visibility.Visible : Visibility.Hidden;
-            syncListView.Visibility = SyncProcessing.SocketMode == 0 ? Visibility.Visible : Visibility.Hidden;
-            sendGrid.Visibility = SyncProcessing.SocketMode == 2 ? Visibility.Visible : Visibility.Hidden;
-
-            if (SyncProcessing.SocketMode == 2)
-                sendProgressText.Text = $"{Math.Round(SyncProcessing.Progress, 2)}% ";
-
-            if (Items.Count != SyncProcessing.Audios.Count)
-            {
-                Items.Clear();
-                foreach (var item in SyncProcessing.Audios)
-                    Items.Add(new TrackModel(GlobalData.Audios[item]));
-
-                syncListView.Items.Refresh();
-            }
-
-            foreach (var item in Items)
-                item.CheckChanges();
+            ViewModel?.Tick(syncListView);
         }
-
+        #endregion
+        #region Private Methods
         private void SyncListView_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             int index = syncListView.SelectedIndex;
 
-            if(index >= 0 && index < Items.Count)
+            if(index >= 0 && index < ViewModel?.Items.Count)
             {
-                var menu = ContextMenuBuilder.BuildForSync(Items[index].FilePath);
+                var menu = ContextMenuBuilder.BuildForSync(ViewModel?.Items[index].FilePath);
                 menu.PlacementTarget = (UIElement)sender;
                 menu.IsOpen = true;
             }
         }
-
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(!string.IsNullOrEmpty(deviceCode.Text))
-            {
-                SyncProcessing.Connect(deviceCode.Text);
-            }
-        }
-
-        private void ReceiveButton_Click(object sender, RoutedEventArgs e)
-        {
-            SyncProcessing.Receive();
-            
-        }
-
-        private void SendButton_Click(object sender, RoutedEventArgs e)
-        {
-            SyncProcessing.Send();
-        }
+        #endregion
     }
 }

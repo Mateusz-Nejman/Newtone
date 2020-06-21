@@ -5,8 +5,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
              xmlns:local="clr-namespace:NSEC.Music_Player"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
              mc:Ignorable="d"
              x:Class="NSEC.Music_Player.Views.PermissionPage" Visual="Material" NavigationPage.HasNavigationBar="False">
+    <ContentPage.BindingContext>
+        <viewmodels:PermissionViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <RelativeLayout BackgroundColor="{x:Static local:Colors.ColorPrimary}">
             <StackLayout BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="Fill" 
@@ -32,10 +36,10 @@
                         </Label.FormattedText>
                     </Label>
                     <Button Margin="0,10,0,0" Text="{x:Static localization:Localization.PermissionGrant}"
-                        Clicked="Button_Clicked"
+                        Command="{Binding Grant}"
                         BackgroundColor="Transparent"
                             BorderColor="Black"
-                        TextColor="{Static local:Colors.TextColor}" x:Name="buttonGrant"/>
+                        TextColor="{Static local:Colors.TextColor}"/>
                 </StackLayout>
             </ScrollView>
 

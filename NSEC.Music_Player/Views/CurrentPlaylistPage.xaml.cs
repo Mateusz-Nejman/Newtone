@@ -2,6 +2,7 @@
 using Newtone.Core.Logic;
 using NSEC.Music_Player.Media;
 using NSEC.Music_Player.Models;
+using NSEC.Music_Player.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,40 +18,28 @@ namespace NSEC.Music_Player.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CurrentPlaylistPage : ContentView, ITimerContent
     {
-        private ObservableCollection<TrackModel> TrackItems { get; set; }
+        #region Fields
+        private readonly CurrentPlaylistViewModel ViewModel;
+        #endregion
+        #region Constructors
         public CurrentPlaylistPage()
         {
             InitializeComponent();
-            trackListView.ItemsSource = TrackItems = new ObservableCollection<TrackModel>();
-            foreach (var track in GlobalData.CurrentPlaylist)
-            {
-                TrackItems.Add(new TrackModel(track, "", false));
-            }
+            ViewModel = BindingContext as CurrentPlaylistViewModel;
         }
-
+        #endregion
+        #region Public Methods
         public void Tick()
         {
-            foreach (var model in TrackItems.ToList())
-            {
-                model.CheckChanges();
-            }
+            ViewModel?.Tick();
 
         }
-
+        #endregion
+        #region Private Methods
         private void TrackListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            int index = e.SelectedItemIndex;
-
-            if (index >= 0 && index < TrackItems.Count)
-            {
-                var model = TrackItems[index];
-
-                GlobalData.MediaSource = GlobalData.CurrentPlaylist[index];
-                GlobalData.PlaylistPosition = index;
-                GlobalData.MediaPlayer.Load(model.FilePath);
-                MediaPlayerHelper.Play();
-                trackListView.SelectedItem = null;
-            }
+            ViewModel?.TrackListView_ItemSelected(sender, e);
         }
+        #endregion
     }
 }

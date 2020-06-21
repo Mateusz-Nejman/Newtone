@@ -1,6 +1,7 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
+using Newtone.Desktop.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,11 +23,13 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
     /// </summary>
     public partial class SearchResultDataTemplate : UserControl
     {
+        #region Constructors
         public SearchResultDataTemplate()
         {
             InitializeComponent();
         }
-
+        #endregion
+        #region Private Methods
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             TagButton button = (TagButton)sender;
@@ -40,12 +43,8 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
             {
                 if(urlType.ContainsKey(SearchProcessing.QueryEnum.Video))
                 {
-                    AlertWindow answer = new AlertWindow(Newtone.Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistOrTrack, Core.Languages.Localization.Track, Core.Languages.Localization.Playlist)
-                    {
-                        Owner = MainWindow.Instance
-                    };
-                    answer.Left = MainWindow.Instance.CalculateSubWindowPosition(answer.Width, answer.Height)[0];
-                    answer.Top = MainWindow.Instance.CalculateSubWindowPosition(answer.Width, answer.Height)[1];
+                    AlertWindow answer = new AlertWindow(Newtone.Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistOrTrack, Core.Languages.Localization.Track, Core.Languages.Localization.Playlist);
+                    answer.CenterToMainWindow();
 
                     if (answer.ShowDialog() == true)
                     {
@@ -54,23 +53,15 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
                     else
                     {
                         playlistId = urlType[SearchProcessing.QueryEnum.Playlist];
-                        AlertWindow alert = new AlertWindow(Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistDownload)
-                        {
-                            Owner = MainWindow.Instance
-                        };
-                        alert.Left = MainWindow.Instance.CalculateSubWindowPosition(alert.Width, alert.Height)[0];
-                        alert.Top = MainWindow.Instance.CalculateSubWindowPosition(alert.Width, alert.Height)[1];
+                        AlertWindow alert = new AlertWindow(Core.Languages.Localization.Question, Core.Languages.Localization.PlaylistDownload, Newtone.Core.Languages.Localization.Yes, Newtone.Core.Languages.Localization.No);
+                        alert.CenterToMainWindow();
                         bool toPlaylist = alert.ShowDialog() == true;
 
                         if(toPlaylist)
                         {
                             var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.QueryEnum.Playlist]);
-                            PromptWindow prompt = new PromptWindow(Core.Languages.Localization.NewPlaylist, playlist.Title)
-                            {
-                                Owner = MainWindow.Instance
-                            };
-                            prompt.Left = MainWindow.Instance.CalculateSubWindowPosition(prompt.Width, prompt.Height)[0];
-                            prompt.Top = MainWindow.Instance.CalculateSubWindowPosition(prompt.Width, prompt.Height)[1];
+                            PromptWindow prompt = new PromptWindow(Core.Languages.Localization.NewPlaylist, playlist.Title);
+                            prompt.CenterToMainWindow();
                             prompt.ShowDialog();
                             string newPlaylistName = prompt.Value;
                             playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
@@ -91,5 +82,6 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
                 }
             }
         }
+        #endregion
     }
 }

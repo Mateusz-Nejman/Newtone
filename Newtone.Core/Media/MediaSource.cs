@@ -10,19 +10,22 @@ namespace Newtone.Core.Media
 {
     public class MediaSource
     {
+        #region Properties
         public string Title { get; set; }
         public string FilePath { get; set; }
         public string Artist { get; set; }
         public TimeSpan Duration { get; set; }
         public byte[] Image { get; set; }
         public SourceType Type { get; set; }
-
+        #endregion
+        #region Enums
         public enum SourceType
         {
             Local,
             Web
         }
-
+        #endregion
+        #region Public Methods
         public MediaSource Clone()
         {
             return new MediaSource()
@@ -35,7 +38,9 @@ namespace Newtone.Core.Media
                 Type = this.Type
             };
         }
+        #endregion
 
+        #region Operators
         public static explicit operator MediaSource(Video video)
         {
             using WebClient client = new WebClient();
@@ -75,6 +80,6 @@ namespace Newtone.Core.Media
             };
         }
 
-
+        #endregion
     }
 }

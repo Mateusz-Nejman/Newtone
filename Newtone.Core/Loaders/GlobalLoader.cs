@@ -11,6 +11,7 @@ namespace Newtone.Core.Loaders
 {
     public static class GlobalLoader
     {
+        #region Public Methods
         public async static Task Load()
         {
             if(GlobalData.Audios.Count == 0)
@@ -80,6 +81,12 @@ namespace Newtone.Core.Loaders
                 };
                 GlobalData.AudioTags.Add(oldSource.FilePath, tag);
             }
+            if(oldSource.Artist != newSource.Artist)
+            {
+                GlobalData.Artists[oldSource.Artist].Remove(oldSource.FilePath);
+                if (GlobalData.Artists[oldSource.Artist].Count == 0)
+                    GlobalData.Artists.Remove(oldSource.Artist);
+            }
             AddTrack(newSource);
 
             if (GlobalData.MediaSource != null && GlobalData.MediaSource.FilePath == newSource.FilePath)
@@ -87,5 +94,6 @@ namespace Newtone.Core.Loaders
             ConsoleDebug.WriteLine("Save " + oldSource.FilePath + " " + tag.Author + " -> " + tag.Title);
             GlobalData.SaveTags();
         }
+        #endregion
     }
 }

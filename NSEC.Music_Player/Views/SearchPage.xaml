@@ -6,7 +6,11 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:NSEC.Music_Player"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
+             xmlns:viewmodels="clr-namespace:NSEC.Music_Player.ViewModels"
              x:Class="NSEC.Music_Player.Views.SearchPage">
+    <ContentView.BindingContext>
+        <viewmodels:SearchViewModel/>
+    </ContentView.BindingContext>
   <ContentView.Content>
         <StackLayout Orientation="Vertical" Padding="5">
             <Grid>
@@ -16,7 +20,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="42"/>
                 </Grid.RowDefinitions>
-                <Entry Grid.Column="0" Placeholder="{x:Static localization:Localization.Search}" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" Completed="SearchEntry_Completed" x:Name="searchEntry"/>
+                <Entry Text="{Binding Path=SearchText, Mode=TwoWay}" Grid.Column="0" Placeholder="{x:Static localization:Localization.Search}" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" Completed="SearchEntry_Completed"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -27,11 +31,15 @@
                     <RowDefinition Height="42"/>
                 </Grid.RowDefinitions>
                 <Label Text="{x:Static localization:Localization.SearchHistory}" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
-                <Label Grid.Column="1" Text="{x:Static localization:Localization.Clear}" Margin="0,0,8,0" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}" x:Name="clearLabel"/>
+                <Label Grid.Column="1" Text="{x:Static localization:Localization.Clear}" Margin="0,0,8,0" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ClearList}"/>
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
             <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
-                <ListView VerticalOptions="FillAndExpand" x:Name="historyList"
-                          ItemSelected="HistoryList_ItemSelected">
+                <ListView VerticalOptions="FillAndExpand"
+                          ItemSelected="HistoryList_ItemSelected"  ItemsSource="{Binding Items}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
