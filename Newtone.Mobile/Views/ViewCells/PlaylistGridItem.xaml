@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:custom="clr-namespace:Newtone.Mobile.Views.Custom"
+             xmlns:local="clr-namespace:Newtone.Mobile"
+             xmlns:viewcells="clr-namespace:Newtone.Mobile.ViewModels.ViewCells"
+             x:Class="Newtone.Mobile.Views.ViewCells.PlaylistGridItem">
+    <ContentView.Content>
+        <RelativeLayout HeightRequest="150" Margin="4,8">
+            <Image Source="{Binding Image}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" 
+                   Aspect="AspectFill"/>
+
+            <Grid BackgroundColor="#99000000" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-36}"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=Constant, Constant=36}"/>
+            <Label 
+                Text="{Binding PlaylistName}"
+                TextColor="{Static local:Colors.TextColor}" 
+                FontFamily="{x:Static local:Fonts.Regular}" 
+                FontSize="14" 
+                WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-36}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
+            <Label 
+                Text="{Binding TracksText}"
+                TextColor="{Static local:Colors.TextColor}" 
+                FontFamily="{x:Static local:Fonts.Thin}" 
+                FontSize="14" WidthRequest="108"  
+                LineBreakMode="TailTruncation"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=5}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1,Constant=-22}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-10}" />
+
+            <custom:PressGestureMask RelativeLayout.XConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=Constant, Constant=0}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                                  RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" LongPressedCommand="{Binding LongPressedCommand}" PressedCommand="{Binding PressedCommand}"/>
+        </RelativeLayout>
+    </ContentView.Content>
+</ContentView>

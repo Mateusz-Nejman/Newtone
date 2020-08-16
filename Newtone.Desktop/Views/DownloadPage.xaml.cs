@@ -38,6 +38,16 @@ namespace Newtone.Desktop.Views
         {
             ViewModel?.Tick(downloadListView);
         }
+
+        public void Appearing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Disappearing()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

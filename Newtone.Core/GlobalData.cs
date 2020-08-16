@@ -47,6 +47,7 @@ namespace Newtone.Core
         public static List<string> DownloadedIds { get; set; }
         public static Dictionary<string, List<string>> Artists { get; set; }
         public static Dictionary<string, List<string>> Playlists { get; set; }
+        public static Dictionary<string, string> WebToLocalPlaylists { get; set; }
         public static List<MediaSource> CurrentPlaylist { get; set; }
         public static List<MediaSource> CurrentQueue { get; set; }
         public static MediaSource.SourceType PlaylistType { get; set; }
@@ -54,6 +55,7 @@ namespace Newtone.Core
         public static int QueuePosition { get; set; }
         public static MediaSource MediaSource { get; set; }
         public static bool AudioFromIntent { get; set; }
+        public static bool AutoDownload { get; set; }
 
         public static string MediaSourcePath
         {
@@ -76,6 +78,7 @@ namespace Newtone.Core
         public static List<string> ExcludedPaths { get; set; }
         public static List<string> IncludedPaths { get; set; }
         public static string CurrentLanguage { get; set; }
+        public static MessageGenerator Messenger { get; set; }
         #endregion
         #region Public Methods
 
@@ -127,26 +130,26 @@ namespace Newtone.Core
                     string[] playlists = buffer.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                     //ConsoleDebug.WriteLine("LoadConfig " + playlists.Length);
 
-                    foreach (string playlistBuffer in playlists)
+                    playlists.ForEach(playlistBuffer =>
                     {
                         List<string> playlist = new List<string>();
                         string[] parts = playlistBuffer.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
                         string name = parts[0];
                         string[] items = parts[1].Split(';', StringSplitOptions.RemoveEmptyEntries);
 
-                        foreach (string filepath in items)
+                        items.ForEach(filepath =>
                         {
                             if (File.Exists(filepath))
                             {
                                 playlist.Add(filepath);
                             }
-                        }
+                        });
 
                         if (playlist.Count > 0)
                         {
                             Playlists.Add(name, playlist);
                         }
-                    }
+                    });
                 }
 
                 if (nsec.Exists("mostTracks"))
@@ -155,9 +158,8 @@ namespace Newtone.Core
                     string[] tracks = System.Text.Encoding.UTF8.GetString(tracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
 
                     List<TrackCounter> trackList = new List<TrackCounter>();
-                    foreach (string track in tracks)
+                    tracks.ForEach(track =>
                     {
-
                         TrackCounter counter = TrackCounter.FromString(track);
 
                         if (counter != null && File.Exists(counter.Media.FilePath) && trackList.Count < MAXTRACKSINLASTLIST)
@@ -165,10 +167,9 @@ namespace Newtone.Core
 
                             trackList.Add(counter);
                         }
-                    }
+                    });
 
                     trackList = trackList.OrderByDescending(o => o.Count).ToList();
-
                     MostTracks = trackList.ToArray();
                 }
 
@@ -178,7 +179,7 @@ namespace Newtone.Core
                     string[] tracks = System.Text.Encoding.UTF8.GetString(tracksData).Split(':', StringSplitOptions.RemoveEmptyEntries);
 
                     List<TrackCounter> trackList = new List<TrackCounter>();
-                    foreach (string track in tracks)
+                    tracks.ForEach(track =>
                     {
                         TrackCounter counter = TrackCounter.FromString(track);
 
@@ -186,7 +187,7 @@ namespace Newtone.Core
                         {
                             trackList.Add(counter);
                         }
-                    }
+                    });
 
                     LastTracks = trackList.ToArray();
                 }
@@ -203,23 +204,43 @@ namespace Newtone.Core
                     byte[] historyData = nsec.Get("history");
                     string[] historyElems = System.Text.Encoding.UTF8.GetString(historyData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
                     History.Clear();
-                    foreach (string elem in historyElems)
+
+                    historyElems.ForEach(elem =>
                     {
                         string[] text = elem.Split(SEPARATOR);
                         if (text.Length >= 2 && History.FindIndex(model => model.Text == text[1]) == -1)
                             History.Add(new HistoryModel() { Text = text[1] });
-                    }
+                    });
                 }
 
                 if(nsec.Exists("includedPaths"))
                 {
                     byte[] pathData = nsec.Get("includedPaths");
                     string[] paths = System.Text.Encoding.UTF8.GetString(pathData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                    foreach(var item in paths)
+                    paths.ForEach(item =>
                     {
                         if (Directory.Exists(item) && !IncludedPaths.Contains(item))
                             IncludedPaths.Add(item);
-                    }
+                    });
+                }
+
+                if(nsec.Exists("webPlaylists"))
+                {
+                    byte[] pathData = nsec.Get("webPlaylists");
+                    string[] elems = System.Text.Encoding.UTF8.GetString(pathData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                    WebToLocalPlaylists.Clear();
+                    elems.ForEach(item =>
+                    {
+                        string[] datas = item.Split(SEPARATOR);
+                        WebToLocalPlaylists.Add(datas[0], datas[1]);
+                    });
+                }
+
+                if (nsec.Exists("autoDownload"))
+                {
+                    byte[] playerModeData = nsec.Get("autoDownload");
+                    AutoDownload = System.Text.Encoding.UTF8.GetString(playerModeData) == "true";
                 }
 
                 if (!AudioFromIntent)
@@ -254,13 +275,13 @@ namespace Newtone.Core
                             }
                         }
 
-                        foreach (string filepath in files)
+                        files.ForEach(filepath =>
                         {
                             if (File.Exists(filepath) && Audios.ContainsKey(filepath))
                             {
                                 CurrentPlaylist.Add(Audios[filepath]);
                             }
-                        }
+                        });
                     }
                 }
 
@@ -283,9 +304,9 @@ namespace Newtone.Core
 
             if (Playlists.Count > 0)
             {
-                foreach (string playlistName in Playlists.Keys)
-                {
 
+                Playlists.Keys.ForEach(playlistName =>
+                {
                     List<string> playlist = Playlists[playlistName];
 
                     if (playlist.Count > 0)
@@ -293,18 +314,25 @@ namespace Newtone.Core
                         string playlistItem = playlistName + SEPARATOR;
 
 
-
-                        foreach (string item in playlist)
+                        playlist.ForEach(item =>
                         {
                             playlistItem += item + ';';
-                        }
+                        });
 
                         buffer += playlistItem + '\n';
                     }
-
-                }
-
+                });
                 nsec.AddFile("playlists", System.Text.Encoding.UTF8.GetBytes(buffer));
+
+                buffer = "";
+
+                WebToLocalPlaylists.Keys.ForEach(playlistId =>
+                {
+                    string elem = $"{playlistId}{SEPARATOR}{WebToLocalPlaylists[playlistId]}\n";
+                    buffer += elem;
+                });
+
+                nsec.AddFile("webPlaylists", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
 
             int playerMode = (int)PlayerMode;
@@ -316,30 +344,31 @@ namespace Newtone.Core
             if (CurrentPlaylist.Count > 0 && PlaylistType == MediaSource.SourceType.Local)
             {
                 buffer = "";
-                foreach (MediaSource mediaSource in CurrentPlaylist)
+
+                CurrentPlaylist.ForEach(mediaSource =>
                 {
                     string item = mediaSource.FilePath;
                     buffer += item + ';';
-                }
+                });
                 nsec.AddFile("playlist", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
             buffer = "";
 
-            foreach (TrackCounter counter in MostTracks)
+            MostTracks.ForEach(counter =>
             {
                 if (counter != null)
                     buffer += counter.ToString() + ":";
-            }
+            });
 
             nsec.AddFile("mostTracks", System.Text.Encoding.UTF8.GetBytes(buffer));
 
             buffer = "";
 
-            foreach (TrackCounter counter in LastTracks)
+            LastTracks.ForEach(counter =>
             {
                 if (counter != null)
                     buffer += counter.ToString() + ":";
-            }
+            });
 
             nsec.AddFile("lastTracks", System.Text.Encoding.UTF8.GetBytes(buffer));
 
@@ -347,10 +376,10 @@ namespace Newtone.Core
             {
                 buffer = "";
 
-                foreach (var model in History)
+                History.ForEach(model =>
                 {
                     buffer += "yt" + SEPARATOR + model.Text + "\n";
-                }
+                });
 
                 nsec.AddFile("history", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
@@ -359,13 +388,15 @@ namespace Newtone.Core
             {
                 buffer = "";
 
-                for(int a = 2; a < IncludedPaths.Count; a++)
+                IncludedPaths.Skip(2).ForEach(elem =>
                 {
-                    buffer += IncludedPaths[a] + "\n";
-                }
+                    buffer += elem + "\n";
+                });
 
                 nsec.AddFile("includedPaths", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
+
+            nsec.AddFile("autoDownload", System.Text.Encoding.UTF8.GetBytes(AutoDownload ? "true" : "false"));
 
             File.WriteAllBytes(DataPath + "/newtone.nsec2", nsec.Save());
 
@@ -382,7 +413,8 @@ namespace Newtone.Core
 
                 int counter = 0;
                 string buffer = "";
-                foreach (string filepath in AudioTags.Keys)
+
+                AudioTags.Keys.ForEach(filepath =>
                 {
                     MediaSourceTag mediaSource = AudioTags[filepath];
 
@@ -397,7 +429,7 @@ namespace Newtone.Core
                     bufferItem += "\n";
                     buffer += bufferItem;
                     counter += 1;
-                }
+                });
 
                 nsec.AddFile("tags", System.Text.Encoding.UTF8.GetBytes(buffer));
 
@@ -419,7 +451,7 @@ namespace Newtone.Core
                 string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get("tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 ConsoleDebug.WriteLine("LoadTags "+tags.Length);
 
-                foreach (string tagItem in tags)
+                tags.ForEach(tagItem =>
                 {
                     string[] values = tagItem.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
@@ -431,15 +463,15 @@ namespace Newtone.Core
                         Id = values.Length > 4 ? values[4] : null
                     };
 
-                    if(values.Length > 4)
+                    if (values.Length > 4)
                     {
-                        if (!DownloadedIds.Contains(values[4]))
+                        if (!DownloadedIds.Contains(values[4]) && File.Exists(values[0]))
                             DownloadedIds.Add(values[4]);
                     }
 
-                    ConsoleDebug.WriteLine("LT: "+values[0]);
+                    ConsoleDebug.WriteLine("LT: " + values[0]);
                     AudioTags.Add(values[0], tag);
-                }
+                });
 
                 nsec.Dispose();
             }

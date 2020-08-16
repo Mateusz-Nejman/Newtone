@@ -24,10 +24,7 @@ namespace Newtone.Core.Loaders
                     sources.AddRange(await FileProcessing.Scan(path, listed));
                 }
 
-                foreach(MediaSource source in sources)
-                {
-                    AddTrack(source);
-                }
+                sources.ForEach(AddTrack);
             }
         }
 

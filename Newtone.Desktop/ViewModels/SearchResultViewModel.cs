@@ -57,7 +57,7 @@ namespace Newtone.Desktop.ViewModels
                         {
                             var item = Items[index];
                             GlobalData.CurrentPlaylist.Clear();
-                            GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Web;
+                            GlobalData.PlaylistType = item.IsOffline ? Core.Media.MediaSource.SourceType.Local : Core.Media.MediaSource.SourceType.Web;
 
                             if (string.IsNullOrEmpty(item.MixId))
                             {
@@ -72,7 +72,7 @@ namespace Newtone.Desktop.ViewModels
                                         FilePath = _item.Id,
                                         Image = _item.Image,
                                         Title = _item.Title,
-                                        Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                                        Type = _item.IsOffline ? Core.Media.MediaSource.SourceType.Local : Core.Media.MediaSource.SourceType.Web
                                     });
                                 }
 
@@ -153,6 +153,7 @@ namespace Newtone.Desktop.ViewModels
                 //Items.Clear();
                 //RawItems.Clear();
                 //ConsoleDebug.WriteLine("await");
+                SearchProcessing.SearchOffline(searchedText, RawItems);
                 await SearchProcessing.Search(searchedText, RawItems);
                 //ConsoleDebug.WriteLine("Searched");
 
@@ -160,9 +161,16 @@ namespace Newtone.Desktop.ViewModels
                 {
                     using WebClient webClient = new WebClient();
 
-                    byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
-                    //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
-                    Items[a].Image = data;
+                    if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
+                    {
+                        byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
+                        //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
+                        Items[a].Image = data;
+                    }
+                    else
+                    {
+                        Items[a].OnPropertyChanged("Thumb");
+                    }
                 }
 
                 MainWindow.MainDispatcher.Invoke(() => page.searchListView.Items.Refresh());

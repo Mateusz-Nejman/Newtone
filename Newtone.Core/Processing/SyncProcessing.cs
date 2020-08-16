@@ -44,7 +44,16 @@ namespace Newtone.Core.Processing
         {
             get
             {
-                return Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
+                IPAddress tempAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
+                foreach (var item in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                {
+                    if (item.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        tempAddress = item;
+                        break;
+                    }
+                }
+                return tempAddress;
             }
         }
 
@@ -56,7 +65,6 @@ namespace Newtone.Core.Processing
             }
         }
         #endregion
-
         #region Public Methods
         public static void Connect(string code)
         {
@@ -71,8 +79,9 @@ namespace Newtone.Core.Processing
                     };
                     CurrentConnection.Connect(CurrentConnectionIp, port);
                 }
-                catch
+                catch(Exception e)
                 {
+                    ConsoleDebug.WriteLine("[SYNC ERROR] "+e);
                     Disconnect();
                 }
             }
@@ -102,7 +111,7 @@ namespace Newtone.Core.Processing
                     State = 0;
                     try
                     {
-                        ConsoleDebug.WriteLine("SYNC Binding");
+                        ConsoleDebug.WriteLine("SYNC Binding "+IpAddress);
                         socket.Bind(new IPEndPoint(IpAddress, port));
                         socket.Listen(10);
                         //socket.Connect(FromHex(code), port);
@@ -117,9 +126,9 @@ namespace Newtone.Core.Processing
                         CurrentConnectionIp = (client.RemoteEndPoint as IPEndPoint).Address;
                         CurrentConnection = client;
                     }
-                    catch
+                    catch(Exception e)
                     {
-
+                        ConsoleDebug.WriteLine("[SYNC ERROR] " + e);
                     }
 
                     receiverTask = null;
@@ -198,8 +207,9 @@ namespace Newtone.Core.Processing
                         Audios.Clear();
                         ReceivingAction?.Invoke();
                     }
-                    catch
+                    catch(Exception e)
                     {
+                        ConsoleDebug.WriteLine("[SYNC ERROR] " + e);
                         Disconnect();
                     }
                     currentBuffer.Close();
@@ -262,7 +272,7 @@ namespace Newtone.Core.Processing
                 }
                 catch(Exception e)
                 {
-                    ConsoleDebug.WriteLine(e);
+                    ConsoleDebug.WriteLine("[SYNC ERROR] "+e);
                     GlobalData.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)
                         CurrentConnection.Disconnect(false);

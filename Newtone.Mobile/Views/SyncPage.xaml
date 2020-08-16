@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Newtone.Mobile"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
+             xmlns:viewmodels="clr-namespace:Newtone.Mobile.ViewModels"
+             mc:Ignorable="d"
+             x:Class="Newtone.Mobile.Views.SyncPage" BackgroundColor="{Static local:Colors.ColorSecondary}">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="DefaultButton">
+                <Setter Property="BackgroundColor" Value="{Static local:Colors.ColorPrimary}"/>
+                <Setter Property="BorderColor" Value="{Static local:Colors.ColorThirdary}"/>
+                <Setter Property="TextColor" Value="{Static local:Colors.TextColor}"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#fe000000"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#12ffffff"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#FE000000"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.BindingContext>
+        <viewmodels:SyncViewModel/>
+    </ContentView.BindingContext>
+  <ContentView.Content>
+        <ScrollView>
+            <StackLayout Padding="5">
+                <Button Text="{Static localization:Localization.SyncShowFiles}" Style="{StaticResource DefaultButton}" Command="{Binding ShowFiles}"/>
+                <Label Text="{Static localization:Localization.YourCode}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" FontSize="20" Margin="5"/>
+                <Label Text="{Binding DeviceCode}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Black}" FontSize="40" HorizontalTextAlignment="Center"/>
+                <Entry Grid.Column="0" Placeholder="{Static localization:Localization.ReceiverCode}" PlaceholderColor="{Static local:Colors.TextColor}" TextColor="{Static local:Colors.TextColor}" BackgroundColor="{Static local:Colors.ColorThirdary}" Text="{Binding Path=DeviceCodeEntry, Mode=TwoWay}" IsEnabled="{Binding DeviceCodeEntryEnabled}"/>
+                <Button Text="{Static localization:Localization.Connect}" Style="{StaticResource DefaultButton}" Command="{Binding Connect}" IsEnabled="{Binding ConnectButtonEnabled}"/>
+                <Button Text="{Static localization:Localization.Receive}" Style="{StaticResource DefaultButton}" Command="{Binding Receive}" IsEnabled="{Binding ReceiveButtonEnabled}"/>
+                <Button Text="{Static localization:Localization.Send}" Style="{StaticResource DefaultButton}" Command="{Binding Send}" IsEnabled="{Binding SendButtonEnabled}"/>
+                <Button Text="{Static localization:Localization.Disconnect}" Style="{StaticResource DefaultButton}" Command="{Binding Disconnect}" IsVisible="{Binding DisconnectButtonIsVisible}"/>
+                <Label Text="{Binding ProgressText}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" FontSize="20" HorizontalTextAlignment="Center"/>
+                <Label Text="{Binding FileText}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" FontSize="20" HorizontalTextAlignment="Center"/>
+                <Label TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Thin}" FontSize="20" HorizontalTextAlignment="Center" Text="{Static localization:Localization.Instruction}"/>
+                <Label TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Thin}" FontSize="16" HorizontalTextAlignment="Center" Text="{Static localization:Localization.SyncHelp1}"/>
+                <Label TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Thin}" FontSize="16" HorizontalTextAlignment="Center" Text="{Static localization:Localization.SyncHelp2}"/>
+                <Label TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Thin}" FontSize="16" HorizontalTextAlignment="Center" Text="{Static localization:Localization.SyncHelp3}"/>
+            </StackLayout>
+        </ScrollView>
+  </ContentView.Content>
+</ContentView>

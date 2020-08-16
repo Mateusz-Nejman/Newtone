@@ -44,6 +44,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{x:Static localization:Localization.ConversionInputFiles}" Style="{StaticResource ListViewText}" Margin="5"/>
             <Button Style="{StaticResource DefaultButton}" Content="{x:Static localization:Localization.Select}" Margin="5" Grid.Column="1" Command="{Binding SelectFiles}" IsEnabled="{Binding IsNotConverting}"/>
@@ -57,9 +58,10 @@
             <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource ListViewText}" Text="{Binding Progress}"/>
             <TextBlock Grid.Row="3" Style="{StaticResource ListViewText}" Text="{x:Static localization:Localization.ConversionOutputFolder}" Margin="5"/>
             <Button Style="{StaticResource DefaultButton}" Content="{x:Static localization:Localization.Select}" Margin="5" Grid.Row="3" Grid.Column="1" Command="{Binding SelectOutputFolder}" IsEnabled="{Binding IsNotConverting}"/>
-            <Button Style="{StaticResource DefaultButton}" Content="{x:Static localization:Localization.Convert}" Margin="5" Grid.Row="4" Grid.Column="1" IsEnabled="{Binding IsNotConverting}" Command="{Binding Convert}"/>
-            <TextBlock Grid.Row="5" Text="{Binding CurrentFile}" Style="{StaticResource ListViewText}" Grid.ColumnSpan="2"/>
-            <fa:ImageAwesome Icon="Spinner" Spin="True" SpinDuration="4" Width="32" Height="32" Foreground="White" Grid.Row="6" Grid.ColumnSpan="2" Visibility="{Binding SpinnerVisibility}"/>
+            <CheckBox Content="{x:Static localization:Localization.ReplaceWithExists}" Margin="5" Grid.Row="4" Grid.ColumnSpan="2" Foreground="White" IsChecked="{Binding ReplaceWithExists, Mode=TwoWay}" IsEnabled="{Binding IsNotConverting}"/>
+            <Button Style="{StaticResource DefaultButton}" Content="{x:Static localization:Localization.Convert}" Margin="5" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding IsNotConverting}" Command="{Binding Convert}"/>
+            <TextBlock Grid.Row="6" Text="{Binding CurrentFile}" Style="{StaticResource ListViewText}" Grid.ColumnSpan="2"/>
+            <fa:ImageAwesome Icon="Spinner" Spin="True" SpinDuration="4" Width="32" Height="32" Foreground="White" Grid.Row="7" Grid.ColumnSpan="2" Visibility="{Binding SpinnerVisibility}"/>
         </Grid>
     </Grid>
 </Window>

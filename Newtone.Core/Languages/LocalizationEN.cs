@@ -13,6 +13,8 @@ this.Add = "Add";
 this.AddTags = "Add tags?";
 this.Artist = "Artist";
 this.Artists = "Artists";
+this.AutoConvert = "Auto convert to mp3";
+this.AutoDownload = "Do you want to automatically update downloaded playlists?";
 this.BackPressed = "Press again to exit";
 this.Cancel = "Cancel";
 this.ChangeName = "Change name";
@@ -58,6 +60,7 @@ this.QuestionDeletePlaylist = "Delete playlist";
 this.Ready = "Ready";
 this.Receive = "Receive";
 this.ReceiverCode = "Receiver code";
+this.ReplaceWithExists = "Replace with existing files";
 this.Save = "Zapisz";
 this.Search = "Search";
 this.SearchHistory = "Search history";
@@ -106,5 +109,6 @@ this.Unpacked = "Unpacked";
 this.Warning = "Warning";
 this.Yes = "Yes";
 this.YourCode = "Your code";
+this.YoutubeError = "An error occurred due to changes to YouTube. Please wait for the update with the given changes.";
 }}
 }

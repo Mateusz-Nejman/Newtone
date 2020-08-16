@@ -55,6 +55,14 @@ public static string Artist { get { return CurrentLocalization.Artist; } }
 /// </summary>
 public static string Artists { get { return CurrentLocalization.Artists; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Automatycznie konwertuj do mp3
+/// </summary>
+public static string AutoConvert { get { return CurrentLocalization.AutoConvert; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Czy chcesz automatycznie aktualizować pobrane playlisty?
+/// </summary>
+public static string AutoDownload { get { return CurrentLocalization.AutoDownload; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, aby wyjść
 /// </summary>
 public static string BackPressed { get { return CurrentLocalization.BackPressed; } }
@@ -251,6 +259,10 @@ public static string Receive { get { return CurrentLocalization.Receive; } }
 /// </summary>
 public static string ReceiverCode { get { return CurrentLocalization.ReceiverCode; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Zamień z istniejącymi plikami
+/// </summary>
+public static string ReplaceWithExists { get { return CurrentLocalization.ReplaceWithExists; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zapisz
 /// </summary>
 public static string Save { get { return CurrentLocalization.Save; } }
@@ -442,6 +454,10 @@ public static string Yes { get { return CurrentLocalization.Yes; } }
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Twój kod
 /// </summary>
 public static string YourCode { get { return CurrentLocalization.YourCode; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Wystąpił błąd spowodowany zmianami w serwisie YouTube. Proszę czekać na aktualizację uwzględniający podane zmiany.
+/// </summary>
+public static string YoutubeError { get { return CurrentLocalization.YoutubeError; } }
 
 public abstract class LocalizationBase{
 public string AboutAuthor = "Autor: Mateusz Nejman";
@@ -451,6 +467,8 @@ public string Add = "Dodaj";
 public string AddTags = "Dodać tagi?";
 public string Artist = "Wykonawca";
 public string Artists = "Wykonawcy";
+public string AutoConvert = "Automatycznie konwertuj do mp3";
+public string AutoDownload = "Czy chcesz automatycznie aktualizować pobrane playlisty?";
 public string BackPressed = "Naciśnij jeszcze raz, aby wyjść";
 public string Cancel = "Anuluj";
 public string ChangeName = "Zmień nazwę";
@@ -500,6 +518,7 @@ public string QuestionDeletePlaylistg = "";
 public string Ready = "Gotowe";
 public string Receive = "Odbierz";
 public string ReceiverCode = "Kod odbiorcy";
+public string ReplaceWithExists = "Zamień z istniejącymi plikami";
 public string Save = "Zapisz";
 public string Search = "Szukaj";
 public string SearchHistory = "Historia wyszukiwania";
@@ -548,6 +567,7 @@ public string Unpacked = "Wypakowano";
 public string Warning = "Uwaga";
 public string Yes = "Tak";
 public string YourCode = "Twój kod";
+public string YoutubeError = "Wystąpił błąd spowodowany zmianami w serwisie YouTube. Proszę czekać na aktualizację uwzględniający podane zmiany.";
 }
     }
 }

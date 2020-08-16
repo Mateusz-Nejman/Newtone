@@ -8,12 +8,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="32"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding Title}" Style="{StaticResource ListViewText}"/>
-        <Image Source="../../../Resources/playIcon.png" Grid.Column="1" Stretch="Fill" Width="16" Height="16" x:Name="playIcon" Visibility="{Binding Visibility}" Margin="0 0 4 0"/>
-        <TextBlock Text="{Binding Duration}" Style="{StaticResource ListViewText}" Grid.Column="2"/>
+        <Image Source="{Binding Image}" Stretch="UniformToFill" Margin="2" Height="32" HorizontalAlignment="Center"/>
+        <TextBlock Text="{Binding Title}" Style="{StaticResource ListViewText}" Grid.Column="1"/>
+        <Image Source="../../../Resources/playIcon.png" Grid.Column="2" Stretch="Fill" Width="16" Height="16" x:Name="playIcon" Visibility="{Binding Visibility}" Margin="0 0 4 0"/>
+        <TextBlock Text="{Binding Duration}" Style="{StaticResource ListViewText}" Grid.Column="3"/>
     </Grid>
 </UserControl>

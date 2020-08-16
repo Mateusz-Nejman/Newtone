@@ -13,6 +13,8 @@ this.Add = "Добавлять";
 this.AddTags = "Добавить теги?";
 this.Artist = "Музыкант";
 this.Artists = "Музыканты";
+this.AutoConvert = "Автоматически конвертировать в mp3";
+this.AutoDownload = "Вы хотите автоматически обновлять загруженные списки?";
 this.BackPressed = "Нажмите еще раз, чтобы выйти";
 this.Cancel = "Отменить";
 this.ChangeName = "Переименовать список";
@@ -58,6 +60,7 @@ this.QuestionDeletePlaylist = "Удалить список";
 this.Ready = "Готовый";
 this.Receive = "Ответ";
 this.ReceiverCode = "Код получателя";
+this.ReplaceWithExists = "Заменить существующими файлами";
 this.Save = "Сохранить";
 this.Search = "Поиск";
 this.SearchHistory = "История поиска";
@@ -106,5 +109,6 @@ this.Unpacked = "Распакованный";
 this.Warning = "Внимание";
 this.Yes = "Да";
 this.YourCode = "Ваш код";
+this.YoutubeError = "Произошла ошибка из-за изменений на YouTube. Пожалуйста, дождитесь обновления с данными изменениями.";
 }}
 }

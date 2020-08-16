@@ -1,7 +1,9 @@
-﻿using Newtone.Core.Logic;
+﻿using Newtone.Core.Languages;
+using Newtone.Core.Logic;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Newtone.Core.Media
@@ -63,6 +65,27 @@ namespace Newtone.Core.Media
         {
             BasePlayer.Reset();
             SetPlayerController(filename.Length == 11 ? webPC : localPC);
+
+            if(filename.Length == 11)
+            {
+                if(GlobalData.DownloadedIds.Contains(filename))
+                {
+                    try
+                    {
+                        var filepath = GlobalData.AudioTags.Keys.First(filepath =>
+                        {
+                            return GlobalData.AudioTags[filepath].Id == filename;
+                        });
+                        filename = filepath;
+                        SetPlayerController(localPC);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+
             PlayerController?.Load(this, filename);
 
             try
@@ -71,7 +94,7 @@ namespace Newtone.Core.Media
             }
             catch
             {
-                BasePlayer?.Error(GlobalData.ERROR_CORRUPTED);
+                Error(GlobalData.ERROR_CORRUPTED);
             }
         }
 
@@ -135,8 +158,7 @@ namespace Newtone.Core.Media
                     else
                     {
                         //ConsoleDebug.WriteLine("CustomMediaPlayer Next");
-                        BasePlayer?.Error(GlobalData.ERROR_FILE_EXISTS);
-                        track = null;
+                        Error(GlobalData.ERROR_FILE_EXISTS);
                     }
                 }
                 else
@@ -182,7 +204,7 @@ namespace Newtone.Core.Media
                     else
                     {
                         //ConsoleDebug.WriteLine("CustomMediaPlayer Prev");
-                        BasePlayer?.Error(GlobalData.ERROR_FILE_EXISTS);
+                        Error(GlobalData.ERROR_FILE_EXISTS);
                         track = null;
                     }
                 }
@@ -223,7 +245,14 @@ namespace Newtone.Core.Media
 
         public void Error(string error)
         {
-            BasePlayer?.Error(error);
+            string errorText = error;
+
+            if (error == GlobalData.ERROR_FILE_EXISTS)
+                errorText = Localization.SnackFileExists;
+            else if (error == GlobalData.ERROR_CORRUPTED)
+                errorText = Localization.FileCorrupted;
+
+            GlobalData.Messenger.Show(MessageGenerator.EMessageType.Snackbar, errorText);
         }
         #endregion
         #region Private Methods

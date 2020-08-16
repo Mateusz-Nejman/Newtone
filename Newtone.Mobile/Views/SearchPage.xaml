@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:Newtone.Mobile"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
+             xmlns:viewmodels="clr-namespace:Newtone.Mobile.ViewModels"
+             x:Class="Newtone.Mobile.Views.SearchPage">
+    <ContentView.BindingContext>
+        <viewmodels:SearchViewModel/>
+    </ContentView.BindingContext>
+  <ContentView.Content>
+        <StackLayout Orientation="Vertical" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42"/>
+                </Grid.RowDefinitions>
+                <Label Text="{x:Static localization:Localization.SearchHistory}" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                <Label Grid.Column="1" Text="{x:Static localization:Localization.Clear}" Margin="0,0,8,0" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ClearList}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
+                <ListView VerticalOptions="FillAndExpand"
+                          ItemSelected="HistoryList_ItemSelected"  ItemsSource="{Binding Items}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

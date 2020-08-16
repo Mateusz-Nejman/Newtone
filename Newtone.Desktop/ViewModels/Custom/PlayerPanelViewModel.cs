@@ -28,8 +28,8 @@ namespace Newtone.Desktop.ViewModels.Custom
         private ImageSource trackImage;
         private ImageSource playImage;
         private ImageSource modeImage;
-        private Visibility spinnerVisibility;
-        private Visibility playButtonVisibility;
+        private Visibility spinnerVisibility = Visibility.Hidden;
+        private Visibility playButtonVisibility = Visibility.Visible;
         private Visibility backgroundGridVisibility;
         private string artist;
         private string title;
@@ -263,9 +263,10 @@ namespace Newtone.Desktop.ViewModels.Custom
         {
             timer = new Timer();
             timer.Elapsed += Timer_Elapsed;
-            timer.Interval = 500;
+            timer.Interval = 200;
             timer.Start();
-            
+            PlayButtonImage = ImageProcessing.FromArray(Properties.Resources.PlayIcon);
+
         }
         #endregion
         #region Private Methods
@@ -274,8 +275,8 @@ namespace Newtone.Desktop.ViewModels.Custom
             MainWindow.MainDispatcher.Invoke(() => {
                 try
                 {
-                    SpinnerVisibility = !(GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared ? Visibility.Visible : Visibility.Hidden;
-                    PlayButtonVisibility = (GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared ? Visibility.Visible : Visibility.Hidden;
+                    SpinnerVisibility = (!(GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared) && GlobalData.MediaSource != null ? Visibility.Visible : Visibility.Hidden;
+                    PlayButtonVisibility = (GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared || GlobalData.MediaSource == null ? Visibility.Visible : Visibility.Hidden;
                     if (playedTrack != GlobalData.MediaSourcePath)
                     {
                         TrackImage = ImageProcessing.FromArray(GlobalData.MediaSource.Image ?? Properties.Resources.EmptyTrack);

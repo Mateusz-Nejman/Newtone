@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Newtone.Mobile.Views.FirstStart.FirstStartThemes"
+             xmlns:local="clr-namespace:Newtone.Mobile"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core">
+    <ContentView.Content>
+        <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+
+            <Grid BackgroundColor="{x:Static local:Colors.ColorPrimary}" HorizontalOptions="Fill" x:Name="rootGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0"  Margin="10,0" VerticalOptions="Center" FontSize="24" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Black}" Text="{x:Static localization:Localization.Settings3}"/>
+
+
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackLayout x:Name="defaultTheme">
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDefault}"/>
+                    <Image Source="DefaultPreview.png" x:Name="defaultThemeImage"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" x:Name="lightTheme">
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeLight}"/>
+                    <Image Source="LightPreview.png" x:Name="lightThemeImage"/>
+                </StackLayout>
+
+                <StackLayout Grid.Row="1" x:Name="darkTheme">
+                    <Label Margin="10,0" VerticalOptions="Center" FontSize="20" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Bold}" Text="{x:Static localization:Localization.ThemeDark}"/>
+                    <Image Source="DarkPreview.png" x:Name="darkThemeImage"/>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

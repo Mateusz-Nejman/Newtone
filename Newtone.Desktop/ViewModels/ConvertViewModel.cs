@@ -26,6 +26,7 @@ namespace Newtone.Desktop.ViewModels
         private int convertType;
         private bool isConverting;
         private string currentFile;
+        private bool replaceWithExists;
         #endregion
         #region Properties
         public int FilesToConvert
@@ -107,6 +108,15 @@ namespace Newtone.Desktop.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool ReplaceWithExists
+        {
+            get => replaceWithExists;
+            set
+            {
+                replaceWithExists = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
         #region Commands
         private ICommand selectFiles;
@@ -150,6 +160,9 @@ namespace Newtone.Desktop.ViewModels
 
                             new Task(() =>
                             {
+                                if (ReplaceWithExists)
+                                    ConvertType = 0;
+
                                 foreach (var file in Items)
                                 {
                                     CurrentFile = file.FilePath;

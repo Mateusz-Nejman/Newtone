@@ -1,12 +1,19 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
+using Newtone.Desktop.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Newtone.Desktop.Models
 {
@@ -15,6 +22,7 @@ namespace Newtone.Desktop.Models
         #region Fields
         private Visibility visibility = Visibility.Hidden;
         private string trackString;
+        private BitmapSource image;
         #endregion
         #region Properties
         public Visibility Visibility
@@ -25,7 +33,7 @@ namespace Newtone.Desktop.Models
                if(visibility != value)
                 {
                     visibility = value;
-                    OnPropertyChanged(() => Visibility);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -42,8 +50,18 @@ namespace Newtone.Desktop.Models
                 if(newValue != trackString)
                 {
                     trackString = newValue;
-                    OnPropertyChanged(() => TrackString);
+                    OnPropertyChanged();
                 }
+            }
+        }
+
+        public BitmapSource Image
+        {
+            get => image;
+            set
+            {
+                image = value;
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -54,6 +72,24 @@ namespace Newtone.Desktop.Models
             this.Duration = model.Duration;
             this.FilePath = model.FilePath;
             this.Title = model.Title;
+            bool isTag = GlobalData.AudioTags.Keys.Any(key => key == FilePath);
+
+            if(isTag)
+            {
+                BitmapImage bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = new MemoryStream(GlobalData.AudioTags[FilePath].Image ?? Resources.EmptyTrack);
+                bmp.EndInit();
+                Image = bmp;
+            }
+            else
+            {
+                BitmapImage bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = new MemoryStream(Resources.EmptyTrack);
+                bmp.EndInit();
+                Image = bmp;
+            }
         }
         #endregion
         #region Public Methods

@@ -100,6 +100,13 @@ namespace Newtone.Core.Models
                 return Duration.ToString("mm':'ss");
             }
         }
+        public bool IsOffline
+        {
+            get
+            {
+                return id.Length > 11;
+            }
+        }
         #endregion
 
         #region Operators

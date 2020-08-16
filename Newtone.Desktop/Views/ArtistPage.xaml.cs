@@ -59,6 +59,16 @@ namespace Newtone.Desktop.Views
         {
             ViewModel?.Tick(listView, trackListView);
         }
+
+        public void Appearing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Disappearing()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

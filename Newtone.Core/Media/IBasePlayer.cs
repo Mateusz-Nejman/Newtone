@@ -20,7 +20,6 @@ namespace Newtone.Core.Media
         void SetVolume(float volume);
         float GetVolume();
         void SetNotification(bool isPlaying);
-        void Error(string text);
         void Prepare();
         void AfterPrev();
         void AfterNext();

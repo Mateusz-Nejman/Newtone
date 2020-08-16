@@ -53,6 +53,16 @@ namespace Newtone.Desktop.Views
                 menu.IsOpen = true;
             }
         }
+
+        public void Appearing()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Disappearing()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

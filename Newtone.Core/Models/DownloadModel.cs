@@ -13,6 +13,7 @@ namespace Newtone.Core.Models
         private string title;
         private string url;
         private string playlistName;
+        private string playlistId;
         #endregion
         #region Properties
         public string Id
@@ -62,6 +63,16 @@ namespace Newtone.Core.Models
             set
             {
                 playlistName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PlaylistID
+        {
+            get => playlistId;
+            set
+            {
+                playlistId = value;
                 OnPropertyChanged();
             }
         }

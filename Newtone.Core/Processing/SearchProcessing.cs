@@ -16,6 +16,35 @@ namespace Newtone.Core.Processing
     public class SearchProcessing
     {
         #region Public Methods
+        public static void SearchOffline(string text, ObservableBridge<SearchResultModel> model)
+        {
+            GlobalData.Audios.Values.ForEach(item =>
+            {
+                string artist = item.Artist;
+                string title = item.Title;
+
+                if (CyrylicToUnicode.IsCyrylic(artist))
+                    artist = CyrylicToUnicode.Convert(artist);
+
+                if (CyrylicToUnicode.IsCyrylic(title))
+                    title = CyrylicToUnicode.Convert(title);
+
+                double artistSimiliarity = CalculateSimilarity(text.ToLowerInvariant(), artist.ToLowerInvariant());
+                double titleSimiliarity = CalculateSimilarity(text, title);
+
+                if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || artist.ToLowerInvariant().Contains(text.ToLowerInvariant()) || title.ToLowerInvariant().Contains(text.ToLowerInvariant()))
+                {
+                    model.Add(new SearchResultModel()
+                    {
+                        Author = item.Artist,
+                        Duration = item.Duration,
+                        Id = item.FilePath,
+                        Image = item.Image,
+                        Title = item.Title,
+                    });
+                }
+            });
+        }
         public async static Task Search(string text, ObservableBridge<SearchResultModel> model)
         {
             if (GlobalData.History.FindIndex(model => model.Text == text) == -1)
@@ -112,6 +141,53 @@ namespace Newtone.Core.Processing
                 returnDict.Add(QueryEnum.None, link);
 
             return returnDict;
+        }
+        public static double CalculateSimilarity(string source, string target)
+        {
+            if ((source == null) || (target == null)) return 0.0;
+            if ((source.Length == 0) || (target.Length == 0)) return 0.0;
+            if (source == target) return 1.0;
+
+            int stepsToSame = ComputeLevenshteinDistance(source, target);
+            return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length)));
+        }
+        #endregion
+        #region Private Methods
+        private static int ComputeLevenshteinDistance(string source, string target)
+        {
+            if ((source == null) || (target == null)) return 0;
+            if ((source.Length == 0) || (target.Length == 0)) return 0;
+            if (source == target) return source.Length;
+
+            int sourceWordCount = source.Length;
+            int targetWordCount = target.Length;
+
+            // Step 1
+            if (sourceWordCount == 0)
+                return targetWordCount;
+
+            if (targetWordCount == 0)
+                return sourceWordCount;
+
+            int[,] distance = new int[sourceWordCount + 1, targetWordCount + 1];
+
+            // Step 2
+            for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++) ;
+            for (int j = 0; j <= targetWordCount; distance[0, j] = j++) ;
+
+            for (int i = 1; i <= sourceWordCount; i++)
+            {
+                for (int j = 1; j <= targetWordCount; j++)
+                {
+                    // Step 3
+                    int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+
+                    // Step 4
+                    distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
+                }
+            }
+
+            return distance[sourceWordCount, targetWordCount];
         }
         #endregion
         #region Enums

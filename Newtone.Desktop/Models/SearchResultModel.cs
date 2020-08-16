@@ -21,6 +21,10 @@ namespace Newtone.Desktop.Models
                 return thumb;
             }
         }
+        public Color BackgroundColor
+        {
+            get => Color.FromArgb((byte)(IsOffline ? 32 : 0), 255, 255, 255);
+        }
         #endregion
         #region Constructors
         public SearchResultModel(Core.Models.SearchResultModel model)
@@ -33,6 +37,7 @@ namespace Newtone.Desktop.Models
             this.ThumbUrl = model.ThumbUrl;
             this.Title = model.Title;
             this.VideoData = model.VideoData;
+            OnPropertyChanged(() => BackgroundColor);
         }
         #endregion
     }

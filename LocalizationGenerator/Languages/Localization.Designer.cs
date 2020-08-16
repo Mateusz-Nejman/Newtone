@@ -124,6 +124,24 @@ namespace LocalizationGenerator.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Automatycznie konwertuj do mp3.
+        /// </summary>
+        internal static string AutoConvert {
+            get {
+                return ResourceManager.GetString("AutoConvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Czy chcesz automatycznie aktualizować pobrane playlisty?.
+        /// </summary>
+        internal static string AutoDownload {
+            get {
+                return ResourceManager.GetString("AutoDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Naciśnij jeszcze raz, aby wyjść.
         /// </summary>
         internal static string BackPressed {
@@ -565,6 +583,15 @@ namespace LocalizationGenerator.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zamień z istniejącymi plikami.
+        /// </summary>
+        internal static string ReplaceWithExists {
+            get {
+                return ResourceManager.GetString("ReplaceWithExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Zapisz.
         /// </summary>
         internal static string Save {
@@ -993,6 +1020,15 @@ namespace LocalizationGenerator.Languages {
         internal static string YourCode {
             get {
                 return ResourceManager.GetString("YourCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wystąpił błąd spowodowany zmianami w serwisie YouTube. Proszę czekać na aktualizację uwzględniający podane zmiany..
+        /// </summary>
+        internal static string YoutubeError {
+            get {
+                return ResourceManager.GetString("YoutubeError", resourceCulture);
             }
         }
     }

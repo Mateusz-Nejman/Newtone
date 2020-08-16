@@ -36,7 +36,7 @@ namespace Newtone.Core.Processing
                 files.AddRange(mp3Files);
                 files.AddRange(m4aFiles);
 
-                foreach (string filepath in files)
+                files.ForEach(filepath =>
                 {
                     MediaSource source = MediaProcessing.GetSource(filepath);
 
@@ -44,7 +44,7 @@ namespace Newtone.Core.Processing
                     {
                         containers.Add(source);
                     }
-                }
+                });
 
                 return containers.ToArray();
             });

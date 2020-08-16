@@ -138,6 +138,12 @@
   <data name="Artists" xml:space="preserve">
     <value>Музыканты</value>
   </data>
+  <data name="AutoConvert" xml:space="preserve">
+    <value>Автоматически конвертировать в mp3</value>
+  </data>
+  <data name="AutoDownload" xml:space="preserve">
+    <value>Вы хотите автоматически обновлять загруженные списки?</value>
+  </data>
   <data name="BackPressed" xml:space="preserve">
     <value>Нажмите еще раз, чтобы выйти</value>
   </data>
@@ -272,6 +278,9 @@
   </data>
   <data name="ReceiverCode" xml:space="preserve">
     <value>Код получателя</value>
+  </data>
+  <data name="ReplaceWithExists" xml:space="preserve">
+    <value>Заменить существующими файлами</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -416,5 +425,8 @@
   </data>
   <data name="YourCode" xml:space="preserve">
     <value>Ваш код</value>
+  </data>
+  <data name="YoutubeError" xml:space="preserve">
+    <value>Произошла ошибка из-за изменений на YouTube. Пожалуйста, дождитесь обновления с данными изменениями.</value>
   </data>
 </root>

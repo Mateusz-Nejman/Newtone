@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates"
              xmlns:custom="clr-namespace:Newtone.Desktop.Views.Custom"
              mc:Ignorable="d" 
-             d:DesignHeight="66" d:DesignWidth="800">
+             d:DesignHeight="66" d:DesignWidth="800" Background="{Binding BackgroundColor}">
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="56"/>

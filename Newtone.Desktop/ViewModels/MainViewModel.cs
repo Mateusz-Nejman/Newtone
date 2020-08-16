@@ -113,6 +113,7 @@ namespace Newtone.Desktop.ViewModels
         {
             GlobalData.Artists = new Dictionary<string, List<string>>();
             GlobalData.Audios = new Dictionary<string, Core.Media.MediaSource>();
+            GlobalData.WebToLocalPlaylists = new Dictionary<string, string>();
             GlobalData.AudioTags = new Dictionary<string, Core.Media.MediaSourceTag>();
             GlobalData.DownloadedIds = new List<string>();
             GlobalData.CurrentPlaylist = new List<Core.Media.MediaSource>();

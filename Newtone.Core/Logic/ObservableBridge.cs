@@ -23,7 +23,7 @@ namespace Newtone.Core.Logic
         public void Add(T item)
         {
             Items.Add(item);
-            Action(item);
+            Action?.Invoke(item);
             //ConsoleDebug.WriteLine("Add item");
         }
 
