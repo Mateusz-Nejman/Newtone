@@ -39,7 +39,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Border Background="#99000000" Grid.Row="1" CornerRadius="20" Margin="80,10" Visibility="{Binding SnackbarVisibility}">
+            <Border Background="#40000000" Grid.Row="1" CornerRadius="20" Margin="80,10" Visibility="{Binding SnackbarVisibility}">
                 <TextBlock Foreground="White" Text="{Binding SnackbarText}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Border>
         </Grid>

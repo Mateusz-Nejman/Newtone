@@ -22,7 +22,7 @@ namespace Newtone.Core.Processing
                 {
                     foreach (string dir in Directory.GetDirectories(directory))
                     {
-                        if (!listed.Contains(dir) && !GlobalData.ExcludedPaths.Contains(dir))
+                        if (!listed.Contains(dir) && !GlobalData.Current.ExcludedPaths.Contains(dir))
                         {
                             listed.Add(dir);
                             containers.AddRange(await Scan(dir, listed));

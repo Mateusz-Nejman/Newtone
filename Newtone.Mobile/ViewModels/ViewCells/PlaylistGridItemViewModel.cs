@@ -86,7 +86,7 @@ namespace Newtone.Mobile.ViewModels.ViewCells
                 if (pressedCommand == null)
                     pressedCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Playlists[PlaylistName], PlaylistName), PlaylistName));
+                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Playlists[PlaylistName], PlaylistName), PlaylistName));
                     });
                 return pressedCommand;
             }
@@ -97,12 +97,12 @@ namespace Newtone.Mobile.ViewModels.ViewCells
         {
             View = view;
             PlaylistName = playlistName;
-            TracksText = Localization.Tracks + ": " + GlobalData.Playlists[playlistName].Count;
+            TracksText = Localization.Tracks + ": " + GlobalData.Current.Playlists[playlistName].Count;
             Image = ImageSource.FromFile("EmptyTrack.png");
 
-            foreach (string filePath in GlobalData.Playlists[playlistName])
+            foreach (string filePath in GlobalData.Current.Playlists[playlistName])
             {
-                var source = GlobalData.Audios[filePath];
+                var source = GlobalData.Current.Audios[filePath];
                 if (source.Image != null)
                 {
                     Image = ImageProcessing.FromArray(source.Image);

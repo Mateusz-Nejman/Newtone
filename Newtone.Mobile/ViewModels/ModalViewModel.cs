@@ -97,7 +97,7 @@ namespace Newtone.Mobile.ViewModels
                 if (toFullScreen == null)
                     toFullScreen = new ActionCommand(async(parameter) =>
                     {
-                        if (GlobalData.MediaSource != null)
+                        if (GlobalData.Current.MediaSource != null)
                         {
                             await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
                         }

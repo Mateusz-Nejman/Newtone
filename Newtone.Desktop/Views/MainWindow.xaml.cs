@@ -127,22 +127,22 @@ namespace Newtone.Desktop.Views
 
         private void MediaNext_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GlobalData.MediaPlayer.Next();
+            GlobalData.Current.MediaPlayer.Next();
         }
 
         private void MediaPrev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GlobalData.MediaPlayer.Prev();
+            GlobalData.Current.MediaPlayer.Prev();
         }
 
         private void MediaPlay_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (GlobalData.MediaSource != null)
+            if (GlobalData.Current.MediaSource != null)
             {
-                if (GlobalData.MediaPlayer.IsPlaying)
-                    GlobalData.MediaPlayer.Pause();
+                if (GlobalData.Current.MediaPlayer.IsPlaying)
+                    GlobalData.Current.MediaPlayer.Pause();
                 else
-                    GlobalData.MediaPlayer.Play();
+                    GlobalData.Current.MediaPlayer.Play();
             }
         }
         #endregion

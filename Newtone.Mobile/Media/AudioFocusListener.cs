@@ -21,16 +21,16 @@ namespace Newtone.Mobile.Media
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
             ConsoleDebug.WriteLine("[Android Media] OnAudioFocusChange " + focusChange);
-            if (GlobalData.MediaPlayer != null)
+            if (GlobalData.Current.MediaPlayer != null)
             {
-                if (focusChange == AudioFocus.Loss && GlobalData.MediaPlayer.CurrentPosition > 10)
+                if (focusChange == AudioFocus.Loss && GlobalData.Current.MediaPlayer.CurrentPosition > 10)
                     MediaPlayerHelper.Pause();
 
                 if (focusChange == AudioFocus.LossTransientCanDuck)
-                    GlobalData.MediaPlayer.SetVolume(0.1f);
+                    GlobalData.Current.MediaPlayer.SetVolume(0.1f);
 
                 if (focusChange == AudioFocus.Gain)
-                    GlobalData.MediaPlayer.SetVolume(1f);
+                    GlobalData.Current.MediaPlayer.SetVolume(1f);
 
                 if (focusChange == AudioFocus.LossTransient)
                     MediaPlayerHelper.Pause();

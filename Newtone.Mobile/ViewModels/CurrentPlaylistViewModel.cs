@@ -49,7 +49,7 @@ namespace Newtone.Mobile.ViewModels
                         ConsoleDebug.WriteLine("[Refresh] CurrentPlaylistViewModel");
                         IsRefreshing = true;
                         TrackItems = new ObservableCollection<TrackModel>();
-                        foreach (var track in GlobalData.CurrentPlaylist)
+                        foreach (var track in GlobalData.Current.CurrentPlaylist)
                         {
                             TrackItems.Add(new TrackModel(track, "", false));
                         }
@@ -63,7 +63,7 @@ namespace Newtone.Mobile.ViewModels
         public CurrentPlaylistViewModel()
         {
             TrackItems = new ObservableCollection<TrackModel>();
-            foreach (var track in GlobalData.CurrentPlaylist)
+            foreach (var track in GlobalData.Current.CurrentPlaylist)
             {
                 TrackItems.Add(new TrackModel(track, "", false));
             }
@@ -78,9 +78,9 @@ namespace Newtone.Mobile.ViewModels
             {
                 var model = TrackItems[index];
 
-                GlobalData.MediaSource = GlobalData.CurrentPlaylist[index];
-                GlobalData.PlaylistPosition = index;
-                GlobalData.MediaPlayer.Load(model.FilePath);
+                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[index];
+                GlobalData.Current.PlaylistPosition = index;
+                GlobalData.Current.MediaPlayer.Load(model.FilePath);
                 MediaPlayerHelper.Play();
                 ConsoleDebug.WriteLine(sender is Xamarin.Forms.ListView);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;

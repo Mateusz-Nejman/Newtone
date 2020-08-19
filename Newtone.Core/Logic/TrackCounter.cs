@@ -36,7 +36,7 @@ namespace Newtone.Core.Logic
             fromString = fromString.Replace(":", "");
 
             string[] elems = fromString.Split(GlobalData.SEPARATOR);
-            return GlobalData.Audios.ContainsKey(elems[0]) ? new TrackCounter(GlobalData.Audios[elems[0]], int.Parse(elems[1])) : null;
+            return GlobalData.Current.Audios.ContainsKey(elems[0]) ? new TrackCounter(GlobalData.Current.Audios[elems[0]], int.Parse(elems[1])) : null;
         }
         #endregion
     }

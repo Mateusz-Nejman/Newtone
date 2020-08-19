@@ -48,9 +48,9 @@ namespace Newtone.Desktop.ViewModels
         public MainViewModel()
         {
             InitializeGlobalVariables();
-            GlobalData.LoadTags();
+            GlobalData.Current.LoadTags();
             Task.Run(async () => await GlobalLoader.Load()).Wait();
-            GlobalData.LoadConfig();
+            GlobalData.Current.LoadConfig();
         }
         #endregion
         #region Public Methods
@@ -111,39 +111,20 @@ namespace Newtone.Desktop.ViewModels
         #region Private Methods
         private void InitializeGlobalVariables()
         {
-            GlobalData.Artists = new Dictionary<string, List<string>>();
-            GlobalData.Audios = new Dictionary<string, Core.Media.MediaSource>();
-            GlobalData.WebToLocalPlaylists = new Dictionary<string, string>();
-            GlobalData.AudioTags = new Dictionary<string, Core.Media.MediaSourceTag>();
-            GlobalData.DownloadedIds = new List<string>();
-            GlobalData.CurrentPlaylist = new List<Core.Media.MediaSource>();
-            GlobalData.CurrentQueue = new List<Core.Media.MediaSource>();
-            GlobalData.DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\NSEC.Newtone";
-            GlobalData.MusicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\NSEC.Newtone";
-
-            //ConsoleDebug.WriteLine(GlobalData.DataPath);
-            //ConsoleDebug.WriteLine(GlobalData.MusicPath);
-
-            Directory.CreateDirectory(GlobalData.DataPath);
-            Directory.CreateDirectory(GlobalData.MusicPath);
-
-            GlobalData.History = new List<Core.Models.HistoryModel>();
-            GlobalData.LastTracks = new Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
-            GlobalData.MostTracks = new Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
-
-            GlobalData.PlayerMode = Core.Media.PlayerMode.All;
-            GlobalData.Playlists = new Dictionary<string, List<string>>();
-            GlobalData.PlaylistType = Core.Media.MediaSource.SourceType.Local;
-            GlobalData.MediaPlayer = new Core.Media.CrossPlayer(new DesktopMediaPlayer());
-
-            GlobalData.ExcludedPaths = new List<string>();
-            GlobalData.IncludedPaths = new List<string>()
+            GlobalData.Current.Initialize();
+            //ConsoleDebug.WriteLine(GlobalData.Current.DataPath);
+            //ConsoleDebug.WriteLine(GlobalData.Current.MusicPath);
+            GlobalData.Current.MusicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\NSEC.Newtone";
+            Directory.CreateDirectory(GlobalData.Current.DataPath);
+            Directory.CreateDirectory(GlobalData.Current.MusicPath);
+            GlobalData.Current.MediaPlayer = new Core.Media.CrossPlayer(new DesktopMediaPlayer());
+            GlobalData.Current.IncludedPaths = new List<string>()
             {
-                GlobalData.MusicPath,
+                GlobalData.Current.MusicPath,
                 Environment.GetFolderPath(Environment.SpecialFolder.MyMusic)
             };
-            //GlobalData.MediaPlayer.Load("D:\\chillwagon - @ (trailer).m4a");
-            //GlobalData.MediaPlayer.Play();
+            //GlobalData.Current.MediaPlayer.Load("D:\\chillwagon - @ (trailer).m4a");
+            //GlobalData.Current.MediaPlayer.Play();
         }
         #endregion
         #region Nested Classes

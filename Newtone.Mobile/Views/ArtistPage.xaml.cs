@@ -1,4 +1,5 @@
-﻿using Newtone.Core;
+﻿using ATL;
+using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Mobile.Views.ViewCells;
@@ -14,18 +15,22 @@ using Xamarin.Forms.Xaml;
 namespace Newtone.Mobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ArtistPage : ContentView, IVisibleContent
+    public partial class ArtistPage : ContentView, IVisibleContent, ITimerContent
     {
+        #region Fields
+        private static IList<View> generatedChildrens;
+        #endregion
         #region Constructors
         public ArtistPage()
         {
             InitializeComponent();
+            Init();
         }
         #endregion
         #region Public Methods
         public void Appearing()
         {
-            Init();
+            
         }
 
         public void Disappearing()
@@ -34,49 +39,78 @@ namespace Newtone.Mobile.Views
         }
         public void Init()
         {
-            List<string> beforeSort = new List<string>();
-            string unknown = null;
-
-            foreach (string artist in GlobalData.Artists.Keys)
+            if(generatedChildrens == null)
             {
-                if (artist == Localization.UnknownArtist)
-                    unknown = artist;
-                else
-                    beforeSort.Add(artist);
-            }
+                List<string> beforeSort = new List<string>();
+                string unknown = null;
 
-            List<string> afterSort = beforeSort.OrderBy(o => o).ToList();
-
-            if (unknown != null)
-                afterSort.Add(unknown);
-
-            trackGrid.Children.Clear();
-
-            int pos = 0;
-            string model0 = null;
-            foreach (string artist in afterSort)
-            {
-                if (pos == 0)
+                foreach (string artist in GlobalData.Current.Artists.Keys)
                 {
-                    model0 = artist;
-                    pos = 1;
+                    if (artist == Localization.UnknownArtist)
+                        unknown = artist;
+                    else
+                        beforeSort.Add(artist);
                 }
-                else
+
+                List<string> afterSort = beforeSort.OrderBy(o => o).ToList();
+
+                if (unknown != null)
+                    afterSort.Add(unknown);
+
+                generatedChildrens = new List<View>();
+
+                int pos = 0;
+                string model0 = null;
+                foreach (string artist in afterSort)
+                {
+                    if (pos == 0)
+                    {
+                        model0 = artist;
+                        pos = 1;
+                    }
+                    else
+                    {
+                        Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
+                        layout.Children.Add(new ArtistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+                        layout.Children.Add(new ArtistGridItem(this, artist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+                        generatedChildrens.Add(layout);
+                        pos = 0;
+                    }
+
+                }
+
+                if (pos == 1)
                 {
                     Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                    layout.Children.Add(new ArtistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
-                    layout.Children.Add(new ArtistGridItem(this, artist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
-                    trackGrid.Children.Add(layout);
-                    pos = 0;
+                    layout.Children.Add(new ArtistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(200));
+                    generatedChildrens.Add(layout);
                 }
 
+                trackGrid.Children.Clear();
+                generatedChildrens.ForEach(trackGrid.Children.Add);
+                Console.WriteLine("ArtistPage GeneratedChildrens ForEach");
             }
-
-            if (pos == 1)
+            else
             {
-                Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                layout.Children.Add(new ArtistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(200));
-                trackGrid.Children.Add(layout);
+                if(trackGrid.Children.Count == 0 && generatedChildrens?.Count > 0)
+                {
+                    generatedChildrens.ForEach(trackGrid.Children.Add);
+                    Console.WriteLine("ArtistPage GeneratedChildrens ForEach 1");
+                }
+            }
+            
+        }
+
+        public void Tick()
+        {
+            if (GlobalData.Current.ArtistsNeedRefresh)
+            {
+                Console.WriteLine("ArtistPage NeedRefresh");
+                if (generatedChildrens != null)
+                    generatedChildrens = null;
+
+                Device.BeginInvokeOnMainThread(Init);
+                GlobalData.Current.ArtistsNeedRefresh = false;
             }
         }
         #endregion

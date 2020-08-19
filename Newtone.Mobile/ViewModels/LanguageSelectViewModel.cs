@@ -90,7 +90,7 @@ namespace Newtone.Mobile.ViewModels
 
         private void ChangeLanguage(string lang)
         {
-            GlobalData.CurrentLanguage = lang;
+            GlobalData.Current.CurrentLanguage = lang;
             Localization.RefreshLanguage();
             if (NextPage == "permissions")
                 App.Instance.MainPage = new PermissionPage();

@@ -25,7 +25,7 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" IsVisible="{Binding EntryVisible}" Completed="Entry_Completed"/>
+                    <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" BackgroundColor="#05FFFFFF" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" IsVisible="{Binding EntryVisible}" Completed="Entry_Completed"/>
                     <Label Text="{Binding PageTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" IsVisible="{Binding TitleVisible}"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>

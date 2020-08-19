@@ -45,7 +45,7 @@ namespace Newtone.Desktop.Views
             InitializeComponent();
 
             FilePath = filePath;
-            MediaSource source = GlobalData.Audios[filePath];
+            MediaSource source = GlobalData.Current.Audios[filePath];
             artistBox.Text = source.Artist;
             titleBox.Text = source.Title;
             AfterEdit = false;
@@ -58,12 +58,12 @@ namespace Newtone.Desktop.Views
 
             if(!string.IsNullOrWhiteSpace(artistBox.Text) && !string.IsNullOrWhiteSpace(titleBox.Text))
             {
-                MediaSource newSource = GlobalData.Audios[FilePath].Clone();
+                MediaSource newSource = GlobalData.Current.Audios[FilePath].Clone();
                 newSource.Title = titleBox.Text;
                 newSource.Artist = artistBox.Text;
                 if (NewImage != null && NewImage.Length > 0)
                     newSource.Image = NewImage;
-                GlobalLoader.ChangeTrack(GlobalData.Audios[FilePath], newSource);
+                GlobalLoader.ChangeTrack(GlobalData.Current.Audios[FilePath], newSource);
                 AfterEdit = true;
                 SnackbarBuilder.Show(Core.Languages.Localization.Ready);
                 this.Close();

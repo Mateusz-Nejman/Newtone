@@ -18,7 +18,7 @@ namespace Newtone.Core.Processing
         #region Public Methods
         public static void SearchOffline(string text, ObservableBridge<SearchResultModel> model)
         {
-            GlobalData.Audios.Values.ForEach(item =>
+            GlobalData.Current.Audios.Values.ForEach(item =>
             {
                 string artist = item.Artist;
                 string title = item.Title;
@@ -47,10 +47,13 @@ namespace Newtone.Core.Processing
         }
         public async static Task Search(string text, ObservableBridge<SearchResultModel> model)
         {
-            if (GlobalData.History.FindIndex(model => model.Text == text) == -1)
-                GlobalData.History.Add(new HistoryModel() { Text = text });
+            if (GlobalData.Current.History.FindIndex(model => model.Text == text) == -1)
+            {
+                GlobalData.Current.History.Add(new HistoryModel() { Text = text });
+                GlobalData.Current.HistoryNeedRefresh = true;
+            }
 
-            GlobalData.SaveConfig();
+            GlobalData.Current.SaveConfig();
             ConsoleDebug.WriteLine("Start search");
             YoutubeClient client = new YoutubeClient();
             ConsoleDebug.WriteLine("init");

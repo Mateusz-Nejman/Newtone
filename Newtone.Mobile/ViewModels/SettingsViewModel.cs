@@ -75,7 +75,7 @@ namespace Newtone.Mobile.ViewModels
                 new SettingsModel() { Name = Localization.Settings2 },
                 new SettingsModel() { Name = Localization.Settings4 },
                 new SettingsModel() { Name = Localization.Settings5 },
-                new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.AutoDownload ? Localization.Yes : Localization.No }
+                new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.Current.AutoDownload ? Localization.Yes : Localization.No }
             };
             Version = "v" + MainActivity.Instance.PackageManager.GetPackageInfo(MainActivity.Instance.PackageName, 0).VersionName;
         }
@@ -96,7 +96,7 @@ namespace Newtone.Mobile.ViewModels
 
         private void ChangeTheme(string theme)
         {
-            GlobalData.SaveFirstStart(theme);
+            GlobalData.Current.SaveFirstStart(theme);
             SnackbarBuilder.Show(Localization.SettingsChanges);
         }
         #endregion
@@ -111,12 +111,12 @@ namespace Newtone.Mobile.ViewModels
                 {
                     if (e.SelectedItemIndex == 0)
                     {
-                        foreach (string filepath in GlobalData.Audios.Keys)
+                        foreach (string filepath in GlobalData.Current.Audios.Keys)
                         {
 
-                            if (!GlobalData.AudioTags.ContainsKey(filepath))
+                            if (!GlobalData.Current.AudioTags.ContainsKey(filepath))
                             {
-                                var tag = GlobalData.Audios[filepath];
+                                var tag = GlobalData.Current.Audios[filepath];
                                 if (tag.Artist == Localization.UnknownArtist)
                                 {
                                     FileInfo fileInfo = new FileInfo(filepath);
@@ -126,16 +126,16 @@ namespace Newtone.Mobile.ViewModels
 
                                     string artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
                                     string title = splitted[splitted.Length == 1 ? 0 : 1];
-                                    GlobalData.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
+                                    GlobalData.Current.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
                                 }
                             }
                         }
-                        GlobalData.SaveTags();
+                        GlobalData.Current.SaveTags();
                         SnackbarBuilder.Show(Localization.Ready);
                     }
                     else if (e.SelectedItemIndex == 1)
                     {
-                        string[] files = Directory.GetFiles(GlobalData.DataPath, "*.nsec2");
+                        string[] files = Directory.GetFiles(GlobalData.Current.DataPath, "*.nsec2");
 
                         foreach (string file in files)
                         {
@@ -154,14 +154,14 @@ namespace Newtone.Mobile.ViewModels
                     {
                         string newLang = await NormalPage.Instance.DisplayActionSheet(Localization.Settings5, Localization.Cancel, null, Localization.LanguagePL, Localization.LanguageEN, Localization.LanguageRU);
                         if (newLang == Localization.LanguagePL)
-                            GlobalData.CurrentLanguage = "pl";
+                            GlobalData.Current.CurrentLanguage = "pl";
                         else if (newLang == Localization.LanguageEN)
-                            GlobalData.CurrentLanguage = "en";
+                            GlobalData.Current.CurrentLanguage = "en";
                         else if (newLang == Localization.LanguageRU)
-                            GlobalData.CurrentLanguage = "ru";
+                            GlobalData.Current.CurrentLanguage = "ru";
 
                         Localization.RefreshLanguage();
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.SaveConfig();
                         SnackbarBuilder.Show(Localization.SettingsChanges);
                     }
                     else if(e.SelectedItemIndex == 4)
@@ -170,15 +170,15 @@ namespace Newtone.Mobile.ViewModels
 
                         if(newOption == Localization.Yes)
                         {
-                            GlobalData.AutoDownload = true;
+                            GlobalData.Current.AutoDownload = true;
                             Items[4].Description = Localization.Yes;
                         }
                         else if(newOption == Localization.No)
                         {
-                            GlobalData.AutoDownload = false;
+                            GlobalData.Current.AutoDownload = false;
                             Items[4].Description = Localization.No;
                         }
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.SaveConfig();
                         SnackbarBuilder.Show(Localization.SettingsChanges);
                     }
                 }

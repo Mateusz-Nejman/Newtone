@@ -29,7 +29,7 @@ namespace Newtone.Mobile.ViewModels
 
             List<string> beforeSort = new List<string>();
 
-            foreach (string playlist in GlobalData.Playlists.Keys)
+            foreach (string playlist in GlobalData.Current.Playlists.Keys)
             {
                 beforeSort.Add(playlist);
             }
@@ -39,9 +39,9 @@ namespace Newtone.Mobile.ViewModels
             foreach (var playlistName in afterSort)
             {
                 ImageSource image = ImageSource.FromFile("EmptyTrack.png");
-                foreach (string filePath in GlobalData.Playlists[playlistName])
+                foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    var source = GlobalData.Audios[filePath];
+                    var source = GlobalData.Current.Audios[filePath];
                     if (source.Image != null)
                     {
                         image = ImageProcessing.FromArray(source.Image);
@@ -49,7 +49,7 @@ namespace Newtone.Mobile.ViewModels
                     }
                 }
 
-                Items.Add(new PlaylistModel() { Image = image, Name = playlistName, TrackCount = GlobalData.Playlists[playlistName].Count });
+                Items.Add(new PlaylistModel() { Image = image, Name = playlistName, TrackCount = GlobalData.Current.Playlists[playlistName].Count });
             }
         }
         #endregion
@@ -60,7 +60,7 @@ namespace Newtone.Mobile.ViewModels
 
             List<string> beforeSort = new List<string>();
 
-            foreach (string playlist in GlobalData.Playlists.Keys)
+            foreach (string playlist in GlobalData.Current.Playlists.Keys)
             {
                 beforeSort.Add(playlist);
             }
@@ -70,9 +70,9 @@ namespace Newtone.Mobile.ViewModels
             foreach (var playlistName in afterSort)
             {
                 ImageSource image = ImageSource.FromFile("EmptyTrack.png");
-                foreach (string filePath in GlobalData.Playlists[playlistName])
+                foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    var source = GlobalData.Audios[filePath];
+                    var source = GlobalData.Current.Audios[filePath];
                     if (source.Image != null)
                     {
                         image = ImageProcessing.FromArray(source.Image);
@@ -80,7 +80,7 @@ namespace Newtone.Mobile.ViewModels
                     }
                 }
 
-                Items.Add(new PlaylistModel() { Image = image, Name = playlistName, TrackCount = GlobalData.Playlists[playlistName].Count });
+                Items.Add(new PlaylistModel() { Image = image, Name = playlistName, TrackCount = GlobalData.Current.Playlists[playlistName].Count });
             }
 
             return Items.Count;

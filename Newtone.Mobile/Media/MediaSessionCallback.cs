@@ -47,7 +47,7 @@ namespace Newtone.Mobile.Media
             {
                 MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
                 Global.MediaSession.Active = true;
-                GlobalData.MediaPlayer.Play();
+                GlobalData.Current.MediaPlayer.Play();
                 MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance?.GetNotification());
             }
                 
@@ -71,27 +71,27 @@ namespace Newtone.Mobile.Media
 
             MediaPlayerService.Instance.StopSelf();
             Global.MediaSession.Active = false;
-            GlobalData.MediaPlayer.Stop();
+            GlobalData.Current.MediaPlayer.Stop();
             MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnPause()
         {
             ConsoleDebug.WriteLine("[Android Media] MeSeCa OnPause");
-            GlobalData.MediaPlayer.Pause();
+            GlobalData.Current.MediaPlayer.Pause();
             MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnSkipToNext()
         {
             ConsoleDebug.WriteLine("[Android Media] OnSkipToNext");
-            GlobalData.MediaPlayer.Next();
+            GlobalData.Current.MediaPlayer.Next();
         }
 
         public override void OnSkipToPrevious()
         {
             ConsoleDebug.WriteLine("[Android Media] OnSkipToPrev");
-            GlobalData.MediaPlayer.Prev();
+            GlobalData.Current.MediaPlayer.Prev();
         }
 
         public override bool OnMediaButtonEvent(Intent mediaButtonEvent)
@@ -152,22 +152,22 @@ namespace Newtone.Mobile.Media
                     Console.WriteLine("Assist " + query);
 
                     bool played = false;
-                    foreach (var playlistName in GlobalData.Playlists.Keys)
+                    foreach (var playlistName in GlobalData.Current.Playlists.Keys)
                     {
                         string checkedString = CyrylicToUnicode.IsCyrylic(playlistName) ? CyrylicToUnicode.Convert(playlistName) : playlistName;
                         double similiarity = SearchProcessing.CalculateSimilarity(query, playlistName);
                         if (playlistName.ToLowerInvariant().Contains(query) || query.Contains(playlistName.ToLowerInvariant()) || similiarity >= 0.8)
                         {
                             Console.WriteLine(query + " similiar to playlist " + playlistName);
-                            if (GlobalData.Playlists[playlistName].Count > 0)
+                            if (GlobalData.Current.Playlists[playlistName].Count > 0)
                             {
-                                GlobalData.CurrentPlaylist.Clear();
+                                GlobalData.Current.CurrentPlaylist.Clear();
 
-                                GlobalData.Playlists[playlistName].ForEach(track => GlobalData.CurrentPlaylist.Add(GlobalData.Audios[track]));
+                                GlobalData.Current.Playlists[playlistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
 
-                                GlobalData.PlaylistPosition = 0;
-                                GlobalData.MediaPlayer.Load(GlobalData.CurrentPlaylist[0].FilePath);
-                                GlobalData.MediaSource = GlobalData.CurrentPlaylist[0];
+                                GlobalData.Current.PlaylistPosition = 0;
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
+                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
                                 MediaPlayerHelper.Play();
                                 played = true;
                                 break;
@@ -177,21 +177,21 @@ namespace Newtone.Mobile.Media
 
                     if (!played)
                     {
-                        foreach (var artistName in GlobalData.Artists.Keys)
+                        foreach (var artistName in GlobalData.Current.Artists.Keys)
                         {
                             string checkedString = CyrylicToUnicode.IsCyrylic(artistName) ? CyrylicToUnicode.Convert(artistName) : artistName;
                             double similiarity = SearchProcessing.CalculateSimilarity(query, artistName);
                             if (checkedString.ToLowerInvariant().Contains(query) || query.Contains(checkedString.ToLowerInvariant()) || similiarity >= 0.8)
                             {
                                 Console.WriteLine(query + " similiar to artist " + checkedString);
-                                if (GlobalData.Artists[artistName].Count > 0)
+                                if (GlobalData.Current.Artists[artistName].Count > 0)
                                 {
-                                    GlobalData.CurrentPlaylist.Clear();
-                                    GlobalData.Artists[artistName].ForEach(track => GlobalData.CurrentPlaylist.Add(GlobalData.Audios[track]));
+                                    GlobalData.Current.CurrentPlaylist.Clear();
+                                    GlobalData.Current.Artists[artistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
 
-                                    GlobalData.PlaylistPosition = 0;
-                                    GlobalData.MediaPlayer.Load(GlobalData.CurrentPlaylist[0].FilePath);
-                                    GlobalData.MediaSource = GlobalData.CurrentPlaylist[0];
+                                    GlobalData.Current.PlaylistPosition = 0;
+                                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
+                                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
                                     MediaPlayerHelper.Play();
                                     played = true;
                                     break;
@@ -203,7 +203,7 @@ namespace Newtone.Mobile.Media
                     if (!played)
                     {
                         List<TrackModel> beforeSort = new List<TrackModel>();
-                        foreach (var track in GlobalData.Audios.Values)
+                        foreach (var track in GlobalData.Current.Audios.Values)
                         {
                             beforeSort.Add(new TrackModel(track).CheckChanges());
                         }
@@ -217,12 +217,12 @@ namespace Newtone.Mobile.Media
                             if (trackText.ToLowerInvariant().Contains(query) || query.Contains(trackText.ToLowerInvariant()))
                             {
                                 Console.WriteLine(query + " similiar to track " + trackText);
-                                GlobalData.CurrentPlaylist.Clear();
-                                afterSort.ForEach(track => GlobalData.CurrentPlaylist.Add(GlobalData.Audios[track.FilePath]));
+                                GlobalData.Current.CurrentPlaylist.Clear();
+                                afterSort.ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track.FilePath]));
 
-                                GlobalData.PlaylistPosition = a;
-                                GlobalData.MediaPlayer.Load(GlobalData.CurrentPlaylist[a].FilePath);
-                                GlobalData.MediaSource = GlobalData.CurrentPlaylist[a];
+                                GlobalData.Current.PlaylistPosition = a;
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[a].FilePath);
+                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[a];
                                 MediaPlayerHelper.Play();
                                 played = true;
                                 break;
@@ -244,7 +244,7 @@ namespace Newtone.Mobile.Media
                         foreach (var item in rawItems.GetItems())
                             items.Add(new SearchResultModel(item));
 
-                        GlobalData.CurrentPlaylist.Clear();
+                        GlobalData.Current.CurrentPlaylist.Clear();
 
                         for (int a = 0; a < items.Count; a++)
                         {
@@ -255,13 +255,13 @@ namespace Newtone.Mobile.Media
                             items[a].Image = data;
                             items[a].CheckChanges();
 
-                            GlobalData.CurrentPlaylist.Add(items[a]);
+                            GlobalData.Current.CurrentPlaylist.Add(items[a]);
 
                             if (a == 0)
                             {
-                                GlobalData.PlaylistPosition = 0;
-                                GlobalData.MediaSource = GlobalData.CurrentPlaylist[0];
-                                GlobalData.MediaPlayer.Load(GlobalData.CurrentPlaylist[0].FilePath);
+                                GlobalData.Current.PlaylistPosition = 0;
+                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                                 MediaPlayerHelper.Play();
                             }
                         }

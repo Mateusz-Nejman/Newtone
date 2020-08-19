@@ -51,7 +51,7 @@ namespace Newtone.Mobile.Views.FirstStart
 
         private void SetTheme(string theme)
         {
-            GlobalData.SaveFirstStart(theme);
+            GlobalData.Current.SaveFirstStart(theme);
             Colors.SetBase(theme);
             FirstStartPage.Instance.SetPage(new FirstStartSearch());
         }

@@ -41,7 +41,7 @@ namespace Newtone.Desktop.Logic
                 Header = Localization.TrackMenuPlaylist
             };
             menuAdd.Items.Add(ItemNew);
-            foreach(var item in GlobalData.Playlists.Keys)
+            foreach(var item in GlobalData.Current.Playlists.Keys)
             {
                 MenuItem playlistItem = new MenuItem
                 {
@@ -49,10 +49,10 @@ namespace Newtone.Desktop.Logic
                 };
                 playlistItem.Click += (sender, e) =>
                 {
-                   if(!GlobalData.Playlists[item].Contains(FilePath))
+                   if(!GlobalData.Current.Playlists[item].Contains(FilePath))
                     {
-                        GlobalData.Playlists[item].Add(FilePath);
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.Playlists[item].Add(FilePath);
+                        GlobalData.Current.SaveConfig();
                     }
                 };
                 menuAdd.Items.Add(playlistItem);
@@ -120,17 +120,17 @@ namespace Newtone.Desktop.Logic
             {
                 Header = Localization.LanguagePL
             };
-            menuLangPL.Click += (sender, e) => { GlobalData.CurrentLanguage = "pl"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
+            menuLangPL.Click += (sender, e) => { GlobalData.Current.CurrentLanguage = "pl"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.Current.SaveConfig(); };
             MenuItem menuLangEN = new MenuItem
             {
                 Header = Localization.LanguageEN
             };
-            menuLangEN.Click += (sender, e) => { GlobalData.CurrentLanguage = "en"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
+            menuLangEN.Click += (sender, e) => { GlobalData.Current.CurrentLanguage = "en"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.Current.SaveConfig(); };
             MenuItem menuLangRU = new MenuItem
             {
                 Header = Localization.LanguageRU
             };
-            menuLangRU.Click += (sender, e) => { GlobalData.CurrentLanguage = "ru"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.SaveConfig(); };
+            menuLangRU.Click += (sender, e) => { GlobalData.Current.CurrentLanguage = "ru"; Localization.RefreshLanguage(); SnackbarBuilder.Show(Localization.SettingsChanges); GlobalData.Current.SaveConfig(); };
 
 
             menu.Items.Add(menuLangPL);
@@ -187,7 +187,7 @@ namespace Newtone.Desktop.Logic
 
         private static void MenuSyncPlaylist_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            SyncProcessing.AddFiles(GlobalData.Playlists[Playlist]);
+            SyncProcessing.AddFiles(GlobalData.Current.Playlists[Playlist]);
             SnackbarBuilder.Show(Localization.Ready);
         }
 
@@ -218,20 +218,20 @@ namespace Newtone.Desktop.Logic
                 {
                     GlobalLoader.RemoveTrack(FilePath);
                     File.Delete(FilePath);
-                    foreach(var item in GlobalData.Playlists.Keys)
+                    foreach(var item in GlobalData.Current.Playlists.Keys)
                     {
-                        GlobalData.Playlists[item].Remove(FilePath);
+                        GlobalData.Current.Playlists[item].Remove(FilePath);
                     }
                 }
                 else
                 {
-                    GlobalData.Playlists[Playlist].Remove(FilePath);
+                    GlobalData.Current.Playlists[Playlist].Remove(FilePath);
                 }
             }
 
             SnackbarBuilder.Show(Localization.Ready);
-            GlobalData.SaveConfig();
-            GlobalData.SaveTags();
+            GlobalData.Current.SaveConfig();
+            GlobalData.Current.SaveTags();
         }
 
         private static void ItemNew_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -242,16 +242,16 @@ namespace Newtone.Desktop.Logic
 
             if (answer == true && !string.IsNullOrEmpty(prompt.Value))
             {
-                if (!GlobalData.Playlists.ContainsKey(prompt.Value))
-                    GlobalData.Playlists.Add(prompt.Value, new List<string>());
+                if (!GlobalData.Current.Playlists.ContainsKey(prompt.Value))
+                    GlobalData.Current.Playlists.Add(prompt.Value, new List<string>());
 
-                GlobalData.Playlists[prompt.Value].Add(FilePath);
+                GlobalData.Current.Playlists[prompt.Value].Add(FilePath);
 
                 
             }
 
             SnackbarBuilder.Show(Localization.Ready);
-            GlobalData.SaveConfig();
+            GlobalData.Current.SaveConfig();
         }
         #endregion
     }

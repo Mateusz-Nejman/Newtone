@@ -49,12 +49,12 @@ namespace Newtone.Desktop.ViewModels
                         {
                             if (index == 0)
                             {
-                                foreach (string filepath in GlobalData.Audios.Keys)
+                                foreach (string filepath in GlobalData.Current.Audios.Keys)
                                 {
 
-                                    if (!GlobalData.AudioTags.ContainsKey(filepath))
+                                    if (!GlobalData.Current.AudioTags.ContainsKey(filepath))
                                     {
-                                        var tag = GlobalData.Audios[filepath];
+                                        var tag = GlobalData.Current.Audios[filepath];
                                         if (tag.Artist == Newtone.Core.Languages.Localization.UnknownArtist)
                                         {
                                             FileInfo fileInfo = new FileInfo(filepath);
@@ -64,16 +64,16 @@ namespace Newtone.Desktop.ViewModels
 
                                             string artist = splitted.Length == 1 ? Newtone.Core.Languages.Localization.UnknownArtist : splitted[0];
                                             string title = splitted[splitted.Length == 1 ? 0 : 1];
-                                            GlobalData.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
+                                            GlobalData.Current.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
                                         }
                                     }
                                 }
-                                GlobalData.SaveTags();
+                                GlobalData.Current.SaveTags();
                                 SnackbarBuilder.Show(Core.Languages.Localization.Ready);
                             }
                             else if (index == 1)
                             {
-                                string[] files = Directory.GetFiles(GlobalData.DataPath, "*.nsec2");
+                                string[] files = Directory.GetFiles(GlobalData.Current.DataPath, "*.nsec2");
 
                                 foreach (string file in files)
                                 {
@@ -94,9 +94,9 @@ namespace Newtone.Desktop.ViewModels
                                 {
                                     string newPath = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
 
-                                    if (!GlobalData.IncludedPaths.Contains(newPath))
+                                    if (!GlobalData.Current.IncludedPaths.Contains(newPath))
                                     {
-                                        GlobalData.IncludedPaths.Add(newPath);
+                                        GlobalData.Current.IncludedPaths.Add(newPath);
                                         Task.Run(async () => {
                                             var files = await FileProcessing.Scan(newPath, new List<string>());
 
@@ -106,7 +106,7 @@ namespace Newtone.Desktop.ViewModels
                                             }
                                         });
                                         SnackbarBuilder.Show(Core.Languages.Localization.Ready);
-                                        GlobalData.SaveConfig();
+                                        GlobalData.Current.SaveConfig();
                                     }
                                 }
                             }

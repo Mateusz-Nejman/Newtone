@@ -53,16 +53,16 @@ namespace Newtone.Core.Media
                 container.Artist = Localization.UnknownArtist;
             }
 
-            if (GlobalData.AudioTags.ContainsKey(filePath))
+            if (GlobalData.Current.AudioTags.ContainsKey(filePath))
             {
-                MediaSourceTag newTags = GlobalData.AudioTags[filePath];
+                MediaSourceTag newTags = GlobalData.Current.AudioTags[filePath];
 
                 container.Artist = newTags.Author;
                 container.Title = newTags.Title;
                 container.Image ??= newTags.Image;
 
-                if (!string.IsNullOrEmpty(newTags.Id) && !GlobalData.DownloadedIds.Contains(newTags.Id))
-                    GlobalData.DownloadedIds.Add(newTags.Id);
+                if (!string.IsNullOrEmpty(newTags.Id) && !GlobalData.Current.DownloadedIds.Contains(newTags.Id))
+                    GlobalData.Current.DownloadedIds.Add(newTags.Id);
             }
             return container;
         }

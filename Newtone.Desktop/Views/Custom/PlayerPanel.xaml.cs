@@ -38,9 +38,9 @@ namespace Newtone.Desktop.Views.Custom
         private void TrackSlider_ValueChanged(object sender, AudioSliderControl.ValueChangedArgs e)
         {
             ConsoleDebug.WriteLine("TrackSlider ValueChanged");
-            if (GlobalData.MediaPlayer.IsPlaying)
+            if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
-                GlobalData.MediaPlayer.Seek(e.Value);
+                GlobalData.Current.MediaPlayer.Seek(e.Value);
             }
         }
         #endregion

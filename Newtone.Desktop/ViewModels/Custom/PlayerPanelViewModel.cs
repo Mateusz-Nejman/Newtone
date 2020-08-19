@@ -137,9 +137,9 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (previousTrack == null)
                     previousTrack = new ActionCommand(parameter =>
                     {
-                        GlobalData.MediaPlayer.Prev();
+                        GlobalData.Current.MediaPlayer.Prev();
                         if (!isPlayImage)
-                            GlobalData.MediaPlayer.Play();
+                            GlobalData.Current.MediaPlayer.Play();
                     });
 
                 return previousTrack;
@@ -153,9 +153,9 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (nextTrack == null)
                     nextTrack = new ActionCommand(parameter =>
                     {
-                        GlobalData.MediaPlayer.Next();
+                        GlobalData.Current.MediaPlayer.Next();
                         if (!isPlayImage)
-                            GlobalData.MediaPlayer.Play();
+                            GlobalData.Current.MediaPlayer.Play();
                     });
 
                 return nextTrack;
@@ -169,12 +169,12 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (playOrPause == null)
                     playOrPause = new ActionCommand(parameter =>
                     {
-                        if (GlobalData.MediaSource != null)
+                        if (GlobalData.Current.MediaSource != null)
                         {
-                            if (GlobalData.MediaPlayer.IsPlaying)
-                                GlobalData.MediaPlayer.Pause();
+                            if (GlobalData.Current.MediaPlayer.IsPlaying)
+                                GlobalData.Current.MediaPlayer.Pause();
                             else
-                                GlobalData.MediaPlayer.Play();
+                                GlobalData.Current.MediaPlayer.Play();
                         }
                     });
 
@@ -189,16 +189,16 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (volumeUp == null)
                     volumeUp = new ActionCommand(parameter =>
                     {
-                        float currentVolume = GlobalData.MediaPlayer.GetVolume();
+                        float currentVolume = GlobalData.Current.MediaPlayer.GetVolume();
 
                         currentVolume += 0.1f;
 
                         if (currentVolume > 1f)
                             currentVolume = 1f;
 
-                        GlobalData.MediaPlayer.SetVolume(currentVolume);
+                        GlobalData.Current.MediaPlayer.SetVolume(currentVolume);
 
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.SaveConfig();
                     });
                 return volumeUp;
             }
@@ -211,16 +211,16 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (volumeDown == null)
                     volumeDown = new ActionCommand(parameter =>
                     {
-                        float currentVolume = GlobalData.MediaPlayer.GetVolume();
+                        float currentVolume = GlobalData.Current.MediaPlayer.GetVolume();
 
                         currentVolume -= 0.1f;
 
                         if (currentVolume < 0)
                             currentVolume = 0;
 
-                        GlobalData.MediaPlayer.SetVolume(currentVolume);
+                        GlobalData.Current.MediaPlayer.SetVolume(currentVolume);
 
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.SaveConfig();
                     });
                 return volumeDown;
             }
@@ -233,13 +233,13 @@ namespace Newtone.Desktop.ViewModels.Custom
                 if (changeMode == null)
                     changeMode = new ActionCommand(parameter =>
                     {
-                        int oldMode = (int)GlobalData.PlayerMode;
+                        int oldMode = (int)GlobalData.Current.PlayerMode;
                         int newMode = oldMode + 1;
                         if (newMode == 3)
                             newMode = 0;
 
-                        GlobalData.PlayerMode = (PlayerMode)newMode;
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.PlayerMode = (PlayerMode)newMode;
+                        GlobalData.Current.SaveConfig();
                     });
                 return changeMode;
             }
@@ -275,48 +275,48 @@ namespace Newtone.Desktop.ViewModels.Custom
             MainWindow.MainDispatcher.Invoke(() => {
                 try
                 {
-                    SpinnerVisibility = (!(GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared) && GlobalData.MediaSource != null ? Visibility.Visible : Visibility.Hidden;
-                    PlayButtonVisibility = (GlobalData.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared || GlobalData.MediaSource == null ? Visibility.Visible : Visibility.Hidden;
-                    if (playedTrack != GlobalData.MediaSourcePath)
+                    SpinnerVisibility = (!(GlobalData.Current.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared) && GlobalData.Current.MediaSource != null ? Visibility.Visible : Visibility.Hidden;
+                    PlayButtonVisibility = (GlobalData.Current.MediaPlayer.BasePlayer as DesktopMediaPlayer).IsPrepared || GlobalData.Current.MediaSource == null ? Visibility.Visible : Visibility.Hidden;
+                    if (playedTrack != GlobalData.Current.MediaSourcePath)
                     {
-                        TrackImage = ImageProcessing.FromArray(GlobalData.MediaSource.Image ?? Properties.Resources.EmptyTrack);
+                        TrackImage = ImageProcessing.FromArray(GlobalData.Current.MediaSource.Image ?? Properties.Resources.EmptyTrack);
 
-                        BackgroundGridVisibility = GlobalData.MediaSource.Image == null ? Visibility.Hidden : Visibility.Visible;
+                        BackgroundGridVisibility = GlobalData.Current.MediaSource.Image == null ? Visibility.Hidden : Visibility.Visible;
 
-                        playedTrack = GlobalData.MediaSourcePath;
+                        playedTrack = GlobalData.Current.MediaSourcePath;
                     }
-                    if (isPlayImage && GlobalData.MediaPlayer.IsPlaying)
+                    if (isPlayImage && GlobalData.Current.MediaPlayer.IsPlaying)
                     {
                         PlayButtonImage = ImageProcessing.FromArray(Properties.Resources.PauseIcon);
                         isPlayImage = false;
                     }
 
-                    if (!isPlayImage && !GlobalData.MediaPlayer.IsPlaying)
+                    if (!isPlayImage && !GlobalData.Current.MediaPlayer.IsPlaying)
                     {
                         PlayButtonImage = ImageProcessing.FromArray(Properties.Resources.PlayIcon);
                         isPlayImage = true;
                     }
-                    if (GlobalData.MediaPlayer.IsPlaying)
+                    if (GlobalData.Current.MediaPlayer.IsPlaying)
                     {
-                        Artist = GlobalData.MediaSource.Artist;
-                        Title = GlobalData.MediaSource.Title;
+                        Artist = GlobalData.Current.MediaSource.Artist;
+                        Title = GlobalData.Current.MediaSource.Title;
                     }
-                    if (GlobalData.MediaSource != null)
+                    if (GlobalData.Current.MediaSource != null)
                     {
-                        SliderMax = GlobalData.MediaPlayer.Duration;
-                        SliderValue = GlobalData.MediaPlayer.CurrentPosition;
+                        SliderMax = GlobalData.Current.MediaPlayer.Duration;
+                        SliderValue = GlobalData.Current.MediaPlayer.CurrentPosition;
                     }
 
-                    if (GlobalData.PlayerMode != playerMode)
+                    if (GlobalData.Current.PlayerMode != playerMode)
                     {
-                        if (GlobalData.PlayerMode == PlayerMode.All)
+                        if (GlobalData.Current.PlayerMode == PlayerMode.All)
                             ModeImage = ImageProcessing.FromArray(Properties.Resources.RepeatIcon);
-                        else if (GlobalData.PlayerMode == PlayerMode.One)
+                        else if (GlobalData.Current.PlayerMode == PlayerMode.One)
                             ModeImage = ImageProcessing.FromArray(Properties.Resources.RepeatOneIcon);
                         else
                             ModeImage = ImageProcessing.FromArray(Properties.Resources.RandomIcon);
 
-                        playerMode = GlobalData.PlayerMode;
+                        playerMode = GlobalData.Current.PlayerMode;
                     }
                 }
                 catch

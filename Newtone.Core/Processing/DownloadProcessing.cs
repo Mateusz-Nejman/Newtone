@@ -44,33 +44,34 @@ namespace Newtone.Core.Processing
             return Downloads;
         }
 
-        public static void Add(string id, string title, string url, string playlist, string playlistId = "")
+        public static void Add(string id, string title, string url, string playlist, string playlistId = "", bool startTask = true)
         {
+            Console.WriteLine("Add " + id + " " + title);
             if (id == "")
                 YoutubeExplodeExtensions.TryParseVideoId(url, out id);
 
             if(!Downloads.ContainsKey(id))
             {
-                if(GlobalData.DownloadedIds.Contains(id))
+                if(GlobalData.Current.DownloadedIds.Contains(id))
                 {
                     string filename = "";
 
-                    GlobalData.AudioTags.Keys.ForEach(key =>
+                    GlobalData.Current.AudioTags.Keys.ForEach(key =>
                     {
-                        var item = GlobalData.AudioTags[key];
+                        var item = GlobalData.Current.AudioTags[key];
                         if (item.Id == id)
                             filename = key;
                     });
 
                     if (!string.IsNullOrWhiteSpace(playlist))
                     {
-                        if (!GlobalData.Playlists.ContainsKey(playlist))
-                            GlobalData.Playlists.Add(playlist, new List<string>());
+                        if (!GlobalData.Current.Playlists.ContainsKey(playlist))
+                            GlobalData.Current.Playlists.Add(playlist, new List<string>());
 
-                        if (!GlobalData.Playlists[playlist].Contains(filename) && !string.IsNullOrWhiteSpace(filename))
+                        if (!GlobalData.Current.Playlists[playlist].Contains(filename) && !string.IsNullOrWhiteSpace(filename))
                         {
-                            GlobalData.Playlists[playlist].Add(filename);
-                            GlobalData.SaveConfig();
+                            GlobalData.Current.Playlists[playlist].Add(filename);
+                            GlobalData.Current.SaveConfig();
                         }
                     }
                 }
@@ -86,14 +87,21 @@ namespace Newtone.Core.Processing
                         PlaylistID = playlistId
                     });
 
-                    if (downloadTask == null)
+                    if (startTask)
                     {
-                        downloadTask = new Task(async () => await TaskAction());
-                        downloadTask.Start();
-                        ConsoleDebug.WriteLine("Task started");
+                        Console.WriteLine("downloadTask == null: " + (downloadTask == null));
+                        ForceStartDownloadingTask();
                     }
                 }
                 
+            }
+        }
+
+        public static void ForceStartDownloadingTask()
+        {
+            if(downloadTask == null)
+            {
+                downloadTask = TaskAction();
             }
         }
         #endregion
@@ -108,6 +116,7 @@ namespace Newtone.Core.Processing
         }
         private async static Task TaskAction()
         {
+            ConsoleDebug.WriteLine("Task started");
             string currentId = "";
             try
             {
@@ -119,25 +128,25 @@ namespace Newtone.Core.Processing
 
                     if (!string.IsNullOrWhiteSpace(model.PlaylistName))
                     {
-                        if (!GlobalData.Playlists.ContainsKey(model.PlaylistName))
-                            GlobalData.Playlists.Add(model.PlaylistName, new List<string>());
+                        if (!GlobalData.Current.Playlists.ContainsKey(model.PlaylistName))
+                            GlobalData.Current.Playlists.Add(model.PlaylistName, new List<string>());
 
-                        if (!GlobalData.Playlists[model.PlaylistName].Contains(filename))
+                        if (!GlobalData.Current.Playlists[model.PlaylistName].Contains(filename))
                         {
-                            GlobalData.Playlists[model.PlaylistName].Add(filename);
+                            GlobalData.Current.Playlists[model.PlaylistName].Add(filename);
 
                             if (model.PlaylistID != "")
                             {
-                                if (!GlobalData.WebToLocalPlaylists.ContainsKey(model.PlaylistID))
+                                if (!GlobalData.Current.WebToLocalPlaylists.ContainsKey(model.PlaylistID))
                                 {
-                                    GlobalData.WebToLocalPlaylists.Add(model.PlaylistID, model.PlaylistName);
+                                    GlobalData.Current.WebToLocalPlaylists.Add(model.PlaylistID, model.PlaylistName);
                                 }
                                 else
                                 {
-                                    GlobalData.WebToLocalPlaylists[model.PlaylistID] = model.PlaylistName;
+                                    GlobalData.Current.WebToLocalPlaylists[model.PlaylistID] = model.PlaylistName;
                                 }
                             }
-                            GlobalData.SaveConfig();
+                            GlobalData.Current.SaveConfig();
                         }
                     }
                     Downloads.Remove(id);
@@ -145,12 +154,12 @@ namespace Newtone.Core.Processing
             }
             catch (TransientFailureException)
             {
-                GlobalData.Messenger.Show(MessageGenerator.EMessageType.Error, Localization.YoutubeError);
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, Localization.YoutubeError);
                 Downloads.Remove(currentId);
             }
             catch(Exception e)
             {
-                GlobalData.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
                 Downloads.Remove(currentId);
             }
 
@@ -183,9 +192,9 @@ namespace Newtone.Core.Processing
                 Replace('<', '_').
                 Replace('>', '_').
                 Replace('|', '_');
-            FileInfo fileInfo = new FileInfo(GlobalData.MusicPath + "/" + fileName + ".m4a");
+            FileInfo fileInfo = new FileInfo(GlobalData.Current.MusicPath + "/" + fileName + ".m4a");
 
-            if (GlobalData.DownloadedIds.Contains(id))
+            if (GlobalData.Current.DownloadedIds.Contains(id))
                 return fileInfo.FullName;
 
             IStreamInfo streamInfo = null;
@@ -202,7 +211,7 @@ namespace Newtone.Core.Processing
                         streamInfo = item;
                 }
             });
-            await client.Videos.Streams.DownloadAsync(streamInfo, GlobalData.MusicPath + "/" + fileName + ".m4a", progress);
+            await client.Videos.Streams.DownloadAsync(streamInfo, GlobalData.Current.MusicPath + "/" + fileName + ".m4a", progress);
             string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
             string artist = splitted.Length == 1 ? video.Author : splitted[0];
             string title = splitted[splitted.Length == 1 ? 0 : 1];
@@ -218,27 +227,28 @@ namespace Newtone.Core.Processing
 
             }
             ConsoleDebug.WriteLine(fileInfo.FullName);
-            if (GlobalData.AudioTags.ContainsKey(fileInfo.FullName))
+            if (GlobalData.Current.AudioTags.ContainsKey(fileInfo.FullName))
             {
                 string f = fileInfo.FullName;
-                GlobalData.AudioTags[f].Author = artist;
-                GlobalData.AudioTags[f].Title = title;
-                GlobalData.AudioTags[f].Image = picture;
-                GlobalData.AudioTags[f].Id = video.Id;
+                GlobalData.Current.AudioTags[f].Author = artist;
+                GlobalData.Current.AudioTags[f].Title = title;
+                GlobalData.Current.AudioTags[f].Image = picture;
+                GlobalData.Current.AudioTags[f].Id = video.Id;
             }
             else
             {
-                GlobalData.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id });
+                GlobalData.Current.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id });
             }
 
             MediaSource container = MediaProcessing.GetSource(fileInfo.FullName);
             //if (container == null)
                 //ConsoleDebug.WriteLine("Container null" +container.FilePath);
             GlobalLoader.AddTrack(container);
-            GlobalData.SaveConfig();
-            GlobalData.SaveTags();
+            CacheLoader.SaveCache();
+            GlobalData.Current.SaveConfig();
+            GlobalData.Current.SaveTags();
             //CacheString.Save();
-            GlobalData.MediaPlayer.Error(Localization.Ready);
+            GlobalData.Current.MediaPlayer.Error(Localization.Ready);
             //SnackbarBuilder.Show(Localization.Ready);
             //TODO
 

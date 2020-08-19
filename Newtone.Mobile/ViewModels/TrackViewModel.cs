@@ -51,7 +51,7 @@ namespace Newtone.Mobile.ViewModels
                         ConsoleDebug.WriteLine("[Refresh] TrackViewModel");
                         IsRefreshing = true;
                         List<TrackModel> beforeSort = new List<TrackModel>();
-                        foreach (var track in GlobalData.Audios.Values)
+                        foreach (var track in GlobalData.Current.Audios.Values)
                         {
                             beforeSort.Add(new TrackModel(track).CheckChanges());
                         }
@@ -66,8 +66,9 @@ namespace Newtone.Mobile.ViewModels
         public TrackViewModel()
         {
             List<TrackModel> beforeSort = new List<TrackModel>();
-            foreach (var track in GlobalData.Audios.Values)
+            foreach (var track in GlobalData.Current.Audios.Values)
             {
+                Console.WriteLine("Add track");
                 beforeSort.Add(new TrackModel(track).CheckChanges());
             }
             Items = new ObservableCollection<TrackModel>(beforeSort.OrderBy(item => item.TrackString));
@@ -77,12 +78,28 @@ namespace Newtone.Mobile.ViewModels
 
         public void Tick()
         {
+            if (GlobalData.Current.TracksNeedRefresh)
+                Items.Clear();
+            if(Items.Count == 0 && GlobalData.Current.Audios.Count > 0)
+            {
+                List<TrackModel> beforeSort = new List<TrackModel>();
+                foreach (var track in GlobalData.Current.Audios.Values)
+                {
+                    Console.WriteLine("Add track");
+                    beforeSort.Add(new TrackModel(track).CheckChanges());
+                }
+                foreach(var item in beforeSort.OrderBy(item => item.TrackString))
+                {
+                    Items.Add(item);
+                }
+                GlobalData.Current.TracksNeedRefresh = false;
+            }
             foreach (var model in Items.ToList())
             {
 
-                if (GlobalData.Audios.ContainsKey(model.FilePath))
+                if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
                 {
-                    var source = GlobalData.Audios[model.FilePath];
+                    var source = GlobalData.Current.Audios[model.FilePath];
                     if (model.Artist != source.Artist || model.Title != source.Title)
                     {
                         int index = Items.IndexOf(model);
@@ -107,14 +124,14 @@ namespace Newtone.Mobile.ViewModels
             {
                 var model = Items[index];
 
-                GlobalData.MediaSource = GlobalData.Audios[model.FilePath];
-                GlobalData.CurrentPlaylist.Clear();
-                GlobalData.PlaylistPosition = index;
+                GlobalData.Current.MediaSource = GlobalData.Current.Audios[model.FilePath];
+                GlobalData.Current.CurrentPlaylist.Clear();
+                GlobalData.Current.PlaylistPosition = index;
                 foreach (var item in Items)
                 {
-                    GlobalData.CurrentPlaylist.Add(GlobalData.Audios[item.FilePath]);
+                    GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[item.FilePath]);
                 }
-                GlobalData.MediaPlayer.Load(model.FilePath);
+                GlobalData.Current.MediaPlayer.Load(model.FilePath);
                 MediaPlayerHelper.Play();
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }

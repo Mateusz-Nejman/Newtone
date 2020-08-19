@@ -184,13 +184,13 @@ namespace Newtone.Mobile.ViewModels
                 if (repeatChange == null)
                     repeatChange = new ActionCommand(parameter =>
                     {
-                        int oldMode = (int)GlobalData.PlayerMode;
+                        int oldMode = (int)GlobalData.Current.PlayerMode;
                         int newMode = oldMode + 1;
                         if (newMode == 3)
                             newMode = 0;
 
-                        GlobalData.PlayerMode = (PlayerMode)newMode;
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.PlayerMode = (PlayerMode)newMode;
+                        GlobalData.Current.SaveConfig();
                     });
 
                 return repeatChange;
@@ -205,9 +205,9 @@ namespace Newtone.Mobile.ViewModels
                 if (previousTrack == null)
                     previousTrack = new ActionCommand(parameter =>
                     {
-                        GlobalData.MediaPlayer.Prev();
+                        GlobalData.Current.MediaPlayer.Prev();
                         if (!isPlayImage)
-                            GlobalData.MediaPlayer.Play();
+                            GlobalData.Current.MediaPlayer.Play();
                     });
 
                 return previousTrack;
@@ -222,12 +222,12 @@ namespace Newtone.Mobile.ViewModels
                 if (playOrPause == null)
                     playOrPause = new ActionCommand(parameter =>
                     {
-                        if (GlobalData.MediaSource != null)
+                        if (GlobalData.Current.MediaSource != null)
                         {
-                            if (GlobalData.MediaPlayer.IsPlaying)
-                                GlobalData.MediaPlayer.Pause();
+                            if (GlobalData.Current.MediaPlayer.IsPlaying)
+                                GlobalData.Current.MediaPlayer.Pause();
                             else
-                                GlobalData.MediaPlayer.Play();
+                                GlobalData.Current.MediaPlayer.Play();
                         }
                     });
 
@@ -243,9 +243,9 @@ namespace Newtone.Mobile.ViewModels
                 if (nextTrack == null)
                     nextTrack = new ActionCommand(parameter =>
                     {
-                        GlobalData.MediaPlayer.Next();
+                        GlobalData.Current.MediaPlayer.Next();
                         if (!isPlayImage)
-                            GlobalData.MediaPlayer.Play();
+                            GlobalData.Current.MediaPlayer.Play();
                     });
 
                 return nextTrack;
@@ -260,13 +260,13 @@ namespace Newtone.Mobile.ViewModels
                 if (menuButtonCommand == null)
                     menuButtonCommand = new ActionCommand(parameter =>
                     {
-                        if (GlobalData.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
+                        if (GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
                         {
-                            ContextMenuBuilder.BuildForTrack((Xamarin.Forms.View)parameter, GlobalData.MediaSource.FilePath + GlobalData.SEPARATOR);
+                            ContextMenuBuilder.BuildForTrack((Xamarin.Forms.View)parameter, GlobalData.Current.MediaSource.FilePath + GlobalData.SEPARATOR);
                         }
                         else
                         {
-                            DownloadProcessing.Add(GlobalData.MediaSource.FilePath, GlobalData.MediaSource.Title, "", "");
+                            DownloadProcessing.Add(GlobalData.Current.MediaSource.FilePath, GlobalData.Current.MediaSource.Title, "", "");
                         }
                     });
 
@@ -312,9 +312,9 @@ namespace Newtone.Mobile.ViewModels
 
         public void AudioSlider_ValueNewChanged(object sender, AudioSliderControl.ValueChangedArgs e)
         {
-            if (GlobalData.MediaPlayer.IsPlaying)
+            if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
-                GlobalData.MediaPlayer.Seek(e.Value);
+                GlobalData.Current.MediaPlayer.Seek(e.Value);
             }
         }
         #endregion
@@ -322,64 +322,64 @@ namespace Newtone.Mobile.ViewModels
 
         private bool Tick()
         {
-            TrackCurrentPosition = TimeSpan.FromSeconds(GlobalData.MediaPlayer.CurrentPosition).ToString("mm':'ss");
-            TrackDuration = GlobalData.MediaSource.Duration.ToString("mm':'ss");
-            Artist = GlobalData.MediaSource.Artist;
-            Title = GlobalData.MediaSource.Title;
+            TrackCurrentPosition = TimeSpan.FromSeconds(GlobalData.Current.MediaPlayer.CurrentPosition).ToString("mm':'ss");
+            TrackDuration = GlobalData.Current.MediaSource.Duration.ToString("mm':'ss");
+            Artist = GlobalData.Current.MediaSource.Artist;
+            Title = GlobalData.Current.MediaSource.Title;
 
-            if (playedTrack != GlobalData.MediaSourcePath)
+            if (playedTrack != GlobalData.Current.MediaSourcePath)
             {
-                BackgroundGridVisible = GlobalData.MediaSource.Image != null;
+                BackgroundGridVisible = GlobalData.Current.MediaSource.Image != null;
 
-                if (GlobalData.MediaSource.Image != null && GlobalData.MediaSource.Image.Length > 0)
+                if (GlobalData.Current.MediaSource.Image != null && GlobalData.Current.MediaSource.Image.Length > 0)
                 {
-                    TrackBlur = ImageProcessing.Blur(ImageProcessing.FromArray(GlobalData.MediaSource.Image));
-                    TrackImage = ImageProcessing.FromArray(GlobalData.MediaSource.Image);
+                    TrackBlur = ImageProcessing.Blur(ImageProcessing.FromArray(GlobalData.Current.MediaSource.Image));
+                    TrackImage = ImageProcessing.FromArray(GlobalData.Current.MediaSource.Image);
                 }
                 else
                 {
                     TrackImage = ImageSource.FromFile("EmptyTrack.png");
                 }
 
-                playedTrack = GlobalData.MediaSourcePath;
+                playedTrack = GlobalData.Current.MediaSourcePath;
             }
-            if (isPlayImage && GlobalData.MediaPlayer.IsPlaying)
+            if (isPlayImage && GlobalData.Current.MediaPlayer.IsPlaying)
             {
                 MiddleButton = ImageSource.FromFile("PauseIcon.png");
                 isPlayImage = false;
             }
 
-            if (!isPlayImage && !GlobalData.MediaPlayer.IsPlaying)
+            if (!isPlayImage && !GlobalData.Current.MediaPlayer.IsPlaying)
             {
                 MiddleButton = ImageSource.FromFile("PlayIcon.png");
                 isPlayImage = true;
             }
-            if (GlobalData.MediaPlayer.IsPlaying)
+            if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
-                AudioSliderMax = GlobalData.MediaPlayer.Duration;
-                AudioSliderValue = GlobalData.MediaPlayer.CurrentPosition;
+                AudioSliderMax = GlobalData.Current.MediaPlayer.Duration;
+                AudioSliderValue = GlobalData.Current.MediaPlayer.CurrentPosition;
 
             }
 
-            if (GlobalData.PlayerMode != playerMode)
+            if (GlobalData.Current.PlayerMode != playerMode)
             {
-                if (GlobalData.PlayerMode == PlayerMode.All)
+                if (GlobalData.Current.PlayerMode == PlayerMode.All)
                    ModeButton = ImageSource.FromFile("RepeatIcon.png");
-                else if (GlobalData.PlayerMode == PlayerMode.One)
+                else if (GlobalData.Current.PlayerMode == PlayerMode.One)
                     ModeButton = ImageSource.FromFile("RepeatOneIcon.png");
                 else
                     ModeButton = ImageSource.FromFile("RandomIcon.png");
 
-                playerMode = GlobalData.PlayerMode;
+                playerMode = GlobalData.Current.PlayerMode;
             }
 
-            if (isMenuImage && GlobalData.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Web)
+            if (isMenuImage && GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Web)
             {
                 MenuButton = ImageSource.FromFile("DownloadIcon.png");
                 isMenuImage = false;
             }
 
-            if (!isMenuImage && GlobalData.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
+            if (!isMenuImage && GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
             {
                 MenuButton = ImageSource.FromFile("MenuIcon.png");
                 isMenuImage = true;

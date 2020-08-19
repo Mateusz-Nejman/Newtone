@@ -26,9 +26,22 @@ namespace Newtone.Core
         public const string RECEIVED_MESSAGE = "NSEC2R";
         public const string SYNC_CODE = "NSEC2CD";
         #endregion
+        #region Fields
+        private static GlobalData current;
+        #endregion
 
         #region Properties
-        public static bool IsDebugMode
+        public static GlobalData Current
+        {
+            get
+            {
+                if (current == null)
+                    current = new GlobalData();
+
+                return current;
+            }
+        }
+        public bool IsDebugMode
         {
             get
             {
@@ -40,24 +53,24 @@ namespace Newtone.Core
             }
         }
 
-        public static CrossPlayer MediaPlayer { get; set; }
+        public CrossPlayer MediaPlayer { get; set; }
 
-        public static Dictionary<string, MediaSource> Audios { get; set; }
-        public static Dictionary<string, MediaSourceTag> AudioTags { get; set; }
-        public static List<string> DownloadedIds { get; set; }
-        public static Dictionary<string, List<string>> Artists { get; set; }
-        public static Dictionary<string, List<string>> Playlists { get; set; }
-        public static Dictionary<string, string> WebToLocalPlaylists { get; set; }
-        public static List<MediaSource> CurrentPlaylist { get; set; }
-        public static List<MediaSource> CurrentQueue { get; set; }
-        public static MediaSource.SourceType PlaylistType { get; set; }
-        public static int PlaylistPosition { get; set; }
-        public static int QueuePosition { get; set; }
-        public static MediaSource MediaSource { get; set; }
-        public static bool AudioFromIntent { get; set; }
-        public static bool AutoDownload { get; set; }
+        public Dictionary<string, MediaSource> Audios { get; set; }
+        public Dictionary<string, MediaSourceTag> AudioTags { get; set; }
+        public List<string> DownloadedIds { get; set; }
+        public Dictionary<string, List<string>> Artists { get; set; }
+        public Dictionary<string, List<string>> Playlists { get; set; }
+        public Dictionary<string, string> WebToLocalPlaylists { get; set; }
+        public List<MediaSource> CurrentPlaylist { get; set; }
+        public List<MediaSource> CurrentQueue { get; set; }
+        public MediaSource.SourceType PlaylistType { get; set; }
+        public int PlaylistPosition { get; set; }
+        public int QueuePosition { get; set; }
+        public MediaSource MediaSource { get; set; }
+        public bool AudioFromIntent { get; set; }
+        public bool AutoDownload { get; set; }
 
-        public static string MediaSourcePath
+        public string MediaSourcePath
         {
             get
             {
@@ -65,24 +78,55 @@ namespace Newtone.Core
             }
         }
 
-        public static List<HistoryModel> History { get; set; }
-        public static TrackCounter[] LastTracks { get; set; }
-        public static TrackCounter[] MostTracks { get; set; }
+        public List<HistoryModel> History { get; set; }
+        public TrackCounter[] LastTracks { get; set; }
+        public TrackCounter[] MostTracks { get; set; }
 
-        public static PlayerMode PlayerMode { get; set; }
-        public static string DataPath { get; set; }
-        public static string MusicPath { get; set; }
+        public PlayerMode PlayerMode { get; set; }
+        public string DataPath { get; set; }
+        public string MusicPath { get; set; }
 
-        public static AsyncEndController AsyncEndController = new AsyncEndController();
+        public AsyncEndController AsyncEndController = new AsyncEndController();
 
-        public static List<string> ExcludedPaths { get; set; }
-        public static List<string> IncludedPaths { get; set; }
-        public static string CurrentLanguage { get; set; }
-        public static MessageGenerator Messenger { get; set; }
+        public List<string> ExcludedPaths { get; set; }
+        public List<string> IncludedPaths { get; set; }
+        public string CurrentLanguage { get; set; }
+        public MessageGenerator Messenger { get; set; }
+        public bool ArtistsNeedRefresh { get; set; }
+        public bool TracksNeedRefresh { get; set; }
+        public bool PlaylistsNeedRefresh { get; set; }
+        public bool HistoryNeedRefresh { get; set; }
         #endregion
         #region Public Methods
+        public void Initialize()
+        {
+            Artists = new Dictionary<string, List<string>>();
+            Audios = new Dictionary<string, Newtone.Core.Media.MediaSource>();
+            AudioTags = new Dictionary<string, MediaSourceTag>();
+            DownloadedIds = new List<string>();
+            CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
+            WebToLocalPlaylists = new Dictionary<string, string>();
+            CurrentQueue = new List<Newtone.Core.Media.MediaSource>();
+            DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
 
-        public static string LoadFirstStart()
+
+            //ConsoleDebug.WriteLine(DataPath);
+            //ConsoleDebug.WriteLine(MusicPath);
+
+            //Directory.CreateDirectory(DataPath);
+            //Directory.CreateDirectory(MusicPath);
+
+            History = new List<Newtone.Core.Models.HistoryModel>();
+            LastTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
+            MostTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
+
+            PlayerMode = PlayerMode.All;
+            Playlists = new Dictionary<string, List<string>>();
+            PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Local;
+
+            ExcludedPaths = new List<string>();
+        }
+        public string LoadFirstStart()
         {
             if (!File.Exists(DataPath + "/newtone.first.nsec2"))
                 return null;
@@ -96,7 +140,7 @@ namespace Newtone.Core
             return theme;
         }
 
-        public static void SaveFirstStart(string theme)
+        public void SaveFirstStart(string theme)
         {
             NSEC2 nsec = new NSEC2(PASSWORD);
             nsec.AddFile("theme", System.Text.Encoding.ASCII.GetBytes(theme));
@@ -104,7 +148,7 @@ namespace Newtone.Core
             nsec.Dispose();
         }
 
-        public static void LoadConfig()
+        public void LoadConfig()
         {
             Directory.CreateDirectory(MusicPath);
             //ConsoleDebug.WriteLine("LoadConfig");
@@ -289,7 +333,7 @@ namespace Newtone.Core
             }
         }
 
-        public static void SaveConfig()
+        public void SaveConfig()
         {
             NSEC2 nsec = new NSEC2(PASSWORD);
 
@@ -403,7 +447,7 @@ namespace Newtone.Core
             nsec.Dispose();
         }
 
-        public static void SaveTags()
+        public void SaveTags()
         {
             ConsoleDebug.WriteLine("SaveTags " + AudioTags.Count);
             if (AudioTags.Count > 0)
@@ -437,7 +481,7 @@ namespace Newtone.Core
             }
         }
 
-        public static void LoadTags()
+        public void LoadTags()
         {
             
             if (File.Exists(DataPath + "/newtoneTags.nsec2"))

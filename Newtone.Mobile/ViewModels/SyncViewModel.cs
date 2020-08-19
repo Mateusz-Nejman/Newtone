@@ -216,7 +216,7 @@ namespace Newtone.Mobile.ViewModels
                             Localization.NewPlaylist
                         };
 
-                        foreach (string playlist in GlobalData.Playlists.Keys)
+                        foreach (string playlist in GlobalData.Current.Playlists.Keys)
                             positions.Add(playlist);
 
                         string answer = await NormalPage.Instance.DisplayActionSheet(Localization.ChoosePlaylist, Localization.Cancel, null, positions.ToArray());
@@ -227,26 +227,26 @@ namespace Newtone.Mobile.ViewModels
 
                             if (!string.IsNullOrEmpty(playlist))
                             {
-                                if (!GlobalData.Playlists.ContainsKey(playlist))
+                                if (!GlobalData.Current.Playlists.ContainsKey(playlist))
                                 {
-                                    GlobalData.Playlists.Add(playlist, new List<string>());
+                                    GlobalData.Current.Playlists.Add(playlist, new List<string>());
                                 }
                                 foreach (string file in SyncProcessing.ReceivedTracks)
-                                    if (!GlobalData.Playlists[playlist].Contains(file))
-                                        GlobalData.Playlists[playlist].Add(file);
+                                    if (!GlobalData.Current.Playlists[playlist].Contains(file))
+                                        GlobalData.Current.Playlists[playlist].Add(file);
 
-                                GlobalData.SaveConfig();
+                                GlobalData.Current.SaveConfig();
 
                                 SnackbarBuilder.Show(Localization.SnackPlaylist);
                             }
                         }
-                        else if (GlobalData.Playlists.ContainsKey(answer))
+                        else if (GlobalData.Current.Playlists.ContainsKey(answer))
                         {
                             foreach (string file in SyncProcessing.ReceivedTracks)
-                                if (!GlobalData.Playlists[answer].Contains(file))
-                                    GlobalData.Playlists[answer].Add(file);
+                                if (!GlobalData.Current.Playlists[answer].Contains(file))
+                                    GlobalData.Current.Playlists[answer].Add(file);
 
-                            GlobalData.SaveConfig();
+                            GlobalData.Current.SaveConfig();
                         }
                         SyncProcessing.ReceivedTracks.Clear();
                     }

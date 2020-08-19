@@ -11,7 +11,7 @@ namespace Newtone.Core.Languages
 
         private static LocalizationBase GetCurrentLanguage()
         {
-            string culture = GlobalData.CurrentLanguage ?? CultureInfo.CurrentCulture.Name;
+            string culture = GlobalData.Current.CurrentLanguage ?? CultureInfo.CurrentCulture.Name;
 
             if (culture.ToLower().Contains("pl"))
                 return new LocalizationPL();

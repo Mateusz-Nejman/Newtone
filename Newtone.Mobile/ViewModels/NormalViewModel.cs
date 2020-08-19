@@ -28,6 +28,12 @@ namespace Newtone.Mobile.ViewModels
     public class NormalViewModel : PropertyChangedBase
     {
         #region Fields
+        private TracksPage tracksPage;
+        private ArtistPage artistPage;
+        private PlaylistPage playlistPage;
+        private SettingsPage settingsPage;
+        private SearchPage searchPage;
+
         private string pageTitle;
         private string searchPlaceholder;
         private bool badgeSyncVisible;
@@ -208,8 +214,9 @@ namespace Newtone.Mobile.ViewModels
                 if (gotoPlayerCommand == null)
                     gotoPlayerCommand = new ActionCommand(async(parameter) =>
                     {
-                        if (GlobalData.MediaSource != null)
+                        if (GlobalData.Current.MediaSource != null)
                         {
+
                             await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
                         }
                     });
@@ -227,7 +234,9 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if(currentButtonIndex != 0)
                         {
-                            SetContainer(new TracksPage(), Localization.Tracks);
+                            if (tracksPage == null)
+                                tracksPage = new TracksPage();
+                            SetContainer(tracksPage, Localization.Tracks);
                             Toggle(0);
                         }
                     });
@@ -246,7 +255,9 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 1)
                         {
-                            SetContainer(new ArtistPage(), Localization.Artists);
+                            if (artistPage == null)
+                                artistPage = new ArtistPage();
+                            SetContainer(artistPage, Localization.Artists);
                             Toggle(1);
                         }
                     });
@@ -265,7 +276,9 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 2)
                         {
-                            SetContainer(new PlaylistPage(), Localization.Playlists);
+                            if (playlistPage == null)
+                                playlistPage = new PlaylistPage();
+                            SetContainer(playlistPage, Localization.Playlists);
                             Toggle(2);
                         }
                     });
@@ -284,7 +297,9 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 3)
                         {
-                            SetContainer(new SearchPage(), Localization.Search);
+                            if (searchPage == null)
+                                searchPage = new SearchPage();
+                            SetContainer(searchPage, Localization.Search);
                             Toggle(3);
                         }
                     });
@@ -303,7 +318,9 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 4)
                         {
-                            SetContainer(new SettingsPage(), Localization.Settings);
+                            if (settingsPage == null)
+                                settingsPage = new SettingsPage();
+                            SetContainer(settingsPage, Localization.Settings);
                             Toggle(4);
                         }
                     });
@@ -348,13 +365,26 @@ namespace Newtone.Mobile.ViewModels
             Container = container;
             PlayerPanel = panel;
 
-            Directory.CreateDirectory(GlobalData.MusicPath);
+            Directory.CreateDirectory(GlobalData.Current.MusicPath);
             if (!MainActivity.Loaded)
             {
-                GlobalData.LoadTags();
-                Task.Run(async () => await GlobalLoader.Load()).Wait();
-                GlobalData.LoadConfig();
-                MainActivity.Loaded = true;
+                GlobalData.Current.LoadTags();
+                Task task;
+                if(CacheLoader.IsCacheAvailable())
+                {
+                    task = Task.Run(() =>
+                    {
+                        CacheLoader.LoadCache();
+                        Task.Run(async () => await GlobalLoader.Load());
+                    });
+                }
+                else
+                    task = Task.Run(async () => await GlobalLoader.Load());
+                task.ContinueWith(t =>
+                {
+                    GlobalData.Current.LoadConfig();
+                    MainActivity.Loaded = true;
+                });
             }
             SearchPlaceholder = Localization.Search;
         }
@@ -384,8 +414,11 @@ namespace Newtone.Mobile.ViewModels
             BadgeSync = SyncProcessing.Audios.Count.ToString();
             PlayerPanel?.Tick();
 
-            if (Container.Children.Count > 0 && Container.Children[0] is ITimerContent content)
-                content.Tick();
+            foreach(var children in Container.Children)
+            {
+                if (children.IsVisible && children is ITimerContent content)
+                    content.Tick();
+            }
         }
         #endregion
 
@@ -403,15 +436,34 @@ namespace Newtone.Mobile.ViewModels
 
         private void SetContainer(ContentView content, string title)
         {
-            EntryVisible = content is SearchPage;
-            TitleVisible = !(content is SearchPage);
+            EntryVisible = content == searchPage;
+            TitleVisible = !(content == searchPage);
+
+            if (!Container.Children.Contains(content))
+                Container.Children.Add(content);
             if(Container.Children.Count > 0)
-                if (Container.Children[0] is IVisibleContent)
-                    (Container.Children[0] as IVisibleContent).Disappearing();
-            Container.Children.Clear();
-            Container.Children.Add(content);
-            if (content is IVisibleContent)
-                (content as IVisibleContent).Appearing();
+            {
+                foreach(var children in Container.Children)
+                {
+                    
+                    if(children.IsVisible)
+                    {
+                        if(children is IVisibleContent)
+                            (children as IVisibleContent).Disappearing();
+                        children.IsVisible = false;
+                    }
+
+                    if (children == content)
+                    {
+                        if(children is IVisibleContent)
+                            (children as IVisibleContent).Appearing();
+                        children.IsVisible = true;
+
+                    }
+                    else
+                        children.IsVisible = false;
+                }
+            }
             PageTitle = title;
         }
 

@@ -84,7 +84,7 @@ namespace Newtone.Mobile.Media
 
         public Notification GetNotification()
         {
-            if(Global.MediaSession != null && Global.MediaSession.Controller != null && GlobalData.MediaSource != null)
+            if(Global.MediaSession != null && Global.MediaSession.Controller != null && GlobalData.Current.MediaSource != null)
             {
                 MediaControllerCompat controller = Global.MediaSession.Controller;
 
@@ -92,13 +92,13 @@ namespace Newtone.Mobile.Media
 
                 Bitmap bitmap;
 
-                if (GlobalData.MediaSource.Image == null || GlobalData.MediaSource.Image.Length == 0)
+                if (GlobalData.Current.MediaSource.Image == null || GlobalData.Current.MediaSource.Image.Length == 0)
                     bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.EmptyTrack);
                 else
-                    bitmap = BitmapFactory.DecodeByteArray(GlobalData.MediaSource.Image, 0, GlobalData.MediaSource.Image.Length);
+                    bitmap = BitmapFactory.DecodeByteArray(GlobalData.Current.MediaSource.Image, 0, GlobalData.Current.MediaSource.Image.Length);
                 builder
-                    .SetContentTitle(GlobalData.MediaSource.Title)
-                    .SetContentText(GlobalData.MediaSource.Artist)
+                    .SetContentTitle(GlobalData.Current.MediaSource.Title)
+                    .SetContentText(GlobalData.Current.MediaSource.Artist)
 
                     .SetContentIntent(controller.SessionActivity)
                     .SetDeleteIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop))

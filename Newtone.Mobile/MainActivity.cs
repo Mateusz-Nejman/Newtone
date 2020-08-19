@@ -95,7 +95,7 @@ namespace Newtone.Mobile
         {
             base.OnStop();
             ConsoleDebug.WriteLine("MainActivity OnStop");
-            //if (GlobalData.MediaPlayer != null && !GlobalData.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
+            //if (GlobalData.Current.MediaPlayer != null && !GlobalData.Current.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
             //    Process.KillProcess(Process.MyPid());
             MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
             try
@@ -134,18 +134,15 @@ namespace Newtone.Mobile
 
                 string newPath = rootPath + elems[1];
 
-                if (!GlobalData.IncludedPaths.Contains(newPath))
+                if (!GlobalData.Current.IncludedPaths.Contains(newPath))
                 {
-                    GlobalData.IncludedPaths.Add(newPath);
+                    GlobalData.Current.IncludedPaths.Add(newPath);
                     Task.Run(async () => {
                         var files = await FileProcessing.Scan(newPath, new List<string>());
-
-                        foreach (var file in files)
-                        {
-                            GlobalLoader.AddTrack(file);
-                        }
+                        files.ForEach(GlobalLoader.AddTrack);
+                        CacheLoader.SaveCache();
                     });
-                    GlobalData.SaveConfig();
+                    GlobalData.Current.SaveConfig();
                     SnackbarBuilder.Show(Localization.Ready);
                 }
 
@@ -155,7 +152,7 @@ namespace Newtone.Mobile
         #region Private Methods
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            StreamWriter streamWriter = new StreamWriter(GlobalData.MusicPath + "/log.txt", true);
+            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
             streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
             streamWriter.WriteLine("Exception: " + e.Exception.Message);
             streamWriter.WriteLine("StackTrace: " + e.Exception.StackTrace);
@@ -165,7 +162,7 @@ namespace Newtone.Mobile
 
             try
             {
-                GlobalData.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
             }
             catch { }
         }
@@ -173,7 +170,7 @@ namespace Newtone.Mobile
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
            
-            StreamWriter streamWriter = new StreamWriter(GlobalData.MusicPath + "/log.txt", true);
+            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
             streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
             streamWriter.WriteLine("Exception: " + ((Exception)e.ExceptionObject).Message);
             streamWriter.WriteLine("StackTrace: " + ((Exception)e.ExceptionObject).StackTrace);
@@ -183,14 +180,14 @@ namespace Newtone.Mobile
 
             try
             {
-                GlobalData.Messenger.Show(MessageGenerator.EMessageType.Error, (e.ExceptionObject as Exception).ToString());
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, (e.ExceptionObject as Exception).ToString());
             }
             catch { }
         }
 
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            StreamWriter streamWriter = new StreamWriter(GlobalData.MusicPath + "/log.txt", true);
+            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
             streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
             streamWriter.WriteLine("Exception: " + e.Exception.Message);
             streamWriter.WriteLine("StackTrace: " + e.Exception.StackTrace);
@@ -200,7 +197,7 @@ namespace Newtone.Mobile
 
             try
             {
-                GlobalData.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
             }
             catch { }
         }
@@ -242,36 +239,13 @@ namespace Newtone.Mobile
             Global.AudioFocusListener = new AudioFocusListener();
             Global.MediaBrowser = new MediaBrowserCompat(this, new ComponentName(this, Java.Lang.Class.FromType(typeof(MediaPlayerService)).Name), Global.ConnectionCallback, null);
 
-            GlobalData.Artists = new Dictionary<string, List<string>>();
-            GlobalData.Audios = new Dictionary<string, Newtone.Core.Media.MediaSource>();
-            GlobalData.AudioTags = new Dictionary<string, MediaSourceTag>();
-            GlobalData.DownloadedIds = new List<string>();
-            GlobalData.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
-            GlobalData.WebToLocalPlaylists = new Dictionary<string, string>();
-            GlobalData.CurrentQueue = new List<Newtone.Core.Media.MediaSource>();
-            GlobalData.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
-            GlobalData.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
-
-            //ConsoleDebug.WriteLine(GlobalData.DataPath);
-            //ConsoleDebug.WriteLine(GlobalData.MusicPath);
-
-            //Directory.CreateDirectory(GlobalData.DataPath);
-            //Directory.CreateDirectory(GlobalData.MusicPath);
-
-            GlobalData.History = new List<Newtone.Core.Models.HistoryModel>();
-            GlobalData.LastTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
-            GlobalData.MostTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
-
-            GlobalData.PlayerMode = PlayerMode.All;
-            GlobalData.Playlists = new Dictionary<string, List<string>>();
-            GlobalData.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Local;
-            GlobalData.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
-            GlobalData.Messenger = new MessageGenerator(new CoreMessenger());
-
-            GlobalData.ExcludedPaths = new List<string>();
-            GlobalData.IncludedPaths = new List<string>()
+            GlobalData.Current.Initialize();
+            GlobalData.Current.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
+            GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
+            GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            GlobalData.Current.IncludedPaths = new List<string>()
             {
-                GlobalData.MusicPath,
+                GlobalData.Current.MusicPath,
                 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
             };
         }
@@ -292,21 +266,21 @@ namespace Newtone.Mobile
             if (uri != null)
             {
                 
-                GlobalData.AudioFromIntent = true;
+                GlobalData.Current.AudioFromIntent = true;
                 string filepath = HexToString(FilterUriString(uri.Path.Replace("/external_files", Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)));
 
                 if (File.Exists(filepath))
                 {
                     Newtone.Core.Media.MediaSource source = MediaProcessing.GetSource(filepath);
 
-                    if (GlobalData.MediaPlayer != null)
-                        GlobalData.MediaPlayer.Stop();
+                    if (GlobalData.Current.MediaPlayer != null)
+                        GlobalData.Current.MediaPlayer.Stop();
 
-                    GlobalData.MediaSource = source;
-                    GlobalData.PlaylistPosition = 0;
-                    GlobalData.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>() { source };
-                    GlobalData.MediaPlayer.Load(filepath);
-                    GlobalData.MediaPlayer.Play();
+                    GlobalData.Current.MediaSource = source;
+                    GlobalData.Current.PlaylistPosition = 0;
+                    GlobalData.Current.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>() { source };
+                    GlobalData.Current.MediaPlayer.Load(filepath);
+                    GlobalData.Current.MediaPlayer.Play();
                 }
                 else
                 {

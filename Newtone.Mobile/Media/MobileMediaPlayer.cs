@@ -52,7 +52,7 @@ namespace Newtone.Mobile.Media
         {
             ConsoleDebug.WriteLine("MediaPlayer Completion "+MediaPlayer.CurrentPosition +" "+MediaPlayer.Duration);
             if (MediaPlayer.CurrentPosition > 0 && !EntityClicked)
-                GlobalData.MediaPlayer.Next();
+                GlobalData.Current.MediaPlayer.Next();
             EntityClicked = false;
         }
         #endregion
@@ -60,7 +60,7 @@ namespace Newtone.Mobile.Media
         public void AfterNext()
         {
             //throw new NotImplementedException();
-            Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
+            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource.ToMetadata());
             //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToNext, CurrentPosition, 1.0f);
             //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
         }
@@ -70,7 +70,7 @@ namespace Newtone.Mobile.Media
 
             //TODO
             //throw new NotImplementedException();
-            Global.MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
+            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource.ToMetadata());
             //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToPrevious, CurrentPosition, 1.0f);
             //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
         }
@@ -109,7 +109,7 @@ namespace Newtone.Mobile.Media
         public void Pause()
         {
             MediaPlayer.Pause();
-            if(GlobalData.MediaSource != null)
+            if(GlobalData.Current.MediaSource != null)
             {
                 Global.SetNotificationData(PlaybackStateCompat.StatePaused);
             }

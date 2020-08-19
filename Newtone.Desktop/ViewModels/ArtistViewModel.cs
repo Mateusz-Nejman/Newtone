@@ -48,11 +48,11 @@ namespace Newtone.Desktop.ViewModels
             ArtistItems = new ObservableCollection<ArtistModel>();
             TrackItems = new ObservableCollection<Newtone.Desktop.Models.TrackModel>();
 
-            foreach (string artist in GlobalData.Artists.Keys)
+            foreach (string artist in GlobalData.Current.Artists.Keys)
             {
                 //ConsoleDebug.WriteLine(artist);
-                if(GlobalData.Artists[artist].Count > 0)
-                    ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Artists[artist].Count });
+                if(GlobalData.Current.Artists[artist].Count > 0)
+                    ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
             }
         }
         #endregion
@@ -63,11 +63,11 @@ namespace Newtone.Desktop.ViewModels
             {
                 string oldArtist = ArtistItems.Count == 0 || listView.SelectedIndex == -1 ? "" : ArtistItems[listView.SelectedIndex].Name;
                 ArtistItems.Clear();
-                foreach (string artist in GlobalData.Artists.Keys)
+                foreach (string artist in GlobalData.Current.Artists.Keys)
                 {
                     //ConsoleDebug.WriteLine(artist);
-                    if (GlobalData.Artists[artist].Count > 0)
-                        ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Artists[artist].Count });
+                    if (GlobalData.Current.Artists[artist].Count > 0)
+                        ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
                 }
 
                 listView.SelectedIndex = -1;
@@ -90,9 +90,9 @@ namespace Newtone.Desktop.ViewModels
                 bool needRefresh = false;
                 foreach (var model in TrackItems.ToList())
                 {
-                    if (GlobalData.Audios.ContainsKey(model.FilePath))
+                    if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
                     {
-                        MediaSource source = GlobalData.Audios[model.FilePath];
+                        MediaSource source = GlobalData.Current.Audios[model.FilePath];
                         if (model.Artist != source.Artist || model.Title != source.Title)
                         {
                             int index = TrackItems.IndexOf(model);
@@ -119,11 +119,11 @@ namespace Newtone.Desktop.ViewModels
 
             if (index >= 0 && index < ArtistItems.Count)
             {
-                foreach (string path in GlobalData.Artists[ArtistItems.Count == 0 || listView.SelectedIndex == -1 ? "" : ArtistItems[listView.SelectedIndex].Name])
+                foreach (string path in GlobalData.Current.Artists[ArtistItems.Count == 0 || listView.SelectedIndex == -1 ? "" : ArtistItems[listView.SelectedIndex].Name])
                 {
-                    if (GlobalData.Audios.ContainsKey(path))
+                    if (GlobalData.Current.Audios.ContainsKey(path))
                     {
-                        TrackItems.Add(new Models.TrackModel(GlobalData.Audios[path]));
+                        TrackItems.Add(new Models.TrackModel(GlobalData.Current.Audios[path]));
                     }
 
                 }
@@ -136,23 +136,23 @@ namespace Newtone.Desktop.ViewModels
 
             if (index >= 0 && index < TrackItems.Count)
             {
-                MediaSource source = GlobalData.Audios[TrackItems.Count == 0 ? "" : TrackItems[trackListView.SelectedIndex].FilePath];
-                GlobalData.CurrentPlaylist.Clear();
+                MediaSource source = GlobalData.Current.Audios[TrackItems.Count == 0 ? "" : TrackItems[trackListView.SelectedIndex].FilePath];
+                GlobalData.Current.CurrentPlaylist.Clear();
 
-                foreach (string path in GlobalData.Artists[ArtistItems.Count == 0 || listView.SelectedIndex == -1 ? "" : ArtistItems[listView.SelectedIndex].Name])
+                foreach (string path in GlobalData.Current.Artists[ArtistItems.Count == 0 || listView.SelectedIndex == -1 ? "" : ArtistItems[listView.SelectedIndex].Name])
                 {
-                    if (GlobalData.Audios.ContainsKey(path))
-                        GlobalData.CurrentPlaylist.Add(GlobalData.Audios[path]);
+                    if (GlobalData.Current.Audios.ContainsKey(path))
+                        GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[path]);
                 }
 
-                GlobalData.MediaSource = source;
-                GlobalData.PlaylistPosition = index;
-                GlobalData.PlaylistType = MediaSource.SourceType.Local;
+                GlobalData.Current.MediaSource = source;
+                GlobalData.Current.PlaylistPosition = index;
+                GlobalData.Current.PlaylistType = MediaSource.SourceType.Local;
 
-                GlobalData.MediaPlayer.Stop();
-                GlobalData.MediaPlayer.Reset();
-                GlobalData.MediaPlayer.Load(source.FilePath);
-                GlobalData.MediaPlayer.Play();
+                GlobalData.Current.MediaPlayer.Stop();
+                GlobalData.Current.MediaPlayer.Reset();
+                GlobalData.Current.MediaPlayer.Load(source.FilePath);
+                GlobalData.Current.MediaPlayer.Play();
             }
         }
 

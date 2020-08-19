@@ -126,10 +126,10 @@ namespace Newtone.Mobile.Models
             this.AllowContextMenu = allowContextMenu;
 
             if(FilePath.Length > 11)
-                this.Image = (GlobalData.Audios[FilePath].Image == null || GlobalData.Audios[FilePath].Image.Length == 0) ? ImageSource.FromFile("EmptyTrack.png") : ImageProcessing.FromArray(GlobalData.Audios[FilePath].Image);
+                this.Image = (GlobalData.Current.Audios[FilePath].Image == null || GlobalData.Current.Audios[FilePath].Image.Length == 0) ? ImageSource.FromFile("EmptyTrack.png") : ImageProcessing.FromArray(GlobalData.Current.Audios[FilePath].Image);
             else
             {
-                var source = GlobalData.CurrentPlaylist.Find(src => src.FilePath == model.FilePath);
+                var source = GlobalData.Current.CurrentPlaylist.Find(src => src.FilePath == model.FilePath);
 
                 if (source != null)
                     this.Image = ImageProcessing.FromArray(source.Image);
@@ -140,7 +140,7 @@ namespace Newtone.Mobile.Models
 
         public TrackModel CheckChanges()
         {
-            IsVisible = FilePath == GlobalData.MediaSourcePath;
+            IsVisible = FilePath == GlobalData.Current.MediaSourcePath;
             TrackString = Artist == Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
             return this;
         }

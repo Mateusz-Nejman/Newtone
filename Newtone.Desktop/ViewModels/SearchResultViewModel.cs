@@ -56,16 +56,16 @@ namespace Newtone.Desktop.ViewModels
                         if (index >= 0 && index < Items.Count)
                         {
                             var item = Items[index];
-                            GlobalData.CurrentPlaylist.Clear();
-                            GlobalData.PlaylistType = item.IsOffline ? Core.Media.MediaSource.SourceType.Local : Core.Media.MediaSource.SourceType.Web;
+                            GlobalData.Current.CurrentPlaylist.Clear();
+                            GlobalData.Current.PlaylistType = item.IsOffline ? Core.Media.MediaSource.SourceType.Local : Core.Media.MediaSource.SourceType.Web;
 
                             if (string.IsNullOrEmpty(item.MixId))
                             {
-                                GlobalData.PlaylistPosition = index;
+                                GlobalData.Current.PlaylistPosition = index;
 
                                 foreach (var _item in Items)
                                 {
-                                    GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                                    GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
                                     {
                                         Artist = _item.Author,
                                         Duration = _item.Duration,
@@ -76,13 +76,13 @@ namespace Newtone.Desktop.ViewModels
                                     });
                                 }
 
-                                GlobalData.MediaSource = GlobalData.CurrentPlaylist[index];
+                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[index];
                             }
                             else
                             {
-                                GlobalData.PlaylistPosition = 0;
+                                GlobalData.Current.PlaylistPosition = 0;
 
-                                GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                                GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
                                 {
                                     Artist = item.Author,
                                     Duration = item.Duration,
@@ -92,7 +92,7 @@ namespace Newtone.Desktop.ViewModels
                                     Type = Newtone.Core.Media.MediaSource.SourceType.Web
                                 });
 
-                                GlobalData.MediaSource = GlobalData.CurrentPlaylist[0];
+                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
                             }
 
                             //await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
@@ -101,8 +101,8 @@ namespace Newtone.Desktop.ViewModels
                             new Task(() =>
                             {
                                 //MobileMediaPlayer.EntityClicked = true;
-                                GlobalData.MediaPlayer.Load(GlobalData.MediaSource.FilePath);
-                                GlobalData.MediaPlayer.Play();
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.MediaSource.FilePath);
+                                GlobalData.Current.MediaPlayer.Play();
                                 //MediaPlayerHelper.Play();
 
                                 if (!string.IsNullOrEmpty(item.MixId))
@@ -116,7 +116,7 @@ namespace Newtone.Desktop.ViewModels
                                         foreach (var _item in playlist)
                                         {
                                             byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
-                                            GlobalData.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                                            GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
                                             {
                                                 Artist = _item.Author,
                                                 Duration = _item.Duration,

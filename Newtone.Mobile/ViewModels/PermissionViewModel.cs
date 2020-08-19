@@ -48,9 +48,9 @@ namespace Newtone.Mobile.ViewModels
             ConsoleDebug.WriteLine("PermissionPage " + ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage).ToString());
             if (ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
             {
-                GlobalData.SaveConfig();
+                GlobalData.Current.SaveConfig();
 
-                string theme = GlobalData.LoadFirstStart();
+                string theme = GlobalData.Current.LoadFirstStart();
                 if (theme == null)
                 {
                     App.Instance.MainPage = new FirstStartPage();

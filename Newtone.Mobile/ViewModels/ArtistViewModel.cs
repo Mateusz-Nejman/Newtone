@@ -32,7 +32,7 @@ namespace Newtone.Mobile.ViewModels
             List<string> beforeSort = new List<string>();
             string unknown = null;
 
-            foreach (string artist in GlobalData.Artists.Keys)
+            foreach (string artist in GlobalData.Current.Artists.Keys)
             {
                 if (artist == Localization.UnknownArtist)
                     unknown = artist;
@@ -48,9 +48,9 @@ namespace Newtone.Mobile.ViewModels
             foreach(var artistName in afterSort)
             {
                 ImageSource image = ImageSource.FromFile("EmptyTrack.png");
-                foreach (string filePath in GlobalData.Artists[artistName])
+                foreach (string filePath in GlobalData.Current.Artists[artistName])
                 {
-                    var source = GlobalData.Audios[filePath];
+                    var source = GlobalData.Current.Audios[filePath];
                     if (source.Image != null)
                     {
                         image = ImageProcessing.FromArray(source.Image);
@@ -58,7 +58,7 @@ namespace Newtone.Mobile.ViewModels
                     }
                 }
 
-                Items.Add(new ArtistModel() { Image = image, Name = artistName, TrackCount = GlobalData.Artists[artistName].Count });
+                Items.Add(new ArtistModel() { Image = image, Name = artistName, TrackCount = GlobalData.Current.Artists[artistName].Count });
                 ConsoleDebug.WriteLine("Artist Item Add");
             }
         }

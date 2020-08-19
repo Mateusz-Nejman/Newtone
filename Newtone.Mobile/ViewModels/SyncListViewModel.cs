@@ -68,7 +68,7 @@ namespace Newtone.Mobile.ViewModels
             {
                 Items.Clear();
                 foreach (var item in SyncProcessing.Audios)
-                    Items.Add(new TrackModel(GlobalData.Audios[item]));
+                    Items.Add(new TrackModel(GlobalData.Current.Audios[item]));
             }
 
             foreach (var item in Items)

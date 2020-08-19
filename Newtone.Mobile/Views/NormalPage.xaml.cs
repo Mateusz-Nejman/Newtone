@@ -47,16 +47,16 @@ namespace Newtone.Mobile.Views
 
             ViewModel.GotoTracks.Execute(null);
 
-            if(GlobalData.AutoDownload && MainActivity.IsInternet())
+            if(GlobalData.Current.AutoDownload && MainActivity.IsInternet())
             {
                 new Task(async() =>
                 {
                     YoutubeClient client = new YoutubeClient();
-                    foreach(var key in GlobalData.WebToLocalPlaylists.Keys)
+                    foreach(var key in GlobalData.Current.WebToLocalPlaylists.Keys)
                     {
                         foreach (var video in await client.Playlists.GetVideosAsync(key))
                         {
-                            DownloadProcessing.Add(video.Id, video.Title, video.Url, GlobalData.WebToLocalPlaylists[key]);
+                            DownloadProcessing.Add(video.Id, video.Title, video.Url, GlobalData.Current.WebToLocalPlaylists[key]);
                         }
                     }
                     
@@ -98,8 +98,11 @@ namespace Newtone.Mobile.Views
 
         private void Entry_Completed(object sender, EventArgs e)
         {
-            if (container.Children.Count > 0 && container.Children[0] is SearchPage page)
-                page?.SearchEntry_Completed(ViewModel?.EntryText);
+            foreach(var children in container.Children)
+            {
+                if (children is SearchPage page)
+                    page?.SearchEntry_Completed(ViewModel?.EntryText);
+            }
         }
     }
 }

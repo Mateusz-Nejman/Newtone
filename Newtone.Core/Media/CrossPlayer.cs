@@ -68,13 +68,13 @@ namespace Newtone.Core.Media
 
             if(filename.Length == 11)
             {
-                if(GlobalData.DownloadedIds.Contains(filename))
+                if(GlobalData.Current.DownloadedIds.Contains(filename))
                 {
                     try
                     {
-                        var filepath = GlobalData.AudioTags.Keys.First(filepath =>
+                        var filepath = GlobalData.Current.AudioTags.Keys.First(filepath =>
                         {
-                            return GlobalData.AudioTags[filepath].Id == filename;
+                            return GlobalData.Current.AudioTags[filepath].Id == filename;
                         });
                         filename = filepath;
                         SetPlayerController(localPC);
@@ -118,41 +118,41 @@ namespace Newtone.Core.Media
 
         public void Next()
         {
-            ConsoleDebug.WriteLine("[CrossPlayer] Next" + GlobalData.CurrentPlaylist.Count + " " + GlobalData.PlaylistPosition);
-            if (GlobalData.CurrentPlaylist.Count > 0)
+            ConsoleDebug.WriteLine("[CrossPlayer] Next" + GlobalData.Current.CurrentPlaylist.Count + " " + GlobalData.Current.PlaylistPosition);
+            if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
                 MediaSource track;
-                if (GlobalData.CurrentQueue.Count > 0 && GlobalData.QueuePosition < GlobalData.CurrentQueue.Count)
+                if (GlobalData.Current.CurrentQueue.Count > 0 && GlobalData.Current.QueuePosition < GlobalData.Current.CurrentQueue.Count)
                 {
-                    track = GlobalData.CurrentQueue[GlobalData.QueuePosition];
+                    track = GlobalData.Current.CurrentQueue[GlobalData.Current.QueuePosition];
                 }
                 else
                 {
-                    GlobalData.CurrentQueue.Clear();
-                    GlobalData.QueuePosition = 0;
-                    if (GlobalData.CurrentPlaylist.Count > 1)
+                    GlobalData.Current.CurrentQueue.Clear();
+                    GlobalData.Current.QueuePosition = 0;
+                    if (GlobalData.Current.CurrentPlaylist.Count > 1)
                     {
                         int addValue = 0;
-                        if (GlobalData.PlayerMode == PlayerMode.All)
+                        if (GlobalData.Current.PlayerMode == PlayerMode.All)
                             addValue = 1;
-                        else if (GlobalData.PlayerMode == PlayerMode.Random)
-                            addValue = Random.Next(0, GlobalData.CurrentPlaylist.Count);
-                        GlobalData.PlaylistPosition += addValue;
+                        else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
+                            addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
+                        GlobalData.Current.PlaylistPosition += addValue;
 
-                        GlobalData.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.CurrentPlaylist.Count - 1, GlobalData.PlaylistPosition);
+                        GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
                     }
 
-                    track = GlobalData.CurrentPlaylist[GlobalData.PlaylistPosition];
+                    track = GlobalData.Current.CurrentPlaylist[GlobalData.Current.PlaylistPosition];
 
                 }
 
-                if (GlobalData.PlaylistType == MediaSource.SourceType.Local)
+                if (GlobalData.Current.PlaylistType == MediaSource.SourceType.Local)
                 {
 
                     if (File.Exists(track.FilePath))
                     {
                         Load(track.FilePath);
-                        GlobalData.MediaSource = track;
+                        GlobalData.Current.MediaSource = track;
                         BasePlayer?.AfterNext();
                     }
                     else
@@ -164,7 +164,7 @@ namespace Newtone.Core.Media
                 else
                 {
                     Load(track.FilePath);
-                    GlobalData.MediaSource = track;
+                    GlobalData.Current.MediaSource = track;
                 }
 
                 BasePlayer?.SetNotification(true);
@@ -175,30 +175,30 @@ namespace Newtone.Core.Media
 
         public void Prev()
         {
-            if (GlobalData.CurrentPlaylist.Count > 0)
+            if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
-                if (GlobalData.CurrentPlaylist.Count > 1)
+                if (GlobalData.Current.CurrentPlaylist.Count > 1)
                 {
                     int addValue = 0;
-                    if (GlobalData.PlayerMode == PlayerMode.All)
+                    if (GlobalData.Current.PlayerMode == PlayerMode.All)
                         addValue = 1;
-                    else if (GlobalData.PlayerMode == PlayerMode.Random)
-                        addValue = Random.Next(0, GlobalData.CurrentPlaylist.Count);
-                    GlobalData.PlaylistPosition -= addValue;
+                    else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
+                        addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
+                    GlobalData.Current.PlaylistPosition -= addValue;
 
-                    GlobalData.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.CurrentPlaylist.Count - 1, GlobalData.PlaylistPosition);
+                    GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
                 }
 
-                MediaSource track = GlobalData.CurrentPlaylist[GlobalData.PlaylistPosition];
+                MediaSource track = GlobalData.Current.CurrentPlaylist[GlobalData.Current.PlaylistPosition];
 
 
-                if (GlobalData.PlaylistType == MediaSource.SourceType.Local)
+                if (GlobalData.Current.PlaylistType == MediaSource.SourceType.Local)
                 {
 
                     if (File.Exists(track.FilePath))
                     {
                         Load(track.FilePath);
-                        GlobalData.MediaSource = track;
+                        GlobalData.Current.MediaSource = track;
                         BasePlayer?.AfterPrev();
                     }
                     else
@@ -211,7 +211,7 @@ namespace Newtone.Core.Media
                 else
                 {
                     Load(track.FilePath);
-                    GlobalData.MediaSource = track;
+                    GlobalData.Current.MediaSource = track;
                 }
 
                 BasePlayer?.SetNotification(true);
@@ -252,7 +252,7 @@ namespace Newtone.Core.Media
             else if (error == GlobalData.ERROR_CORRUPTED)
                 errorText = Localization.FileCorrupted;
 
-            GlobalData.Messenger.Show(MessageGenerator.EMessageType.Snackbar, errorText);
+            GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Snackbar, errorText);
         }
         #endregion
         #region Private Methods

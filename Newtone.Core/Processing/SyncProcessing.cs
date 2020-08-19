@@ -115,7 +115,7 @@ namespace Newtone.Core.Processing
                         socket.Bind(new IPEndPoint(IpAddress, port));
                         socket.Listen(10);
                         //socket.Connect(FromHex(code), port);
-                        //socket.Send(Encoding.ASCII.GetBytes(GlobalData.SYNC_CODE));
+                        //socket.Send(Encoding.ASCII.GetBytes(GlobalData.Current.SYNC_CODE));
                         //socket.Disconnect(true);
 
                         byte[] buffer = new byte[BufferSize];
@@ -197,7 +197,7 @@ namespace Newtone.Core.Processing
                                 }
                             }
                         }
-                        //File.WriteAllBytes(GlobalData.MusicPath + "/mobile.nsec2", currentBuffer.ToArray());
+                        //File.WriteAllBytes(GlobalData.Current.MusicPath + "/mobile.nsec2", currentBuffer.ToArray());
                         State = 1;
                         PlaylistName = "";
                         
@@ -236,7 +236,7 @@ namespace Newtone.Core.Processing
                 ConsoleDebug.WriteLine("SYNC Verified");
                 byte[] bufferData = PrepareFilesToSend(Audios);
                 Size = bufferData.Length / 1024 / 1024;
-                //File.WriteAllBytes(GlobalData.MusicPath + "/desktop.nsec2", bufferData);
+                //File.WriteAllBytes(GlobalData.Current.MusicPath + "/desktop.nsec2", bufferData);
                 byte[] bufferLength = Encoding.ASCII.GetBytes(bufferData.Length.ToString());
                 byte[] receiveBuffer = new byte[MessSize];
 
@@ -273,7 +273,7 @@ namespace Newtone.Core.Processing
                 catch(Exception e)
                 {
                     ConsoleDebug.WriteLine("[SYNC ERROR] "+e);
-                    GlobalData.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
+                    GlobalData.Current.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)
                         CurrentConnection.Disconnect(false);
                     CurrentConnection.Close();
@@ -332,9 +332,9 @@ namespace Newtone.Core.Processing
             {
                 FileInfo fileInfo = new FileInfo(file);
                 audiosListBuffer += fileInfo.Name + "\n";
-                if (GlobalData.AudioTags.ContainsKey(file))
+                if (GlobalData.Current.AudioTags.ContainsKey(file))
                 {
-                    MediaSourceTag mediaSource = GlobalData.AudioTags[file];
+                    MediaSourceTag mediaSource = GlobalData.Current.AudioTags[file];
 
                     string name = "image" + counter;
                     nsec.AddFile(name, mediaSource.Image ?? (new byte[0]));
@@ -376,7 +376,7 @@ namespace Newtone.Core.Processing
             {
                 //ConsoleDebug.WriteLine("Unpack " + bufferItem);
                 string[] elems = bufferItem.Split(GlobalData.SEPARATOR);
-                string name = new FileInfo(GlobalData.MusicPath + "/" + elems[0]).FullName;
+                string name = new FileInfo(GlobalData.Current.MusicPath + "/" + elems[0]).FullName;
                 ConsoleDebug.WriteLine(name);
                 string author = elems[1];
                 string title = elems[2];
@@ -389,10 +389,10 @@ namespace Newtone.Core.Processing
                     Title = title
                 };
 
-                if (GlobalData.AudioTags.ContainsKey(name))
-                    GlobalData.AudioTags[name] = newTag;
+                if (GlobalData.Current.AudioTags.ContainsKey(name))
+                    GlobalData.Current.AudioTags[name] = newTag;
                 else
-                    GlobalData.AudioTags.Add(name, newTag);
+                    GlobalData.Current.AudioTags.Add(name, newTag);
             }
             string[] files = filesBuffer.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             FilesReceived = files.Length;
@@ -402,7 +402,7 @@ namespace Newtone.Core.Processing
             {
                 string file = files[a];
 
-                FileInfo info = new FileInfo(GlobalData.MusicPath + "/" + file);
+                FileInfo info = new FileInfo(GlobalData.Current.MusicPath + "/" + file);
                 CurrentFileName = file;
                 CurrentFileReceived = a;
                 //ConsoleDebug.WriteLine("Unpack " + info.FullName);
@@ -412,8 +412,8 @@ namespace Newtone.Core.Processing
                 ReceivedTracks.Add(info.FullName);
             }
 
-            GlobalData.SaveTags();
-            GlobalData.SaveConfig();
+            GlobalData.Current.SaveTags();
+            GlobalData.Current.SaveConfig();
         }
 
         private static string ToHex(IPAddress addr)

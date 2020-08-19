@@ -56,8 +56,8 @@ namespace Newtone.Mobile.ViewModels
                     clearCommand = new ActionCommand(parameter =>
                     {
                         Items.Clear();
-                        GlobalData.History.Clear();
-                        GlobalData.SaveConfig();
+                        GlobalData.Current.History.Clear();
+                        GlobalData.Current.SaveConfig();
                     });
                 return clearCommand;
             }
@@ -68,7 +68,7 @@ namespace Newtone.Mobile.ViewModels
         public SearchViewModel()
         {
             Items = new ObservableCollection<HistoryModel>();
-            foreach (var item in GlobalData.History.Reverse<HistoryModel>())
+            foreach (var item in GlobalData.Current.History.Reverse<HistoryModel>())
             {
                 Items.Add(item);
             }

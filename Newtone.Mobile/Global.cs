@@ -48,8 +48,8 @@ namespace Newtone.Mobile
         public static void SetNotificationData(int state)
         {
             PlaybackState = state;
-            MediaSession.SetMetadata(GlobalData.MediaSource.ToMetadata());
-            StateBuilder.SetState(state, (long)GlobalData.MediaPlayer.CurrentPosition, 1.0f);
+            MediaSession.SetMetadata(GlobalData.Current.MediaSource.ToMetadata());
+            StateBuilder.SetState(state, (long)GlobalData.Current.MediaPlayer.CurrentPosition, 1.0f);
             MediaSession.SetPlaybackState(StateBuilder.Build());
         }
         #endregion

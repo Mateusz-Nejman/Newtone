@@ -23,12 +23,16 @@ namespace Newtone.Core.Media
             player.Reset(); //Stop & reset
             YoutubeClient client = new YoutubeClient();
             StreamManifest manifest = null;
-            Task.Run(async () =>
+            var task = Task.Run(async () =>
             {
                 manifest = await client.Videos.Streams.GetManifestAsync(filepath);
-            }).Wait();
-            ConsoleDebug.WriteLine("URL: " + manifest.GetAudioOnly().WithHighestBitrate().Url);
-            player.BasePlayer.Load(manifest.GetAudioOnly().WithHighestBitrate().Url);
+            });
+            task.ContinueWith(t =>
+            {
+                ConsoleDebug.WriteLine("URL: " + manifest.GetAudioOnly().WithHighestBitrate().Url);
+                player.BasePlayer.Load(manifest.GetAudioOnly().WithHighestBitrate().Url);
+            });
+            
         }
 
         public void Prepared(CrossPlayer player)

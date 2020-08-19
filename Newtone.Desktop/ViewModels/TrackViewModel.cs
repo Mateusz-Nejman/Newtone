@@ -44,19 +44,19 @@ namespace Newtone.Desktop.ViewModels
 
                         if (index >= 0 && index < Items.Count)
                         {
-                            MediaSource source = GlobalData.Audios[Items.Count == 0 ? "" : Items[listView.SelectedIndex].FilePath];
-                            GlobalData.CurrentPlaylist.Clear();
+                            MediaSource source = GlobalData.Current.Audios[Items.Count == 0 ? "" : Items[listView.SelectedIndex].FilePath];
+                            GlobalData.Current.CurrentPlaylist.Clear();
 
-                            GlobalData.CurrentPlaylist.AddRange(GlobalData.Audios.Values);
+                            GlobalData.Current.CurrentPlaylist.AddRange(GlobalData.Current.Audios.Values);
 
-                            GlobalData.MediaSource = source;
-                            GlobalData.PlaylistPosition = index;
-                            GlobalData.PlaylistType = MediaSource.SourceType.Local;
+                            GlobalData.Current.MediaSource = source;
+                            GlobalData.Current.PlaylistPosition = index;
+                            GlobalData.Current.PlaylistType = MediaSource.SourceType.Local;
 
-                            GlobalData.MediaPlayer.Stop();
-                            GlobalData.MediaPlayer.Reset();
-                            GlobalData.MediaPlayer.Load(source.FilePath);
-                            GlobalData.MediaPlayer.Play();
+                            GlobalData.Current.MediaPlayer.Stop();
+                            GlobalData.Current.MediaPlayer.Reset();
+                            GlobalData.Current.MediaPlayer.Load(source.FilePath);
+                            GlobalData.Current.MediaPlayer.Play();
                         }
                         listView.SelectedItem = null;
                     });
@@ -90,7 +90,7 @@ namespace Newtone.Desktop.ViewModels
         public TrackViewModel()
         {
             List<Models.TrackModel> beforeSort = new List<Models.TrackModel>();
-            foreach (var source in GlobalData.Audios.Values)
+            foreach (var source in GlobalData.Current.Audios.Values)
             {
                 beforeSort.Add(new Models.TrackModel(source).CheckChanges());
             }
@@ -104,9 +104,9 @@ namespace Newtone.Desktop.ViewModels
             foreach (var model in Items.ToList())
             {
 
-                if (GlobalData.Audios.ContainsKey(model.FilePath))
+                if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
                 {
-                    MediaSource source = GlobalData.Audios[model.FilePath];
+                    MediaSource source = GlobalData.Current.Audios[model.FilePath];
                     if (model.Artist != source.Artist || model.Title != source.Title)
                     {
                         int index = Items.IndexOf(model);

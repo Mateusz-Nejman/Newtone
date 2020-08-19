@@ -225,7 +225,7 @@ namespace Newtone.Desktop.ViewModels
             {
                 Items.Clear();
                 foreach (var item in SyncProcessing.Audios)
-                    Items.Add(new Models.TrackModel(GlobalData.Audios[item]));
+                    Items.Add(new Models.TrackModel(GlobalData.Current.Audios[item]));
 
                 listView.Items.Refresh();
             }

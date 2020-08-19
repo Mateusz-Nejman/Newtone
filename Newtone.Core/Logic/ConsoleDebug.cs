@@ -12,19 +12,19 @@ namespace Newtone.Core.Logic
         #region Public Methods
         public static void WriteLine(string text)
         {
-            if (GlobalData.IsDebugMode && text.Contains(filter))
+            if (GlobalData.Current.IsDebugMode && text.Contains(filter))
                 Console.WriteLine(text);
         }
 
         public static void WriteLine(Exception e)
         {
-            if (GlobalData.IsDebugMode && e.Message.Contains(filter))
+            if (GlobalData.Current.IsDebugMode && e.Message.Contains(filter))
                 Console.WriteLine(e);
         }
 
         public static void WriteLine(object o)
         {
-            if (GlobalData.IsDebugMode)
+            if (GlobalData.Current.IsDebugMode)
                 Console.WriteLine(o);
         }
 

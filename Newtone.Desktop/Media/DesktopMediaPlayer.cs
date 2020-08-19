@@ -36,8 +36,8 @@ namespace Newtone.Desktop.Media
             if(e.Exception == null && CurrentFile != null && ((MediaPlayer.PlaybackState == PlaybackState.Playing && CurrentFile.Position > CurrentFile.Length - 2000) || (MediaPlayer.PlaybackState == PlaybackState.Stopped && CurrentFile.Position > CurrentFile.Length - 2000)))
             {
                 CurrentFile.Position = 0;
-                GlobalData.MediaPlayer.Next();
-                GlobalData.MediaPlayer.Play();
+                GlobalData.Current.MediaPlayer.Next();
+                GlobalData.Current.MediaPlayer.Play();
             }
         }
         #endregion

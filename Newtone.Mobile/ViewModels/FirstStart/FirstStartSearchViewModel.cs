@@ -27,9 +27,10 @@ namespace Newtone.Mobile.ViewModels.FirstStart
                     next = new ActionCommand(parameter =>
                     {
                         App.Instance.MainPage = new NormalPage();
-                        Task.Run(async () => {
+                        Task.Run(async () =>
+                        {
                             await PopToRootAsync();
-                        }).Wait();
+                        });
                     });
 
                 return next;
