@@ -45,10 +45,17 @@ namespace Newtone.Mobile.Media
             Console.Write("OnPlay result " + result);
             if(result == AudioFocusRequest.Granted)
             {
-                MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
-                Global.MediaSession.Active = true;
-                GlobalData.Current.MediaPlayer.Play();
-                MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance?.GetNotification());
+                try
+                {
+                    MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
+                    Global.MediaSession.Active = true;
+                    GlobalData.Current.MediaPlayer.Play();
+                    MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance?.GetNotification());
+                }
+                catch(System.Exception e)
+                {
+                    Console.WriteLine("MediaSessionCallback OnPlay Exception "+e);
+                }
             }
                 
         }

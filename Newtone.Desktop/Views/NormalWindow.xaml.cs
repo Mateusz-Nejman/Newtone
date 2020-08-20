@@ -50,11 +50,17 @@ namespace Newtone.Desktop.Views
         #region Private Methods
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(() => {
-                ViewModel.SearchString = searchBox.Text;
-                ViewModel?.Tick(this, uploadButton, downloadButton);
-            });
+            try
+            {
+                Dispatcher.Invoke(() => {
+                    ViewModel.SearchString = searchBox.Text;
+                    ViewModel?.Tick(this, uploadButton, downloadButton);
+                });
+            }
+            catch
+            {
 
+            }
         }
         private void SearchBox_KeyUp(object sender, KeyEventArgs e)
         {

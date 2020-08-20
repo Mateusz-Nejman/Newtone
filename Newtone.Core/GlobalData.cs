@@ -126,27 +126,6 @@ namespace Newtone.Core
 
             ExcludedPaths = new List<string>();
         }
-        public string LoadFirstStart()
-        {
-            if (!File.Exists(DataPath + "/newtone.first.nsec2"))
-                return null;
-
-            FileStream stream = File.OpenRead(DataPath + "/newtone.first.nsec2");
-            NSEC2 nsec = new NSEC2(PASSWORD);
-            nsec.Load(stream);
-            byte[] themeData = nsec.Get("theme");
-            string theme = System.Text.Encoding.ASCII.GetString(themeData);
-            nsec.Dispose();
-            return theme;
-        }
-
-        public void SaveFirstStart(string theme)
-        {
-            NSEC2 nsec = new NSEC2(PASSWORD);
-            nsec.AddFile("theme", System.Text.Encoding.ASCII.GetBytes(theme));
-            File.WriteAllBytes(DataPath + "/newtone.first.nsec2", nsec.Save());
-            nsec.Dispose();
-        }
 
         public void LoadConfig()
         {

@@ -23,17 +23,7 @@ namespace Newtone.Mobile
             Instance = this;
             if (ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted && File.Exists(GlobalData.Current.DataPath + "/newtone.nsec2"))
             {
-                string theme = GlobalData.Current.LoadFirstStart();
-                if(theme == null)
-                {
-                    MainPage = new LanguageSelectPage("firststart");
-                }
-                else
-                {
-                    Colors.SetBase(theme);
-                    MainPage = new NormalPage();
-                }
-                
+                MainPage = new NormalPage();
             }
             else
             {

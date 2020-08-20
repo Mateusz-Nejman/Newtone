@@ -44,7 +44,7 @@ namespace Newtone.Mobile.Views
                 List<string> beforeSort = new List<string>();
                 string unknown = null;
 
-                foreach (string artist in GlobalData.Current.Artists.Keys)
+                foreach (string artist in GlobalData.Current.Artists.Keys.ToList())
                 {
                     if (artist == Localization.UnknownArtist)
                         unknown = artist;

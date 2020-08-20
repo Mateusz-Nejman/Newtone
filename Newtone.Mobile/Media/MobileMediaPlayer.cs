@@ -60,7 +60,7 @@ namespace Newtone.Mobile.Media
         public void AfterNext()
         {
             //throw new NotImplementedException();
-            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource.ToMetadata());
+            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToNext, CurrentPosition, 1.0f);
             //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
         }
@@ -70,7 +70,7 @@ namespace Newtone.Mobile.Media
 
             //TODO
             //throw new NotImplementedException();
-            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource.ToMetadata());
+            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToPrevious, CurrentPosition, 1.0f);
             //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
         }

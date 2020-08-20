@@ -80,26 +80,6 @@ namespace Newtone.Mobile.ViewModels
             Version = "v" + MainActivity.Instance.PackageManager.GetPackageInfo(MainActivity.Instance.PackageName, 0).VersionName;
         }
         #endregion
-        #region Private Methods
-        private void Menu_OnItemSelected(string item)
-        {
-            if (item == Localization.ThemeLight)
-                ChangeTheme("Light");
-            else if (item == Localization.ThemeDark)
-                ChangeTheme("Dark");
-            else
-                ChangeTheme("Default");
-
-            SnackbarBuilder.Show(Localization.SettingsChanges);
-
-        }
-
-        private void ChangeTheme(string theme)
-        {
-            GlobalData.Current.SaveFirstStart(theme);
-            SnackbarBuilder.Show(Localization.SettingsChanges);
-        }
-        #endregion
         #region Public Methods
         public async System.Threading.Tasks.Task Item_Selected(object sender, SelectedItemChangedEventArgs e)
         {

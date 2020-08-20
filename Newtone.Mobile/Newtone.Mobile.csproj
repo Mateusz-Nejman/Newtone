@@ -162,9 +162,6 @@
     <Compile Include="Views\FirstStart\FirstStartSearch.xaml.cs">
       <DependentUpon>FirstStartSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FirstStart\FirstStartThemes.xaml.cs">
-      <DependentUpon>FirstStartThemes.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\FullScreenPage.xaml.cs">
       <DependentUpon>FullScreenPage.xaml</DependentUpon>
     </Compile>
@@ -400,11 +397,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\SearchPreview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\FirstStart\FirstStartThemes.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\FirstStart\FirstStartSearch.xaml">

@@ -66,7 +66,7 @@ namespace Newtone.Mobile.ViewModels
         public TrackViewModel()
         {
             List<TrackModel> beforeSort = new List<TrackModel>();
-            foreach (var track in GlobalData.Current.Audios.Values)
+            foreach (var track in GlobalData.Current.Audios.Values.ToList())
             {
                 Console.WriteLine("Add track");
                 beforeSort.Add(new TrackModel(track).CheckChanges());
@@ -83,7 +83,7 @@ namespace Newtone.Mobile.ViewModels
             if(Items.Count == 0 && GlobalData.Current.Audios.Count > 0)
             {
                 List<TrackModel> beforeSort = new List<TrackModel>();
-                foreach (var track in GlobalData.Current.Audios.Values)
+                foreach (var track in GlobalData.Current.Audios.Values.ToList())
                 {
                     Console.WriteLine("Add track");
                     beforeSort.Add(new TrackModel(track).CheckChanges());

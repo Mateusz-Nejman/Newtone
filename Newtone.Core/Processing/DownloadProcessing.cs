@@ -44,7 +44,7 @@ namespace Newtone.Core.Processing
             return Downloads;
         }
 
-        public static void Add(string id, string title, string url, string playlist, string playlistId = "", bool startTask = true)
+        public static void Add(string id, string title, string url, string playlist, string playlistId = "")
         {
             Console.WriteLine("Add " + id + " " + title);
             if (id == "")
@@ -86,22 +86,8 @@ namespace Newtone.Core.Processing
                         Progress = 0.0,
                         PlaylistID = playlistId
                     });
-
-                    if (startTask)
-                    {
-                        Console.WriteLine("downloadTask == null: " + (downloadTask == null));
-                        ForceStartDownloadingTask();
-                    }
                 }
                 
-            }
-        }
-
-        public static void ForceStartDownloadingTask()
-        {
-            if(downloadTask == null)
-            {
-                downloadTask = TaskAction();
             }
         }
         #endregion

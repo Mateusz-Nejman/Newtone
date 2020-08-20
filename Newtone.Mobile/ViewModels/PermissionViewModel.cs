@@ -50,21 +50,10 @@ namespace Newtone.Mobile.ViewModels
             {
                 GlobalData.Current.SaveConfig();
 
-                string theme = GlobalData.Current.LoadFirstStart();
-                if (theme == null)
-                {
-                    App.Instance.MainPage = new FirstStartPage();
-                }
-                else
-                {
-                    Colors.SetBase(theme);
-                    App.Instance.MainPage = new NormalPage();
-                    Task.Run(async () => {
-                        await PopToRootAsync();
-                    }).Wait();
-                }
-
-
+                App.Instance.MainPage = new NormalPage();
+                Task.Run(async () => {
+                    await PopToRootAsync();
+                }).Wait();
 
                 return false;
             }

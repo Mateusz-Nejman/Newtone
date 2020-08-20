@@ -49,8 +49,18 @@ namespace Newtone.Desktop.ViewModels
         {
             InitializeGlobalVariables();
             GlobalData.Current.LoadTags();
-            Task.Run(async () => await GlobalLoader.Load()).Wait();
-            GlobalData.Current.LoadConfig();
+            Task task;
+            if(CacheLoader.IsCacheAvailable())
+            {
+                task = Task.Run(() =>
+                {
+                    CacheLoader.LoadCache();
+                    Task.Run(async () => await GlobalLoader.Load());
+                });
+            }
+            else
+                task = Task.Run(async () => await GlobalLoader.Load());
+            task.ContinueWith(t => Task.Run(GlobalData.Current.LoadConfig));
         }
         #endregion
         #region Public Methods
@@ -114,6 +124,7 @@ namespace Newtone.Desktop.ViewModels
             GlobalData.Current.Initialize();
             //ConsoleDebug.WriteLine(GlobalData.Current.DataPath);
             //ConsoleDebug.WriteLine(GlobalData.Current.MusicPath);
+            GlobalData.Current.Messenger = new Core.Logic.MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\NSEC.Newtone";
             Directory.CreateDirectory(GlobalData.Current.DataPath);
             Directory.CreateDirectory(GlobalData.Current.MusicPath);

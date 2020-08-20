@@ -35,7 +35,7 @@ namespace Newtone.Mobile.Views
                 int pos = 0;
                 string model0 = null;
 
-                foreach (string playlist in GlobalData.Current.Playlists.Keys)
+                foreach (string playlist in GlobalData.Current.Playlists.Keys.ToList())
                 {
                     if (pos == 0)
                     {

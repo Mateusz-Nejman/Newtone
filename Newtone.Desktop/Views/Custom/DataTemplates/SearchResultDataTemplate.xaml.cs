@@ -78,9 +78,9 @@ namespace Newtone.Desktop.Views.Custom.DataTemplates
             {
                 foreach(var video in await client.Playlists.GetVideosAsync(playlistId))
                 {
-                    DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName, "", false);
+                    DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName);
                 }
-                DownloadProcessing.ForceStartDownloadingTask();
+                //DownloadProcessing.ForceStartDownloadingTask();
             }
         }
         #endregion
