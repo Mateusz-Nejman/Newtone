@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtone.Core;
+using Newtone.Desktop.Logic;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,6 +15,38 @@ namespace Newtone.Desktop
     /// </summary>
     public partial class App : Application
     {
-        
+        private static KeyboardListener listener = new KeyboardListener();
+        public App()
+        {
+            listener.KeyUp += Listener_KeyUp;
+        }
+
+        private void Listener_KeyUp(object sender, RawKeyEventArgs args)
+        {
+            var key = args.Key;
+
+            if(key == System.Windows.Input.Key.MediaPlayPause)
+            {
+                Console.WriteLine("IsPlaying " + GlobalData.Current.MediaPlayer.IsPlaying);
+                if (GlobalData.Current.MediaPlayer.IsPlaying)
+                    GlobalData.Current.MediaPlayer.Pause();
+                else
+                    GlobalData.Current.MediaPlayer.Play();
+            }
+            else if(key == System.Windows.Input.Key.MediaStop)
+            {
+                GlobalData.Current.MediaPlayer.Stop();
+            }
+            else if(key == System.Windows.Input.Key.MediaNextTrack)
+            {
+                GlobalData.Current.MediaPlayer.Next();
+                GlobalData.Current.MediaPlayer.Play();
+            }
+            else if(key == System.Windows.Input.Key.MediaPreviousTrack)
+            {
+                GlobalData.Current.MediaPlayer.Prev();
+                GlobalData.Current.MediaPlayer.Play();
+            }
+        }
     }
 }

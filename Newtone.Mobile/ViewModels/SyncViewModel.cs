@@ -32,6 +32,7 @@ namespace Newtone.Mobile.ViewModels
         private bool receiveButtonEnabled;
         private bool sendButtonEnabled;
         private bool disconnectButtonEnabled;
+        private bool isSendingType;
         #endregion
 
         #region Properties
@@ -125,6 +126,20 @@ namespace Newtone.Mobile.ViewModels
             }
         }
 
+        public bool IsSendingType
+        {
+            get => isSendingType;
+            set
+            {
+                isSendingType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsSendingEnabled
+        {
+            get => SyncProcessing.Audios.Count > 0;
+        }
         #endregion
 
         #region Commands
@@ -151,7 +166,7 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (!string.IsNullOrEmpty(DeviceCodeEntry) && SyncProcessing.Verify(DeviceCodeEntry))
                         {
-                            SyncProcessing.Connect(DeviceCodeEntry);
+                            SyncProcessing.Connect(DeviceCodeEntry, IsSendingType ? SynchronizationType.Sending : SynchronizationType.Receiving);
                         }
                     });
 

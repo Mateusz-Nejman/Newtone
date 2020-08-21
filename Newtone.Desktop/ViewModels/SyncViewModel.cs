@@ -31,6 +31,7 @@ namespace Newtone.Desktop.ViewModels
         private Visibility syncViewVisibility;
         private Visibility sendGridVisibility;
         private ObservableCollection<Models.TrackModel> items;
+        private bool isSendingType;
         #endregion
         #region Properties
         public string DeviceCode
@@ -141,6 +142,19 @@ namespace Newtone.Desktop.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool IsSendingType
+        {
+            get => isSendingType;
+            set
+            {
+                isSendingType = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsSendingEnabled
+        {
+            get => SyncProcessing.Audios.Count > 0;
+        }
         #endregion
         #region Commands
         private ICommand connect;
@@ -153,7 +167,7 @@ namespace Newtone.Desktop.ViewModels
                     {
                         if (!string.IsNullOrEmpty(DeviceCode))
                         {
-                            SyncProcessing.Connect(DeviceCode);
+                            SyncProcessing.Connect(DeviceCode, IsSendingType ? SynchronizationType.Sending : SynchronizationType.Receiving);
                         }
                     });
                 return connect;

@@ -29,8 +29,7 @@
                 <TextBlock Text="{x:Static localization:Localization.ReceiverCode}" Style="{StaticResource ListViewText}" TextWrapping="Wrap"/>
                 <TextBox Style="{StaticResource DefaultTextBox}" Text="{Binding DeviceCode, Mode=TwoWay}" Margin="5"/>
                 <Button Content="{x:Static localization:Localization.Connect}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Connect}"/>
-                <Button Content="{x:Static localization:Localization.Receive}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Receive}"/>
-                <Button Content="{x:Static localization:Localization.Send}" Style="{StaticResource DefaultButton}" Margin="5" Command="{Binding Send}"/>
+                <CheckBox Content="{x:Static localization:Localization.Send}" IsChecked="{Binding IsSendingType, Mode=TwoWay}" IsEnabled="{Binding ISSendingEnabled}" Margin="5" Foreground="White"/>
                 <TextBlock Text="{x:Static localization:Localization.Instruction}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
                 <TextBlock Text="{x:Static localization:Localization.SyncHelp1}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>
                 <TextBlock Text="{x:Static localization:Localization.SyncHelp2Desktop}" Style="{StaticResource ListViewText}" Margin="5" TextWrapping="Wrap"/>

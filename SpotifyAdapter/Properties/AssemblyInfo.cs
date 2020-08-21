@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Android.App;
@@ -7,12 +6,12 @@ using Android.App;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Newtone")]
+[assembly: AssemblyTitle("SpotifyAdapter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Mateusz Nejman")]
-[assembly: AssemblyProduct("Newtone")]
-[assembly: AssemblyCopyright("Copyright © Mateusz Nejman 2020")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("SpotifyAdapter")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
@@ -23,10 +22,5 @@ using Android.App;
 //      Minor Version 
 //      Build Number
 //      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.6.5.0")]
-[assembly: AssemblyFileVersion("4.6.5.0")]
-[assembly: NeutralResourcesLanguage("en-US")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

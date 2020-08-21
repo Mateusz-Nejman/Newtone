@@ -66,7 +66,7 @@ namespace Newtone.Core.Processing
         }
         #endregion
         #region Public Methods
-        public static void Connect(string code)
+        public static void Connect(string code, SynchronizationType type)
         {
             if(Verify(code))
             {
@@ -78,6 +78,11 @@ namespace Newtone.Core.Processing
                         SendTimeout = 100
                     };
                     CurrentConnection.Connect(CurrentConnectionIp, port);
+                    CurrentConnection.Send(Encoding.ASCII.GetBytes(type == SynchronizationType.Receiving ? "S" : "R"));
+                    if (type == SynchronizationType.Receiving)
+                        Receive();
+                    else if (type == SynchronizationType.Sending)
+                        Send();
                 }
                 catch(Exception e)
                 {
@@ -125,6 +130,14 @@ namespace Newtone.Core.Processing
                         ConsoleDebug.WriteLine("SYNC Accepted");
                         CurrentConnectionIp = (client.RemoteEndPoint as IPEndPoint).Address;
                         CurrentConnection = client;
+                        int bytes = CurrentConnection.Receive(buffer);
+
+                        SynchronizationType type = Encoding.ASCII.GetString(buffer, 0, bytes) == "S" ? SynchronizationType.Sending : SynchronizationType.Receiving;
+
+                        if (type == SynchronizationType.Receiving)
+                            Receive();
+                        else
+                            Send();
                     }
                     catch(Exception e)
                     {
@@ -249,7 +262,7 @@ namespace Newtone.Core.Processing
                     ConsoleDebug.WriteLine("SYNC bytesR = " + bytesR);
 
                     string message = Encoding.ASCII.GetString(receiveBuffer, 0, bytesR);
-                    ConsoleDebug.WriteLine(message);
+                    ConsoleDebug.WriteLine("Message: ["+message+"]"+Encoding.ASCII.GetString(Encoding.ASCII.GetBytes("S")));
 
                     if (message.Contains(GlobalData.RECEIVED_MESSAGE))
                     {
@@ -435,5 +448,11 @@ namespace Newtone.Core.Processing
             return new IPAddress(new byte[] { (byte)int.Parse(h1, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h2, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h3, System.Globalization.NumberStyles.HexNumber), (byte)int.Parse(h4, System.Globalization.NumberStyles.HexNumber) });
         }
         #endregion
+    }
+
+    public enum SynchronizationType
+    {
+        Sending,
+        Receiving
     }
 }
