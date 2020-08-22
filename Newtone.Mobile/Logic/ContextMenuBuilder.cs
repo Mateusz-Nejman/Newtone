@@ -39,10 +39,6 @@ namespace Newtone.Mobile.Logic
             menu.OnSelect += async(item) =>
             {
                 Page page = NormalPage.Instance;
-                string[] elems = CurrentModelInfo.Split(GlobalData.SEPARATOR, System.StringSplitOptions.None);
-                string filePath = elems[0];
-                string playlistName = elems[1];
-
                 var track = GlobalData.Current.Audios[filePath];
 
                 if (track == null)

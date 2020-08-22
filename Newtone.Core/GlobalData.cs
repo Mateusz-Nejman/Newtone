@@ -63,7 +63,6 @@ namespace Newtone.Core
         public Dictionary<string, string> WebToLocalPlaylists { get; set; }
         public List<MediaSource> CurrentPlaylist { get; set; }
         public List<MediaSource> CurrentQueue { get; set; }
-        public MediaSource.SourceType PlaylistType { get; set; }
         public int PlaylistPosition { get; set; }
         public int QueuePosition { get; set; }
         public MediaSource MediaSource { get; set; }
@@ -109,20 +108,12 @@ namespace Newtone.Core
             CurrentQueue = new List<Newtone.Core.Media.MediaSource>();
             DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
 
-
-            //ConsoleDebug.WriteLine(DataPath);
-            //ConsoleDebug.WriteLine(MusicPath);
-
-            //Directory.CreateDirectory(DataPath);
-            //Directory.CreateDirectory(MusicPath);
-
             History = new List<Newtone.Core.Models.HistoryModel>();
             LastTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
             MostTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];
 
             PlayerMode = PlayerMode.All;
             Playlists = new Dictionary<string, List<string>>();
-            PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Local;
 
             ExcludedPaths = new List<string>();
         }
@@ -130,7 +121,6 @@ namespace Newtone.Core
         public void LoadConfig()
         {
             Directory.CreateDirectory(MusicPath);
-            //ConsoleDebug.WriteLine("LoadConfig");
             if (File.Exists(DataPath + "/newtone.nsec2"))
             {
                 FileStream stream = File.OpenRead(DataPath + "/newtone.nsec2");
@@ -151,8 +141,6 @@ namespace Newtone.Core
                 {
                     string buffer = System.Text.Encoding.UTF8.GetString(nsec.Get("playlists"));
                     string[] playlists = buffer.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                    //ConsoleDebug.WriteLine("LoadConfig " + playlists.Length);
-
                     playlists.ForEach(playlistBuffer =>
                     {
                         List<string> playlist = new List<string>();
@@ -364,7 +352,7 @@ namespace Newtone.Core
 
             nsec.AddFile("playlistPosition", System.Text.Encoding.ASCII.GetBytes(PlaylistPosition.ToString()));
 
-            if (CurrentPlaylist.Count > 0 && PlaylistType == MediaSource.SourceType.Local)
+            if (CurrentPlaylist.Count > 0)
             {
                 buffer = "";
 
@@ -428,7 +416,6 @@ namespace Newtone.Core
 
         public void SaveTags()
         {
-            ConsoleDebug.WriteLine("SaveTags " + AudioTags.Count);
             if (AudioTags.Count > 0)
             {
                 NSEC2 nsec = new NSEC2(PASSWORD);
@@ -472,8 +459,6 @@ namespace Newtone.Core
                 nsec.SetDebug(false);
 
                 string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get("tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                ConsoleDebug.WriteLine("LoadTags "+tags.Length);
-
                 tags.ForEach(tagItem =>
                 {
                     string[] values = tagItem.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
@@ -491,8 +476,6 @@ namespace Newtone.Core
                         if (!DownloadedIds.Contains(values[4]) && File.Exists(values[0]))
                             DownloadedIds.Add(values[4]);
                     }
-
-                    ConsoleDebug.WriteLine("LT: " + values[0]);
                     AudioTags.Add(values[0], tag);
                 });
 

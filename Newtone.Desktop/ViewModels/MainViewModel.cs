@@ -122,8 +122,6 @@ namespace Newtone.Desktop.ViewModels
         private void InitializeGlobalVariables()
         {
             GlobalData.Current.Initialize();
-            //ConsoleDebug.WriteLine(GlobalData.Current.DataPath);
-            //ConsoleDebug.WriteLine(GlobalData.Current.MusicPath);
             GlobalData.Current.Messenger = new Core.Logic.MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\NSEC.Newtone";
             Directory.CreateDirectory(GlobalData.Current.DataPath);
@@ -134,8 +132,6 @@ namespace Newtone.Desktop.ViewModels
                 GlobalData.Current.MusicPath,
                 Environment.GetFolderPath(Environment.SpecialFolder.MyMusic)
             };
-            //GlobalData.Current.MediaPlayer.Load("D:\\chillwagon - @ (trailer).m4a");
-            //GlobalData.Current.MediaPlayer.Play();
         }
         #endregion
         #region Nested Classes

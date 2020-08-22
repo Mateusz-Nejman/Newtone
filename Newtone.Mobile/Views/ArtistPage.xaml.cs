@@ -35,7 +35,6 @@ namespace Newtone.Mobile.Views
 
         public void Disappearing()
         {
-            //throw new NotImplementedException();
         }
         public void Init()
         {
@@ -88,14 +87,12 @@ namespace Newtone.Mobile.Views
 
                 trackGrid.Children.Clear();
                 generatedChildrens.ForEach(trackGrid.Children.Add);
-                Console.WriteLine("ArtistPage GeneratedChildrens ForEach");
             }
             else
             {
                 if(trackGrid.Children.Count == 0 && generatedChildrens?.Count > 0)
                 {
                     generatedChildrens.ForEach(trackGrid.Children.Add);
-                    Console.WriteLine("ArtistPage GeneratedChildrens ForEach 1");
                 }
             }
             
@@ -105,7 +102,6 @@ namespace Newtone.Mobile.Views
         {
             if (GlobalData.Current.ArtistsNeedRefresh)
             {
-                Console.WriteLine("ArtistPage NeedRefresh");
                 if (generatedChildrens != null)
                     generatedChildrens = null;
 

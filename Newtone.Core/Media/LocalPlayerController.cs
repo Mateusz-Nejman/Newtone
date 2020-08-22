@@ -21,6 +21,7 @@ namespace Newtone.Core.Media
         public void Prepared(CrossPlayer player)
         {
             player.Play();
+            player.IsLoading = false;
         }
         #endregion
     }

@@ -50,7 +50,6 @@ namespace Newtone.Mobile.ViewModels
                 if (refresh == null)
                     refresh = new ActionCommand(parameter =>
                     {
-                        ConsoleDebug.WriteLine("[Refresh] CurrentTracksViewModel");
                         IsRefreshing = true;
                         List<TrackModel> beforeSort = new List<TrackModel>();
                         foreach (string track in tracks)

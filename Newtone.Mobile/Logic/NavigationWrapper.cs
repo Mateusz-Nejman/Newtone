@@ -77,20 +77,17 @@ namespace Newtone.Mobile.Logic
                     modalBlocked = true;
                     var modal = Navigation.ModalStack.Last();
                     var modal1 = page;
-                    Console.WriteLine("NavModal " + modal.GetType() + " -> " + modal1.GetType());
 
                     if (modal.GetType() != modal1.GetType())
                         modalBlocked = false;
 
                     if(modal is ModalPage modalPage1 && modal1 is ModalPage modalPage2)
                     {
-                        Console.WriteLine("ModalPAge");
                         if (modalPage1.GetContentType() != modalPage2.GetContentType())
                             modalBlocked = false;
                     }
                 }
             }
-            Console.WriteLine("n " + navBlocked + " " + modalBlocked);
 
             if(!navBlocked || !modalBlocked)
             {
@@ -112,7 +109,6 @@ namespace Newtone.Mobile.Logic
         {
             
             await Navigation?.PopModalAsync();
-            Console.WriteLine("PMA " + Navigation.NavigationStack.Count + " " + Navigation.ModalStack.Count);
             if (Navigation.NavigationStack.Count > 0)
             {
                 if (Navigation.NavigationStack.Last() is INavigationContainer container)
@@ -127,7 +123,6 @@ namespace Newtone.Mobile.Logic
         }
         public async void Pop()
         {
-            Console.WriteLine("Pop");
             if (Navigation.ModalStack.Count > 0)
                 await PopModalAsync();
             else

@@ -47,11 +47,9 @@ namespace Newtone.Desktop.ViewModels
                             MediaSource source = GlobalData.Current.Audios[Items.Count == 0 ? "" : Items[listView.SelectedIndex].FilePath];
                             GlobalData.Current.CurrentPlaylist.Clear();
                             Items.ForEach(item => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[item.FilePath]));
-                            //GlobalData.Current.CurrentPlaylist.AddRange(GlobalData.Current.Audios.Values);
 
                             GlobalData.Current.MediaSource = source;
                             GlobalData.Current.PlaylistPosition = listView.SelectedIndex;
-                            GlobalData.Current.PlaylistType = MediaSource.SourceType.Local;
 
                             GlobalData.Current.MediaPlayer.Stop();
                             GlobalData.Current.MediaPlayer.Reset();

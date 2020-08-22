@@ -64,7 +64,6 @@ namespace Newtone.Desktop.Views
         }
         private void SearchBox_KeyUp(object sender, KeyEventArgs e)
         {
-            //ConsoleDebug.WriteLine(ViewModel?.SearchString);
             if (e.Key == Key.Enter && !string.IsNullOrEmpty(ViewModel.SearchString))
             {
                 TopPanelButton_Click(3, new SearchResultPage(ViewModel.SearchString));
@@ -85,7 +84,6 @@ namespace Newtone.Desktop.Views
         }
         public void SetContainer(UIElement element)
         {
-            ConsoleDebug.WriteLine("SetContainer");
             windowContainer.Children.Clear();
             windowContainer.Children.Add(element);
         }

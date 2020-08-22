@@ -60,18 +60,6 @@ namespace Newtone.Mobile
             }
         }
         #endregion
-        #region Public Methods
-        public static void SetBase(string name)
-        {
-            //ColorsBase = new ColorsDefault();
-            //if (name == "Light")
-            //    ColorsBase = new ColorsRed();
-            //else if (name == "Dark")
-            //    ColorsBase = new ColorsDark();
-            //else
-            //    ColorsBase = new ColorsDefault();
-        }
-        #endregion
     }
 
     public class ColorsRed : ColorsBase

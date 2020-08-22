@@ -80,6 +80,9 @@
                     </Grid>
                 </Grid>
             </Grid>
+            <Grid x:Name="loadingGrid" BackgroundColor="#99000000" IsVisible="{Binding IsLoadingVisible}">
+                <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center"/>
+            </Grid>
             <Grid x:Name="blocker" IsVisible="false"/>
         </Grid>
     </ContentPage.Content>

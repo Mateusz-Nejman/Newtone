@@ -54,31 +54,26 @@ namespace Newtone.Mobile.ViewModels
 
             Task.Run(async () =>
             {
-                //ConsoleDebug.WriteLine("Start task");
-                //Items.Clear();
-                //RawItems.Clear();
-                //ConsoleDebug.WriteLine("await");
                 SearchProcessing.SearchOffline(searchedText, rawItems);
 
                 if(MainActivity.IsInternet())
                     await SearchProcessing.Search(searchedText, rawItems);
-                //ConsoleDebug.WriteLine("Searched");
 
-                for (int a = 0; a < Items.Count; a++)
+                using (WebClient webClient = new WebClient())
                 {
-                    using WebClient webClient = new WebClient();
-
-                    if(!string.IsNullOrEmpty(Items[a].ThumbUrl))
+                    for (int a = 0; a < Items.Count; a++)
                     {
-                        byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
-                        //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
-                        Items[a].Image = data;
+                        if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
+                        {
+                            byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
+                            Items[a].Image = data;
+                        }
+                        else
+                        {
+                            Items[a].Thumb = ImageProcessing.FromArray(Items[a].Image);
+                        }
+                        Items[a].CheckChanges();
                     }
-                    else
-                    {
-                        Items[a].Thumb = ImageProcessing.FromArray(Items[a].Image);
-                    }
-                    Items[a].CheckChanges();
                 }
             });
         }
@@ -92,11 +87,10 @@ namespace Newtone.Mobile.ViewModels
             {
                 var item = Items[index];
                 GlobalData.Current.CurrentPlaylist.Clear();
-                GlobalData.Current.PlaylistType = Newtone.Core.Media.MediaSource.SourceType.Web;
 
                 if (string.IsNullOrEmpty(item.MixId))
                 {
-                    GlobalData.Current.PlaylistPosition = index;
+                    GlobalData.Current.PlaylistPosition = e.SelectedItemIndex;
 
                     foreach (var _item in Items)
                     {
@@ -111,7 +105,7 @@ namespace Newtone.Mobile.ViewModels
                         });
                     }
 
-                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[index];
+                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[e.SelectedItemIndex];
                 }
                 else
                 {
@@ -143,25 +137,28 @@ namespace Newtone.Mobile.ViewModels
                     {
                         new Task(async () =>
                         {
-                            YoutubeClient youtubeClient = new YoutubeClient();
-                            var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).BufferAsync(20);
+                        YoutubeClient youtubeClient = new YoutubeClient();
+                        var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).BufferAsync(20);
 
-                            if(playlist.Count > 0)
+                            if (playlist.Count > 0)
                             {
-                                using WebClient client = new WebClient();
-                                GlobalData.Current.CurrentPlaylist.Clear();
-                                foreach (var _item in playlist)
+                                using (WebClient client = new WebClient())
                                 {
-                                    byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
-                                    GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                                    GlobalData.Current.CurrentPlaylist.Clear();
+                                    GlobalData.Current.PlaylistPosition = 0;
+                                    foreach (var _item in playlist)
                                     {
-                                        Artist = _item.Author,
-                                        Duration = _item.Duration,
-                                        FilePath = _item.Id,
-                                        Image = data,
-                                        Title = _item.Title,
-                                        Type = Newtone.Core.Media.MediaSource.SourceType.Web
-                                    });
+                                        byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
+                                        GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                                        {
+                                            Artist = _item.Author,
+                                            Duration = _item.Duration,
+                                            FilePath = _item.Id,
+                                            Image = data,
+                                            Title = _item.Title,
+                                            Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                                        });
+                                    }
                                 }
                             }
                         }).Start();

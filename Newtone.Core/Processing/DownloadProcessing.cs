@@ -86,6 +86,12 @@ namespace Newtone.Core.Processing
                         Progress = 0.0,
                         PlaylistID = playlistId
                     });
+
+                    if (downloadTask == null)
+                    {
+                        downloadTask = new Task(async () => await TaskAction());
+                        downloadTask.Start();
+                    }
                 }
                 
             }
@@ -102,7 +108,6 @@ namespace Newtone.Core.Processing
         }
         private async static Task TaskAction()
         {
-            ConsoleDebug.WriteLine("Task started");
             string currentId = "";
             try
             {
@@ -187,7 +192,6 @@ namespace Newtone.Core.Processing
 
             manifest.GetAudio().ForEach(item =>
             {
-                ConsoleDebug.WriteLine("Item Type " + item.AudioCodec);
                 if (item.AudioCodec.Contains("mp4a"))
                 {
                     if (streamInfo == null)
@@ -212,7 +216,6 @@ namespace Newtone.Core.Processing
             {
 
             }
-            ConsoleDebug.WriteLine(fileInfo.FullName);
             if (GlobalData.Current.AudioTags.ContainsKey(fileInfo.FullName))
             {
                 string f = fileInfo.FullName;
@@ -227,15 +230,11 @@ namespace Newtone.Core.Processing
             }
 
             MediaSource container = MediaProcessing.GetSource(fileInfo.FullName);
-            //if (container == null)
-                //ConsoleDebug.WriteLine("Container null" +container.FilePath);
             GlobalLoader.AddTrack(container);
             CacheLoader.SaveCache();
             GlobalData.Current.SaveConfig();
             GlobalData.Current.SaveTags();
-            //CacheString.Save();
             GlobalData.Current.MediaPlayer.Error(Localization.Ready);
-            //SnackbarBuilder.Show(Localization.Ready);
             //TODO
 
             return fileInfo.FullName;

@@ -32,7 +32,6 @@ namespace Newtone.Desktop.ViewModels
             for (int a = 0; a < Items.Count; a++)
             {
                 Items[a].Progress = DownloadProcessing.GetDownloads()[Items[a].Id].Progress;
-                //ConsoleDebug.WriteLine(Items[a].Progress);
             }
 
             listView.Items.Refresh();

@@ -16,7 +16,7 @@ namespace Newtone.Core.Processing
     public static class SyncProcessing
     {
         #region Fields
-        private static readonly int port = 9050; //transfer}
+        private static readonly int port = 9050;
         private static MemoryStream currentBuffer;
         private static Task task;
         private static Task receiverTask;
@@ -86,7 +86,6 @@ namespace Newtone.Core.Processing
                 }
                 catch(Exception e)
                 {
-                    ConsoleDebug.WriteLine("[SYNC ERROR] "+e);
                     Disconnect();
                 }
             }
@@ -116,18 +115,10 @@ namespace Newtone.Core.Processing
                     State = 0;
                     try
                     {
-                        ConsoleDebug.WriteLine("SYNC Binding "+IpAddress);
                         socket.Bind(new IPEndPoint(IpAddress, port));
                         socket.Listen(10);
-                        //socket.Connect(FromHex(code), port);
-                        //socket.Send(Encoding.ASCII.GetBytes(GlobalData.Current.SYNC_CODE));
-                        //socket.Disconnect(true);
-
                         byte[] buffer = new byte[BufferSize];
-                        ConsoleDebug.WriteLine("SYNC Waiting");
                         Socket client = socket.Accept();
-
-                        ConsoleDebug.WriteLine("SYNC Accepted");
                         CurrentConnectionIp = (client.RemoteEndPoint as IPEndPoint).Address;
                         CurrentConnection = client;
                         int bytes = CurrentConnection.Receive(buffer);
@@ -156,10 +147,8 @@ namespace Newtone.Core.Processing
             {
                 task = new Task(() =>
                 {
-                    ConsoleDebug.WriteLine("SYNC Start");
                     Started = true;
                     SocketMode = 1;
-                    //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     State = 0;
                     try
                     {
@@ -183,7 +172,6 @@ namespace Newtone.Core.Processing
                                 {
                                     dataLength = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
                                     Size = dataLength / 1024 / 1024;
-                                    //ConsoleDebug.WriteLine("SYNC dataLength = " + dataLength);
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                     packetType = 1;
                                 }
@@ -197,20 +185,14 @@ namespace Newtone.Core.Processing
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                 }
 
-                                //ConsoleDebug.WriteLine("SYNC "+currentBuffer.Length+" "+dataLength);
-
                                 if (currentBuffer.Length >= dataLength)
                                 {
-                                    ConsoleDebug.WriteLine("Buffer: " + currentBuffer.Length + " data: " + dataLength);
-                                    ConsoleDebug.WriteLine("SYNC Close");
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.SYNC_COMPLETED));
                                     CurrentConnection.Close();
-                                    ConsoleDebug.WriteLine("SYNC Closed");
                                     break;
                                 }
                             }
                         }
-                        //File.WriteAllBytes(GlobalData.Current.MusicPath + "/mobile.nsec2", currentBuffer.ToArray());
                         State = 1;
                         PlaylistName = "";
                         
@@ -222,7 +204,6 @@ namespace Newtone.Core.Processing
                     }
                     catch(Exception e)
                     {
-                        ConsoleDebug.WriteLine("[SYNC ERROR] " + e);
                         Disconnect();
                     }
                     currentBuffer.Close();
@@ -246,10 +227,8 @@ namespace Newtone.Core.Processing
             {
                 Started = true;
                 SocketMode = 2;
-                ConsoleDebug.WriteLine("SYNC Verified");
                 byte[] bufferData = PrepareFilesToSend(Audios);
                 Size = bufferData.Length / 1024 / 1024;
-                //File.WriteAllBytes(GlobalData.Current.MusicPath + "/desktop.nsec2", bufferData);
                 byte[] bufferLength = Encoding.ASCII.GetBytes(bufferData.Length.ToString());
                 byte[] receiveBuffer = new byte[MessSize];
 
@@ -259,10 +238,7 @@ namespace Newtone.Core.Processing
 
                     byte[] buffer = new byte[BufferSize];
                     int bytesR = CurrentConnection.Receive(receiveBuffer);
-                    ConsoleDebug.WriteLine("SYNC bytesR = " + bytesR);
-
                     string message = Encoding.ASCII.GetString(receiveBuffer, 0, bytesR);
-                    ConsoleDebug.WriteLine("Message: ["+message+"]"+Encoding.ASCII.GetString(Encoding.ASCII.GetBytes("S")));
 
                     if (message.Contains(GlobalData.RECEIVED_MESSAGE))
                     {
@@ -271,12 +247,9 @@ namespace Newtone.Core.Processing
                         int progress = 0;
                         while ((read = memoryStream.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            //ConsoleDebug.WriteLine("SYNC read = " + read);
                             CurrentConnection.Send(buffer);
                             progress += read;
                             Progress = progress / 1024 / 1024;
-
-                            //ConsoleDebug.WriteLine("Sync Receive");
                             bytesR = CurrentConnection.Receive(receiveBuffer);
                         }
                     }
@@ -285,7 +258,6 @@ namespace Newtone.Core.Processing
                 }
                 catch(Exception e)
                 {
-                    ConsoleDebug.WriteLine("[SYNC ERROR] "+e);
                     GlobalData.Current.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)
                         CurrentConnection.Disconnect(false);
@@ -307,7 +279,6 @@ namespace Newtone.Core.Processing
         {
             foreach (string file in files)
             {
-                ConsoleDebug.WriteLine("Sync Add");
                 AddFile(file);
             }
         }
@@ -373,24 +344,17 @@ namespace Newtone.Core.Processing
 
         private static void Unpack(MemoryStream stream)
         {
-            ConsoleDebug.WriteLine("Unpack");
             NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
-            ConsoleDebug.WriteLine("Unpack load");
             nsec.SetDebug(true);
-            nsec.Load(stream);
-            ConsoleDebug.WriteLine("Unpack loaded");
-            
+            nsec.Load(stream);      
 
             string tagsBuffer = Encoding.UTF8.GetString(nsec.Get("tags"));
             string filesBuffer = Encoding.UTF8.GetString(nsec.Get("list"));
 
-            //ConsoleDebug.WriteLine("Unpack " + tagsBuffer + " " + filesBuffer);
             foreach(string bufferItem in tagsBuffer.Split("\n",StringSplitOptions.RemoveEmptyEntries))
             {
-                //ConsoleDebug.WriteLine("Unpack " + bufferItem);
                 string[] elems = bufferItem.Split(GlobalData.SEPARATOR);
                 string name = new FileInfo(GlobalData.Current.MusicPath + "/" + elems[0]).FullName;
-                ConsoleDebug.WriteLine(name);
                 string author = elems[1];
                 string title = elems[2];
                 string imageName = elems[3];
@@ -418,7 +382,6 @@ namespace Newtone.Core.Processing
                 FileInfo info = new FileInfo(GlobalData.Current.MusicPath + "/" + file);
                 CurrentFileName = file;
                 CurrentFileReceived = a;
-                //ConsoleDebug.WriteLine("Unpack " + info.FullName);
                 File.WriteAllBytes(info.FullName, nsec.Get(file));
                 GlobalLoader.AddTrack(MediaProcessing.GetSource(info.FullName));
 

@@ -30,7 +30,6 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public override void OnPlay()
         {
-            ConsoleDebug.WriteLine("[Android Media] MeSeCa OnPlay");
             AudioManager am = (AudioManager)MainActivity.Instance.GetSystemService(Context.AudioService);
 
             AudioAttributes attrs = new AudioAttributes.Builder()
@@ -42,7 +41,6 @@ namespace Newtone.Mobile.Media
                 .Build();
 
             AudioFocusRequest result = am.RequestAudioFocus(Global.AudioFocusRequest);
-            Console.Write("OnPlay result " + result);
             if(result == AudioFocusRequest.Granted)
             {
                 try
@@ -66,12 +64,10 @@ namespace Newtone.Mobile.Media
         }
         public override void OnPlayFromUri(Android.Net.Uri uri, Bundle extras)
         {
-            Console.WriteLine("Assitst Uri " + uri);
         }
 
         public override void OnStop()
         {
-            ConsoleDebug.WriteLine("[Android Media] MeSeCa OnStop");
             AudioManager am = (AudioManager)MainActivity.Instance.GetSystemService(Context.AudioService);
             if(Global.AudioFocusRequest != null)
                 am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
@@ -84,28 +80,23 @@ namespace Newtone.Mobile.Media
 
         public override void OnPause()
         {
-            ConsoleDebug.WriteLine("[Android Media] MeSeCa OnPause");
             GlobalData.Current.MediaPlayer.Pause();
             MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnSkipToNext()
         {
-            ConsoleDebug.WriteLine("[Android Media] OnSkipToNext");
             GlobalData.Current.MediaPlayer.Next();
         }
 
         public override void OnSkipToPrevious()
         {
-            ConsoleDebug.WriteLine("[Android Media] OnSkipToPrev");
             GlobalData.Current.MediaPlayer.Prev();
         }
 
         public override bool OnMediaButtonEvent(Intent mediaButtonEvent)
         {
             KeyEvent ev = (KeyEvent)mediaButtonEvent.GetParcelableExtra(Intent.ExtraKeyEvent);
-
-            ConsoleDebug.WriteLine("[Android Media] OnMediaButtonEvent " + ev.Action);
 
             if(ev.Action == KeyEventActions.Up)
             {
@@ -132,17 +123,14 @@ namespace Newtone.Mobile.Media
 
         public override void OnPrepare()
         {
-            Console.WriteLine("Assist OnPrepare");
         }
 
         public override void OnPrepareFromSearch(string query, Bundle extras)
         {
-            Console.WriteLine("Assist Search " + query);
         }
 
         public override void OnPrepareFromUri(Android.Net.Uri uri, Bundle extras)
         {
-            Console.WriteLine("Assists Uri " + uri);
         }
 
         public static void ProcessSearch(string query)
@@ -156,7 +144,6 @@ namespace Newtone.Mobile.Media
                         await Task.Delay(200);
                     }
                     query = query.ToLowerInvariant();
-                    Console.WriteLine("Assist " + query);
 
                     bool played = false;
                     foreach (var playlistName in GlobalData.Current.Playlists.Keys)
@@ -165,7 +152,6 @@ namespace Newtone.Mobile.Media
                         double similiarity = SearchProcessing.CalculateSimilarity(query, playlistName);
                         if (playlistName.ToLowerInvariant().Contains(query) || query.Contains(playlistName.ToLowerInvariant()) || similiarity >= 0.8)
                         {
-                            Console.WriteLine(query + " similiar to playlist " + playlistName);
                             if (GlobalData.Current.Playlists[playlistName].Count > 0)
                             {
                                 GlobalData.Current.CurrentPlaylist.Clear();
@@ -190,7 +176,6 @@ namespace Newtone.Mobile.Media
                             double similiarity = SearchProcessing.CalculateSimilarity(query, artistName);
                             if (checkedString.ToLowerInvariant().Contains(query) || query.Contains(checkedString.ToLowerInvariant()) || similiarity >= 0.8)
                             {
-                                Console.WriteLine(query + " similiar to artist " + checkedString);
                                 if (GlobalData.Current.Artists[artistName].Count > 0)
                                 {
                                     GlobalData.Current.CurrentPlaylist.Clear();
@@ -223,7 +208,6 @@ namespace Newtone.Mobile.Media
 
                             if (trackText.ToLowerInvariant().Contains(query) || query.Contains(trackText.ToLowerInvariant()))
                             {
-                                Console.WriteLine(query + " similiar to track " + trackText);
                                 GlobalData.Current.CurrentPlaylist.Clear();
                                 afterSort.ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track.FilePath]));
 
@@ -239,13 +223,8 @@ namespace Newtone.Mobile.Media
 
                     if (!played)
                     {
-                        //ConsoleDebug.WriteLine("Start task");
-                        //Items.Clear();
-                        //RawItems.Clear();
-                        //ConsoleDebug.WriteLine("await");
                         var rawItems = new ObservableBridge<Newtone.Core.Models.SearchResultModel>();
                         await SearchProcessing.Search(query, rawItems);
-                        //ConsoleDebug.WriteLine("Searched");
                         var items = new List<Models.SearchResultModel>();
 
                         foreach (var item in rawItems.GetItems())
@@ -253,23 +232,23 @@ namespace Newtone.Mobile.Media
 
                         GlobalData.Current.CurrentPlaylist.Clear();
 
-                        for (int a = 0; a < items.Count; a++)
+                        using (WebClient webClient = new WebClient())
                         {
-                            using WebClient webClient = new WebClient();
-
-                            byte[] data = webClient.DownloadData(items[a].ThumbUrl);
-                            //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
-                            items[a].Image = data;
-                            items[a].CheckChanges();
-
-                            GlobalData.Current.CurrentPlaylist.Add(items[a]);
-
-                            if (a == 0)
+                            for (int a = 0; a < items.Count; a++)
                             {
-                                GlobalData.Current.PlaylistPosition = 0;
-                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
-                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
-                                MediaPlayerHelper.Play();
+                                byte[] data = webClient.DownloadData(items[a].ThumbUrl);
+                                items[a].Image = data;
+                                items[a].CheckChanges();
+
+                                GlobalData.Current.CurrentPlaylist.Add(items[a]);
+
+                                if (a == 0)
+                                {
+                                    GlobalData.Current.PlaylistPosition = 0;
+                                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
+                                    MediaPlayerHelper.Play();
+                                }
                             }
                         }
                     }

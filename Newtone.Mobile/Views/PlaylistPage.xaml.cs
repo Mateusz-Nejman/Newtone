@@ -77,14 +77,12 @@ namespace Newtone.Mobile.Views
 
         public void Disappearing()
         {
-            //throw new NotImplementedException();
         }
 
         public void Tick()
         {
             if (GlobalData.Current.PlaylistsNeedRefresh)
             {
-                Console.WriteLine("PlaylistPage NeedRefresh");
                 if (generatedChildrens != null)
                     generatedChildrens = null;
 

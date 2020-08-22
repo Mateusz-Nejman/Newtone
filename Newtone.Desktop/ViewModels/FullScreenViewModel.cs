@@ -330,7 +330,6 @@ namespace Newtone.Desktop.ViewModels
         #region Constructors
         public FullScreenViewModel()
         {
-            //Tick(null, null);
             timer = new Timer();
             timer.Elapsed += Tick;
             timer.Interval = 200;

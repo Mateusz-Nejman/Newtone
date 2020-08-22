@@ -58,7 +58,6 @@ namespace Newtone.Mobile.Views
 
         public void Unblock()
         {
-            Console.WriteLine("Full unblock");
             blocker.IsVisible = false;
         }
 

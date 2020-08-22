@@ -48,7 +48,6 @@ namespace Newtone.Mobile.ViewModels
                 if (refresh == null)
                     refresh = new ActionCommand(parameter =>
                     {
-                        ConsoleDebug.WriteLine("[Refresh] TrackViewModel");
                         IsRefreshing = true;
                         List<TrackModel> beforeSort = new List<TrackModel>();
                         foreach (var track in GlobalData.Current.Audios.Values)
@@ -68,7 +67,6 @@ namespace Newtone.Mobile.ViewModels
             List<TrackModel> beforeSort = new List<TrackModel>();
             foreach (var track in GlobalData.Current.Audios.Values.ToList())
             {
-                Console.WriteLine("Add track");
                 beforeSort.Add(new TrackModel(track).CheckChanges());
             }
             Items = new ObservableCollection<TrackModel>(beforeSort.OrderBy(item => item.TrackString));
@@ -85,7 +83,6 @@ namespace Newtone.Mobile.ViewModels
                 List<TrackModel> beforeSort = new List<TrackModel>();
                 foreach (var track in GlobalData.Current.Audios.Values.ToList())
                 {
-                    Console.WriteLine("Add track");
                     beforeSort.Add(new TrackModel(track).CheckChanges());
                 }
                 foreach(var item in beforeSort.OrderBy(item => item.TrackString))

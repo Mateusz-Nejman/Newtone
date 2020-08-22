@@ -76,7 +76,6 @@ namespace Newtone.Desktop.Views.Custom
         {
             get
             {
-                ConsoleDebug.WriteLine("Click");
                 return (ICommand)base.GetValue(CommandProperty);
             }
             set

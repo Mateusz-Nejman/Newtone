@@ -148,7 +148,6 @@ namespace Newtone.Desktop.ViewModels
 
                 GlobalData.Current.MediaSource = source;
                 GlobalData.Current.PlaylistPosition = index;
-                GlobalData.Current.PlaylistType = MediaSource.SourceType.Local;
 
                 GlobalData.Current.MediaPlayer.Stop();
                 GlobalData.Current.MediaPlayer.Reset();

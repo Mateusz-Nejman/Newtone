@@ -45,7 +45,6 @@ namespace Newtone.Mobile.Media
         {
             base.OnCreate();
             Instance = this;
-            ConsoleDebug.WriteLine("[Android Media] Service OnCreate");
 
             Global.MediaSession = new MediaSessionCompat(BaseContext, "newtone");
             var intent = new Intent(BaseContext, typeof(MainActivity));
@@ -67,18 +66,15 @@ namespace Newtone.Mobile.Media
         }
         public override BrowserRoot OnGetRoot(string clientPackageName, int clientUid, Bundle rootHints)
         {
-            ConsoleDebug.WriteLine("[Android Media] Service OnGetRoot "+clientPackageName);
             var emptyBundle = new Bundle();
             emptyBundle.PutBoolean("android.media.browse.SEARCH_SUPPORTED", true);
-            return new BrowserRoot("newtone root", rootHints);
+            return new BrowserRoot("newtone root", emptyBundle);
         }
 
         public override void OnLoadChildren(string parentId, Result result)
         {
 
             //TODO
-            ConsoleDebug.WriteLine("[Android Media] Service OnLoadChildren");
-
             result.SendResult(null);
         }
 

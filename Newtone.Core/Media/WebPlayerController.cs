@@ -13,31 +13,26 @@ namespace Newtone.Core.Media
         #region Public Methods
         public void Completed(CrossPlayer player)
         {
-            ConsoleDebug.WriteLine("WPC " + player.CurrentPosition + ":" + player.Duration);
             player.Next();
         }
 
         public void Load(CrossPlayer player, string filepath)
         {
-            ConsoleDebug.WriteLine(filepath);
             player.Reset(); //Stop & reset
             YoutubeClient client = new YoutubeClient();
             StreamManifest manifest = null;
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 manifest = await client.Videos.Streams.GetManifestAsync(filepath);
-            });
-            task.ContinueWith(t =>
-            {
-                ConsoleDebug.WriteLine("URL: " + manifest.GetAudioOnly().WithHighestBitrate().Url);
                 player.BasePlayer.Load(manifest.GetAudioOnly().WithHighestBitrate().Url);
-            });
+            }).Wait();
             
         }
 
         public void Prepared(CrossPlayer player)
         {
             player.Play();
+            player.IsLoading = false;
         }
         #endregion
     }

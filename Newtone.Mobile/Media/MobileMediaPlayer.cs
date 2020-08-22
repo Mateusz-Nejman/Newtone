@@ -44,13 +44,11 @@ namespace Newtone.Mobile.Media
         #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
-            ConsoleDebug.WriteLine("MediaPlayer Prepared");
             Play();
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            ConsoleDebug.WriteLine("MediaPlayer Completion "+MediaPlayer.CurrentPosition +" "+MediaPlayer.Duration);
             if (MediaPlayer.CurrentPosition > 0 && !EntityClicked)
                 GlobalData.Current.MediaPlayer.Next();
             EntityClicked = false;
@@ -59,20 +57,16 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public void AfterNext()
         {
-            //throw new NotImplementedException();
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
-            //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToNext, CurrentPosition, 1.0f);
-            //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
         }
 
         public void AfterPrev()
         {
 
             //TODO
-            //throw new NotImplementedException();
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
-            //Global.StateBuilder.SetState(PlaybackStateCompat.StateSkippingToPrevious, CurrentPosition, 1.0f);
-            //Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
         }
 
         public bool GetCanSeek()

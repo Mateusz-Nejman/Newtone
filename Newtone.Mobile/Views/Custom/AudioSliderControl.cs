@@ -25,7 +25,6 @@ namespace Newtone.Mobile.Views.Custom
 
             set
             {
-                //SetValue(MaxProperty, value);
                 Maximum = value;
                 OnPropertyChanged();
                 OnPropertyChanged("Maximum");
@@ -50,7 +49,6 @@ namespace Newtone.Mobile.Views.Custom
             get => value;
             set
             {
-                //SetValue(ValueChangeProperty, value);
                 SetValue(value);
                 OnPropertyChanged("Value");
             }

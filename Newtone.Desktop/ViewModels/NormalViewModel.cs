@@ -144,7 +144,6 @@ namespace Newtone.Desktop.ViewModels
                 if (gotoSync == null)
                     gotoSync = new ActionCommand(parameter =>
                     {
-                        ConsoleDebug.WriteLine("GotoSync");
                         var window = parameter as NormalWindow;
                         window.TopPanelButton_Click(-1, new SyncPage());
                     });

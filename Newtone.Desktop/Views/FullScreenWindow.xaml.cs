@@ -43,7 +43,6 @@ namespace Newtone.Desktop.Views
         #region Private Methods
         private void TrackSlider_ValueChanged(object sender, AudioSliderControl.ValueChangedArgs e)
         {
-            ConsoleDebug.WriteLine("Seek");
             if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
                 

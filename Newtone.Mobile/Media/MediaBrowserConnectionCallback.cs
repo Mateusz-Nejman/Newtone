@@ -21,16 +21,9 @@ namespace Newtone.Mobile.Media
         public override void OnConnected()
         {
             base.OnConnected();
-            ConsoleDebug.WriteLine("[Android Media] MeBroCoCa OnConnected");
-
             MediaSessionCompat.Token token = Global.MediaBrowser.SessionToken;
-
             MediaControllerCompat mediaController = new MediaControllerCompat(MainActivity.Instance, token);
-
             MediaControllerCompat.SetMediaController(MainActivity.Instance, mediaController);
-
-            //TODO transport controls
-            // Display the initial state
             MediaMetadataCompat metadata = mediaController.Metadata;
             PlaybackStateCompat pbState = mediaController.PlaybackState;
 

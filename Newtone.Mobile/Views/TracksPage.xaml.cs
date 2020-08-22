@@ -47,12 +47,10 @@ namespace Newtone.Mobile.Views
 
         public void Appearing()
         {
-            //throw new NotImplementedException();
         }
 
         public void Disappearing()
         {
-            //throw new NotImplementedException();
         }
         #endregion
     }

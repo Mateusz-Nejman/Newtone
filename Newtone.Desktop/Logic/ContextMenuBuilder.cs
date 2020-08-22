@@ -202,7 +202,6 @@ namespace Newtone.Desktop.Logic
             EditWindow editWindow = new EditWindow(FilePath);
             editWindow.CenterToMainWindow();
             editWindow.ShowDialog();
-            //editWindow.Show();
         }
 
         private static void MenuDelete_Click(object sender, System.Windows.RoutedEventArgs e)

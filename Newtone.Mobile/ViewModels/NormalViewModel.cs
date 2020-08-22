@@ -10,6 +10,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.Media.Session;
 using Android.Views;
 using Android.Widget;
 using Newtone.Core;
@@ -397,6 +398,13 @@ namespace Newtone.Mobile.ViewModels
             if (Container.Children.Count > 0)
                 if (Container.Children[0] is IVisibleContent)
                     (Container.Children[0] as IVisibleContent).Appearing();
+
+            if(GlobalData.Current.Audios.Count == 0 && CacheLoader.IsCacheAvailable())
+            {
+                GlobalData.Current.LoadTags();
+                CacheLoader.LoadCache();
+                GlobalData.Current.LoadConfig();
+            }
         }
 
         public void Disappearing()
@@ -419,6 +427,8 @@ namespace Newtone.Mobile.ViewModels
                 if (children.IsVisible && children is ITimerContent content)
                     content.Tick();
             }
+
+            Global.PlaybackState = GlobalData.Current.MediaPlayer?.IsPlaying == true ? PlaybackStateCompat.StatePlaying : PlaybackStateCompat.StatePaused;
         }
         #endregion
 

@@ -45,7 +45,6 @@ namespace Newtone.Mobile.ViewModels
         #region Private Methods
         private bool Check()
         {
-            ConsoleDebug.WriteLine("PermissionPage " + ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage).ToString());
             if (ActivityCompat.CheckSelfPermission(MainActivity.Instance, Manifest.Permission.WriteExternalStorage) == Android.Content.PM.Permission.Granted)
             {
                 GlobalData.Current.SaveConfig();

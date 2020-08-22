@@ -54,20 +54,10 @@ namespace Newtone.Core.Processing
             }
 
             GlobalData.Current.SaveConfig();
-            ConsoleDebug.WriteLine("Start search");
             YoutubeClient client = new YoutubeClient();
-            ConsoleDebug.WriteLine("init");
             var validators = CheckLink(text);
-            ConsoleDebug.WriteLine(validators.Count);
-
-            foreach(var val in validators.Keys)
-            {
-                ConsoleDebug.WriteLine(val);
-            }
-
             if(validators.ContainsKey(QueryEnum.Video))
             {
-                ConsoleDebug.WriteLine("Video");
                 var video = await client.Videos.GetAsync(validators[QueryEnum.Video]);
 
                 model.Add(new SearchResultModel()
@@ -83,12 +73,9 @@ namespace Newtone.Core.Processing
             }
             else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
             {
-                ConsoleDebug.WriteLine("Search None");
                 var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search]).BufferAsync(20);
-                ConsoleDebug.WriteLine("Search " + videos.Count);
                 foreach(var video in videos)
                 {
-                    ConsoleDebug.WriteLine("Search " + video.Title);
                     model.Add(new SearchResultModel()
                     {
                         Author = video.Author,
@@ -103,11 +90,9 @@ namespace Newtone.Core.Processing
             }
             else if (validators.ContainsKey(QueryEnum.Playlist))
             {
-                ConsoleDebug.WriteLine("Playlist");
                 var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]);
                 foreach (var video in playlist)
                 {
-                    ConsoleDebug.WriteLine("Video " + video.Id);
                     model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}&list={validators[QueryEnum.Playlist]}" });
                 }
             }

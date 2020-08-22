@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Newtone.Core.Media
@@ -49,6 +50,13 @@ namespace Newtone.Core.Media
                 return BasePlayer.GetCanSeek();
             }
         }
+
+        public bool IsLoading { get; set; } = false;
+
+        public bool IsLocalFile
+        {
+            get => PlayerController is LocalPlayerController;
+        }
         #endregion
         #region Constructors
         public CrossPlayer(IBasePlayer basePlayer)
@@ -58,11 +66,13 @@ namespace Newtone.Core.Media
             localPC = new LocalPlayerController();
 
             Random = new Random(GlobalData.PASSWORD.GetHashCode());
+            IsLoading = false;
         }
         #endregion
         #region Public Methods
         public void Load(string filename)
         {
+            IsLoading = true;
             BasePlayer.Reset();
             SetPlayerController(filename.Length == 11 ? webPC : localPC);
 
@@ -72,9 +82,9 @@ namespace Newtone.Core.Media
                 {
                     try
                     {
-                        var filepath = GlobalData.Current.AudioTags.Keys.First(filepath =>
+                        var filepath = GlobalData.Current.AudioTags.Keys.First(file =>
                         {
-                            return GlobalData.Current.AudioTags[filepath].Id == filename;
+                            return GlobalData.Current.AudioTags[file].Id == filename;
                         });
                         filename = filepath;
                         SetPlayerController(localPC);
@@ -86,15 +96,20 @@ namespace Newtone.Core.Media
                 }
             }
 
+            Console.WriteLine("Load " + filename + " using " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerControler"));
             PlayerController?.Load(this, filename);
 
             try
             {
                 BasePlayer?.Prepare();
+                PlayerController?.Prepared(this);
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
+                Console.WriteLine("Error in " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerController"));
                 Error(GlobalData.ERROR_CORRUPTED);
+                IsLoading = false;
             }
         }
 
@@ -118,7 +133,6 @@ namespace Newtone.Core.Media
 
         public void Next()
         {
-            ConsoleDebug.WriteLine("[CrossPlayer] Next" + GlobalData.Current.CurrentPlaylist.Count + " " + GlobalData.Current.PlaylistPosition);
             if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
                 MediaSource track;
@@ -146,26 +160,14 @@ namespace Newtone.Core.Media
 
                 }
 
-                if (GlobalData.Current.PlaylistType == MediaSource.SourceType.Local)
+                if (IsLocalPath(track.FilePath) && !File.Exists(track.FilePath))
                 {
+                    Error(GlobalData.ERROR_FILE_EXISTS);
+                }
 
-                    if (File.Exists(track.FilePath))
-                    {
-                        Load(track.FilePath);
-                        GlobalData.Current.MediaSource = track;
-                        BasePlayer?.AfterNext();
-                    }
-                    else
-                    {
-                        //ConsoleDebug.WriteLine("CustomMediaPlayer Next");
-                        Error(GlobalData.ERROR_FILE_EXISTS);
-                    }
-                }
-                else
-                {
-                    Load(track.FilePath);
-                    GlobalData.Current.MediaSource = track;
-                }
+                Load(track.FilePath);
+                GlobalData.Current.MediaSource = track;
+                BasePlayer?.AfterNext();
 
                 BasePlayer?.SetNotification(true);
 
@@ -191,28 +193,14 @@ namespace Newtone.Core.Media
 
                 MediaSource track = GlobalData.Current.CurrentPlaylist[GlobalData.Current.PlaylistPosition];
 
-
-                if (GlobalData.Current.PlaylistType == MediaSource.SourceType.Local)
+                if (IsLocalPath(track.FilePath) && !File.Exists(track.FilePath))
                 {
+                    Error(GlobalData.ERROR_FILE_EXISTS);
+                }
 
-                    if (File.Exists(track.FilePath))
-                    {
-                        Load(track.FilePath);
-                        GlobalData.Current.MediaSource = track;
-                        BasePlayer?.AfterPrev();
-                    }
-                    else
-                    {
-                        //ConsoleDebug.WriteLine("CustomMediaPlayer Prev");
-                        Error(GlobalData.ERROR_FILE_EXISTS);
-                        track = null;
-                    }
-                }
-                else
-                {
-                    Load(track.FilePath);
-                    GlobalData.Current.MediaSource = track;
-                }
+                Load(track.FilePath);
+                GlobalData.Current.MediaSource = track;
+                BasePlayer?.AfterPrev();
 
                 BasePlayer?.SetNotification(true);
 
@@ -227,10 +215,8 @@ namespace Newtone.Core.Media
 
         public void Seek(double seek)
         {
-            ConsoleDebug.WriteLine("Seek " + seek);
             if (BasePlayer.GetCanSeek())
                 BasePlayer?.Seek(seek);
-                //BasePlayer.Seek((int)seek * 1000);
         }
 
         public void SetVolume(float volume)
@@ -259,6 +245,11 @@ namespace Newtone.Core.Media
         private void SetPlayerController(IPlayerController playerController)
         {
             PlayerController = playerController;
+        }
+
+        private bool IsLocalPath(string filepath)
+        {
+            return filepath.Length > 11;
         }
         #endregion
     }

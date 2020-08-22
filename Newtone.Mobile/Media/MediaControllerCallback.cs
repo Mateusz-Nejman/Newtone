@@ -20,14 +20,12 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public override void OnMetadataChanged(MediaMetadataCompat metadata)
         {
-            base.OnMetadataChanged(metadata);
-            ConsoleDebug.WriteLine("[Android Media] MeCoCa OnMetadataChanged");
+            base.OnMetadataChanged(metadata); //TODO
         }
 
         public override void OnPlaybackStateChanged(PlaybackStateCompat state)
         {
             base.OnPlaybackStateChanged(state);
-            ConsoleDebug.WriteLine("[Android Media] MeCoCa OnPlaybackStateChanged");
         }
         #endregion
     }

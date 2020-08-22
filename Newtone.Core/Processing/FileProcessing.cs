@@ -18,18 +18,6 @@ namespace Newtone.Core.Processing
             return await Task.Run(() => {
                 List<MediaSource> containers = new List<MediaSource>();
 
-                /*if (Directory.Exists(directory))
-                {
-                    foreach (string dir in Directory.GetDirectories(directory))
-                    {
-                        if (!listed.Contains(dir) && !GlobalData.Current.ExcludedPaths.Contains(dir))
-                        {
-                            listed.Add(dir);
-                            containers.AddRange(await Scan(dir, listed));
-                        }
-                    }
-                }*/
-
                 string[] mp3Files = Directory.GetFiles(directory, "*.mp3");
                 string[] m4aFiles = Directory.GetFiles(directory, "*.m4a");
                 List<string> files = new List<string>();

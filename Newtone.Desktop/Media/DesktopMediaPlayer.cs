@@ -29,10 +29,6 @@ namespace Newtone.Desktop.Media
         #region Private Methods
         private void MediaPlayer_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            //ConsoleDebug.WriteLine("Position: " + CurrentFile.Position);
-            //onsoleDebug.WriteLine("Length: " + CurrentFile.Length);
-            ConsoleDebug.WriteLine("Exception null: " + (e.Exception == null));
-            //ConsoleDebug.WriteLine("PlaybackStopped " + MediaPlayer.PlaybackState+" "+CurrentFile.Position);
             if(e.Exception == null && CurrentFile != null && ((MediaPlayer.PlaybackState == PlaybackState.Playing && CurrentFile.Position > CurrentFile.Length - 2000) || (MediaPlayer.PlaybackState == PlaybackState.Stopped && CurrentFile.Position > CurrentFile.Length - 2000)))
             {
                 CurrentFile.Position = 0;
@@ -55,7 +51,6 @@ namespace Newtone.Desktop.Media
 
         public void Error(string text)
         {
-            //ConsoleDebug.WriteLine(text);
         }
 
         public bool GetCanSeek()
@@ -83,7 +78,6 @@ namespace Newtone.Desktop.Media
             IsPrepared = false;
             Stop();
             Reset();
-            ConsoleDebug.WriteLine("Load File: " + filename);
             if (filename.StartsWith("http"))
                 CurrentFile = new MediaFoundationReader(filename);
             else
@@ -117,7 +111,6 @@ namespace Newtone.Desktop.Media
 
         public void Seek(double seek)
         {
-            //ConsoleDebug.WriteLine("Seek to " + TimeSpan.FromSeconds(seek).ToString());
             CurrentFile.SetPosition(seek);
         }
 

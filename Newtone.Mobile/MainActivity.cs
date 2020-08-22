@@ -54,11 +54,8 @@ namespace Newtone.Mobile
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
-            //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
             InitializeGlobalVariables();
-
-            ConsoleDebug.WriteLine(SyncProcessing.Code);
 
             LoadApplication(new App());
 
@@ -68,14 +65,13 @@ namespace Newtone.Mobile
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            //ConsoleDebug.WriteLine("MainActivity Intent " + intent.Data.ToString());
-            ConsoleDebug.WriteLine("MainActivity ProcessNewIntent OnNewIntent");
             ProcessNewIntent(intent);
+            if(!Global.WakeLock?.IsHeld == true)
+                Global.WakeLock?.Acquire();
         }
 
         protected override void OnResume()
         {
-            ConsoleDebug.WriteLine("MainActivity OnResume");
             base.OnResume();
         }
         protected override void OnStart()
@@ -94,9 +90,6 @@ namespace Newtone.Mobile
         protected override void OnStop()
         {
             base.OnStop();
-            ConsoleDebug.WriteLine("MainActivity OnStop");
-            //if (GlobalData.Current.MediaPlayer != null && !GlobalData.Current.MediaPlayer.IsPlaying && DownloadProcessing.GetDownloads().Count == 0)
-            //    Process.KillProcess(Process.MyPid());
             MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
             try
             {
@@ -112,8 +105,6 @@ namespace Newtone.Mobile
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
-
-            ConsoleDebug.WriteLine("Result");
             if (requestCode == 9999 && data != null)
             {
                 string[] elems = data.Data.Path.Split(':');
@@ -203,12 +194,8 @@ namespace Newtone.Mobile
         }
         private void InitializeGlobalVariables()
         {
-
-            //Global.PowerManager = (PowerManager)GetSystemService(PowerService);
             Global.ConnectivityManager = (ConnectivityManager)GetSystemService(ConnectivityService);
             Global.NotificationManager = (NotificationManager)GetSystemService(NotificationService);
-            //Global.WakeLock = Global.PowerManager.NewWakeLock(WakeLockFlags.Partial, "NSEC WakeLock");
-            //Global.WakeLock.Acquire();
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 NotificationChannel notificationChannel = new NotificationChannel("newtone", "Newtone", NotificationImportance.Max);
@@ -252,8 +239,6 @@ namespace Newtone.Mobile
 
         private void ProcessNewIntent(Intent intent)
         {
-            Console.WriteLine("Uri DataString :" + intent?.DataString);
-            Console.WriteLine("Uri DataString :" + intent?.Data);
             if(intent.Extras != null)
             {
                 if(!string.IsNullOrWhiteSpace(intent.Extras.GetString("query","")))
@@ -350,7 +335,6 @@ namespace Newtone.Mobile
 
         public override void OnBackPressed()
         {
-            ConsoleDebug.WriteLine("OnBackPressed " + NormalPage.NavigationInstance.NavigationStack.Count + " "+ NormalPage.NavigationInstance.ModalStack.Count);
             if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)
             {
                 if (backPressed)

@@ -50,7 +50,6 @@ namespace Newtone.Desktop.ViewModels
 
             foreach (string artist in GlobalData.Current.Artists.Keys)
             {
-                //ConsoleDebug.WriteLine(artist);
                 if(GlobalData.Current.Artists[artist].Count > 0)
                     ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
             }
@@ -65,7 +64,6 @@ namespace Newtone.Desktop.ViewModels
                 ArtistItems.Clear();
                 foreach (string artist in GlobalData.Current.Artists.Keys)
                 {
-                    //ConsoleDebug.WriteLine(artist);
                     if (GlobalData.Current.Artists[artist].Count > 0)
                         ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
                 }
@@ -147,7 +145,6 @@ namespace Newtone.Desktop.ViewModels
 
                 GlobalData.Current.MediaSource = source;
                 GlobalData.Current.PlaylistPosition = index;
-                GlobalData.Current.PlaylistType = MediaSource.SourceType.Local;
 
                 GlobalData.Current.MediaPlayer.Stop();
                 GlobalData.Current.MediaPlayer.Reset();

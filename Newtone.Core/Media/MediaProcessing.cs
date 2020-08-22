@@ -15,19 +15,13 @@ namespace Newtone.Core.Media
         #region Properties
         public static MediaSource GetSource(string filePath)
         {
-            ConsoleDebug.WriteLine("GS: " + filePath);
             MediaSource container = new MediaSource
             {
                 FilePath = filePath
             };
-
-            //ConsoleDebug.WriteLine(filePath);
-
             try
             {
                 ATL.Track audioFile = new ATL.Track(filePath);
-
-                //ConsoleDebug.WriteLine(audioFile.Duration);
                 if (audioFile.DurationMs < MINIMUM_TRACK_DURATION * 1000)
                     return null;
                 container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;

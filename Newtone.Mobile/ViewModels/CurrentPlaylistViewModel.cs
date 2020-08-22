@@ -46,7 +46,6 @@ namespace Newtone.Mobile.ViewModels
                 if (refresh == null)
                     refresh = new ActionCommand(parameter =>
                     {
-                        ConsoleDebug.WriteLine("[Refresh] CurrentPlaylistViewModel");
                         IsRefreshing = true;
                         TrackItems = new ObservableCollection<TrackModel>();
                         foreach (var track in GlobalData.Current.CurrentPlaylist)
@@ -82,7 +81,6 @@ namespace Newtone.Mobile.ViewModels
                 GlobalData.Current.PlaylistPosition = index;
                 GlobalData.Current.MediaPlayer.Load(model.FilePath);
                 MediaPlayerHelper.Play();
-                ConsoleDebug.WriteLine(sender is Xamarin.Forms.ListView);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
         }

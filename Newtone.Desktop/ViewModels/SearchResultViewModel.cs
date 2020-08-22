@@ -57,7 +57,6 @@ namespace Newtone.Desktop.ViewModels
                         {
                             var item = Items[index];
                             GlobalData.Current.CurrentPlaylist.Clear();
-                            GlobalData.Current.PlaylistType = item.IsOffline ? Core.Media.MediaSource.SourceType.Local : Core.Media.MediaSource.SourceType.Web;
 
                             if (string.IsNullOrEmpty(item.MixId))
                             {
@@ -94,16 +93,10 @@ namespace Newtone.Desktop.ViewModels
 
                                 GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
                             }
-
-                            //await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
-
-
                             new Task(() =>
                             {
-                                //MobileMediaPlayer.EntityClicked = true;
                                 GlobalData.Current.MediaPlayer.Load(GlobalData.Current.MediaSource.FilePath);
                                 GlobalData.Current.MediaPlayer.Play();
-                                //MediaPlayerHelper.Play();
 
                                 if (!string.IsNullOrEmpty(item.MixId))
                                 {
@@ -149,13 +142,8 @@ namespace Newtone.Desktop.ViewModels
 
             Task.Run(async () =>
             {
-                //ConsoleDebug.WriteLine("Start task");
-                //Items.Clear();
-                //RawItems.Clear();
-                //ConsoleDebug.WriteLine("await");
                 SearchProcessing.SearchOffline(searchedText, RawItems);
                 await SearchProcessing.Search(searchedText, RawItems);
-                //ConsoleDebug.WriteLine("Searched");
 
                 for (int a = 0; a < Items.Count; a++)
                 {
@@ -164,7 +152,6 @@ namespace Newtone.Desktop.ViewModels
                     if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
                     {
                         byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
-                        //ConsoleDebug.WriteLine("Thumb for " + Items[a].Title + " " + (data == null || data.Length == 0 ? "null" : ""));
                         Items[a].Image = data;
                     }
                     else

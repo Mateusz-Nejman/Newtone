@@ -24,7 +24,6 @@ namespace Newtone.Core.Logic
         {
             Items.Add(item);
             Action?.Invoke(item);
-            //ConsoleDebug.WriteLine("Add item");
         }
 
         public List<T> GetItems()

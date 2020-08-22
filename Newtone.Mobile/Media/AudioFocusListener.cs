@@ -20,7 +20,6 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
-            ConsoleDebug.WriteLine("[Android Media] OnAudioFocusChange " + focusChange);
             if (GlobalData.Current.MediaPlayer != null)
             {
                 if (focusChange == AudioFocus.Loss && GlobalData.Current.MediaPlayer.CurrentPosition > 10)

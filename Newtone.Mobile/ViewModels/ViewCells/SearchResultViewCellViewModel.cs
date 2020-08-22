@@ -31,8 +31,6 @@ namespace Newtone.Mobile.ViewModels.ViewCells
                     downloadClicked = new ActionCommand(async(parameter) =>
                     {
                         string tag = parameter as string;
-                        ConsoleDebug.WriteLine("downloadClicked");
-
                         string[] elems = tag.Split(GlobalData.SEPARATOR);
                         YoutubeClient client = new YoutubeClient();
                         string playlistId = "";

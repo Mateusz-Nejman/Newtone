@@ -37,7 +37,6 @@ namespace Newtone.Core.Loaders
 
                 if (!GlobalData.Current.Artists.ContainsKey(source.Artist))
                 {
-                    ConsoleDebug.WriteLine("Create artist " + source.Artist);
                     GlobalData.Current.Artists.Add(source.Artist, new List<string>());
                     GlobalData.Current.ArtistsNeedRefresh = true;
                 }
@@ -92,7 +91,6 @@ namespace Newtone.Core.Loaders
 
             if (GlobalData.Current.MediaSource != null && GlobalData.Current.MediaSource.FilePath == newSource.FilePath)
                 GlobalData.Current.MediaSource = newSource;
-            ConsoleDebug.WriteLine("Save " + oldSource.FilePath + " " + tag.Author + " -> " + tag.Title);
             GlobalData.Current.SaveTags();
         }
         #endregion

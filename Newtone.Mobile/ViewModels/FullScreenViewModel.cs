@@ -45,6 +45,7 @@ namespace Newtone.Mobile.ViewModels
         private string playedTrack = "";
         private PlayerMode playerMode = PlayerMode.All;
         private IDisposable loopSubscription;
+        private bool isLoadingVisible;
         #endregion
 
         #region Properties
@@ -171,6 +172,16 @@ namespace Newtone.Mobile.ViewModels
                     audioSliderValue = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        public bool IsLoadingVisible
+        {
+            get => isLoadingVisible;
+            set
+            {
+                isLoadingVisible = value;
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -326,6 +337,7 @@ namespace Newtone.Mobile.ViewModels
             TrackDuration = GlobalData.Current.MediaSource.Duration.ToString("mm':'ss");
             Artist = GlobalData.Current.MediaSource.Artist;
             Title = GlobalData.Current.MediaSource.Title;
+            IsLoadingVisible = GlobalData.Current.MediaPlayer.IsLoading;
 
             if (playedTrack != GlobalData.Current.MediaSourcePath)
             {

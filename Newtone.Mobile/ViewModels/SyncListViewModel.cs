@@ -45,7 +45,6 @@ namespace Newtone.Mobile.ViewModels
                 if (refresh == null)
                     refresh = new ActionCommand(parameter =>
                     {
-                        ConsoleDebug.WriteLine("[Refresh] SyncListViewModel");
                         IsRefreshing = true;
                         Items = new ObservableCollection<TrackModel>();
                         IsRefreshing = false;

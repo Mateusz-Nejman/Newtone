@@ -64,8 +64,6 @@ namespace Newtone.Mobile.Models
                     downloadClicked = new ActionCommand(async (parameter) =>
                     {
                         string tag = parameter as string;
-                        ConsoleDebug.WriteLine("downloadClicked");
-
                         string[] elems = tag.Split(GlobalData.SEPARATOR);
                         YoutubeClient client = new YoutubeClient();
                         string playlistId = "";

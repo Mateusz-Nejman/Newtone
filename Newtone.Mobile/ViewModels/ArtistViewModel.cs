@@ -59,7 +59,6 @@ namespace Newtone.Mobile.ViewModels
                 }
 
                 Items.Add(new ArtistModel() { Image = image, Name = artistName, TrackCount = GlobalData.Current.Artists[artistName].Count });
-                ConsoleDebug.WriteLine("Artist Item Add");
             }
         }
         #endregion

@@ -27,7 +27,6 @@ namespace Newtone.Desktop
 
             if(key == System.Windows.Input.Key.MediaPlayPause)
             {
-                Console.WriteLine("IsPlaying " + GlobalData.Current.MediaPlayer.IsPlaying);
                 if (GlobalData.Current.MediaPlayer.IsPlaying)
                     GlobalData.Current.MediaPlayer.Pause();
                 else
