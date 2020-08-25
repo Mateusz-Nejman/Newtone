@@ -12,6 +12,3 @@ Newtone Desktop is actualy unsupported due to targeting in mobile apps.
 - Smartbands support
 - Google assistant support
 - Auto updating playlists (from YT)
-
-
-KARNY KUTAS ZA NIE WYLOGOWANIE CWELU Xd
