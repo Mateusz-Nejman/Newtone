@@ -78,8 +78,9 @@ namespace Newtone.Mobile.ViewModels
         {
             if (GlobalData.Current.TracksNeedRefresh)
                 Items.Clear();
-            if(Items.Count == 0 && GlobalData.Current.Audios.Count > 0)
+            if(Items.Count != GlobalData.Current.Audios.Count)
             {
+                Items.Clear();
                 List<TrackModel> beforeSort = new List<TrackModel>();
                 foreach (var track in GlobalData.Current.Audios.Values.ToList())
                 {
