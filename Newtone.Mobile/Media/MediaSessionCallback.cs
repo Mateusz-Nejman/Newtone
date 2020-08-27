@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -45,7 +46,7 @@ namespace Newtone.Mobile.Media
             {
                 try
                 {
-                    MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
+                    MainActivity.Instance.StartForegroundService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
                     Global.MediaSession.Active = true;
                     GlobalData.Current.MediaPlayer.Play();
                     MediaPlayerService.Instance.StartForeground(0, MediaPlayerService.Instance?.GetNotification());
@@ -53,6 +54,13 @@ namespace Newtone.Mobile.Media
                 catch(System.Exception e)
                 {
                     Console.WriteLine("MediaSessionCallback OnPlay Exception "+e);
+                    StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
+                    streamWriter.WriteLine("ERROR from MediaSessionCallback " + DateTime.Now.ToString());
+                    streamWriter.WriteLine("Exception: " + e.Message);
+                    streamWriter.WriteLine("StackTrace: " + e.StackTrace);
+                    streamWriter.WriteLine("Source: " + e.Source);
+                    streamWriter.WriteLine("ERROR END");
+                    streamWriter.Close();
                 }
             }
                 

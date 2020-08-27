@@ -39,7 +39,8 @@ namespace Newtone.Mobile.Media
         public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
         {
             MediaButtonReceiver.HandleIntent(Global.MediaSession, intent);
-            return base.OnStartCommand(intent, flags, startId);
+
+            return StartCommandResult.Sticky;
         }
         public override void OnCreate()
         {
