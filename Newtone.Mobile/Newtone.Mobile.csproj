@@ -89,6 +89,7 @@
     <Compile Include="Fonts.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Logic\ContentViewExtensions.cs" />
+    <Compile Include="Logic\ContextExtensions.cs" />
     <Compile Include="Logic\ContextMenuBuilder.cs" />
     <Compile Include="Logic\CoreMessenger.cs" />
     <Compile Include="Logic\NavigationWrapper.cs" />

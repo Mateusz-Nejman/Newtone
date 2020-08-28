@@ -25,6 +25,7 @@ using Newtone.Mobile.Processing;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
 using Android.Support.V4.App;
+using System.Reactive.Linq;
 
 namespace Newtone.Mobile
 {
@@ -38,6 +39,7 @@ namespace Newtone.Mobile
         #region Fields
         public static bool Loaded = false;
         private bool backPressed = false;
+        private IDisposable stateRefresher;
         #endregion
         #region Properties
         public static MainActivity Instance { get; set; }
@@ -58,9 +60,7 @@ namespace Newtone.Mobile
             InitializeGlobalVariables();
 
             LoadApplication(new App());
-
-            Intent serviceIntent = new Intent(this, typeof(MediaPlayerService));
-            StartService(serviceIntent);
+            this.ApplicationContext.StartForegroundServiceCompat<MediaPlayerService>();
         }
         protected override void OnNewIntent(Intent intent)
         {
@@ -68,11 +68,6 @@ namespace Newtone.Mobile
             ProcessNewIntent(intent);
             if(!Global.WakeLock?.IsHeld == true)
                 Global.WakeLock?.Acquire();
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
         }
         protected override void OnStart()
         {
@@ -93,7 +88,7 @@ namespace Newtone.Mobile
             MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
             try
             {
-                Global.MediaBrowser.Disconnect();
+                Global.MediaBrowser?.Disconnect();
             }
             catch
             {
@@ -143,52 +138,31 @@ namespace Newtone.Mobile
         #region Private Methods
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
-            streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
-            streamWriter.WriteLine("Exception: " + e.Exception.Message);
-            streamWriter.WriteLine("StackTrace: " + e.Exception.StackTrace);
-            streamWriter.WriteLine("Source: " + e.Exception.Source);
-            streamWriter.WriteLine("ERROR END");
-            streamWriter.Close();
-
-            try
-            {
-                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
-            }
-            catch { }
+            LogException(e.Exception);
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-           
-            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
-            streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
-            streamWriter.WriteLine("Exception: " + ((Exception)e.ExceptionObject).Message);
-            streamWriter.WriteLine("StackTrace: " + ((Exception)e.ExceptionObject).StackTrace);
-            streamWriter.WriteLine("Source: " + ((Exception)e.ExceptionObject).Source);
-            streamWriter.WriteLine("ERROR END");
-            streamWriter.Close();
-
-            try
-            {
-                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, (e.ExceptionObject as Exception).ToString());
-            }
-            catch { }
+            LogException(e.ExceptionObject as Exception);
         }
 
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
+            LogException(e.Exception);
+        }
+        private void LogException(Exception e)
+        {
             StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
             streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
-            streamWriter.WriteLine("Exception: " + e.Exception.Message);
-            streamWriter.WriteLine("StackTrace: " + e.Exception.StackTrace);
-            streamWriter.WriteLine("Source: " + e.Exception.Source);
+            streamWriter.WriteLine("Exception: " + e.Message);
+            streamWriter.WriteLine("StackTrace: " + e.StackTrace);
+            streamWriter.WriteLine("Source: " + e.Source);
             streamWriter.WriteLine("ERROR END");
             streamWriter.Close();
 
             try
             {
-                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.Exception.ToString());
+                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
             }
             catch { }
         }
@@ -328,11 +302,6 @@ namespace Newtone.Mobile
         }
         #endregion
         #region Public Methods
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
         public override void OnBackPressed()
         {
             if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)

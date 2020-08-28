@@ -17,6 +17,7 @@ using Java.Lang;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
+using Newtone.Mobile.Logic;
 using Newtone.Mobile.Models;
 using Newtone.Mobile.Views;
 using YoutubeExplode.Playlists;
@@ -47,7 +48,7 @@ namespace Newtone.Mobile.Media
                 try
                 {
                     if (MediaPlayerService.Instance == null)
-                        MainActivity.Instance.StartService(new Intent(MainActivity.Instance, Java.Lang.Class.FromType(typeof(MediaPlayerService))));
+                        MainActivity.Instance.ApplicationContext.StartForegroundServiceCompat<MediaPlayerService>();
                     Global.MediaSession.Active = true;
                     GlobalData.Current.MediaPlayer.Play();
                 }
@@ -70,9 +71,6 @@ namespace Newtone.Mobile.Media
         {
             ProcessSearch(query);
         }
-        public override void OnPlayFromUri(Android.Net.Uri uri, Bundle extras)
-        {
-        }
 
         public override void OnStop()
         {
@@ -80,16 +78,16 @@ namespace Newtone.Mobile.Media
             if(Global.AudioFocusRequest != null)
                 am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
 
-            MediaPlayerService.Instance.StopSelf();
+            //MediaPlayerService.Instance.StopSelf();
             Global.MediaSession.Active = false;
             GlobalData.Current.MediaPlayer.Stop();
-            MediaPlayerService.Instance.StopForeground(false);
+            //MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnPause()
         {
             GlobalData.Current.MediaPlayer.Pause();
-            MediaPlayerService.Instance.StopForeground(false);
+            //MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnSkipToNext()
@@ -127,18 +125,6 @@ namespace Newtone.Mobile.Media
             }
             
             return true;
-        }
-
-        public override void OnPrepare()
-        {
-        }
-
-        public override void OnPrepareFromSearch(string query, Bundle extras)
-        {
-        }
-
-        public override void OnPrepareFromUri(Android.Net.Uri uri, Bundle extras)
-        {
         }
 
         public static void ProcessSearch(string query)
