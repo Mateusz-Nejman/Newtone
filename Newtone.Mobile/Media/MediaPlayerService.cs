@@ -46,7 +46,6 @@ namespace Newtone.Mobile.Media
         {
             base.OnCreate();
             Instance = this;
-
             Global.MediaSession = new MediaSessionCompat(BaseContext, "newtone");
             var intent = new Intent(BaseContext, typeof(MainActivity));
             var pi = PendingIntent.GetActivity(BaseContext, 99 /*request code*/,
@@ -62,8 +61,8 @@ namespace Newtone.Mobile.Media
             Global.MediaSession.SetPlaybackState(stateBuilder.Build());
 
             //TODO SetCallback
-
             SessionToken = Global.MediaSession.SessionToken;
+            StartForeground(0, GetNotification());
         }
         public override BrowserRoot OnGetRoot(string clientPackageName, int clientUid, Bundle rootHints)
         {
