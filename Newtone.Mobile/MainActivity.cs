@@ -60,7 +60,8 @@ namespace Newtone.Mobile
             InitializeGlobalVariables();
 
             LoadApplication(new App());
-            this.ApplicationContext.StartForegroundServiceCompat<MediaPlayerService>();
+            ConsoleDebug.WriteLine("MainActivity Service MediaPlayerService");
+            this.ApplicationContext.StartServiceCompat<MediaPlayerService>();
         }
         protected override void OnNewIntent(Intent intent)
         {
@@ -204,6 +205,7 @@ namespace Newtone.Mobile
             GlobalData.Current.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/consoleDebug.txt");
             GlobalData.Current.IncludedPaths = new List<string>()
             {
                 GlobalData.Current.MusicPath,

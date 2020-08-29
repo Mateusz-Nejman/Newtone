@@ -31,5 +31,16 @@ namespace Newtone.Mobile.Logic
                 context.StartService(intent);
             }
         }
+
+        public static void StartServiceCompat<T>(this Context context, Bundle args = null) where T : Service
+        {
+            var intent = new Intent(context, typeof(T));
+            if (args != null)
+            {
+                intent.PutExtras(args);
+            }
+
+            context.StartService(intent);
+        }
     }
 }

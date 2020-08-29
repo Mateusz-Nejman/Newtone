@@ -32,6 +32,7 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public override void OnPlay()
         {
+            ConsoleDebug.WriteLine("MediaSessionCallback OnPlay()");
             AudioManager am = (AudioManager)MainActivity.Instance.GetSystemService(Context.AudioService);
 
             AudioAttributes attrs = new AudioAttributes.Builder()
@@ -74,6 +75,7 @@ namespace Newtone.Mobile.Media
 
         public override void OnStop()
         {
+            ConsoleDebug.WriteLine("MediaSessionCallback OnStop()");
             AudioManager am = (AudioManager)MainActivity.Instance.GetSystemService(Context.AudioService);
             if(Global.AudioFocusRequest != null)
                 am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
@@ -86,6 +88,7 @@ namespace Newtone.Mobile.Media
 
         public override void OnPause()
         {
+            ConsoleDebug.WriteLine("MediaSessionCallback OnPause()");
             GlobalData.Current.MediaPlayer.Pause();
             //MediaPlayerService.Instance.StopForeground(false);
         }

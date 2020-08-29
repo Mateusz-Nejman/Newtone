@@ -45,6 +45,7 @@ namespace Newtone.Mobile.Media
         public override void OnCreate()
         {
             base.OnCreate();
+            ConsoleDebug.WriteLine("MediaPlayerService OnCreate()");
             Instance = this;
             Global.MediaSession = new MediaSessionCompat(BaseContext, "newtone");
             var intent = new Intent(BaseContext, typeof(MainActivity));
