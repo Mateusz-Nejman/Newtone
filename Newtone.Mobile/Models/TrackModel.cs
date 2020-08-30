@@ -23,7 +23,6 @@ namespace Newtone.Mobile.Models
     public class TrackModel : Newtone.Core.Models.TrackModel
     {
         #region Fields
-        //TODO Visibility
         private bool isVisible;
         private string trackString;
         private string playlistName;

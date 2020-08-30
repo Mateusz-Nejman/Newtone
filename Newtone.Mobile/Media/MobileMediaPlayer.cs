@@ -63,8 +63,6 @@ namespace Newtone.Mobile.Media
 
         public void AfterPrev()
         {
-
-            //TODO
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
         }
@@ -105,7 +103,7 @@ namespace Newtone.Mobile.Media
             MediaPlayer.Pause();
             if(GlobalData.Current.MediaSource != null)
             {
-                Global.SetNotificationData(PlaybackStateCompat.StatePaused);
+                MediaPlayerService.Instance.SetNotificationData(PlaybackStateCompat.StatePaused);
             }
             
         }
@@ -113,7 +111,7 @@ namespace Newtone.Mobile.Media
         public void Play()
         {
             MediaPlayer.Start();
-            Global.SetNotificationData(PlaybackStateCompat.StatePlaying);
+            MediaPlayerService.Instance.SetNotificationData(PlaybackStateCompat.StatePlaying);
         }
 
         public void Prepare()
@@ -129,6 +127,7 @@ namespace Newtone.Mobile.Media
         public void Seek(double seek)
         {
             MediaPlayer.SeekTo((int)seek * 1000);
+            MediaPlayerService.Instance.ShowNotification();
         }
 
         public void SetNotification(bool isPlaying)
@@ -144,7 +143,7 @@ namespace Newtone.Mobile.Media
         public void Stop()
         {
             MediaPlayer?.Stop();
-            Global.SetNotificationData(PlaybackStateCompat.StateStopped);
+            MediaPlayerService.Instance.SetNotificationData(PlaybackStateCompat.StateStopped);
         }
         #endregion
     }

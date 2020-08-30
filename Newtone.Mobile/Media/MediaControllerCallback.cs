@@ -20,7 +20,7 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public override void OnMetadataChanged(MediaMetadataCompat metadata)
         {
-            base.OnMetadataChanged(metadata); //TODO
+            base.OnMetadataChanged(metadata);
         }
 
         public override void OnPlaybackStateChanged(PlaybackStateCompat state)

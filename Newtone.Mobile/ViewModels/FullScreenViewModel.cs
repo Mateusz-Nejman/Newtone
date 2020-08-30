@@ -16,6 +16,7 @@ using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
 using Newtone.Mobile.Logic;
+using Newtone.Mobile.Media;
 using Newtone.Mobile.Processing;
 using Newtone.Mobile.Views;
 using Newtone.Mobile.Views.Custom;

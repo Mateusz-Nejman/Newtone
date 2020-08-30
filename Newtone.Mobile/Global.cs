@@ -41,16 +41,6 @@ namespace Newtone.Mobile
         public static ConnectivityManager ConnectivityManager { get; set; }
         public static PowerManager PowerManager { get; set; }
         public static PowerManager.WakeLock WakeLock { get; set; }
-        public static int PlaybackState { get; set; }
-        #endregion
-        #region Public Methods
-        public static void SetNotificationData(int state)
-        {
-            PlaybackState = state;
-            MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
-            StateBuilder.SetState(state, (long)GlobalData.Current.MediaPlayer.CurrentPosition, 1.0f);
-            MediaSession.SetPlaybackState(StateBuilder.Build());
-        }
         #endregion
     }
 }

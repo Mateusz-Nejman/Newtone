@@ -236,7 +236,6 @@ namespace Newtone.Core.Processing
             GlobalData.Current.SaveConfig();
             GlobalData.Current.SaveTags();
             GlobalData.Current.MediaPlayer.Error(Localization.Ready);
-            //TODO
 
             return fileInfo.FullName;
         }

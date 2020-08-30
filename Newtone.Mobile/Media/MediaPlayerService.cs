@@ -60,8 +60,6 @@ namespace Newtone.Mobile.Media
                 | PlaybackStateCompat.ActionPrepare | PlaybackStateCompat.ActionPrepareFromSearch | PlaybackStateCompat.ActionPrepareFromUri);
 
             Global.MediaSession.SetPlaybackState(stateBuilder.Build());
-
-            //TODO SetCallback
             SessionToken = Global.MediaSession.SessionToken;
             StartForeground(0, GetNotification());
         }
@@ -74,8 +72,6 @@ namespace Newtone.Mobile.Media
 
         public override void OnLoadChildren(string parentId, Result result)
         {
-
-            //TODO
             result.SendResult(null);
         }
 
@@ -104,7 +100,7 @@ namespace Newtone.Mobile.Media
                     .SetOngoing(true)
                     .SetLargeIcon(bitmap)
                     .AddAction(new NotificationCompat.Action(Resource.Drawable.PrevIconNotification, "prev", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToPrevious)))
-                    .AddAction(new NotificationCompat.Action(Global.PlaybackState == PlaybackStateCompat.StatePlaying ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, Global.PlaybackState == PlaybackStateCompat.StatePlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
+                    .AddAction(new NotificationCompat.Action(GlobalData.Current.MediaPlayer.IsPlaying ? Resource.Drawable.PauseIconNotification : Resource.Drawable.PlayIconNotification, "pause", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, GlobalData.Current.MediaPlayer.IsPlaying ? PlaybackStateCompat.ActionPause : PlaybackStateCompat.ActionPlay)))
                     .AddAction(new NotificationCompat.Action(Resource.Drawable.NextIconNotification, "next", MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionSkipToNext)))
                     .SetStyle(new MediaStyle()
                     .SetMediaSession(Global.MediaSession.SessionToken)
@@ -112,6 +108,7 @@ namespace Newtone.Mobile.Media
                     .SetShowCancelButton(true)
                     .SetCancelButtonIntent(MediaButtonReceiver.BuildMediaButtonPendingIntent(BaseContext, PlaybackStateCompat.ActionStop)));
 
+                SetNotificationData(GlobalData.Current.MediaPlayer.IsPlaying ? PlaybackStateCompat.StatePlaying : PlaybackStateCompat.StateStopped);
                 return builder.Build();
             }
 
@@ -126,6 +123,13 @@ namespace Newtone.Mobile.Media
                 Global.NotificationManager?.Notify(0, n);
             }
             
+        }
+
+        public void SetNotificationData(int state)
+        {
+            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
+            Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
+            Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
         }
         #endregion
     }

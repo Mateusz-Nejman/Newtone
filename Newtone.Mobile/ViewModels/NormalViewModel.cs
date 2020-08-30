@@ -427,8 +427,6 @@ namespace Newtone.Mobile.ViewModels
                 if (children.IsVisible && children is ITimerContent content)
                     content.Tick();
             }
-
-            Global.PlaybackState = GlobalData.Current.MediaPlayer?.IsPlaying == true ? PlaybackStateCompat.StatePlaying : PlaybackStateCompat.StatePaused;
         }
         #endregion
 
