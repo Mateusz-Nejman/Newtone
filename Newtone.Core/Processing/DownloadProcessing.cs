@@ -139,6 +139,7 @@ namespace Newtone.Core.Processing
                             }
                             GlobalData.Current.SaveConfig();
                         }
+                        GlobalData.Current.PlaylistsNeedRefresh = true;
                     }
                     Downloads.Remove(id);
                 }
