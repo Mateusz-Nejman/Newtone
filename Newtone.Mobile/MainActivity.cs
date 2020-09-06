@@ -47,6 +47,7 @@ namespace Newtone.Mobile
         #region Protected Methods
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            ConsoleDebug.WriteLine("MainActivity OnCreate()");
             Instance = this;
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -66,6 +67,7 @@ namespace Newtone.Mobile
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
+            ConsoleDebug.WriteLine("MainActivity OnNewIntent()");
             ProcessNewIntent(intent);
             if(!Global.WakeLock?.IsHeld == true)
                 Global.WakeLock?.Acquire();
@@ -73,6 +75,7 @@ namespace Newtone.Mobile
         protected override void OnStart()
         {
             base.OnStart();
+            ConsoleDebug.WriteLine("MainActivity OnStart()");
             try
             {
                 Global.MediaBrowser.Connect();
@@ -86,6 +89,7 @@ namespace Newtone.Mobile
         protected override void OnStop()
         {
             base.OnStop();
+            ConsoleDebug.WriteLine("MainActivity OnStop()");
             MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
             try
             {
@@ -98,6 +102,10 @@ namespace Newtone.Mobile
 
         }
 
+        private bool test()
+        {
+            return false;
+        }
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);

@@ -16,6 +16,7 @@ using Android.Widget;
 using Java.Util;
 using Newtone.Core;
 using Newtone.Core.Logic;
+using Newtone.Mobile.Logic;
 using Newtone.Mobile.Processing;
 using static Android.Support.V4.Media.App.NotificationCompat;
 using static Android.Support.V4.Media.MediaBrowserCompat;
@@ -130,6 +131,12 @@ namespace Newtone.Mobile.Media
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
             Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            ConsoleDebug.WriteLine("MediaPlayerService OnDestroy(IsPlaying: "+GlobalData.Current.MediaPlayer.IsPlaying+ ")");
         }
         #endregion
     }
