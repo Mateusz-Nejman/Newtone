@@ -3,12 +3,9 @@ using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Desktop.Logic;
-using Newtone.Desktop.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 

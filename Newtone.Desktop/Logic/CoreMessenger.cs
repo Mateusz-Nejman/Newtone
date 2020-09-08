@@ -1,8 +1,5 @@
 ﻿using Newtone.Core.Logic;
 using Newtone.Desktop.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Newtone.Desktop.Logic
 {

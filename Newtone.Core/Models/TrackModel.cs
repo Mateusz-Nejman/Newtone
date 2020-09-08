@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-
-namespace Newtone.Core.Models
+﻿namespace Newtone.Core.Models
 {
     public class TrackModel:PropertyChangedBase
     {

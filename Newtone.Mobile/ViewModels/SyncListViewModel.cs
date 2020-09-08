@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
-using Newtone.Mobile.Models;
 using TrackModel = Newtone.Mobile.Models.TrackModel;
 
 namespace Newtone.Mobile.ViewModels

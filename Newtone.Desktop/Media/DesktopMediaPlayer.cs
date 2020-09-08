@@ -1,13 +1,7 @@
 ﻿using NAudio.Wave;
 using Newtone.Core;
-using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Desktop.Logic;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace Newtone.Desktop.Media
 {

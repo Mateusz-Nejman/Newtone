@@ -1,13 +1,9 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using Android.Content;
-using Android.Support.V4.App;
+﻿using Xamarin.Forms;
 using Android;
-using System.Threading.Tasks;
 using System.IO;
 using Newtone.Mobile.Views;
 using Newtone.Core;
+using AndroidX.Core.App;
 
 namespace Newtone.Mobile
 {

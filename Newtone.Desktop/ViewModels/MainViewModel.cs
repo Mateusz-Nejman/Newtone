@@ -8,12 +8,10 @@ using Newtone.Desktop.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static Newtone.Desktop.Views.MainWindow;
 
 namespace Newtone.Desktop.ViewModels
 {

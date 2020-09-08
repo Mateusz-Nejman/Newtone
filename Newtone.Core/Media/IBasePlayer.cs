@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Newtone.Core.Media
+﻿namespace Newtone.Core.Media
 {
     public interface IBasePlayer
     {

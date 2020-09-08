@@ -1,12 +1,7 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Models;
-using Newtone.Core.Languages;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using System.Windows.Input;
 using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
 using Newtone.Mobile.Views;
-using Newtone.Mobile.Views.Images;
 using YoutubeExplode;
 
 namespace Newtone.Mobile.ViewModels.ViewCells

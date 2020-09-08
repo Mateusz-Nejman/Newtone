@@ -1,9 +1,6 @@
-﻿using Newtone.Core.Logic;
-using Newtone.Core.Models;
+﻿using Newtone.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Media

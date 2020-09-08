@@ -5,14 +5,8 @@ using Newtone.Core.Models;
 using Newtone.Desktop.Media;
 using Newtone.Desktop.Processing;
 using Newtone.Desktop.Views;
-using Newtone.Desktop.Views.Custom;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 

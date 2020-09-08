@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Newtone.Mobile"
              xmlns:custom="clr-namespace:Newtone.Mobile.ViewModels.Custom"
              mc:Ignorable="d"
-             x:Class="Newtone.Mobile.Views.Custom.PlayerPanel">
+             x:Class="Newtone.Mobile.Views.Custom.PlayerPanel" HeightRequest="60" IsVisible="{Binding IsPanelVisible}">
     <ContentView.BindingContext>
         <custom:PlayerPanelViewModel/>
     </ContentView.BindingContext>

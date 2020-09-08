@@ -1,10 +1,7 @@
 ﻿using Newtone.Core.Logic;
 using Newtone.Core.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using System.Windows.Input;
 
 namespace Newtone.Desktop.ViewModels

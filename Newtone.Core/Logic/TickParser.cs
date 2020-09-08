@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Newtone.Core.Logic
+﻿namespace Newtone.Core.Logic
 {
     public class TickParser
     {

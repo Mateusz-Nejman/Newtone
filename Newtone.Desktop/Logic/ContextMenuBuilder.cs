@@ -3,10 +3,8 @@ using Newtone.Core.Languages;
 using Newtone.Core.Loaders;
 using Newtone.Core.Processing;
 using Newtone.Desktop.Views;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Controls;
 
 namespace Newtone.Desktop.Logic

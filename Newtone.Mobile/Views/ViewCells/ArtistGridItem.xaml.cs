@@ -1,14 +1,4 @@
-﻿using Newtone.Core;
-using Newtone.Core.Languages;
-using Newtone.Core.Media;
-using Newtone.Mobile.Media;
-using Newtone.Mobile.Processing;
-using Newtone.Mobile.ViewModels.ViewCells;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtone.Mobile.ViewModels.ViewCells;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

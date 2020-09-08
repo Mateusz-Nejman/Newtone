@@ -1,18 +1,11 @@
-﻿using ATL;
-using Newtone.Core;
-using Newtone.Core.Logic;
+﻿using Newtone.Core;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Desktop.Logic;
-using Newtone.Desktop.Models;
 using Newtone.Desktop.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Newtone.Desktop.ViewModels
 {

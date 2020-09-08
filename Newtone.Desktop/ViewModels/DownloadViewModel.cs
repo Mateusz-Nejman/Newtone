@@ -1,9 +1,6 @@
 ﻿using Newtone.Core.Models;
 using Newtone.Core.Processing;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows.Controls;
 
 namespace Newtone.Desktop.ViewModels

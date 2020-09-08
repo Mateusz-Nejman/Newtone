@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using System.ComponentModel;
 using Android.Graphics;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Newtone.Mobile.Views.Images;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Color = Xamarin.Forms.Color;
 
 #pragma warning disable CS0618 // Typ lub składowa jest przestarzała
 [assembly: ExportRendererAttribute(typeof(IconView), typeof(IconViewRenderer))]

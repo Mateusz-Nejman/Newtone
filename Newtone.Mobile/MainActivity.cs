@@ -21,10 +21,8 @@ using Newtone.Core.Processing;
 using Newtone.Core.Languages;
 using Newtone.Mobile.Logic;
 using Newtone.Mobile.Media;
-using Newtone.Mobile.Processing;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
-using Android.Support.V4.App;
 using System.Reactive.Linq;
 
 namespace Newtone.Mobile

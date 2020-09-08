@@ -1,19 +1,7 @@
-﻿using Newtone.Core;
-using Newtone.Core.Media;
-using Newtone.Core.Processing;
-using Newtone.Core.Languages;
-using Newtone.Mobile.Logic;
-using Newtone.Mobile.Processing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using YoutubeExplode;
-using System.Net;
 using Newtone.Mobile.ViewModels;
 using Newtone.Core.Logic;
 

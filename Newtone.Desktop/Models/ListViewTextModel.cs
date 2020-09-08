@@ -1,7 +1,4 @@
 ﻿using Newtone.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Newtone.Desktop.Models
 {

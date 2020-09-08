@@ -1,26 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.Graphics;
 using Android.Media;
-using Android.OS;
-using Android.Runtime;
-using Android.Support.V4.App;
-using Android.Support.V4.Media;
 using Android.Support.V4.Media.Session;
-using Android.Views;
-using Android.Widget;
-using Java.Interop;
 using Newtone.Core;
-using Newtone.Core.Logic;
 using Newtone.Core.Media;
-using Newtone.Core.Languages;
-using Newtone.Mobile.Logic;
-using static Android.Support.V4.Media.App.NotificationCompat;
 
 namespace Newtone.Mobile.Media
 {

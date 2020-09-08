@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Content;
 using Android.Media;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V4.Media.Session;
 using Android.Views;
-using Android.Widget;
-using Java.Lang;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
 using Newtone.Mobile.Logic;
 using Newtone.Mobile.Models;
-using Newtone.Mobile.Views;
-using YoutubeExplode.Playlists;
 
 namespace Newtone.Mobile.Media
 {

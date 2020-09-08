@@ -9,8 +9,6 @@ using Xamarin.Forms;
 using Newtone.Core.Processing;
 using Newtone.Mobile.Media;
 using Newtone.Mobile.Views.ViewCells;
-using Newtone.Mobile.ViewModels.ViewCells;
-using Newtone.Core.Logic;
 using System.Linq;
 
 namespace Newtone.Mobile.Logic

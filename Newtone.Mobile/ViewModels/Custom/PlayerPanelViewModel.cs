@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using System.Windows.Input;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
-using Newtone.Mobile.Media;
 using Newtone.Mobile.Processing;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
@@ -30,6 +19,7 @@ namespace Newtone.Mobile.ViewModels.Custom
         private ImageSource playButton;
         private bool isPlayImage = true;
         private string playedTrack = "";
+        private bool isPanelVisible;
         #endregion
 
         #region Properties
@@ -92,6 +82,16 @@ namespace Newtone.Mobile.ViewModels.Custom
                 OnPropertyChanged();
             }
         }
+
+        public bool IsPanelVisible
+        {
+            get => isPanelVisible;
+            set
+            {
+                isPanelVisible = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region Commands
@@ -144,6 +144,7 @@ namespace Newtone.Mobile.ViewModels.Custom
 
         public void Tick()
         {
+            IsPanelVisible = GlobalData.Current.MediaSource != null;
             if (GlobalData.Current.MediaSource != null)
             {
                 Artist = GlobalData.Current.MediaSource.Artist;

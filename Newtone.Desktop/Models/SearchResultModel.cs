@@ -1,7 +1,4 @@
 ﻿using Newtone.Desktop.Processing;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Media;
 
 namespace Newtone.Desktop.Models

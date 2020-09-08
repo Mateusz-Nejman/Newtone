@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Mobile.Logic;
-using Newtone.Mobile.Models;
 using Newtone.Mobile.Views;
-using Newtone.Mobile.Views.Custom;
 using Xamarin.Forms;
 using SettingsModel = Newtone.Mobile.Models.SettingsModel;
 

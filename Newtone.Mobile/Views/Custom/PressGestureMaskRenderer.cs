@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Content;
 using Newtone.Mobile.Views.Custom;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms.Platform.Android.FastRenderers;
 using ImageRenderer = Xamarin.Forms.Platform.Android.FastRenderers.ImageRenderer;
 
 [assembly: ExportRenderer(typeof(PressGestureMask), typeof(PressGestureMaskRenderer))]

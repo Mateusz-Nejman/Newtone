@@ -1,9 +1,6 @@
 ﻿using Newtone.Core.Languages;
-using Newtone.Core.Logic;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Newtone.Core.Media
 {

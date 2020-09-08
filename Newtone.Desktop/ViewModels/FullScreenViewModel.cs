@@ -4,15 +4,11 @@ using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Desktop.Processing;
 using Newtone.Desktop.Views;
-using Newtone.Desktop.Views.Custom;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using static Newtone.Desktop.ViewModels.MainViewModel;
 
 namespace Newtone.Desktop.ViewModels

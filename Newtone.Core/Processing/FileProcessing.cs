@@ -1,8 +1,6 @@
 ﻿using Newtone.Core.Media;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Newtone.Core.Processing

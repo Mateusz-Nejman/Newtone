@@ -4,20 +4,9 @@ using Newtone.Core.Loaders;
 using Newtone.Core.Media;
 using Newtone.Desktop.Logic;
 using Newtone.Desktop.Processing;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using WaveFormRendererLib;
 
 namespace Newtone.Desktop.Views
 {

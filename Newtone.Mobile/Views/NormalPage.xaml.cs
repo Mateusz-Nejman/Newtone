@@ -1,22 +1,13 @@
 ﻿using Newtone.Core;
-using Newtone.Core.Loaders;
 using Newtone.Core.Logic;
 using Newtone.Core.Processing;
-using Newtone.Core.Languages;
-using Newtone.Mobile.Processing;
-using Newtone.Mobile.Views.Images;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Newtone.Mobile.ViewModels;
 using System.Reactive.Linq;
-using Java.Util;
 using Newtone.Mobile.Logic;
 using YoutubeExplode;
 

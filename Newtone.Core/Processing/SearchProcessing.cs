@@ -1,15 +1,10 @@
 ﻿using Newtone.Core.Logic;
-using Newtone.Core.Media;
 using Newtone.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using YoutubeExplode;
-using YoutubeExplode.Videos;
-using YoutubeExplode.Videos.Streams;
 
 namespace Newtone.Core.Processing
 {

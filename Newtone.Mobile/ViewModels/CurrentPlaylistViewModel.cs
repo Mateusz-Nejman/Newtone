@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
 using Newtone.Mobile.Media;
-using Newtone.Mobile.Models;
 using Xamarin.Forms;
 using TrackModel = Newtone.Mobile.Models.TrackModel;
 

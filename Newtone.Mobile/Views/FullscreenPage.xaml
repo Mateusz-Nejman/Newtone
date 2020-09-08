@@ -31,7 +31,11 @@
 
                 <Label Text="{Binding Title}" FontSize="16" FontFamily="{x:Static local:Fonts.Black}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0"/>
                 <Label Text="{Binding Artist}" Grid.Row="1" FontSize="16" FontFamily="{x:Static local:Fonts.Light}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0"/>
-                <Image Source="{Binding TrackImage}" Margin="16" Grid.Row="2" VerticalOptions="Fill" Aspect="AspectFit"/>
+                <RelativeLayout Margin="16" Grid.Row="2" VerticalOptions="Fill">
+                    <Image Source="{Binding TrackImage}" Aspect="AspectFill"
+                           RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                           RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"/>
+                </RelativeLayout>
 
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>

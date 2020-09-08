@@ -1,11 +1,4 @@
-﻿using Newtone.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace Newtone.Mobile.Views.Custom

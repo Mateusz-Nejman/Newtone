@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace Newtone.Core.Media
+﻿namespace Newtone.Core.Media
 {
     public class LocalPlayerController : IPlayerController
     {

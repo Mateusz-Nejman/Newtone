@@ -1,10 +1,7 @@
-﻿using Newtone.Core.Logic;
-using Newtone.Core.Media;
+﻿using Newtone.Core.Media;
 using Newtone.Core.Processing;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Newtone.Core.Loaders

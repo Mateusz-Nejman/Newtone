@@ -1,28 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
+﻿
 using Android.App;
-using Android.Content;
 using Android.Media;
-using Android.Media.Session;
 using Android.Net;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V4.App;
 using Android.Support.V4.Media;
 using Android.Support.V4.Media.Session;
-using Android.Views;
-using Android.Widget;
-using Nejman.NSEC2;
-using Newtone.Core;
-using Newtone.Mobile.Logic;
 using Newtone.Mobile.Media;
-using Newtone.Mobile.Models;
-using Newtone.Mobile.Processing;
-using Xamarin.Forms;
 
 namespace Newtone.Mobile
 {

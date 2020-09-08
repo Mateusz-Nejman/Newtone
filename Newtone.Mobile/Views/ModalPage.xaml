@@ -15,7 +15,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" HeightRequest="60" x:Name="topPanel" IsVisible="{Binding TopPanelVisible}">
                     <Grid.ColumnDefinitions>

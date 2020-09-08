@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.App;
-using Android.Support.V4.Media;
 using Android.Support.V4.Media.Session;
-using Android.Views;
-using Android.Widget;
-using Java.Util;
+using AndroidX.Core.App;
+using AndroidX.Media;
+using AndroidX.Media.Session;
 using Newtone.Core;
 using Newtone.Core.Logic;
-using Newtone.Mobile.Logic;
-using Newtone.Mobile.Processing;
-using static Android.Support.V4.Media.App.NotificationCompat;
-using static Android.Support.V4.Media.MediaBrowserCompat;
+using static AndroidX.Media.App.NotificationCompat;
 
 namespace Newtone.Mobile.Media
 {
