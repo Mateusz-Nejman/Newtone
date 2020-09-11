@@ -159,16 +159,15 @@ namespace Newtone.Mobile
         }
         private void LogException(Exception e)
         {
-            StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
-            streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
-            streamWriter.WriteLine("Exception: " + e.Message);
-            streamWriter.WriteLine("StackTrace: " + e.StackTrace);
-            streamWriter.WriteLine("Source: " + e.Source);
-            streamWriter.WriteLine("ERROR END");
-            streamWriter.Close();
-
             try
             {
+                StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
+                streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
+                streamWriter.WriteLine("Exception: " + e.Message);
+                streamWriter.WriteLine("StackTrace: " + e.StackTrace);
+                streamWriter.WriteLine("Source: " + e.Source);
+                streamWriter.WriteLine("ERROR END");
+                streamWriter.Close();
                 GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
             }
             catch { }

@@ -27,7 +27,7 @@ namespace Newtone.Mobile.Logic
             string filePath = elems[0];
             string playlistName = elems[1];
 
-            List<string> menuItems = new List<string>() { Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.SyncAdd };
+            List<string> menuItems = new List<string>() { Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd };
             if (!string.IsNullOrEmpty(playlistName))
                 menuItems.Add(Localization.SyncAddPlaylist);
 
@@ -173,6 +173,15 @@ namespace Newtone.Mobile.Logic
                     SyncProcessing.AddFiles(GlobalData.Current.Playlists[playlistName]);
                     SnackbarBuilder.Show(Localization.Ready);
                 }
+                else if(item == Localization.TrackMenuQueue)
+                {
+                    if(GlobalData.Current.CurrentPlaylist.Count > 0)
+                    {
+                        if (GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == filePath) == -1)
+                            GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[filePath]);
+                        SnackbarBuilder.Show(Localization.SnackQueue);
+                    }
+                }
             };
             menu.Show();
         }
@@ -197,7 +206,7 @@ namespace Newtone.Mobile.Logic
 
         public static void BuildForPlaylist(View sender, string playlistName)
         {
-            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.SyncAdd, Localization.ChangeName, Localization.TrackMenuDelete);
+            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd, Localization.ChangeName, Localization.TrackMenuDelete);
             menu.OnSelect += async(item) =>
             {
                 if(item == Localization.PlaylistPlay)
@@ -325,13 +334,25 @@ namespace Newtone.Mobile.Logic
                         (sender as PlaylistGridItem).Page.Init();
                     }
                 }
+                else if(item == Localization.TrackMenuQueue)
+                {
+                    if(GlobalData.Current.CurrentPlaylist.Count > 0)
+                    {
+                        foreach (var playlistTrack in GlobalData.Current.Playlists[playlistName])
+                        {
+                            if (GlobalData.Current.Audios.ContainsKey(playlistTrack) && GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == playlistTrack) == -1)
+                                GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[playlistTrack]);
+                        }
+                        SnackbarBuilder.Show(Localization.SnackQueue);
+                    }
+                }
             };
             menu.Show();
         }
 
         public static void BuildForArtist(View sender, string artistName)
         {
-            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.SyncAdd);
+            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd);
             menu.OnSelect += async(item) =>
             {
                 if (item == Localization.PlaylistPlay)
@@ -401,6 +422,17 @@ namespace Newtone.Mobile.Logic
                 {
                     SyncProcessing.AddFiles(GlobalData.Current.Artists[artistName]);
                     SnackbarBuilder.Show(Localization.Ready);
+                }
+                else if(item == Localization.TrackMenuQueue)
+                {
+                    if(GlobalData.Current.CurrentPlaylist.Count > 0)
+                    {
+                        foreach (var artistTrack in GlobalData.Current.Artists[artistName])
+                        {
+                            if (GlobalData.Current.Audios.ContainsKey(artistTrack) && GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == artistTrack) == -1)
+                                GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[artistTrack]);
+                        }
+                    }
                 }
             };
             menu.Show();
