@@ -24,6 +24,7 @@ using Newtone.Mobile.Media;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
 using System.Reactive.Linq;
+using System.Linq;
 
 namespace Newtone.Mobile
 {
@@ -215,7 +216,8 @@ namespace Newtone.Mobile
             {
                 GlobalData.Current.MusicPath,
                 Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
-            };
+        };
+            GlobalData.Current.IncludedPathsToSkip = GlobalData.Current.IncludedPaths.Count;
         }
 
         private void ProcessNewIntent(Intent intent)

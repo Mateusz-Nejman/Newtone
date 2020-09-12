@@ -95,6 +95,7 @@ namespace Newtone.Core
         public bool TracksNeedRefresh { get; set; }
         public bool PlaylistsNeedRefresh { get; set; }
         public bool HistoryNeedRefresh { get; set; }
+        public int IncludedPathsToSkip { get; set; }
         #endregion
         #region Public Methods
         public void Initialize()
@@ -395,11 +396,11 @@ namespace Newtone.Core
                 nsec.AddFile("history", System.Text.Encoding.UTF8.GetBytes(buffer));
             }
 
-            if(IncludedPaths.Count > 2)
+            if(IncludedPaths.Count > IncludedPathsToSkip)
             {
                 buffer = "";
 
-                IncludedPaths.Skip(2).ForEach(elem =>
+                IncludedPaths.Skip(IncludedPathsToSkip).ForEach(elem =>
                 {
                     buffer += elem + "\n";
                 });

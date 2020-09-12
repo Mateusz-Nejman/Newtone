@@ -16,8 +16,14 @@ namespace Newtone.Core.Processing
             return await Task.Run(() => {
                 List<MediaSource> containers = new List<MediaSource>();
 
-                string[] mp3Files = Directory.GetFiles(directory, "*.mp3");
-                string[] m4aFiles = Directory.GetFiles(directory, "*.m4a");
+                string[] mp3Files = new string[0];
+                string[] m4aFiles = new string[0];
+                try
+                {
+                    mp3Files = Directory.GetFiles(directory, "*.mp3");
+                    m4aFiles = Directory.GetFiles(directory, "*.m4a");
+                }
+                catch { }
                 List<string> files = new List<string>();
                 files.AddRange(mp3Files);
                 files.AddRange(m4aFiles);
