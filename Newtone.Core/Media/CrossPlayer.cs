@@ -133,10 +133,10 @@ namespace Newtone.Core.Media
             if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
                 MediaSource track;
-                if (GlobalData.Current.CurrentQueue.Count > 0 && GlobalData.Current.QueuePosition < GlobalData.Current.CurrentQueue.Count-1)
+                if (GlobalData.Current.CurrentQueue.Count > 0 && GlobalData.Current.QueuePosition <= GlobalData.Current.CurrentQueue.Count-1 && GlobalData.Current.QueuePosition >= 0)
                 {
-                    GlobalData.Current.QueuePosition++;
                     track = GlobalData.Current.CurrentQueue[GlobalData.Current.QueuePosition];
+                    GlobalData.Current.QueuePosition++;
                 }
                 else
                 {
