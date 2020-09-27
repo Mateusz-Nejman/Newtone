@@ -210,10 +210,10 @@ namespace Newtone.Desktop.ViewModels
             ReceiveButtonIsEnabled = !SyncProcessing.Started;
 
             if (SyncProcessing.State == 0)
-                ProgressText = SyncProcessing.Progress == 0 ? "" : $"{Math.Round(SyncProcessing.Progress, 2)}MB / {Math.Round(SyncProcessing.Size, 2)}MB";
+                ProgressText = SyncProcessing.Progress == 0 ? "" : string.Concat(Math.Round(SyncProcessing.Progress, 2), "MB / ", Math.Round(SyncProcessing.Size, 2), "MB");
             else if (SyncProcessing.State == 1)
             {
-                ProgressText = $"{SyncProcessing.CurrentFileReceived} / {SyncProcessing.FilesReceived}";
+                ProgressText = string.Concat(SyncProcessing.CurrentFileReceived, " / ", SyncProcessing.FilesReceived);
                 FileText = SyncProcessing.CurrentFileName;
             }
             else if (SyncProcessing.State == 2)
@@ -227,7 +227,7 @@ namespace Newtone.Desktop.ViewModels
             SendGridVisibility = SyncProcessing.SocketMode == 2 ? Visibility.Visible : Visibility.Hidden;
 
             if (SyncProcessing.SocketMode == 2)
-                SendProgressText = $"{Math.Round(SyncProcessing.Progress, 2)}% ";
+                SendProgressText = string.Concat(Math.Round(SyncProcessing.Progress, 2), "%");
 
             if (Items.Count != SyncProcessing.Audios.Count)
             {

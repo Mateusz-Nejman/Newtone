@@ -9,7 +9,6 @@ namespace Newtone.Mobile.Media
     public class MobileMediaPlayer : IBasePlayer
     {
         #region Properties
-        public static bool EntityClicked { get; set; }
         private MediaPlayer MediaPlayer { get; set; }
         #endregion
         #region Constructors
@@ -19,26 +18,25 @@ namespace Newtone.Mobile.Media
             MediaPlayer.SetAudioStreamType(Stream.Music);
             MediaPlayer.Completion += MediaPlayer_Completion;
             MediaPlayer.Prepared += MediaPlayer_Prepared;
-            EntityClicked = false;
-            
         }
         #endregion
         #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
             Play();
+            Seek(0);
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            if (MediaPlayer.CurrentPosition > 0 && !EntityClicked)
+            if (MediaPlayer.CurrentPosition > 0 && MediaPlayer.CurrentPosition != MediaPlayer.Duration)
                 GlobalData.Current.MediaPlayer.Next();
-            EntityClicked = false;
         }
         #endregion
         #region Public Methods
         public void AfterNext()
         {
+            Console.WriteLine("AfterNext");
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
         }

@@ -25,7 +25,7 @@ namespace Newtone.Core.Logic
         #region Public Methods
         public override string ToString()
         {
-            return $"{Media?.FilePath}{GlobalData.SEPARATOR}{Count}:";
+            return string.Concat(Media?.FilePath,GlobalData.SEPARATOR,Count,":");
         }
 
         public static TrackCounter FromString(string fromString)

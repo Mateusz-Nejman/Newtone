@@ -11,8 +11,8 @@
 
             string format = "";
 
-            format += minutes < 10 ? $"0{minutes}:" : $"{minutes}";
-            format += seconds < 10 ? $"0{seconds}" : $"{seconds}";
+            format += minutes < 10 ? string.Concat(0,minutes) : minutes.ToString();
+            format += seconds < 10 ? string.Concat(0,seconds) : seconds.ToString();
 
             return format;
         }

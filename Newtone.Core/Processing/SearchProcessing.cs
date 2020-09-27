@@ -63,7 +63,7 @@ namespace Newtone.Core.Processing
                     ThumbUrl = video.Thumbnails.MediumResUrl,
                     Id = video.Id,
                     MixId = video.GetVideoMixPlaylistId(),
-                    VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}"
+                    VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url)
                 });
             }
             else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
@@ -79,7 +79,7 @@ namespace Newtone.Core.Processing
                         MixId = video.GetVideoMixPlaylistId(),
                         ThumbUrl = video.Thumbnails.MediumResUrl,
                         Title = video.Title,
-                        VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}"
+                        VideoData = string.Concat(video.Title, GlobalData.SEPARATOR, video.Url)
                     });
                 }
             }
@@ -88,7 +88,7 @@ namespace Newtone.Core.Processing
                 var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]);
                 foreach (var video in playlist)
                 {
-                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}&list={validators[QueryEnum.Playlist]}" });
+                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[QueryEnum.Playlist] )});
                 }
             }
         }

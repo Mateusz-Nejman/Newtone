@@ -95,11 +95,13 @@ namespace Newtone.Core.Media
 
             Console.WriteLine("Load " + filename + " using " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerControler"));
             PlayerController?.Load(this, filename);
-
+            Console.WriteLine("Loaded");
             try
             {
+                Console.WriteLine("Prepare");
                 BasePlayer?.Prepare();
                 PlayerController?.Prepared(this);
+                Console.WriteLine("Prepared");
             }
             catch(Exception e)
             {

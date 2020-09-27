@@ -31,7 +31,7 @@
         {
             get
             {
-                return $"{Name} ({TrackCount})";
+                return string.Concat(Name, " (", TrackCount, ")");
             }
         }
         #endregion

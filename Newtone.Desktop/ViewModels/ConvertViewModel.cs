@@ -48,7 +48,7 @@ namespace Newtone.Desktop.ViewModels
         }
         public string Progress
         {
-            get => $"{ConvertedFiles} / {FilesToConvert}";
+            get => string.Concat(ConvertedFiles, " / ", FilesToConvert);
         }
         public ObservableCollection<ListViewTextModel> Items
         {

@@ -34,7 +34,7 @@ namespace Newtone.Mobile.Models
         {
             get
             {
-                return $"{FilePath}{GlobalData.SEPARATOR}{PlaylistName}";
+                return string.Concat(FilePath, GlobalData.SEPARATOR, PlaylistName);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Newtone.Mobile.Models
         public TrackModel CheckChanges()
         {
             IsVisible = FilePath == GlobalData.Current.MediaSourcePath;
-            TrackString = Artist == Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
+            TrackString = Artist == Localization.UnknownArtist ? Title : string.Concat(Artist, " - ", Title);
             return this;
         }
         #endregion

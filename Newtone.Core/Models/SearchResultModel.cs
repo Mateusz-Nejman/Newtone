@@ -118,7 +118,7 @@ namespace Newtone.Core.Models
                 MixId = video.GetVideoMixPlaylistId(),
                 ThumbUrl = video.Thumbnails.MediumResUrl,
                 Title = video.Title,
-                VideoData = $"{video.Title}{GlobalData.SEPARATOR}{video.Url}"
+                VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url)
             };
 
             using WebClient client = new WebClient();

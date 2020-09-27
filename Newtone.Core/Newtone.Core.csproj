@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="YoutubeExplode" Version="5.1.5" />
-    <PackageReference Include="z440.atl.core" Version="3.10.0" />
+    <PackageReference Include="z440.atl.core" Version="3.11.0" />
   </ItemGroup>
 
   <ItemGroup>

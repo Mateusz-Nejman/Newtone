@@ -272,10 +272,10 @@ namespace Newtone.Mobile.ViewModels
             FileText = SyncProcessing.CurrentFileName;
 
             if (SyncProcessing.State == 0)
-                ProgressText = SyncProcessing.Progress == 0 ? "" : $"{Math.Round(SyncProcessing.Progress, 2)}MB / {Math.Round(SyncProcessing.Size, 2)}MB";
+                ProgressText = SyncProcessing.Progress == 0 ? "" : string.Concat(Math.Round(SyncProcessing.Progress, 2), "MB / ", Math.Round(SyncProcessing.Size, 2), "MB");
             else if (SyncProcessing.State == 1)
             {
-                ProgressText = $"{SyncProcessing.CurrentFileReceived} / {SyncProcessing.FilesReceived}";
+                ProgressText = string.Concat(SyncProcessing.CurrentFileReceived, " / ", SyncProcessing.FilesReceived);
             }
             else if (SyncProcessing.State == 2)
                 ProgressText = Localization.Unpacked;

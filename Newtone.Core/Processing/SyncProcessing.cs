@@ -398,7 +398,7 @@ namespace Newtone.Core.Processing
             string c2 = ((int)addr.GetAddressBytes()[1]).ToString("X").PadLeft(2, '0');
             string c3 = ((int)addr.GetAddressBytes()[2]).ToString("X").PadLeft(2, '0');
             string c4 = ((int)addr.GetAddressBytes()[3]).ToString("X").PadLeft(2, '0');
-            return $"{c1}{c2}{c3}{c4}";
+            return string.Concat(c1,c2,c3,c4);
         }
 
         private static IPAddress FromHex(string hex)

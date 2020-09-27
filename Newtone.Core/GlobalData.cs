@@ -340,7 +340,7 @@ namespace Newtone.Core
 
                 WebToLocalPlaylists.Keys.ForEach(playlistId =>
                 {
-                    string elem = $"{playlistId}{SEPARATOR}{WebToLocalPlaylists[playlistId]}\n";
+                    string elem = string.Concat(playlistId, SEPARATOR, WebToLocalPlaylists[playlistId],"\n");
                     buffer += elem;
                 });
 

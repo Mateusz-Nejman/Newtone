@@ -117,7 +117,6 @@ namespace Newtone.Mobile.ViewModels
 
                 new Task(() =>
                 {
-                    MobileMediaPlayer.EntityClicked = true;
                     GlobalData.Current.MediaPlayer.Load(GlobalData.Current.MediaSource.FilePath);
                     MediaPlayerHelper.Play();
 

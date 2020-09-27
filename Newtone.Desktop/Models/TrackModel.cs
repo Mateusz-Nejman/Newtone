@@ -87,7 +87,7 @@ namespace Newtone.Desktop.Models
         public TrackModel CheckChanges()
         {
             Visibility = FilePath == GlobalData.Current.MediaSourcePath ? Visibility.Visible : Visibility.Hidden;
-            TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : $"{Artist} - {Title}";
+            TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : string.Concat(Artist," - ",Title);
             return this;
         }
         #endregion
