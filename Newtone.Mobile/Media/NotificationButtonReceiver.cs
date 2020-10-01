@@ -13,25 +13,31 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public override void OnReceive(Context context, Intent intent)
         {
-            KeyEvent ev = (KeyEvent)intent.GetParcelableExtra(Intent.ExtraKeyEvent);
-
-            if(ev.Action == KeyEventActions.Down)
+            if(intent != null)
             {
-                if (ev.KeyCode == Keycode.MediaPlay)
+                KeyEvent ev = (KeyEvent)intent.GetParcelableExtra(Intent.ExtraKeyEvent);
+
+                if (ev == null)
+                    return;
+
+                if (ev.Action == KeyEventActions.Down)
                 {
-                    MediaPlayerHelper.Play();
-                }
-                else if (ev.KeyCode == Keycode.MediaPause)
-                {
-                    MediaPlayerHelper.Pause();
-                }
-                else if (ev.KeyCode == Keycode.MediaPrevious)
-                {
-                    MediaPlayerHelper.Prev();
-                }
-                else if (ev.KeyCode == Keycode.MediaNext)
-                {
-                    MediaPlayerHelper.Next();
+                    if (ev.KeyCode == Keycode.MediaPlay)
+                    {
+                        MediaPlayerHelper.Play();
+                    }
+                    else if (ev.KeyCode == Keycode.MediaPause)
+                    {
+                        MediaPlayerHelper.Pause();
+                    }
+                    else if (ev.KeyCode == Keycode.MediaPrevious)
+                    {
+                        MediaPlayerHelper.Prev();
+                    }
+                    else if (ev.KeyCode == Keycode.MediaNext)
+                    {
+                        MediaPlayerHelper.Next();
+                    }
                 }
             }
         }

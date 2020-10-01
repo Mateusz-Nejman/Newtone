@@ -222,7 +222,7 @@ namespace Newtone.Mobile.ViewModels
                 if (gotoTracksCommand == null)
                     gotoTracksCommand = new ActionCommand(parameter =>
                     {
-                        if(currentButtonIndex != 0)
+                        if(currentButtonIndex != 0 || (parameter as bool?) == true)
                         {
                             if (tracksPage == null)
                                 tracksPage = new TracksPage();
@@ -374,6 +374,7 @@ namespace Newtone.Mobile.ViewModels
                 {
                     GlobalData.Current.LoadConfig();
                     MainActivity.Loaded = true;
+                    GotoTracks.Execute(true);
                 });
             }
             SearchPlaceholder = Localization.Search;

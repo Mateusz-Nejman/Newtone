@@ -70,7 +70,7 @@ namespace Newtone.Mobile.Media
 
         public Notification GetNotification()
         {
-            if(Global.MediaSession != null && Global.MediaSession.Controller != null && GlobalData.Current.MediaSource != null)
+            if(Global.MediaSession != null && Global.MediaSession.Controller != null && GlobalData.Current.MediaSource != null && GlobalData.Current.MediaPlayer != null)
             {
                 MediaControllerCompat controller = Global.MediaSession.Controller;
 
@@ -123,12 +123,6 @@ namespace Newtone.Mobile.Media
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
             Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
-        }
-
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-            ConsoleDebug.WriteLine("MediaPlayerService OnDestroy(IsPlaying: "+GlobalData.Current.MediaPlayer.IsPlaying+ ")");
         }
         #endregion
     }
