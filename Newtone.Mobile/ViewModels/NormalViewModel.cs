@@ -374,7 +374,7 @@ namespace Newtone.Mobile.ViewModels
                 {
                     GlobalData.Current.LoadConfig();
                     MainActivity.Loaded = true;
-                    GotoTracks.Execute(true);
+                    NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoTracks.Execute(true));
                 });
             }
             SearchPlaceholder = Localization.Search;
@@ -439,6 +439,11 @@ namespace Newtone.Mobile.ViewModels
 
             if (!Container.Children.Contains(content))
                 Container.Children.Add(content);
+            else
+            {
+                Container.Children.Remove(content);
+                Container.Children.Add(content);
+            }
             if(Container.Children.Count > 0)
             {
                 foreach(var children in Container.Children)

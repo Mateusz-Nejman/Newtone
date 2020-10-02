@@ -33,6 +33,7 @@ namespace Newtone.Mobile
     [IntentFilter(new[] { MediaStore.IntentActionMediaPlayFromSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { MediaStore.IntentActionMediaSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { Intent.ActionGetContent} ,Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataMimeType = "audio/*")]
+    [IntentFilter(new[] { Intent.ActionMain }, Categories = new[] { Intent.CategoryLeanbackLauncher})]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         #region Fields
@@ -101,10 +102,6 @@ namespace Newtone.Mobile
 
         }
 
-        private bool test()
-        {
-            return false;
-        }
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
