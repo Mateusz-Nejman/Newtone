@@ -28,12 +28,12 @@ using System.Linq;
 
 namespace Newtone.Mobile
 {
-    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTask, AlwaysRetainTaskState = true)]
+    [Activity(Label = "Newtone", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.Navigation, LaunchMode = LaunchMode.SingleTask, AlwaysRetainTaskState = true)]
     [IntentFilter(new[] { Intent.ActionView}, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataSchemes = new[] { "file","content"}, DataMimeType = "audio/*")]
     [IntentFilter(new[] { MediaStore.IntentActionMediaPlayFromSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { MediaStore.IntentActionMediaSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { Intent.ActionGetContent} ,Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataMimeType = "audio/*")]
-    [IntentFilter(new[] { Intent.ActionMain }, Categories = new[] { Intent.CategoryLeanbackLauncher})]
+    [IntentFilter(new[] { Intent.ActionMain }, Categories = new[] { Intent.CategoryLauncher, Intent.CategoryLeanbackLauncher})]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         #region Fields

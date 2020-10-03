@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="68" android:versionName="4.84" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="69" android:versionName="4.85" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
 	<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="29" />
-	<application android:allowBackup="true" android:icon="@mipmap/app_icon" android:label="Newtone" android:roundIcon="@mipmap/icon_round" android:supportsRtl="true" android:appCategory="audio" android:requestLegacyExternalStorage="true" android:banner="@drawable/Banner"></application>
+	<application android:allowBackup="true" android:icon="@mipmap/app_icon" android:label="Newtone" android:roundIcon="@mipmap/icon_round" android:appCategory="audio" android:requestLegacyExternalStorage="true" android:banner="@drawable/Banner"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,4 +13,6 @@
         android:required="false" />
   <uses-feature android:name="android.hardware.touchscreen"
               android:required="false" />
+  <uses-feature android:name="android.hardware.faketouch"
+        android:required="false"/>
 </manifest>

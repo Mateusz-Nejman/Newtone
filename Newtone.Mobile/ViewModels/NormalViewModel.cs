@@ -389,7 +389,7 @@ namespace Newtone.Mobile.ViewModels
                 if (Container.Children[0] is IVisibleContent)
                     (Container.Children[0] as IVisibleContent).Appearing();
 
-            if(GlobalData.Current.Audios.Count == 0 && CacheLoader.IsCacheAvailable())
+            if(GlobalData.Current.Audios.Count == 0)
             {
                 GlobalData.Current.LoadTags();
                 CacheLoader.LoadCache();
