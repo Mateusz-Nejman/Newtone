@@ -72,7 +72,7 @@
   <ItemGroup>
     <Reference Include="Mono.Android.Export" />
     <Reference Include="NSEC2">
-      <HintPath>..\..\NSEC\NSEC2\bin\Debug\netstandard2.0\NSEC2.dll</HintPath>
+      <HintPath>..\..\NSEC\NSEC2\bin\Release\netstandard2.0\NSEC2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web.Services" />
