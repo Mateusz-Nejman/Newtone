@@ -251,6 +251,9 @@
     <PackageReference Include="System.Reactive">
       <Version>5.0.0-preview.16</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Leanback">
+      <Version>1.0.0.5</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.1487-pre1</Version>
     </PackageReference>

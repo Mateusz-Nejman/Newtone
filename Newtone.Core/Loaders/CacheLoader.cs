@@ -21,13 +21,16 @@ namespace Newtone.Core.Loaders
                 NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
                 nsec.Load(File.OpenRead(GlobalData.Current.DataPath + "/cache.nsec2"));
 
-                string[] cache = Encoding.UTF8.GetString(nsec.Get("cache")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                Console.WriteLine("Load " + cache.Length + " cached files");
-                cache.ForEach(filepath =>
+                if(nsec.TryGet("cache",out byte[] data))
                 {
-                    if (File.Exists(filepath))
-                        GlobalLoader.AddTrack(MediaProcessing.GetSource(filepath));
-                });
+                    string[] cache = Encoding.UTF8.GetString(data).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    Console.WriteLine("Load " + cache.Length + " cached files");
+                    cache.ForEach(filepath =>
+                    {
+                        if (File.Exists(filepath))
+                            GlobalLoader.AddTrack(MediaProcessing.GetSource(filepath));
+                    });
+                }
 
                 nsec.Dispose();
             }
