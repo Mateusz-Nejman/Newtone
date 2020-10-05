@@ -134,6 +134,28 @@ namespace Newtone.Core.Processing
             int stepsToSame = ComputeLevenshteinDistance(source, target);
             return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length)));
         }
+
+        public static List<string> GenerateSearchSuggestions()
+        {
+            List<string> returnData = new List<string>();
+
+            foreach(var item in GlobalData.Current.Audios.Values)
+            {
+                if(returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Artist.ToLowerInvariant()) || item.Artist.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
+                    returnData.Add(item.Artist);
+                if (returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Title.ToLowerInvariant()) || item.Title.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
+                    returnData.Add(item.Title);
+            }
+
+            foreach(var item in GlobalData.Current.History)
+            {
+                if (returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Text.ToLowerInvariant()) || item.Text.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
+                    returnData.Add(item.Text);
+            }
+
+            returnData.Sort();
+            return returnData;
+        }
         #endregion
         #region Private Methods
         private static int ComputeLevenshteinDistance(string source, string target)

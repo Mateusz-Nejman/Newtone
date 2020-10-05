@@ -42,6 +42,8 @@ namespace Newtone.Mobile.ViewModels
         private bool settingsButtonToggled;
         private PlayerPanel playerPanel;
         private IDisposable loopSubscription;
+
+        private bool searchCancelVisible;
         #endregion
 
         #region Properties
@@ -190,6 +192,18 @@ namespace Newtone.Mobile.ViewModels
             set
             {
                 entryText = value;
+                OnPropertyChanged();
+
+                SearchCancelVisible = entryText.Length > 0;
+            }
+        }
+
+        public bool SearchCancelVisible
+        {
+            get => searchCancelVisible;
+            set
+            {
+                searchCancelVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -346,6 +360,37 @@ namespace Newtone.Mobile.ViewModels
                     });
 
                 return gotoDownloadCommand;
+            }
+        }
+
+        private ICommand searchCommand;
+        public ICommand SearchCommand
+        {
+            get
+            {
+                if (searchCommand == null)
+                    searchCommand = new ActionCommand(parameter =>
+                    {
+                        foreach (var children in Container.Children)
+                        {
+                            if (children is SearchPage page)
+                                page?.SearchEntry_Completed(EntryText);
+                        }
+                    });
+
+                return searchCommand;
+            }
+        }
+
+        private ICommand clearSearchCommand;
+        public ICommand ClearSearchText
+        {
+            get
+            {
+                if (clearSearchCommand == null)
+                    clearSearchCommand = new ActionCommand(parameter => EntryText = "");
+
+                return clearSearchCommand;
             }
         }
         #endregion

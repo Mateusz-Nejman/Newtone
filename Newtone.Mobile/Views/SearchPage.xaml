@@ -13,7 +13,7 @@
     </ContentView.BindingContext>
   <ContentView.Content>
         <StackLayout Orientation="Vertical" Padding="5">
-            <Grid>
+            <Grid IsVisible="{Binding SearchSuggestionsVisibleNegative}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
@@ -28,9 +28,26 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical" IsVisible="{Binding SearchSuggestionsVisibleNegative}">
                 <ListView VerticalOptions="FillAndExpand"
                           ItemSelected="HistoryList_ItemSelected"  ItemsSource="{Binding Items}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+            <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical" IsVisible="{Binding SearchSuggestionsVisible}" BackgroundColor="{Static local:Colors.ColorPrimary}">
+                <ListView VerticalOptions="FillAndExpand"
+                          ItemSelected="SuggestionList_ItemSelected"  ItemsSource="{Binding SuggestionItems}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

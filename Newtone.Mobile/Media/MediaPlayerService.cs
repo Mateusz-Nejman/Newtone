@@ -120,9 +120,13 @@ namespace Newtone.Mobile.Media
 
         public void SetNotificationData(int state)
         {
-            Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
-            Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
-            Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            try
+            {
+                Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
+                Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
+                Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
+            }
+            catch { }
         }
         #endregion
     }

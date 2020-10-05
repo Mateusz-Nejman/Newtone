@@ -95,5 +95,31 @@ namespace Newtone.Mobile.Views
                     page?.SearchEntry_Completed(ViewModel?.EntryText);
             }
         }
+        private void Entry_Focused(object sender, FocusEventArgs e)
+        {
+            foreach (var children in container.Children)
+            {
+                if (children is SearchPage page)
+                    page?.Entry_Focused();
+            }
+        }
+
+        private void Entry_Unfocused(object sender, FocusEventArgs e)
+        {
+            foreach (var children in container.Children)
+            {
+                if (children is SearchPage page)
+                    page?.Entry_Unfocused();
+            }
+        }
+
+        private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            foreach (var children in container.Children)
+            {
+                if (children is SearchPage page)
+                    page?.SetSearchText(ViewModel?.EntryText);
+            }
+        }
     }
 }

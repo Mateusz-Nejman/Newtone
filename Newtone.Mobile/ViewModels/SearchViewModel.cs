@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -6,6 +7,8 @@ using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
+using Newtone.Core.Processing;
+using Newtone.Mobile.Logic;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
 
@@ -15,7 +18,9 @@ namespace Newtone.Mobile.ViewModels
     {
         #region Fields
         private ObservableCollection<HistoryModel> items;
-        private string searchText;
+        private ObservableCollection<HistoryModel> suggestionItems;
+        private string searchText = string.Empty;
+        private bool searchSuggestionsVisible = false;
         #endregion
         #region Properties
         public ObservableCollection<HistoryModel> Items
@@ -24,6 +29,16 @@ namespace Newtone.Mobile.ViewModels
             set
             {
                 items = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<HistoryModel> SuggestionItems
+        {
+            get => suggestionItems;
+            set
+            {
+                suggestionItems = value;
                 OnPropertyChanged();
             }
         }
@@ -37,6 +52,19 @@ namespace Newtone.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool SearchSuggestionsVisible
+        {
+            get => searchSuggestionsVisible;
+            set
+            {
+                searchSuggestionsVisible = value;
+                OnPropertyChanged();
+                OnPropertyChanged(() => SearchSuggestionsVisibleNegative);
+            }
+        }
+
+        public bool SearchSuggestionsVisibleNegative => !SearchSuggestionsVisible;
         #endregion
         #region Commands
         private ICommand clearCommand;
@@ -59,6 +87,7 @@ namespace Newtone.Mobile.ViewModels
         #region Constructors
         public SearchViewModel()
         {
+            SuggestionItems = new ObservableCollection<HistoryModel>();
             Items = new ObservableCollection<HistoryModel>();
             foreach (var item in GlobalData.Current.History.Reverse<HistoryModel>())
             {
@@ -92,6 +121,33 @@ namespace Newtone.Mobile.ViewModels
                     await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
 
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
+            }
+        }
+
+        public async void SuggestionItem_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            int index = e.SelectedItemIndex;
+
+            if (index >= 0 && index < SuggestionItems.Count)
+            {
+                if (MainActivity.IsInternet())
+                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
+                else
+                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+
+                (sender as Xamarin.Forms.ListView).SelectedItem = null;
+            }
+        }
+
+        public void RefreshSuggestion(string text)
+        {
+            SearchSuggestionsVisible = true;
+            var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(item => item.ToLowerInvariant().Contains(text.ToLowerInvariant()) || text.ToLowerInvariant().Contains(item.ToLowerInvariant()));
+
+            SuggestionItems.Clear();
+            foreach(var item in newList)
+            {
+                SuggestionItems.Add(new HistoryModel() { Text = item });
             }
         }
         #endregion

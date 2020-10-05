@@ -34,6 +34,11 @@ namespace Newtone.Mobile.Views
             ViewModel?.Item_Selected(sender, e);
         }
 
+        private void SuggestionList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            ViewModel?.SuggestionItem_Selected(sender, e);
+        }
+
         public void Tick()
         {
             if(GlobalData.Current.HistoryNeedRefresh)
@@ -55,6 +60,23 @@ namespace Newtone.Mobile.Views
         public void Disappearing()
         {
             
+        }
+
+        public void Entry_Focused()
+        {
+            ViewModel.SearchSuggestionsVisible = true;
+            ViewModel?.RefreshSuggestion(ViewModel?.SearchText);
+        }
+
+        public void Entry_Unfocused()
+        {
+            ViewModel.SearchSuggestionsVisible = false;
+        }
+
+        public void SetSearchText(string text)
+        {
+            ViewModel.SearchText = text;
+            ViewModel?.RefreshSuggestion(ViewModel?.SearchText);
         }
         #endregion
     }

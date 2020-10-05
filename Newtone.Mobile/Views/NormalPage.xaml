@@ -25,7 +25,14 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" BackgroundColor="#05FFFFFF" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" IsVisible="{Binding EntryVisible}" Completed="Entry_Completed"/>
+                    <Grid BackgroundColor="#05FFFFFF" IsVisible="{Binding EntryVisible}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" BackgroundColor="Transparent" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" ReturnType="Search" Focused="Entry_Focused" Unfocused="Entry_Unfocused" TextChanged="Entry_TextChanged" Completed="Entry_Completed"/>
+                        <ImageButton Grid.Column="1" Source="CloseIconAndroid.png" BackgroundColor="Transparent" Command="{Binding ClearSearchText}" IsVisible="{Binding SearchCancelVisible}"/>
+                    </Grid>
                     <Label Text="{Binding PageTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" IsVisible="{Binding TitleVisible}"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
