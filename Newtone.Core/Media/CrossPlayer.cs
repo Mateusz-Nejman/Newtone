@@ -165,7 +165,16 @@ namespace Newtone.Core.Media
                     Error(GlobalData.ERROR_FILE_EXISTS);
                 }
 
-                Load(track.FilePath);
+                try
+                {
+                    Load(track.FilePath);
+                }
+                catch
+                {
+                    Next();
+                    return;
+                }
+                
                 GlobalData.Current.MediaSource = track;
                 BasePlayer?.AfterNext();
 

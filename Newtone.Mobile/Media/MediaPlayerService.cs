@@ -109,13 +109,16 @@ namespace Newtone.Mobile.Media
         }
         public void ShowNotification()
         {
-            var n = GetNotification();
-            if (n != null)
+            try
             {
-                StartForeground(0, n);
-                Global.NotificationManager?.Notify(0, n);
+                var n = GetNotification();
+                if (n != null)
+                {
+                    StartForeground(0, n);
+                    Global.NotificationManager?.Notify(0, n);
+                }
             }
-            
+            catch { }
         }
 
         public void SetNotificationData(int state)
