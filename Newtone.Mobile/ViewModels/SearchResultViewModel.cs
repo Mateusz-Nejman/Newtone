@@ -18,6 +18,10 @@ namespace Newtone.Mobile.ViewModels
         #region Fields
         private ObservableCollection<Models.SearchResultModel> items;
         private readonly ObservableBridge<Newtone.Core.Models.SearchResultModel> rawItems;
+        private int currentPage = 1;
+        private bool pageLoaded = false;
+        private readonly string searchedText;
+        private bool spinnerVisible = false;
         #endregion
 
         #region Properties
@@ -30,10 +34,21 @@ namespace Newtone.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool SpinnerVisible
+        {
+            get => spinnerVisible;
+            set
+            {
+                spinnerVisible = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
         #region Constructors
         public SearchResultViewModel(string searchedText)
         {
+            this.searchedText = searchedText;
             Items = new ObservableCollection<Models.SearchResultModel>();
             rawItems = new ObservableBridge<Newtone.Core.Models.SearchResultModel>
             {
@@ -42,6 +57,7 @@ namespace Newtone.Mobile.ViewModels
 
             Task.Run(async () =>
             {
+                SpinnerVisible = true;
                 SearchProcessing.SearchOffline(searchedText, rawItems);
 
                 if(MainActivity.IsInternet())
@@ -62,7 +78,11 @@ namespace Newtone.Mobile.ViewModels
                         }
                         Items[a].CheckChanges();
                     }
+
+                    pageLoaded = true;
                 }
+
+                SpinnerVisible = false;
             });
         }
         #endregion
@@ -157,6 +177,45 @@ namespace Newtone.Mobile.ViewModels
             }
         }
 
+        public void SearchListView_ItemAppearing(int itemIndex)
+        {
+            if(pageLoaded)
+            {
+                if(itemIndex == Items.Count - 1)
+                {
+                    pageLoaded = false;
+                    currentPage++;
+
+                    Task.Run(async () =>
+                    {
+                        SpinnerVisible = true;
+                        if (MainActivity.IsInternet())
+                            await SearchProcessing.Search(searchedText, rawItems, currentPage);
+
+                        using (WebClient webClient = new WebClient())
+                        {
+                            for (int a = 0; a < Items.Count; a++)
+                            {
+                                if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
+                                {
+                                    byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
+                                    Items[a].Image = data;
+                                }
+                                else
+                                {
+                                    Items[a].Thumb = ImageProcessing.FromArray(Items[a].Image);
+                                }
+                                Items[a].CheckChanges();
+                            }
+
+                            pageLoaded = true;
+                        }
+
+                        SpinnerVisible = false;
+                    });
+                }
+            }
+        }
         #endregion
     }
 }

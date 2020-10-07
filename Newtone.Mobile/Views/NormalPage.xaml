@@ -25,7 +25,7 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Grid BackgroundColor="#05FFFFFF" IsVisible="{Binding EntryVisible}">
+                    <Grid BackgroundColor="#05FFFFFF">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
@@ -33,7 +33,6 @@
                         <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" BackgroundColor="Transparent" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" ReturnType="Search" Focused="Entry_Focused" Unfocused="Entry_Unfocused" TextChanged="Entry_TextChanged" Completed="Entry_Completed"/>
                         <ImageButton Grid.Column="1" Source="CloseIconAndroid.png" BackgroundColor="Transparent" Command="{Binding ClearSearchText}" IsVisible="{Binding SearchCancelVisible}"/>
                     </Grid>
-                    <Label Text="{Binding PageTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" IsVisible="{Binding TitleVisible}"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -69,9 +68,27 @@
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" x:Name="container">
 
                 </Grid>
+                <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" IsVisible="{Binding SearchSuggestionsVisible}" >
+                    <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
+                        <ListView VerticalOptions="FillAndExpand"
+                          ItemSelected="SuggestionList_ItemSelected"  ItemsSource="{Binding SuggestionItems}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollView>
+                </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -91,9 +108,6 @@
                         <images:CustomImageButton Source="PlaylistIcon.png" Style="{StaticResource TransparentImageButton}" Padding="20" Command="{Binding GotoPlaylists}" IsToggled="{Binding PlaylistsButtonToggled}"/>
                     </Grid>
                     <Grid Grid.Column="4">
-                        <images:CustomImageButton Source="SearchIcon.png" Style="{StaticResource TransparentImageButton}" Padding="20" Command="{Binding GotoSearch}" IsToggled="{Binding SearchButtonToggled}"/>
-                    </Grid>
-                    <Grid Grid.Column="5">
                         <images:CustomImageButton Source="SettingsIcon.png" Style="{StaticResource TransparentImageButton}" Padding="20" Command="{Binding GotoSettings}" IsToggled="{Binding SettingsButtonToggled}"/>
                     </Grid>
                 </Grid>

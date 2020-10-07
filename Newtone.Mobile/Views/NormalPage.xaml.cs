@@ -55,6 +55,21 @@ namespace Newtone.Mobile.Views
             }
         }
         #endregion
+        #region Public Methods
+        public void Block()
+        {
+            blocker.IsVisible = true;
+        }
+
+        public void Unblock()
+        {
+            blocker.IsVisible = false;
+        }
+        public bool IsBlocked()
+        {
+            return blocker.IsVisible;
+        }
+        #endregion
         #region Protected Methods
         protected override void OnSizeAllocated(double width, double height)
         {
@@ -72,54 +87,33 @@ namespace Newtone.Mobile.Views
             ViewModel?.Appearing();
         }
 
-        public void Block()
+        private async void Entry_Completed(object sender, EventArgs e)
         {
-            blocker.IsVisible = true;
-        }
-
-        public void Unblock()
-        {
-            blocker.IsVisible = false;
-        }
-        public bool IsBlocked()
-        {
-            return blocker.IsVisible;
-        }
-        #endregion
-
-        private void Entry_Completed(object sender, EventArgs e)
-        {
-            foreach(var children in container.Children)
+            if (!string.IsNullOrEmpty(ViewModel?.EntryText))
             {
-                if (children is SearchPage page)
-                    page?.SearchEntry_Completed(ViewModel?.EntryText);
+                await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(ViewModel?.EntryText), ViewModel?.EntryText));
             }
         }
         private void Entry_Focused(object sender, FocusEventArgs e)
         {
-            foreach (var children in container.Children)
-            {
-                if (children is SearchPage page)
-                    page?.Entry_Focused();
-            }
+            ViewModel.SearchSuggestionsVisible = true;
+            ViewModel?.RefreshSuggestion();
         }
 
         private void Entry_Unfocused(object sender, FocusEventArgs e)
         {
-            foreach (var children in container.Children)
-            {
-                if (children is SearchPage page)
-                    page?.Entry_Unfocused();
-            }
+            ViewModel.SearchSuggestionsVisible = false;
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
-            foreach (var children in container.Children)
-            {
-                if (children is SearchPage page)
-                    page?.SetSearchText(ViewModel?.EntryText);
-            }
+            ViewModel?.RefreshSuggestion();
         }
+
+        private void SuggestionList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            ViewModel?.SuggestionItem_Selected(sender, e);
+        }
+        #endregion
     }
 }

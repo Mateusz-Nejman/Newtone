@@ -8,12 +8,21 @@
              mc:Ignorable="d"
              x:Class="Newtone.Mobile.Views.SearchResultPage">
     <ContentView.Content>
-        <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected" ItemsSource="{Binding Items}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <viewcells:SearchResultViewCell/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected" ItemsSource="{Binding Items}" ItemAppearing="SearchListView_ItemAppearing">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <viewcells:SearchResultViewCell/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid IsVisible="{Binding SpinnerVisible}" Grid.Row="1">
+                <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center" Color="White"/>
+            </Grid>
+        </Grid>
     </ContentView.Content>
 </ContentView>

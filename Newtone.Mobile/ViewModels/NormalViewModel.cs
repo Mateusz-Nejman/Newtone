@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,8 @@ namespace Newtone.Mobile.ViewModels
         private IDisposable loopSubscription;
 
         private bool searchCancelVisible;
+        private ObservableCollection<HistoryModel> suggestionItems;
+        private bool searchSuggestionsVisible = false;
         #endregion
 
         #region Properties
@@ -204,6 +207,26 @@ namespace Newtone.Mobile.ViewModels
             set
             {
                 searchCancelVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<HistoryModel> SuggestionItems
+        {
+            get => suggestionItems;
+            set
+            {
+                suggestionItems = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool SearchSuggestionsVisible
+        {
+            get => searchSuggestionsVisible;
+            set
+            {
+                searchSuggestionsVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -397,6 +420,7 @@ namespace Newtone.Mobile.ViewModels
         #region Constructors
         public NormalViewModel(Grid container, PlayerPanel panel)
         {
+            SuggestionItems = new ObservableCollection<HistoryModel>();
             Container = container;
             PlayerPanel = panel;
 
@@ -463,6 +487,34 @@ namespace Newtone.Mobile.ViewModels
                     content.Tick();
             }
         }
+
+        public void RefreshSuggestion()
+        {
+            string searchedText = EntryText ?? "";
+            SearchSuggestionsVisible = true;
+            var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(item => item.ToLowerInvariant().Contains(searchedText.ToLowerInvariant()) || searchedText.ToLowerInvariant().Contains(item.ToLowerInvariant()));
+
+            SuggestionItems.Clear();
+            foreach (var item in newList)
+            {
+                SuggestionItems.Add(new HistoryModel() { Text = item });
+            }
+        }
+        public async void SuggestionItem_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            int index = e.SelectedItemIndex;
+
+            if (index >= 0 && index < SuggestionItems.Count)
+            {
+                if (MainActivity.IsInternet())
+                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
+                else
+                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+
+                (sender as Xamarin.Forms.ListView).SelectedItem = null;
+            }
+        }
+
         #endregion
 
 

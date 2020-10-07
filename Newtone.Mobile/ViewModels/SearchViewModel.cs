@@ -102,10 +102,7 @@ namespace Newtone.Mobile.ViewModels
             SearchText = searchText;
             if (!string.IsNullOrEmpty(SearchText))
             {
-                if (MainActivity.IsInternet())
-                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SearchText), SearchText));
-                else
-                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SearchText), SearchText));
             }
         }
 

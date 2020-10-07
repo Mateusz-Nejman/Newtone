@@ -24,7 +24,8 @@ namespace Newtone.Mobile.Media
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
             Play();
-            Seek(0);
+            if(GetCurrentPosition() > 1000)
+                Seek(0);
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)

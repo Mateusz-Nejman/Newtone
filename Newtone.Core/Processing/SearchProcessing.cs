@@ -25,9 +25,20 @@ namespace Newtone.Core.Processing
                     title = CyrylicToUnicode.Convert(title);
 
                 double artistSimiliarity = CalculateSimilarity(text.ToLowerInvariant(), artist.ToLowerInvariant());
-                double titleSimiliarity = CalculateSimilarity(text, title);
+                double titleSimiliarity = CalculateSimilarity(text.ToLowerInvariant(), title.ToLowerInvariant());
 
-                if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || artist.ToLowerInvariant().Contains(text.ToLowerInvariant()) || title.ToLowerInvariant().Contains(text.ToLowerInvariant()))
+                string trackName = artist + " " + title;
+
+                string[] searchElems = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                int similiarCounter = 0;
+
+                foreach(string elem in searchElems)
+                {
+                    if (trackName.ToLowerInvariant().Contains(elem.ToLowerInvariant()) || elem.ToLowerInvariant().Contains(trackName.ToLowerInvariant()))
+                        similiarCounter++;
+                }
+
+                if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || (similiarCounter > 0 && similiarCounter >= searchElems.Length / 2))
                 {
                     model.Add(new SearchResultModel()
                     {
@@ -40,7 +51,7 @@ namespace Newtone.Core.Processing
                 }
             });
         }
-        public async static Task Search(string text, ObservableBridge<SearchResultModel> model)
+        public async static Task Search(string text, ObservableBridge<SearchResultModel> model, int fromPage = 0)
         {
             if (GlobalData.Current.History.FindIndex(model => model.Text == text) == -1)
             {
@@ -68,7 +79,8 @@ namespace Newtone.Core.Processing
             }
             else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
             {
-                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search]).BufferAsync(20);
+                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search], fromPage, 1).BufferAsync();
+                Console.WriteLine("Searched " + videos.Count);
                 foreach(var video in videos)
                 {
                     model.Add(new SearchResultModel()
@@ -85,7 +97,7 @@ namespace Newtone.Core.Processing
             }
             else if (validators.ContainsKey(QueryEnum.Playlist))
             {
-                var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]);
+                var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]).BufferAsync(100);
                 foreach (var video in playlist)
                 {
                     model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[QueryEnum.Playlist] )});
