@@ -30,7 +30,7 @@ namespace Newtone.Mobile.ViewModels
         private double audioSliderMax;
         private double audioSliderValue;
 
-        private bool stopTimer = false;
+        private readonly bool stopTimer = false;
         private bool isMenuImage = true;
         private bool isPlayImage = true;
         private string playedTrack = "";
@@ -312,7 +312,7 @@ namespace Newtone.Mobile.ViewModels
             loopSubscription = null;
         }
 
-        public void AudioSlider_ValueNewChanged(object sender, AudioSliderControl.ValueChangedArgs e)
+        public void AudioSlider_ValueNewChanged(AudioSliderControl.ValueChangedArgs e)
         {
             if (GlobalData.Current.MediaPlayer.IsPlaying)
             {

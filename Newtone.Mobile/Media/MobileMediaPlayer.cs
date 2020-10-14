@@ -8,6 +8,10 @@ namespace Newtone.Mobile.Media
 {
     public class MobileMediaPlayer : IBasePlayer
     {
+        #region Fields
+        private bool checkSafeTime = true;
+        private bool prepared = false;
+        #endregion
         #region Properties
         private MediaPlayer MediaPlayer { get; set; }
         #endregion
@@ -23,21 +27,29 @@ namespace Newtone.Mobile.Media
         #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
+            prepared = true;
             Play();
-            if(GetCurrentPosition() > 1000)
-                Seek(0);
+            if (checkSafeTime)
+            {
+                if (GetCurrentPosition() > (GetDuration() / 2))
+                {
+                    Seek(0);
+                }
+
+                checkSafeTime = false;
+            }
+
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)
         {
-            if (MediaPlayer.CurrentPosition > 0 && MediaPlayer.CurrentPosition != MediaPlayer.Duration)
+            if (MediaPlayer.CurrentPosition > 0 && !checkSafeTime && prepared)
                 GlobalData.Current.MediaPlayer.Next();
         }
         #endregion
         #region Public Methods
         public void AfterNext()
         {
-            Console.WriteLine("AfterNext");
             Global.MediaSession.SetMetadata(GlobalData.Current.MediaSource?.ToMetadata());
             Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
         }
@@ -75,6 +87,8 @@ namespace Newtone.Mobile.Media
 
         public void Load(string filename)
         {
+            checkSafeTime = true;
+            prepared = false;
             MediaPlayer.Reset();
             MediaPlayer.SetDataSource(filename);
         }

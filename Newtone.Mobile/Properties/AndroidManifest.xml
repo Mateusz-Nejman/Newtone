@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="73" android:versionName="4.89" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="74" android:versionName="4.90" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
 	<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="29" />
-	<application android:allowBackup="true" android:icon="@mipmap/app_icon" android:label="Newtone" android:roundIcon="@mipmap/icon_round" android:appCategory="audio" android:requestLegacyExternalStorage="true" android:banner="@drawable/Banner"></application>
+	<application android:allowBackup="true" android:icon="@mipmap/app_icon" android:label="Newtone" android:roundIcon="@mipmap/icon_round" android:appCategory="audio" android:requestLegacyExternalStorage="true"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,10 +9,4 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc" />
-  <uses-feature android:name="android.software.leanback"
-        android:required="false" />
-  <uses-feature android:name="android.hardware.touchscreen"
-              android:required="false" />
-  <uses-feature android:name="android.hardware.faketouch"
-        android:required="false"/>
 </manifest>

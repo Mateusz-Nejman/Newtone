@@ -33,13 +33,11 @@ namespace Newtone.Mobile
     [IntentFilter(new[] { MediaStore.IntentActionMediaPlayFromSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { MediaStore.IntentActionMediaSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { Intent.ActionGetContent} ,Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataMimeType = "audio/*")]
-    [IntentFilter(new[] { Intent.ActionMain }, Categories = new[] { Intent.CategoryLauncher, Intent.CategoryLeanbackLauncher})]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         #region Fields
         public static bool Loaded = false;
         private bool backPressed = false;
-        private IDisposable stateRefresher;
         #endregion
         #region Properties
         public static MainActivity Instance { get; set; }

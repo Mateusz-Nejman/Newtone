@@ -135,30 +135,22 @@ namespace Newtone.Core.Media
             if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
                 MediaSource track;
-                if (GlobalData.Current.CurrentQueue.Count > 0 && GlobalData.Current.QueuePosition <= GlobalData.Current.CurrentQueue.Count-1 && GlobalData.Current.QueuePosition >= 0)
+                //TODO Queue
+                //GlobalData.Current.CurrentQueue.Clear();
+                //GlobalData.Current.QueuePosition = -1;
+                if (GlobalData.Current.CurrentPlaylist.Count > 1)
                 {
-                    track = GlobalData.Current.CurrentQueue[GlobalData.Current.QueuePosition];
-                    GlobalData.Current.QueuePosition++;
+                    int addValue = 0;
+                    if (GlobalData.Current.PlayerMode == PlayerMode.All)
+                        addValue = 1;
+                    else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
+                        addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
+                    GlobalData.Current.PlaylistPosition += addValue;
+
+                    GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
                 }
-                else
-                {
-                    GlobalData.Current.CurrentQueue.Clear();
-                    GlobalData.Current.QueuePosition = -1;
-                    if (GlobalData.Current.CurrentPlaylist.Count > 1)
-                    {
-                        int addValue = 0;
-                        if (GlobalData.Current.PlayerMode == PlayerMode.All)
-                            addValue = 1;
-                        else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
-                            addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
-                        GlobalData.Current.PlaylistPosition += addValue;
 
-                        GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
-                    }
-
-                    track = GlobalData.Current.CurrentPlaylist[GlobalData.Current.PlaylistPosition];
-
-                }
+                track = GlobalData.Current.CurrentPlaylist[GlobalData.Current.PlaylistPosition];
 
                 if (IsLocalPath(track.FilePath) && !File.Exists(track.FilePath))
                 {

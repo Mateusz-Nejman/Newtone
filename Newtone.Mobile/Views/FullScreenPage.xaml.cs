@@ -26,7 +26,7 @@ namespace Newtone.Mobile.Views
         #region Private Methods
         private void AudioSlider_ValueNewChanged(object sender, Custom.AudioSliderControl.ValueChangedArgs e)
         {
-            ViewModel?.AudioSlider_ValueNewChanged(sender, e);
+            ViewModel?.AudioSlider_ValueNewChanged(e);
         }
 
         private void PageDisappearing(object sender, EventArgs e)

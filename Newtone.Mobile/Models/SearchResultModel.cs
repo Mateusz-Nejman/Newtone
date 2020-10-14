@@ -14,7 +14,6 @@ namespace Newtone.Mobile.Models
     {
         #region Fields
         private ImageSource thumb;
-        private Color backgroundColor;
         #endregion
 
         #region Properties
@@ -42,6 +41,8 @@ namespace Newtone.Mobile.Models
         {
             get => IsOffline ? Color.FromHex("#20FFFFFF") : Color.Transparent;
         }
+
+        public bool IsVisible => !IsOffline;
         #endregion
         #region Commands
         private ICommand downloadClicked;

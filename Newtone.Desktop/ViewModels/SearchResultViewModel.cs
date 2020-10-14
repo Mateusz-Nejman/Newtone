@@ -17,6 +17,7 @@ namespace Newtone.Desktop.ViewModels
         #region Fields
         private ObservableCollection<Newtone.Desktop.Models.SearchResultModel> items;
         private ObservableBridge<Newtone.Core.Models.SearchResultModel> rawItems;
+        private int maxItems;
         #endregion
         #region Properties
         public ObservableCollection<Newtone.Desktop.Models.SearchResultModel> Items
@@ -140,7 +141,7 @@ namespace Newtone.Desktop.ViewModels
             Task.Run(async () =>
             {
                 SearchProcessing.SearchOffline(searchedText, RawItems);
-                await SearchProcessing.Search(searchedText, RawItems);
+                maxItems = await SearchProcessing.Search(searchedText, RawItems);
 
                 for (int a = 0; a < Items.Count; a++)
                 {

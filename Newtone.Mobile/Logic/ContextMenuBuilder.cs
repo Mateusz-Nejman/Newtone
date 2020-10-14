@@ -177,8 +177,13 @@ namespace Newtone.Mobile.Logic
                 {
                     if(GlobalData.Current.CurrentPlaylist.Count > 0)
                     {
-                        if (GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == filePath) == -1)
-                            GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[filePath]);
+                        if (GlobalData.Current.QueuePosition < GlobalData.Current.PlaylistPosition || GlobalData.Current.QueuePosition > GlobalData.Current.CurrentPlaylist.Count)
+                        {
+                            GlobalData.Current.QueuePosition = GlobalData.Current.PlaylistPosition;
+                        }
+
+                        GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, GlobalData.Current.Audios[filePath]);
+                        GlobalData.Current.QueuePosition++;
                         SnackbarBuilder.Show(Localization.SnackQueue);
                     }
                 }
@@ -340,8 +345,16 @@ namespace Newtone.Mobile.Logic
                     {
                         foreach (var playlistTrack in GlobalData.Current.Playlists[playlistName])
                         {
-                            if (GlobalData.Current.Audios.ContainsKey(playlistTrack) && GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == playlistTrack) == -1)
-                                GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[playlistTrack]);
+                            if (GlobalData.Current.Audios.ContainsKey(playlistTrack))
+                            {
+                                if (GlobalData.Current.QueuePosition < GlobalData.Current.PlaylistPosition || GlobalData.Current.QueuePosition > GlobalData.Current.CurrentPlaylist.Count)
+                                {
+                                    GlobalData.Current.QueuePosition = GlobalData.Current.PlaylistPosition;
+                                }
+
+                                GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, GlobalData.Current.Audios[playlistTrack]);
+                                GlobalData.Current.QueuePosition++;
+                            }
                         }
                         SnackbarBuilder.Show(Localization.SnackQueue);
                     }
@@ -429,8 +442,16 @@ namespace Newtone.Mobile.Logic
                     {
                         foreach (var artistTrack in GlobalData.Current.Artists[artistName])
                         {
-                            if (GlobalData.Current.Audios.ContainsKey(artistTrack) && GlobalData.Current.CurrentQueue.FindIndex(source => source.FilePath == artistTrack) == -1)
-                                GlobalData.Current.CurrentQueue.Add(GlobalData.Current.Audios[artistTrack]);
+                            if (GlobalData.Current.Audios.ContainsKey(artistTrack))
+                            {
+                                if (GlobalData.Current.QueuePosition < GlobalData.Current.PlaylistPosition || GlobalData.Current.QueuePosition > GlobalData.Current.CurrentPlaylist.Count)
+                                {
+                                    GlobalData.Current.QueuePosition = GlobalData.Current.PlaylistPosition;
+                                }
+
+                                GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, GlobalData.Current.Audios[artistTrack]);
+                                GlobalData.Current.QueuePosition++;
+                            }
                         }
                     }
                 }

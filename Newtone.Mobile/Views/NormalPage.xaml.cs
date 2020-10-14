@@ -31,7 +31,7 @@ namespace Newtone.Mobile.Views
         public NormalPage()
         {
             InitializeComponent();
-            BindingContext = ViewModel = new NormalViewModel(container, playerPanel);
+            BindingContext = ViewModel = new NormalViewModel(container, playerPanel, searchEntry);
             Instance = this;
             Appearing += PageAppearing;
             Disappearing += PageDisappearing;

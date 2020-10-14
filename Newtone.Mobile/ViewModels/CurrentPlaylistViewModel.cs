@@ -69,8 +69,7 @@ namespace Newtone.Mobile.ViewModels
 
                 GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[index];
                 GlobalData.Current.PlaylistPosition = index;
-                GlobalData.Current.CurrentQueue.Clear();
-                GlobalData.Current.QueuePosition = -1;
+                GlobalData.Current.QueuePosition = index;
                 GlobalData.Current.MediaPlayer.Load(model.FilePath);
                 MediaPlayerHelper.Play();
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;

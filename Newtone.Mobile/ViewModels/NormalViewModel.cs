@@ -47,6 +47,7 @@ namespace Newtone.Mobile.ViewModels
         private bool searchCancelVisible;
         private ObservableCollection<HistoryModel> suggestionItems;
         private bool searchSuggestionsVisible = false;
+        private readonly Entry searchEntry;
         #endregion
 
         #region Properties
@@ -411,15 +412,20 @@ namespace Newtone.Mobile.ViewModels
             get
             {
                 if (clearSearchCommand == null)
-                    clearSearchCommand = new ActionCommand(parameter => EntryText = "");
+                    clearSearchCommand = new ActionCommand(parameter =>
+                    {
+                        searchEntry.Unfocus();
+                        EntryText = "";
+                    });
 
                 return clearSearchCommand;
             }
         }
         #endregion
         #region Constructors
-        public NormalViewModel(Grid container, PlayerPanel panel)
+        public NormalViewModel(Grid container, PlayerPanel panel, Entry searchEntry)
         {
+            this.searchEntry = searchEntry;
             SuggestionItems = new ObservableCollection<HistoryModel>();
             Container = container;
             PlayerPanel = panel;
@@ -446,7 +452,6 @@ namespace Newtone.Mobile.ViewModels
                     NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoTracks.Execute(true));
                 });
             }
-            SearchPlaceholder = Localization.Search;
         }
         #endregion
         #region Public Methods
@@ -474,6 +479,7 @@ namespace Newtone.Mobile.ViewModels
 
         public void Tick()
         {
+            SearchPlaceholder = Localization.Search;
             Badge = DownloadProcessing.BadgeCount.ToString();
             BadgeVisible = DownloadProcessing.BadgeCount > 0;
 
@@ -491,7 +497,6 @@ namespace Newtone.Mobile.ViewModels
         public void RefreshSuggestion()
         {
             string searchedText = EntryText ?? "";
-            SearchSuggestionsVisible = true;
             var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(item => item.ToLowerInvariant().Contains(searchedText.ToLowerInvariant()) || searchedText.ToLowerInvariant().Contains(item.ToLowerInvariant()));
 
             SuggestionItems.Clear();

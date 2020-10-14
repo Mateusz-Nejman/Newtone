@@ -24,11 +24,11 @@ namespace Newtone.Mobile.Views
         {
             await ViewModel?.Item_Selected(sender, e);
         }
-        #endregion
 
         private void SearchListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
             ViewModel?.SearchListView_ItemAppearing(e.ItemIndex);
         }
+        #endregion
     }
 }

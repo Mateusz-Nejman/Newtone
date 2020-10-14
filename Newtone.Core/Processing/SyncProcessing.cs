@@ -84,7 +84,7 @@ namespace Newtone.Core.Processing
                     else if (type == SynchronizationType.Sending)
                         Send();
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     Disconnect();
                 }
@@ -202,7 +202,7 @@ namespace Newtone.Core.Processing
                         Audios.Clear();
                         ReceivingAction?.Invoke();
                     }
-                    catch(Exception e)
+                    catch(Exception)
                     {
                         Disconnect();
                     }
@@ -256,7 +256,7 @@ namespace Newtone.Core.Processing
                     else
                         throw new Exception("invalid message");
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     GlobalData.Current.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)

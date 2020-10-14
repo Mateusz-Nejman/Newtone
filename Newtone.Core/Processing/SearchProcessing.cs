@@ -29,16 +29,20 @@ namespace Newtone.Core.Processing
 
                 string trackName = artist + " " + title;
 
-                string[] searchElems = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                text = text.ToLowerInvariant();
+                trackName = trackName.ToLowerInvariant();
+
+                List<string> trackNameElems = new List<string>(trackName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                List<string> searchElems = new List<string>(text.Split(' ', StringSplitOptions.RemoveEmptyEntries));
                 int similiarCounter = 0;
 
                 foreach(string elem in searchElems)
                 {
-                    if (trackName.ToLowerInvariant().Contains(elem.ToLowerInvariant()) || elem.ToLowerInvariant().Contains(trackName.ToLowerInvariant()))
+                    if (trackNameElems.Contains(elem))
                         similiarCounter++;
                 }
 
-                if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || (similiarCounter > 0 && similiarCounter >= searchElems.Length / 2))
+                if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || similiarCounter > 0)
                 {
                     model.Add(new SearchResultModel()
                     {
@@ -51,8 +55,9 @@ namespace Newtone.Core.Processing
                 }
             });
         }
-        public async static Task Search(string text, ObservableBridge<SearchResultModel> model, int fromPage = 0)
+        public async static Task<int> Search(string text, ObservableBridge<SearchResultModel> model, int fromPage = 0)
         {
+            int maxItems = -1;
             if (GlobalData.Current.History.FindIndex(model => model.Text == text) == -1)
             {
                 GlobalData.Current.History.Add(new HistoryModel() { Text = text });
@@ -76,6 +81,8 @@ namespace Newtone.Core.Processing
                     MixId = video.GetVideoMixPlaylistId(),
                     VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url)
                 });
+
+                maxItems = 1;
             }
             else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
             {
@@ -102,7 +109,10 @@ namespace Newtone.Core.Processing
                 {
                     model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[QueryEnum.Playlist] )});
                 }
+                maxItems = playlist.Count;
             }
+
+            return maxItems;
         }
 
         public static Dictionary<QueryEnum, string> CheckLink(string link)

@@ -25,14 +25,22 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Grid BackgroundColor="#05FFFFFF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Entry Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" BackgroundColor="Transparent" PlaceholderColor="{x:Static local:Colors.TextColor}" TextColor="{x:Static local:Colors.TextColor}" ReturnType="Search" Focused="Entry_Focused" Unfocused="Entry_Unfocused" TextChanged="Entry_TextChanged" Completed="Entry_Completed"/>
-                        <ImageButton Grid.Column="1" Source="CloseIconAndroid.png" BackgroundColor="Transparent" Command="{Binding ClearSearchText}" IsVisible="{Binding SearchCancelVisible}"/>
-                    </Grid>
+                    <Frame CornerRadius="16" BackgroundColor="Transparent" Padding="5,10">
+                        <Grid BackgroundColor="#05FFFFFF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Entry 
+                            Text="{Binding EntryText}" Placeholder="{Binding SearchPlaceholder}" 
+                            BackgroundColor="Transparent" PlaceholderColor="{x:Static local:Colors.TextColor}" 
+                            TextColor="{x:Static local:Colors.TextColor}" ReturnType="Search" 
+                            Focused="Entry_Focused" Unfocused="Entry_Unfocused" 
+                            TextChanged="Entry_TextChanged" Completed="Entry_Completed" 
+                            x:Name="searchEntry"/>
+                            <ImageButton Grid.Column="1" Source="CloseIconAndroid.png" BackgroundColor="Transparent" Command="{Binding ClearSearchText}" IsVisible="{Binding SearchCancelVisible}"/>
+                        </Grid>
+                    </Frame>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -79,7 +87,7 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}"/>
+                                            <Label Text="{Binding Text}" VerticalOptions="Center" FontSize="14" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Light}" Margin="10,0,0,0"/>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>

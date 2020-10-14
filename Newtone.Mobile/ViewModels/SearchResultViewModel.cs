@@ -22,6 +22,7 @@ namespace Newtone.Mobile.ViewModels
         private bool pageLoaded = false;
         private readonly string searchedText;
         private bool spinnerVisible = false;
+        private int maxItems;
         #endregion
 
         #region Properties
@@ -61,7 +62,7 @@ namespace Newtone.Mobile.ViewModels
                 SearchProcessing.SearchOffline(searchedText, rawItems);
 
                 if(MainActivity.IsInternet())
-                    await SearchProcessing.Search(searchedText, rawItems);
+                    maxItems = await SearchProcessing.Search(searchedText, rawItems);
 
                 using (WebClient webClient = new WebClient())
                 {
@@ -109,7 +110,7 @@ namespace Newtone.Mobile.ViewModels
                             FilePath = _item.Id,
                             Image = _item.Image,
                             Title = _item.Title,
-                            Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                            Type = _item.Id.Length == 11 ? Newtone.Core.Media.MediaSource.SourceType.Web : Core.Media.MediaSource.SourceType.Local
                         });
                     }
 
@@ -181,7 +182,7 @@ namespace Newtone.Mobile.ViewModels
         {
             if(pageLoaded)
             {
-                if(itemIndex == Items.Count - 1)
+                if(itemIndex == Items.Count - 1 && maxItems > 0 && Items.Count < maxItems)
                 {
                     pageLoaded = false;
                     currentPage++;
@@ -190,7 +191,7 @@ namespace Newtone.Mobile.ViewModels
                     {
                         SpinnerVisible = true;
                         if (MainActivity.IsInternet())
-                            await SearchProcessing.Search(searchedText, rawItems, currentPage);
+                            maxItems = await SearchProcessing.Search(searchedText, rawItems, currentPage);
 
                         using (WebClient webClient = new WebClient())
                         {

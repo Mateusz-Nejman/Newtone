@@ -112,8 +112,7 @@ namespace Newtone.Mobile.ViewModels
                 var model = Items[index];
 
                 GlobalData.Current.MediaSource = GlobalData.Current.Audios[model.FilePath];
-                GlobalData.Current.CurrentQueue.Clear();
-                GlobalData.Current.QueuePosition = -1;
+                GlobalData.Current.QueuePosition = index;
                 GlobalData.Current.CurrentPlaylist.Clear();
                 GlobalData.Current.PlaylistPosition = index;
                 foreach (var item in Items)

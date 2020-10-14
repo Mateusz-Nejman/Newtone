@@ -19,7 +19,6 @@ namespace Newtone.Mobile.ViewModels
         private string badge;
         private bool badgeVisible;
         private bool topPanelVisible;
-        private bool stopTimer = false;
         private PlayerPanel playerPanel;
         private IDisposable loopSubscription;
         #endregion
