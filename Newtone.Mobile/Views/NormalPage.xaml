@@ -25,8 +25,8 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Frame CornerRadius="16" BackgroundColor="Transparent" Padding="5,10">
-                        <Grid BackgroundColor="#05FFFFFF">
+                    <Frame CornerRadius="30" BackgroundColor="Transparent" Padding="5,10">
+                        <Grid BackgroundColor="#80000000">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
@@ -50,7 +50,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <images:CustomImageButton Source="UploadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoSync}"/>
+                        <images:CustomImageButton Source="UploadIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoSync}"/>
                         <Grid Grid.Row="1" x:Name="badgeBubbleSync" IsVisible="{Binding BadgeSyncVisible}">
                             <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
                             <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding BadgeSync}" TextColor="{Static local:Colors.TextColor}"/>
@@ -65,7 +65,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <images:CustomImageButton Source="DownloadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoDownload}"/>
+                        <images:CustomImageButton Source="DownloadIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoDownload}"/>
                         <Grid Grid.Row="1" IsVisible="{Binding BadgeVisible}">
                             <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
                             <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Badge}" TextColor="{Static local:Colors.TextColor}"/>

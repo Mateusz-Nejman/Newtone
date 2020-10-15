@@ -6,6 +6,7 @@
     <color name="colorAccent">@color/launcher_background</color>
   <color name="colorTextPrimary">#FFFFFF</color>
   <color name="colorTextSecondary">#ff00ff</color>
+  <color name="colorSelection">#060606</color>
 </resources>
 
 

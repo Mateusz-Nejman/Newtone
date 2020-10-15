@@ -299,9 +299,6 @@
     <AndroidResource Include="Resources\drawable\TrackIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\HomeIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\SearchIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +341,6 @@
     <AndroidResource Include="Resources\drawable\DownloadIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\DownloadPageIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -361,16 +355,10 @@
     <AndroidResource Include="Resources\drawable\NextIconNotification.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\StopIconNotification.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\PauseIconNotification.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\RandomIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\StopIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\PermissionPage.xaml">
@@ -387,18 +375,6 @@
     <EmbeddedResource Include="Views\FirstStartPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\DarkPreview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\DefaultPreview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\LightPreview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\SearchPreview.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\FirstStart\FirstStartSearch.xaml">
@@ -507,9 +483,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\UploadPageIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\LanguageSelectPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -546,6 +519,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\CloseIconAndroid.png">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\UploadIcon.png">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
   </ItemGroup>

@@ -14,7 +14,7 @@ namespace Newtone.Mobile.Views
         private ModalViewModel ViewModel { get; set; }
         #endregion
         #region Constructors
-        public ModalPage(ContentView content, string title, bool topPanelVisible = true)
+        public ModalPage(ContentView content, string title, bool topPanelVisible = true, bool playerPanelVisible = true)
         {
             InitializeComponent();
             BindingContext = ViewModel = new ModalViewModel(container, title, topPanelVisible, playerPanel);
@@ -23,7 +23,7 @@ namespace Newtone.Mobile.Views
             Appearing += PageAppearing;
             Disappearing += PageDisappearing;
 
-            
+            playerPanel.IsVisible = playerPanelVisible;
         }
         #endregion
         #region Private Methods

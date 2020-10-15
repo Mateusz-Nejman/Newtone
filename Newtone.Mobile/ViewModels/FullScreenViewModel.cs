@@ -284,7 +284,7 @@ namespace Newtone.Mobile.ViewModels
                 if (expandList == null)
                     expandList = new ActionCommand(async(parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentPlaylistPage(), ""));
+                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentPlaylistPage(), "", false,false));
                     });
                 return expandList;
             }

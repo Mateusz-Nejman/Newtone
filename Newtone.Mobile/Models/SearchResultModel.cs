@@ -39,7 +39,7 @@ namespace Newtone.Mobile.Models
         }
         public Color BackgroundColor
         {
-            get => IsOffline ? Color.FromHex("#20FFFFFF") : Color.Transparent;
+            get => IsOffline ? Color.FromHex("#060606") : Color.Transparent;
         }
 
         public bool IsVisible => !IsOffline;

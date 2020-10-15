@@ -22,7 +22,7 @@
                 <Image Source="{Binding TrackBlur}" Aspect="AspectFill" VerticalOptions="Center" HorizontalOptions="Fill" x:Name="backgroundImage"/>
                 <Grid BackgroundColor="#99000000"/>
             </Grid>
-            <images:CustomImageButton Padding="4" Source="{Binding TrackImage}" x:Name="trackImage" Aspect="AspectFill" Command="{Binding GotoPlayer}"/>
+            <images:CustomImageButton Padding="4" Source="{Binding TrackImage}" x:Name="trackImage" Aspect="AspectFill" Command="{Binding GotoPlayer}" BackgroundColor="Transparent"/>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>

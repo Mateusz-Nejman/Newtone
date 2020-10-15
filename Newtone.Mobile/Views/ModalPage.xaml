@@ -33,7 +33,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <images:CustomImageButton Source="DownloadPageIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding ToDownloadPage}"/>
+                        <images:CustomImageButton Source="DownloadIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding ToDownloadPage}"/>
                         <Grid Grid.Row="1" IsVisible="{Binding BadgeVisible}">
                             <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
                             <Label Text="{Binding Badge}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="{Static local:Colors.TextColor}"/>
