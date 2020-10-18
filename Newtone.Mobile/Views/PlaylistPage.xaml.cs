@@ -44,6 +44,7 @@ namespace Newtone.Mobile.Views
                         Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
                         layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
                         layout.Children.Add(new PlaylistGridItem(this, playlist), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+
                         generatedChildrens.Add(layout);
                         pos = 0;
                     }
@@ -78,7 +79,7 @@ namespace Newtone.Mobile.Views
 
         public void Tick()
         {
-            if (GlobalData.Current.PlaylistsNeedRefresh)
+            if (GlobalData.Current.PlaylistsNeedRefresh || generatedChildrens?.Count != GlobalData.Current.Playlists.Count)
             {
                 if (generatedChildrens != null)
                     generatedChildrens = null;
