@@ -1,6 +1,4 @@
-namespace Newtone.Core.Languages
-{
-    public  class LocalizationEN : Localization.LocalizationBase{
+namespace Newtone.Core.Languages{public class LocalizationEN : Localization.LocalizationBase{
 public LocalizationEN(){
 this.AboutAuthor = "Author: Mateusz Nejman";
 this.AboutDesc = "The player allows you to listen to music from youtube, and locally. The author is not responsible for how the user uses the media from the websites.";
@@ -27,6 +25,7 @@ this.CoverLoad = "Load cover";
 this.CoverSave = "Save cover";
 this.Disconnect = "Disconnect";
 this.FileCorrupted = "File is corrupted";
+this.FileDownloaded = "Downloaded";
 this.FolderExists = "The folder does not exist";
 this.Informations = "Informations";
 this.Instruction = "Help";
@@ -106,5 +105,4 @@ this.Warning = "Warning";
 this.Yes = "Yes";
 this.YourCode = "Your code";
 this.YoutubeError = "An error occurred due to changes to YouTube. Please wait for the update with the given changes.";
-}}
-}
+}}}

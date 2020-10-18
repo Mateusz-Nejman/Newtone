@@ -79,7 +79,6 @@ namespace Newtone.Mobile.ViewModels
                 {
                     Items.Add(item);
                 }
-                GlobalData.Current.TracksNeedRefresh = false;
             }
             foreach (var model in Items.ToList())
             {

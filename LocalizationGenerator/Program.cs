@@ -10,7 +10,7 @@ namespace LocalizationGenerator
         static void Main(string[] args)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(@"D:\Projekty\CS\NSEC.Music_Player\LocalizationGenerator\Languages\Localization.resx");
+            doc.Load(@"D:\Projekty\CS\Newtone\LocalizationGenerator\Languages\Localization.resx");
             var root = doc.SelectSingleNode("root");
 
             string buffer = "public abstract class LocalizationBase{\n";
@@ -40,7 +40,7 @@ namespace LocalizationGenerator
             buffer += "}";
             string template = File.ReadAllText("baseTemplate.txt");
             template = template.Replace("[BODY]", propertyBuffer + "\n" + buffer);
-            File.WriteAllText(@"D:\Projekty\CS\NSEC.Music_Player\Newtone.Core\Languages\Localization.cs", template);
+            File.WriteAllText(@"D:\Projekty\CS\Newtone\Newtone.Core\Languages\Localization.cs", template);
 
             Generate("en");
             Generate("ru");
@@ -50,11 +50,11 @@ namespace LocalizationGenerator
         static void Generate(string lang)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(@"D:\Projekty\CS\NSEC.Music_Player\LocalizationGenerator\Languages\Localization." + lang + ".resx");
+            doc.Load(@"D:\Projekty\CS\Newtone\LocalizationGenerator\Languages\Localization." + lang + ".resx");
 
             var root = doc.SelectSingleNode("root");
 
-            string buffer = "public  class Localization" + lang.ToUpper() + " : Localization.LocalizationBase{\npublic Localization" + lang.ToUpper() + "(){\n";
+            string buffer = "namespace Newtone.Core.Languages{public class Localization" + lang.ToUpper() + " : Localization.LocalizationBase{\npublic Localization" + lang.ToUpper() + "(){\n";
 
             foreach (XmlNode item in root.SelectNodes("data"))
             {
@@ -63,10 +63,8 @@ namespace LocalizationGenerator
                 buffer += $"this.{name} = \"{value}\";\n";
             }
 
-            buffer += "}}";
-            string template = File.ReadAllText("langTemplate.txt");
-            template = template.Replace("[BODY]", buffer);
-            File.WriteAllText(@"D:\Projekty\CS\NSEC.Music_Player\Newtone.Core\Languages\Localization" + lang.ToUpper() + ".cs", template);
+            buffer += "}}}";
+            File.WriteAllText(@"D:\Projekty\CS\Newtone\Newtone.Core\Languages\Localization" + lang.ToUpper() + ".cs", buffer);
         }
     }
 }

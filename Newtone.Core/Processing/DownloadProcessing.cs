@@ -234,7 +234,7 @@ namespace Newtone.Core.Processing
             CacheLoader.SaveCache();
             GlobalData.Current.SaveConfig();
             GlobalData.Current.SaveTags();
-            GlobalData.Current.MediaPlayer.Error(Localization.Ready);
+            GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Snackbar, Localization.FileDownloaded + " " + artist + " - " + title);
 
             return fileInfo.FullName;
         }

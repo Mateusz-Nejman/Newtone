@@ -22,8 +22,7 @@ namespace Newtone.Core.Languages
         {
             CurrentLocalization = GetCurrentLanguage();
         }
-
-        /// <summary>
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Autor: Mateusz Nejman
 /// </summary>
 public static string AboutAuthor { get { return CurrentLocalization.AboutAuthor; } }
@@ -123,6 +122,10 @@ public static string Disconnect { get { return CurrentLocalization.Disconnect; }
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony
 /// </summary>
 public static string FileCorrupted { get { return CurrentLocalization.FileCorrupted; } }
+/// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrano
+/// </summary>
+public static string FileDownloaded { get { return CurrentLocalization.FileDownloaded; } }
 /// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Folder nie istnieje
 /// </summary>
@@ -482,6 +485,7 @@ public string CoverLoad = "Wczytaj okładkę";
 public string CoverSave = "Zapisz okładkę";
 public string Disconnect = "Rozłącz";
 public string FileCorrupted = "Plik jest uszkodzony";
+public string FileDownloaded = "Pobrano";
 public string FolderExists = "Folder nie istnieje";
 public string Informations = "Informacje";
 public string Instruction = "Instrukcja";

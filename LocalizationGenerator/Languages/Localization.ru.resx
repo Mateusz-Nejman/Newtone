@@ -192,6 +192,9 @@
   <data name="FileCorrupted" xml:space="preserve">
     <value>Файл поврежден</value>
   </data>
+  <data name="FileDownloaded" xml:space="preserve">
+    <value>Скачано</value>
+  </data>
   <data name="FolderExists" xml:space="preserve">
     <value>Папка не существует</value>
   </data>

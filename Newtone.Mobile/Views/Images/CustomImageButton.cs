@@ -28,6 +28,12 @@ namespace Newtone.Mobile.Views.Images
             get { return (string)GetValue(TagProperty); }
         }
         #endregion
+        #region Constructor
+        public CustomImageButton()
+        {
+            Clicked += CustomImageButton_Clicked;
+        }
+        #endregion
         #region Private Methods
         private static void OnIsToggledChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -36,9 +42,14 @@ namespace Newtone.Mobile.Views.Images
 
             // Fire event
             toggleButton.Toggled?.Invoke(toggleButton, new ToggledEventArgs(isToggled));
-
+            Console.WriteLine("Change toggle to " + isToggled);
             // Set the visual state
             VisualStateManager.GoToState(toggleButton, isToggled ? "ToggledOn" : "Normal");
+        }
+
+        private void CustomImageButton_Clicked(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(this, IsToggled ? "ToggledOn" : "Normal");
         }
         #endregion
     }

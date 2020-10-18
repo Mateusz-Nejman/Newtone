@@ -91,6 +91,7 @@ namespace Newtone.Mobile.Media
             prepared = false;
             MediaPlayer.Reset();
             MediaPlayer.SetDataSource(filename);
+            MediaPlayerService.Instance.SetNotificationData(PlaybackStateCompat.StatePaused);
         }
 
         public void Pause()

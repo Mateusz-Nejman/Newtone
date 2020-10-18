@@ -149,8 +149,8 @@ namespace Newtone.Mobile.Media
                                 GlobalData.Current.Playlists[playlistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
 
                                 GlobalData.Current.PlaylistPosition = 0;
-                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                                 GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                                 MediaPlayerHelper.Play();
                                 played = true;
                                 break;
@@ -172,8 +172,8 @@ namespace Newtone.Mobile.Media
                                     GlobalData.Current.Artists[artistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
 
                                     GlobalData.Current.PlaylistPosition = 0;
-                                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                                     GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                                     MediaPlayerHelper.Play();
                                     played = true;
                                     break;
@@ -202,8 +202,8 @@ namespace Newtone.Mobile.Media
                                 afterSort.ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track.FilePath]));
 
                                 GlobalData.Current.PlaylistPosition = a;
-                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[a].FilePath);
                                 GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[a];
+                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[a].FilePath);
                                 MediaPlayerHelper.Play();
                                 played = true;
                                 break;

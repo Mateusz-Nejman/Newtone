@@ -16,8 +16,8 @@ namespace Newtone.Mobile.ViewModels
     {
         #region Fields
         private bool isRefreshing;
-        private List<string> tracks;
-        private string playlistName;
+        private readonly List<string> tracks;
+        private readonly string playlistName;
         #endregion
         #region Properties
         public ObservableCollection<TrackModel> TrackItems { get; private set; }

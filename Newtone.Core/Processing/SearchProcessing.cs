@@ -28,19 +28,8 @@ namespace Newtone.Core.Processing
                 double titleSimiliarity = CalculateSimilarity(text.ToLowerInvariant(), title.ToLowerInvariant());
 
                 string trackName = artist + " " + title;
-
-                text = text.ToLowerInvariant();
-                trackName = trackName.ToLowerInvariant();
-
-                List<string> trackNameElems = new List<string>(trackName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-                List<string> searchElems = new List<string>(text.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-                int similiarCounter = 0;
-
-                foreach(string elem in searchElems)
-                {
-                    if (trackNameElems.Contains(elem))
-                        similiarCounter++;
-                }
+                
+                int similiarCounter = Similiar(trackName, text);
 
                 if(artistSimiliarity >= 0.8 || titleSimiliarity >= 0.8 || similiarCounter > 0)
                 {
@@ -177,6 +166,19 @@ namespace Newtone.Core.Processing
 
             returnData.Sort();
             return returnData;
+        }
+
+        public static int Similiar(string text1, string text2)
+        {
+            int similiarCounter = 0;
+            List<string> text1Elems = new List<string>(text1.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            List<string> text2Elems = new List<string>(text2.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            foreach (string elem in text2Elems)
+            {
+                if (text1Elems.Contains(elem) && elem.Length > 2)
+                    similiarCounter++;
+            }
+            return similiarCounter;
         }
         #endregion
         #region Private Methods

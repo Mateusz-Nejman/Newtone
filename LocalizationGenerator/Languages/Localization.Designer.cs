@@ -286,6 +286,15 @@ namespace LocalizationGenerator.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobrano.
+        /// </summary>
+        internal static string FileDownloaded {
+            get {
+                return ResourceManager.GetString("FileDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Folder nie istnieje.
         /// </summary>
         internal static string FolderExists {

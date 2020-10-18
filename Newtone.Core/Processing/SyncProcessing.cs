@@ -258,7 +258,7 @@ namespace Newtone.Core.Processing
                 }
                 catch(Exception)
                 {
-                    GlobalData.Current.MediaPlayer.Error(GlobalData.ERROR_CONNECTION);
+                    GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Snackbar, GlobalData.ERROR_CONNECTION);
                     if (CurrentConnection.Connected)
                         CurrentConnection.Disconnect(false);
                     CurrentConnection.Close();

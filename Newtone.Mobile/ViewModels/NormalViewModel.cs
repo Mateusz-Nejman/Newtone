@@ -19,11 +19,10 @@ namespace Newtone.Mobile.ViewModels
     public class NormalViewModel : PropertyChangedBase
     {
         #region Fields
-        private TracksPage tracksPage;
-        private ArtistPage artistPage;
-        private PlaylistPage playlistPage;
+        private readonly TracksPage tracksPage = new TracksPage();
+        private readonly ArtistPage artistPage = new ArtistPage();
+        private readonly PlaylistPage playlistPage = new PlaylistPage();
         private SettingsPage settingsPage;
-        private SearchPage searchPage;
 
         private string pageTitle;
         private string searchPlaceholder;
@@ -39,7 +38,6 @@ namespace Newtone.Mobile.ViewModels
         private bool tracksButtonToggled;
         private bool artistsButtonToggled;
         private bool playlistsButtonToggled;
-        private bool searchButtonToggled;
         private bool settingsButtonToggled;
         private PlayerPanel playerPanel;
         private IDisposable loopSubscription;
@@ -129,16 +127,6 @@ namespace Newtone.Mobile.ViewModels
             set
             {
                 playlistsButtonToggled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool SearchButtonToggled
-        {
-            get => searchButtonToggled;
-            set
-            {
-                searchButtonToggled = value;
                 OnPropertyChanged();
             }
         }
@@ -262,8 +250,6 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if(currentButtonIndex != 0 || (parameter as bool?) == true)
                         {
-                            if (tracksPage == null)
-                                tracksPage = new TracksPage();
                             SetContainer(tracksPage, Localization.Tracks);
                             Toggle(0);
                         }
@@ -283,8 +269,6 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 1)
                         {
-                            if (artistPage == null)
-                                artistPage = new ArtistPage();
                             SetContainer(artistPage, Localization.Artists);
                             Toggle(1);
                         }
@@ -304,35 +288,12 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 2)
                         {
-                            if (playlistPage == null)
-                                playlistPage = new PlaylistPage();
                             SetContainer(playlistPage, Localization.Playlists);
                             Toggle(2);
                         }
                     });
 
                 return gotoPlaylistsCommand;
-            }
-        }
-
-        private ICommand gotoSearchCommand;
-        public ICommand GotoSearch
-        {
-            get
-            {
-                if (gotoSearchCommand == null)
-                    gotoSearchCommand = new ActionCommand(parameter =>
-                    {
-                        if (currentButtonIndex != 3)
-                        {
-                            if (searchPage == null)
-                                searchPage = new SearchPage();
-                            SetContainer(searchPage, Localization.Search);
-                            Toggle(3);
-                        }
-                    });
-
-                return gotoSearchCommand;
             }
         }
 
@@ -344,12 +305,12 @@ namespace Newtone.Mobile.ViewModels
                 if (gotoSettingsCommand == null)
                     gotoSettingsCommand = new ActionCommand(parameter =>
                     {
-                        if (currentButtonIndex != 4)
+                        if (currentButtonIndex != 3)
                         {
                             if (settingsPage == null)
                                 settingsPage = new SettingsPage();
                             SetContainer(settingsPage, Localization.Settings);
-                            Toggle(4);
+                            Toggle(3);
                         }
                     });
 
@@ -384,25 +345,6 @@ namespace Newtone.Mobile.ViewModels
                     });
 
                 return gotoDownloadCommand;
-            }
-        }
-
-        private ICommand searchCommand;
-        public ICommand SearchCommand
-        {
-            get
-            {
-                if (searchCommand == null)
-                    searchCommand = new ActionCommand(parameter =>
-                    {
-                        foreach (var children in Container.Children)
-                        {
-                            if (children is SearchPage page)
-                                page?.SearchEntry_Completed(EntryText);
-                        }
-                    });
-
-                return searchCommand;
             }
         }
 
@@ -497,7 +439,8 @@ namespace Newtone.Mobile.ViewModels
         public void RefreshSuggestion()
         {
             string searchedText = EntryText ?? "";
-            var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(item => item.ToLowerInvariant().Contains(searchedText.ToLowerInvariant()) || searchedText.ToLowerInvariant().Contains(item.ToLowerInvariant()));
+            var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(
+                item => SearchProcessing.Similiar(searchedText, item) > 0);
 
             SuggestionItems.Clear();
             foreach (var item in newList)
@@ -529,16 +472,12 @@ namespace Newtone.Mobile.ViewModels
             TracksButtonToggled = buttonIndex == 0;
             ArtistsButtonToggled = buttonIndex == 1;
             PlaylistsButtonToggled = buttonIndex == 2;
-            SearchButtonToggled = buttonIndex == 3;
-            SettingsButtonToggled = buttonIndex == 4;
+            SettingsButtonToggled = buttonIndex == 3;
             currentButtonIndex = buttonIndex;
         }
 
         private void SetContainer(ContentView content, string title)
         {
-            EntryVisible = content == searchPage;
-            TitleVisible = !(content == searchPage);
-
             if (!Container.Children.Contains(content))
                 Container.Children.Add(content);
             else

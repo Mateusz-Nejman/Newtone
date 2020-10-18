@@ -192,6 +192,9 @@
   <data name="FileCorrupted" xml:space="preserve">
     <value>Plik jest uszkodzony</value>
   </data>
+  <data name="FileDownloaded" xml:space="preserve">
+    <value>Pobrano</value>
+  </data>
   <data name="FolderExists" xml:space="preserve">
     <value>Folder nie istnieje</value>
   </data>

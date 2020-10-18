@@ -76,7 +76,6 @@ namespace Newtone.Mobile.Logic
                         GlobalLoader.ChangeTrack(GlobalData.Current.Audios[filePath], newSource);
                         GlobalData.Current.SaveTags();
                         SnackbarBuilder.Show(Localization.Ready);
-                        GlobalData.Current.TracksNeedRefresh = true;
                     }
 
                 }
@@ -139,7 +138,6 @@ namespace Newtone.Mobile.Logic
                             }
 
                             GlobalData.Current.Audios.Remove(filePath);
-                            GlobalData.Current.TracksNeedRefresh = true;
 
                             foreach (var playlist in GlobalData.Current.Playlists.Keys)
                             {
@@ -226,8 +224,8 @@ namespace Newtone.Mobile.Logic
                         }
 
                         GlobalData.Current.PlaylistPosition = 0;
-                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                         GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                         MediaPlayerHelper.Play();
                     }
                 }
@@ -380,8 +378,8 @@ namespace Newtone.Mobile.Logic
                         }
 
                         GlobalData.Current.PlaylistPosition = 0;
-                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                         GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
                         MediaPlayerHelper.Play();
                     }
                 }

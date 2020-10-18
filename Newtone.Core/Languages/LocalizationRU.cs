@@ -1,6 +1,4 @@
-namespace Newtone.Core.Languages
-{
-    public  class LocalizationRU : Localization.LocalizationBase{
+namespace Newtone.Core.Languages{public class LocalizationRU : Localization.LocalizationBase{
 public LocalizationRU(){
 this.AboutAuthor = "Автор: Матеуш Нейман";
 this.AboutDesc = "Плеер позволяет слушать музыку как с YouTube, так и локально. Автор не несет ответственности за то, как пользователь использует медиа с веб-сайтов.";
@@ -27,6 +25,7 @@ this.CoverLoad = "Загрузите обложку";
 this.CoverSave = "Сохранить обложку";
 this.Disconnect = "Отключить";
 this.FileCorrupted = "Файл поврежден";
+this.FileDownloaded = "Скачано";
 this.FolderExists = "Папка не существует";
 this.Informations = "Информация";
 this.Instruction = "Помощь";
@@ -106,5 +105,4 @@ this.Warning = "Внимание";
 this.Yes = "Да";
 this.YourCode = "Ваш код";
 this.YoutubeError = "Произошла ошибка из-за изменений на YouTube. Пожалуйста, дождитесь обновления с данными изменениями.";
-}}
-}
+}}}
