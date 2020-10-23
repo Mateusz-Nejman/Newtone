@@ -6,13 +6,15 @@ namespace Newtone.Core.Logic
     public class ObservableBridge<T>
     {
         #region Fields
-        public Action<T> Action;
-        private List<T> Items;
+        private readonly List<T> items;
+        #endregion
+        #region Properties
+        public Action<T> Action { get; set; }
         #endregion
         #region Constructors
         public ObservableBridge()
         {
-            Items = new List<T>();
+            items = new List<T>();
         }
         #endregion
 
@@ -20,18 +22,18 @@ namespace Newtone.Core.Logic
 
         public void Add(T item)
         {
-            Items.Add(item);
+            items.Add(item);
             Action?.Invoke(item);
         }
 
         public List<T> GetItems()
         {
-            return Items;
+            return items;
         }
 
         public void Clear()
         {
-            Items.Clear();
+            items.Clear();
         }
         #endregion
     }

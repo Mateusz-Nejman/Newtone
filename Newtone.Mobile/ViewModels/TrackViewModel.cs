@@ -65,8 +65,6 @@ namespace Newtone.Mobile.ViewModels
 
         public void Tick()
         {
-            if (GlobalData.Current.TracksNeedRefresh)
-                Items.Clear();
             if(Items.Count != GlobalData.Current.Audios.Count)
             {
                 Items.Clear();

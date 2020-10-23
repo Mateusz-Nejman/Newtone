@@ -13,12 +13,11 @@ namespace Newtone.Core.Loaders
         {
             if(GlobalData.Current.Audios.Count == 0)
             {
-                List<string> listed = new List<string>();
                 List<MediaSource> sources = new List<MediaSource>();
 
                 foreach(string path in GlobalData.Current.IncludedPaths)
                 {
-                    sources.AddRange(await FileProcessing.Scan(path, listed));
+                    sources.AddRange(await FileProcessing.Scan(path));
                 }
 
                 sources.ForEach(AddTrack);

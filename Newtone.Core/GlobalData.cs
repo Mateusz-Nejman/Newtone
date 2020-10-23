@@ -13,7 +13,7 @@ namespace Newtone.Core
     public class GlobalData
     {
         #region Constants
-        public const string PASSWORD = "gruby idzie";
+        public const string NSEC_HASH = "gruby idzie";
         public const string SEPARATOR = "[NSEC2_SEPARATOR]";
         public const int MAXTRACKSINLASTLIST = 5;
 
@@ -26,21 +26,8 @@ namespace Newtone.Core
         public const string RECEIVED_MESSAGE = "NSEC2R";
         public const string SYNC_CODE = "NSEC2CD";
         #endregion
-        #region Fields
-        private static GlobalData current;
-        #endregion
-
         #region Properties
-        public static GlobalData Current
-        {
-            get
-            {
-                if (current == null)
-                    current = new GlobalData();
-
-                return current;
-            }
-        }
+        public static GlobalData Current { get; } = new GlobalData();
         public bool IsDebugMode
         {
             get
@@ -84,14 +71,13 @@ namespace Newtone.Core
         public string DataPath { get; set; }
         public string MusicPath { get; set; }
 
-        public AsyncEndController AsyncEndController = new AsyncEndController();
+        public AsyncEndController AsyncEndController { get; } = new AsyncEndController();
 
         public List<string> ExcludedPaths { get; set; }
         public List<string> IncludedPaths { get; set; }
         public string CurrentLanguage { get; set; }
         public MessageGenerator Messenger { get; set; }
         public bool ArtistsNeedRefresh { get; set; }
-        public bool TracksNeedRefresh { get; set; }
         public bool PlaylistsNeedRefresh { get; set; }
         public bool HistoryNeedRefresh { get; set; }
         public int IncludedPathsToSkip { get; set; }
@@ -123,7 +109,7 @@ namespace Newtone.Core
             if (File.Exists(DataPath + "/newtone.nsec2"))
             {
                 FileStream stream = File.OpenRead(DataPath + "/newtone.nsec2");
-                NSEC2 nsec = new NSEC2(PASSWORD);
+                NSEC2 nsec = new NSEC2(NSEC_HASH);
                 nsec.Load(stream);
                 if(nsec.Exists("language"))
                 {
@@ -255,13 +241,13 @@ namespace Newtone.Core
 
                 if (!AudioFromIntent)
                 {
-                    int cpp = 0;
+                    int playlistPosition = 0;
 
                     if (nsec.Exists("playlistPosition"))
                     {
-                        byte[] ppData = nsec.Get("playlistPosition");
-                        string pp = System.Text.Encoding.ASCII.GetString(ppData);
-                        cpp = int.Parse(pp);
+                        byte[] playlistPositionData = nsec.Get("playlistPosition");
+                        string playlistPositionBuffer = System.Text.Encoding.ASCII.GetString(playlistPositionData);
+                        playlistPosition = int.Parse(playlistPositionBuffer);
                     }
 
                     if (nsec.Exists("playlist"))
@@ -271,18 +257,11 @@ namespace Newtone.Core
 
                         CurrentPlaylist = new List<MediaSource>();
 
-                        if (cpp >= files.Length)
+                        if (playlistPosition < files.Length && Audios.ContainsKey(files[playlistPosition]))
                         {
-                            cpp = -1;
-                        }
-                        else
-                        {
-                            if (Audios.ContainsKey(files[cpp]))
-                            {
-                                PlaylistPosition = cpp;
-                                MediaSource = Audios[files[cpp]];
-                                MediaPlayer.Load(files[cpp]);
-                            }
+                            PlaylistPosition = playlistPosition;
+                            MediaSource = Audios[files[playlistPosition]];
+                            MediaPlayer.Load(files[playlistPosition]);
                         }
 
                         files.ForEach(filepath =>
@@ -301,7 +280,7 @@ namespace Newtone.Core
 
         public void SaveConfig()
         {
-            NSEC2 nsec = new NSEC2(PASSWORD);
+            NSEC2 nsec = new NSEC2(NSEC_HASH);
 
             string buffer = MediaPlayer.GetVolume().ToString();
 
@@ -417,7 +396,7 @@ namespace Newtone.Core
         {
             if (AudioTags.Count > 0)
             {
-                NSEC2 nsec = new NSEC2(PASSWORD);
+                NSEC2 nsec = new NSEC2(NSEC_HASH);
                 nsec.SetDebug(false);
 
                 int counter = 0;
@@ -453,7 +432,7 @@ namespace Newtone.Core
             {
                 AudioTags.Clear();
                 FileStream fileStream = File.OpenRead(DataPath + "/newtoneTags.nsec2");
-                NSEC2 nsec = new NSEC2(PASSWORD);
+                NSEC2 nsec = new NSEC2(NSEC_HASH);
                 nsec.Load(fileStream);
                 nsec.SetDebug(false);
 
@@ -470,11 +449,9 @@ namespace Newtone.Core
                         Id = values.Length > 4 ? values[4] : null
                     };
 
-                    if (values.Length > 4)
-                    {
-                        if (!DownloadedIds.Contains(values[4]) && File.Exists(values[0]))
-                            DownloadedIds.Add(values[4]);
-                    }
+                    if (values.Length > 4 && !DownloadedIds.Contains(values[4]) && File.Exists(values[0]))
+                        DownloadedIds.Add(values[4]);
+  
                     AudioTags.Add(values[0], tag);
                 });
 

@@ -1,6 +1,6 @@
 ﻿namespace Newtone.Core.Logic
 {
-    public class TickParser
+    public static class TickParser
     {
         #region Public Methods
         public static string FormatTick(double ticks)

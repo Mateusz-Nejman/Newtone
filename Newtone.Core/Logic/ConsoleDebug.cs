@@ -53,7 +53,10 @@ namespace Newtone.Core.Logic
                 streamWriter.WriteLine(data);
                 streamWriter.Close();
             }
-            catch { }
+            catch
+            {
+                //Don't catch because of ConsoleDebug using in global exception handlers
+            }
         }
 
         private static bool IsLogFile()

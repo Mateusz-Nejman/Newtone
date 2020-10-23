@@ -127,7 +127,7 @@ namespace Newtone.Mobile
                 {
                     GlobalData.Current.IncludedPaths.Add(newPath);
                     Task.Run(async () => {
-                        var files = await FileProcessing.Scan(newPath, new List<string>());
+                        var files = await FileProcessing.Scan(newPath);
                         files.ForEach(GlobalLoader.AddTrack);
                         CacheLoader.SaveCache();
                     });

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Newtone.Core.Media
 {
-    public class MediaProcessing
+    public static class MediaProcessing
     {
         #region Constants
         private const int MINIMUM_TRACK_DURATION = 10;

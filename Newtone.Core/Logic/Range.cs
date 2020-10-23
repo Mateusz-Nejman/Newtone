@@ -1,6 +1,6 @@
 ﻿namespace Newtone.Core.Logic
 {
-    public class Range
+    public static class Range
     {
         #region Public Methods
         public static int GetRangeInt(int min, int max, int current)

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Newtone.Core.Loaders
 {
-    public class CacheLoader
+    public static class CacheLoader
     {
         public static bool IsCacheAvailable()
         {
@@ -18,7 +18,7 @@ namespace Newtone.Core.Loaders
         {
             if(IsCacheAvailable())
             {
-                NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
+                NSEC2 nsec = new NSEC2(GlobalData.NSEC_HASH);
                 nsec.Load(File.OpenRead(GlobalData.Current.DataPath + "/cache.nsec2"));
 
                 if(nsec.TryGet("cache",out byte[] data))
@@ -38,13 +38,14 @@ namespace Newtone.Core.Loaders
 
         public static void SaveCache()
         {
-            NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
-            string buffer = "";
+            NSEC2 nsec = new NSEC2(GlobalData.NSEC_HASH);
+            StringBuilder buffer = new StringBuilder();
+
             foreach(var filepath in GlobalData.Current.Audios.Keys)
             {
-                buffer += filepath + "\n";
+                buffer.Append(filepath + "\n");
             }
-            nsec.AddFile("cache", Encoding.UTF8.GetBytes(buffer));
+            nsec.AddFile("cache", Encoding.UTF8.GetBytes(buffer.ToString()));
             File.WriteAllBytes(GlobalData.Current.DataPath + "/cache.nsec2", nsec.Save());
         }
     }

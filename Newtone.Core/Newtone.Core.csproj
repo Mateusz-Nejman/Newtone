@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Processing\SearchProcessing.cs~RF527a4fa.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="YoutubeExplode" Version="5.1.7" />
     <PackageReference Include="z440.atl.core" Version="3.11.0" />
   </ItemGroup>

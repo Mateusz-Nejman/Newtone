@@ -60,9 +60,9 @@ namespace Newtone.Mobile.Models
                         string playlistName = "";
                         var urlType = SearchProcessing.CheckLink(elems[1]);
 
-                        if (urlType.ContainsKey(SearchProcessing.QueryEnum.Playlist))
+                        if (urlType.ContainsKey(SearchProcessing.Query.Playlist))
                         {
-                            if (urlType.ContainsKey(SearchProcessing.QueryEnum.Video))
+                            if (urlType.ContainsKey(SearchProcessing.Query.Video))
                             {
                                 if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
                                 {
@@ -70,11 +70,11 @@ namespace Newtone.Mobile.Models
                                 }
                                 else
                                 {
-                                    playlistId = urlType[SearchProcessing.QueryEnum.Playlist];
+                                    playlistId = urlType[SearchProcessing.Query.Playlist];
 
                                     if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
                                     {
-                                        var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.QueryEnum.Playlist]);
+                                        var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.Query.Playlist]);
                                         string newPlaylistName = await NormalPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
                                         playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
                                     }

@@ -8,7 +8,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Newtone.Core.Processing
@@ -22,7 +21,6 @@ namespace Newtone.Core.Processing
         private static Task receiverTask;
         private const int BufferSize = 65536;
         private const int MessSize = 1024;
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
         #endregion
         #region Properties
         public static List<string> Audios { get; private set; } = new List<string>();
@@ -171,7 +169,7 @@ namespace Newtone.Core.Processing
                                 if (packetType == 0)
                                 {
                                     dataLength = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
-                                    Size = dataLength / 1024 / 1024;
+                                    Size = (double)(dataLength / 1048576);
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                     packetType = 1;
                                 }
@@ -181,7 +179,7 @@ namespace Newtone.Core.Processing
                                     if (currentBuffer.Length + numByte > dataLength)
                                         numByte1 = dataLength - currentBuffer.Length;
                                     currentBuffer.Write(buffer, 0, (int)numByte1);
-                                    Progress = currentBuffer.Length / 1024 / 1024;
+                                    Progress = (double)(currentBuffer.Length / 1048576);
                                     CurrentConnection.Send(Encoding.ASCII.GetBytes(GlobalData.RECEIVED_MESSAGE));
                                 }
 
@@ -228,13 +226,13 @@ namespace Newtone.Core.Processing
                 Started = true;
                 SocketMode = 2;
                 byte[] bufferData = PrepareFilesToSend(Audios);
-                Size = bufferData.Length / 1024 / 1024;
+                Size = (double)(bufferData.Length / 1048576);
                 byte[] bufferLength = Encoding.ASCII.GetBytes(bufferData.Length.ToString());
                 byte[] receiveBuffer = new byte[MessSize];
 
                 try
                 {
-                    int bytesSent1 = CurrentConnection.Send(bufferLength);
+                    CurrentConnection.Send(bufferLength);
 
                     byte[] buffer = new byte[BufferSize];
                     int bytesR = CurrentConnection.Receive(receiveBuffer);
@@ -249,12 +247,12 @@ namespace Newtone.Core.Processing
                         {
                             CurrentConnection.Send(buffer);
                             progress += read;
-                            Progress = progress / 1024 / 1024;
-                            bytesR = CurrentConnection.Receive(receiveBuffer);
+                            Progress = (double)(progress / 1048576);
+                            CurrentConnection.Receive(receiveBuffer);
                         }
                     }
                     else
-                        throw new Exception("invalid message");
+                        throw new SyncException("invalid message");
                 }
                 catch(Exception)
                 {
@@ -306,16 +304,16 @@ namespace Newtone.Core.Processing
         #region Private Methods
         private static byte[] PrepareFilesToSend(List<string> files)
         {
-            NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
+            NSEC2 nsec = new NSEC2(GlobalData.NSEC_HASH);
             nsec.SetDebug(false);
-            string audiosListBuffer = "";
-            string audioTagsBuffer = "";
+            StringBuilder listBuffer = new StringBuilder();
+            StringBuilder tagsBuffer = new StringBuilder();
             int counter = 0;
 
             foreach (string file in files)
             {
                 FileInfo fileInfo = new FileInfo(file);
-                audiosListBuffer += fileInfo.Name + "\n";
+                listBuffer.AppendLine(fileInfo.Name);
                 if (GlobalData.Current.AudioTags.ContainsKey(file))
                 {
                     MediaSourceTag mediaSource = GlobalData.Current.AudioTags[file];
@@ -329,22 +327,22 @@ namespace Newtone.Core.Processing
                         bufferItem += GlobalData.SEPARATOR + mediaSource.Id;
 
                     bufferItem += "\n";
-                    audioTagsBuffer += bufferItem;
+                    tagsBuffer.Append(bufferItem);
                     counter += 1;
                 }
 
                 nsec.AddFile(fileInfo.Name, File.ReadAllBytes(file));
             }
 
-            nsec.AddFile("list", Encoding.UTF8.GetBytes(audiosListBuffer));
-            nsec.AddFile("tags", Encoding.UTF8.GetBytes(audioTagsBuffer));
+            nsec.AddFile("list", Encoding.UTF8.GetBytes(listBuffer.ToString()));
+            nsec.AddFile("tags", Encoding.UTF8.GetBytes(tagsBuffer.ToString()));
 
             return nsec.Save();
         }
 
         private static void Unpack(MemoryStream stream)
         {
-            NSEC2 nsec = new NSEC2(GlobalData.PASSWORD);
+            NSEC2 nsec = new NSEC2(GlobalData.NSEC_HASH);
             nsec.SetDebug(true);
             nsec.Load(stream);      
 
@@ -354,7 +352,7 @@ namespace Newtone.Core.Processing
             foreach(string bufferItem in tagsBuffer.Split("\n",StringSplitOptions.RemoveEmptyEntries))
             {
                 string[] elems = bufferItem.Split(GlobalData.SEPARATOR);
-                string name = new FileInfo(GlobalData.Current.MusicPath + "/" + elems[0]).FullName;
+                string name = new FileInfo(Path.Combine(GlobalData.Current.MusicPath, elems[0])).FullName;
                 string author = elems[1];
                 string title = elems[2];
                 string imageName = elems[3];
@@ -379,7 +377,7 @@ namespace Newtone.Core.Processing
             {
                 string file = files[a];
 
-                FileInfo info = new FileInfo(GlobalData.Current.MusicPath + "/" + file);
+                FileInfo info = new FileInfo(Path.Combine(GlobalData.Current.MusicPath, file));
                 CurrentFileName = file;
                 CurrentFileReceived = a;
                 File.WriteAllBytes(info.FullName, nsec.Get(file));

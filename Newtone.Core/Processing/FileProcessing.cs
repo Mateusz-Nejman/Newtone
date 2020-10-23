@@ -5,25 +5,26 @@ using System.Threading.Tasks;
 
 namespace Newtone.Core.Processing
 {
-    public class FileProcessing
+    public static class FileProcessing
     {
         #region Public Methods
-        public static async Task<MediaSource[]> Scan(string directory, List<string> listed = null)
+        public static async Task<MediaSource[]> Scan(string directory)
         {
-            if (listed == null)
-                listed = new List<string>();
-
             return await Task.Run(() => {
                 List<MediaSource> containers = new List<MediaSource>();
 
-                string[] mp3Files = new string[0];
-                string[] m4aFiles = new string[0];
+                string[] mp3Files = null;
+                string[] m4aFiles = null;
                 try
                 {
                     mp3Files = Directory.GetFiles(directory, "*.mp3");
                     m4aFiles = Directory.GetFiles(directory, "*.m4a");
                 }
-                catch { }
+                catch
+                {
+                    //If don't have access to directory, ignore
+                }
+
                 List<string> files = new List<string>();
                 files.AddRange(mp3Files);
                 files.AddRange(m4aFiles);

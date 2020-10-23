@@ -62,7 +62,7 @@ namespace Newtone.Core.Media
             webPC = new WebPlayerController();
             localPC = new LocalPlayerController();
 
-            Random = new Random(GlobalData.PASSWORD.GetHashCode());
+            Random = new Random(GlobalData.NSEC_HASH.GetHashCode());
             IsLoading = false;
         }
         #endregion
@@ -73,23 +73,20 @@ namespace Newtone.Core.Media
             BasePlayer.Reset();
             SetPlayerController(filename.Length == 11 ? webPC : localPC);
 
-            if(filename.Length == 11)
+            if(filename.Length == 11 && GlobalData.Current.DownloadedIds.Contains(filename))
             {
-                if(GlobalData.Current.DownloadedIds.Contains(filename))
+                try
                 {
-                    try
+                    var filepath = GlobalData.Current.AudioTags.Keys.First(file =>
                     {
-                        var filepath = GlobalData.Current.AudioTags.Keys.First(file =>
-                        {
-                            return GlobalData.Current.AudioTags[file].Id == filename;
-                        });
-                        filename = filepath;
-                        SetPlayerController(localPC);
-                    }
-                    catch
-                    {
-
-                    }
+                        return GlobalData.Current.AudioTags[file].Id == filename;
+                    });
+                    filename = filepath;
+                    SetPlayerController(localPC);
+                }
+                catch
+                {
+                    //If can't load stream audio from local file, continue
                 }
             }
 
@@ -135,9 +132,6 @@ namespace Newtone.Core.Media
             if (GlobalData.Current.CurrentPlaylist.Count > 0)
             {
                 MediaSource track;
-                //TODO Queue
-                //GlobalData.Current.CurrentQueue.Clear();
-                //GlobalData.Current.QueuePosition = -1;
                 if (GlobalData.Current.CurrentPlaylist.Count > 1)
                 {
                     int addValue = 0;
@@ -208,8 +202,7 @@ namespace Newtone.Core.Media
 
         public void Reset()
         {
-            BasePlayer?.Stop();
-            BasePlayer?.SetNotification(false);
+            Stop();
         }
 
         public void Seek(double seek)

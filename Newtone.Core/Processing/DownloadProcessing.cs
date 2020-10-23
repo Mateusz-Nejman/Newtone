@@ -183,7 +183,7 @@ namespace Newtone.Core.Processing
                 Replace('<', '_').
                 Replace('>', '_').
                 Replace('|', '_');
-            FileInfo fileInfo = new FileInfo(GlobalData.Current.MusicPath + "/" + fileName + ".m4a");
+            FileInfo fileInfo = new FileInfo(Path.Combine(GlobalData.Current.MusicPath, fileName + ".m4a"));
 
             if (GlobalData.Current.DownloadedIds.Contains(id))
                 return fileInfo.FullName;
@@ -201,7 +201,7 @@ namespace Newtone.Core.Processing
                         streamInfo = item;
                 }
             });
-            await client.Videos.Streams.DownloadAsync(streamInfo, GlobalData.Current.MusicPath + "/" + fileName + ".m4a", progress);
+            await client.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(GlobalData.Current.MusicPath, fileName + ".m4a"), progress);
             string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
             string artist = splitted.Length == 1 ? video.Author : splitted[0];
             string title = splitted[splitted.Length == 1 ? 0 : 1];
@@ -214,8 +214,9 @@ namespace Newtone.Core.Processing
             }
             catch
             {
-
+                //If can't download image, ignore
             }
+
             if (GlobalData.Current.AudioTags.ContainsKey(fileInfo.FullName))
             {
                 string f = fileInfo.FullName;

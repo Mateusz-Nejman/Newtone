@@ -15,6 +15,7 @@ namespace Newtone.Core.Logic
         public ActionCommand(Action<object> action)
         {
             this.action = action;
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
         #endregion
         #region Public Methods

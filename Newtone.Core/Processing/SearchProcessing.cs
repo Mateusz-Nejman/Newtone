@@ -56,9 +56,9 @@ namespace Newtone.Core.Processing
             GlobalData.Current.SaveConfig();
             YoutubeClient client = new YoutubeClient();
             var validators = CheckLink(text);
-            if(validators.ContainsKey(QueryEnum.Video))
+            if(validators.ContainsKey(Query.Video))
             {
-                var video = await client.Videos.GetAsync(validators[QueryEnum.Video]);
+                var video = await client.Videos.GetAsync(validators[Query.Video]);
 
                 model.Add(new SearchResultModel()
                 {
@@ -73,9 +73,9 @@ namespace Newtone.Core.Processing
 
                 maxItems = 1;
             }
-            else if(validators.ContainsKey(QueryEnum.Search) || validators.ContainsKey(QueryEnum.None))
+            else if(validators.ContainsKey(Query.Search) || validators.ContainsKey(Query.None))
             {
-                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(QueryEnum.None) ? QueryEnum.None : QueryEnum.Search], fromPage, 1).BufferAsync();
+                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(Query.None) ? Query.None : Query.Search], fromPage, 1).BufferAsync();
                 Console.WriteLine("Searched " + videos.Count);
                 foreach(var video in videos)
                 {
@@ -91,12 +91,12 @@ namespace Newtone.Core.Processing
                     });
                 }
             }
-            else if (validators.ContainsKey(QueryEnum.Playlist))
+            else if (validators.ContainsKey(Query.Playlist))
             {
-                var playlist = await client.Playlists.GetVideosAsync(validators[QueryEnum.Playlist]).BufferAsync(100);
+                var playlist = await client.Playlists.GetVideosAsync(validators[Query.Playlist]).BufferAsync(100);
                 foreach (var video in playlist)
                 {
-                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[QueryEnum.Playlist] )});
+                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[Query.Playlist] )});
                 }
                 maxItems = playlist.Count;
             }
@@ -104,9 +104,9 @@ namespace Newtone.Core.Processing
             return maxItems;
         }
 
-        public static Dictionary<QueryEnum, string> CheckLink(string link)
+        public static Dictionary<Query, string> CheckLink(string link)
         {
-            Dictionary<QueryEnum, string> returnDict = new Dictionary<QueryEnum, string>();
+            Dictionary<Query, string> returnDict = new Dictionary<Query, string>();
 
             if(link != null)
             {
@@ -116,23 +116,23 @@ namespace Newtone.Core.Processing
                 bool channelValid = YoutubeExplodeExtensions.TryParseChannelId(link, out string channelId);
                 bool playlistValid = YoutubeExplodeExtensions.TryParsePlaylistId(link, out string playlistId);
 
-                bool searchValid = link.IndexOf("search_query=") > 0;
+                bool searchValid = link.IndexOf("search_query=") >= 0;
 
                 if(searchValid)
                     searchValue = HttpUtility.UrlDecode(link.Substring(link.IndexOf("search_query=") + 13));
 
                 if (videoValid)
-                    returnDict.Add(QueryEnum.Video, videoId);
+                    returnDict.Add(Query.Video, videoId);
                 if (channelValid)
-                    returnDict.Add(QueryEnum.Channel, channelId);
+                    returnDict.Add(Query.Channel, channelId);
                 if (playlistValid)
-                    returnDict.Add(QueryEnum.Playlist, playlistId);
+                    returnDict.Add(Query.Playlist, playlistId);
                 if (searchValid)
-                    returnDict.Add(QueryEnum.Search, searchValue);
+                    returnDict.Add(Query.Search, searchValue);
             }
 
             if (returnDict.Count == 0)
-                returnDict.Add(QueryEnum.None, link);
+                returnDict.Add(Query.None, link);
 
             return returnDict;
         }
@@ -201,8 +201,15 @@ namespace Newtone.Core.Processing
             int[,] distance = new int[sourceWordCount + 1, targetWordCount + 1];
 
             // Step 2
-            for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++) ;
-            for (int j = 0; j <= targetWordCount; distance[0, j] = j++) ;
+            for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++)
+            {
+                distance[i, 0] = i;
+            }
+
+            for (int j = 0; j <= targetWordCount; distance[0, j] = j++)
+            {
+                distance[0, j] = j;
+            }
 
             for (int i = 1; i <= sourceWordCount; i++)
             {
@@ -220,7 +227,7 @@ namespace Newtone.Core.Processing
         }
         #endregion
         #region Enums
-        public enum QueryEnum
+        public enum Query
         {
             None,
             Video,

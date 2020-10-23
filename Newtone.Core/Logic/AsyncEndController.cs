@@ -5,7 +5,7 @@ namespace Newtone.Core.Logic
     public class AsyncEndController
     {
         #region Fields
-        public Dictionary<string, IAsyncEndListener> listeners = new Dictionary<string, IAsyncEndListener>();
+        private readonly Dictionary<string, IAsyncEndListener> listeners = new Dictionary<string, IAsyncEndListener>();
         #endregion
         #region Public Methods
         public void Invoke(string name)

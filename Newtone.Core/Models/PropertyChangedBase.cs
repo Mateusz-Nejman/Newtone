@@ -5,15 +5,15 @@ using System.Runtime.CompilerServices;
 
 namespace Newtone.Core.Models
 {
-    public class PropertyChangedBase : INotifyPropertyChanged, IPropertyChangeBase
+    public class PropertyChangedBase : IPropertyChangeBase
     {
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
         #region Public Methods
-        public void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        public void OnPropertyChanged<T>(Expression<Func<T>> property)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs((propertyExpression.Body as MemberExpression).Member.Name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs((property.Body as MemberExpression).Member.Name));
         }
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
