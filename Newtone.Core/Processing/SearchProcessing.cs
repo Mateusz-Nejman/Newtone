@@ -152,10 +152,13 @@ namespace Newtone.Core.Processing
 
             foreach(var item in GlobalData.Current.Audios.Values)
             {
-                if(returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Artist.ToLowerInvariant()) || item.Artist.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
-                    returnData.Add(item.Artist);
-                if (returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Title.ToLowerInvariant()) || item.Title.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
-                    returnData.Add(item.Title);
+                if(returnData.Count > 0)
+                {
+                    if (returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Artist.ToLowerInvariant()) || item.Artist.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
+                        returnData.Add(item.Artist);
+                    if (returnData.FindIndex(find => find.ToLowerInvariant().Contains(item.Title.ToLowerInvariant()) || item.Title.ToLowerInvariant().Contains(find.ToLowerInvariant())) == -1)
+                        returnData.Add(item.Title);
+                }
             }
 
             foreach(var item in GlobalData.Current.History)

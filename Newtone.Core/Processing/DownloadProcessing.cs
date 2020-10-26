@@ -110,8 +110,9 @@ namespace Newtone.Core.Processing
             string currentId = "";
             try
             {
-                foreach(var id in Downloads.Keys.ToList())
+                if(Downloads.Keys.Count > 0)
                 {
+                    string id = Downloads.Keys.First();
                     currentId = id;
                     DownloadModel model = Downloads[id];
                     string filename = await Download(id);
@@ -143,14 +144,9 @@ namespace Newtone.Core.Processing
                     Downloads.Remove(id);
                 }
             }
-            catch (TransientFailureException)
+            catch (Exception)
             {
                 GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, Localization.YoutubeError);
-                Downloads.Remove(currentId);
-            }
-            catch(Exception e)
-            {
-                GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
                 Downloads.Remove(currentId);
             }
 

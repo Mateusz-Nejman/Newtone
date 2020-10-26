@@ -37,22 +37,6 @@ namespace Newtone.Mobile.Views
             Disappearing += PageDisappearing;
 
             ViewModel.GotoTracks.Execute(null);
-
-            if(GlobalData.Current.AutoDownload && MainActivity.IsInternet())
-            {
-                new Task(async() =>
-                {
-                    YoutubeClient client = new YoutubeClient();
-                    foreach(var key in GlobalData.Current.WebToLocalPlaylists.Keys)
-                    {
-                        foreach (var video in await client.Playlists.GetVideosAsync(key))
-                        {
-                            DownloadProcessing.Add(video.Id, video.Title, video.Url, GlobalData.Current.WebToLocalPlaylists[key]);
-                        }
-                    }
-                    
-                }).Start();
-            }
         }
         #endregion
         #region Public Methods

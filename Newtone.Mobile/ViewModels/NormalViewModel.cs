@@ -13,6 +13,7 @@ using Newtone.Core.Processing;
 using Newtone.Mobile.Views;
 using Newtone.Mobile.Views.Custom;
 using Xamarin.Forms;
+using YoutubeExplode;
 
 namespace Newtone.Mobile.ViewModels
 {
@@ -379,10 +380,10 @@ namespace Newtone.Mobile.ViewModels
                 Task task;
                 if(CacheLoader.IsCacheAvailable())
                 {
-                    task = Task.Run(() =>
+                    task = Task.Run(async() =>
                     {
                         CacheLoader.LoadCache();
-                        Task.Run(async () => await GlobalLoader.Load());
+                        await GlobalLoader.Load();
                     });
                 }
                 else
@@ -391,6 +392,21 @@ namespace Newtone.Mobile.ViewModels
                 {
                     GlobalData.Current.LoadConfig();
                     MainActivity.Loaded = true;
+
+                    if (GlobalData.Current.AutoDownload && MainActivity.IsInternet())
+                    {
+                        Task autoDownloadTask = Task.Run(async () =>
+                        {
+                            YoutubeClient client = new YoutubeClient();
+                            foreach (var key in GlobalData.Current.WebToLocalPlaylists.Keys)
+                            {
+                                foreach (var video in await client.Playlists.GetVideosAsync(key))
+                                {
+                                    DownloadProcessing.Add(video.Id, video.Title, video.Url, GlobalData.Current.WebToLocalPlaylists[key]);
+                                }
+                            }
+                        });
+                    }
                     NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoTracks.Execute(true));
                 });
             }

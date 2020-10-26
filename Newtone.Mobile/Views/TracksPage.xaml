@@ -11,7 +11,15 @@
         <viewmodels:TrackViewModel/>
     </ContentView.BindingContext>
   <ContentView.Content>
-        <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" ItemSelected="TrackListView_ItemSelected" ItemsSource="{Binding Items}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding Refresh}" RefreshControlColor="#0f4c75" IsRefreshing="{Binding IsRefreshing}">
+        <ListView 
+            SelectionMode="Single" 
+            VerticalOptions="FillAndExpand" 
+            ItemSelected="TrackListView_ItemSelected" 
+            ItemsSource="{Binding Items}" 
+            IsPullToRefreshEnabled="True" 
+            RefreshCommand="{Binding Refresh}" 
+            RefreshControlColor="#0f4c75" 
+            IsRefreshing="{Binding IsRefreshing}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <viewcells:TrackViewCell/>
