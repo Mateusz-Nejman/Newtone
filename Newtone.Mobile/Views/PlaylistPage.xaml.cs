@@ -28,11 +28,20 @@ namespace Newtone.Mobile.Views
         {
             if(generatedChildrens == null)
             {
+                List<string> beforeSort = new List<string>();
+
+                foreach (string playlist in GlobalData.Current.Playlists.Keys.ToList())
+                {
+                    beforeSort.Add(playlist);
+                }
+
+                List<string> afterSort = beforeSort.OrderBy(o => o).ToList();
+
                 generatedChildrens = new List<View>();
                 int pos = 0;
                 string model0 = null;
 
-                foreach (string playlist in GlobalData.Current.Playlists.Keys.ToList())
+                foreach (string playlist in afterSort)
                 {
                     if (pos == 0)
                     {
@@ -79,7 +88,7 @@ namespace Newtone.Mobile.Views
 
         public void Tick()
         {
-            if (GlobalData.Current.PlaylistsNeedRefresh || generatedChildrens?.Count != GlobalData.Current.Playlists.Count)
+            if (GlobalData.Current.PlaylistsNeedRefresh)
             {
                 if (generatedChildrens != null)
                     generatedChildrens = null;

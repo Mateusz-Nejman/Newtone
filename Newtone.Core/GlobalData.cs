@@ -146,6 +146,8 @@ namespace Newtone.Core
                             Playlists.Add(name, playlist);
                         }
                     });
+
+                    PlaylistsNeedRefresh = true;
                 }
 
                 if (nsec.Exists("mostTracks"))
