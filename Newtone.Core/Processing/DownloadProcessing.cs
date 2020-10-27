@@ -125,20 +125,21 @@ namespace Newtone.Core.Processing
                         if (!GlobalData.Current.Playlists[model.PlaylistName].Contains(filename))
                         {
                             GlobalData.Current.Playlists[model.PlaylistName].Add(filename);
-
-                            if (model.PlaylistID != "")
-                            {
-                                if (!GlobalData.Current.WebToLocalPlaylists.ContainsKey(model.PlaylistID))
-                                {
-                                    GlobalData.Current.WebToLocalPlaylists.Add(model.PlaylistID, model.PlaylistName);
-                                }
-                                else
-                                {
-                                    GlobalData.Current.WebToLocalPlaylists[model.PlaylistID] = model.PlaylistName;
-                                }
-                            }
-                            GlobalData.Current.SaveConfig();
                         }
+
+                        if (model.PlaylistID != "")
+                        {
+                            if (!GlobalData.Current.WebToLocalPlaylists.ContainsKey(model.PlaylistID))
+                            {
+                                GlobalData.Current.WebToLocalPlaylists.Add(model.PlaylistID, model.PlaylistName);
+                            }
+                            else
+                            {
+                                GlobalData.Current.WebToLocalPlaylists[model.PlaylistID] = model.PlaylistName;
+                            }
+                        }
+
+                        GlobalData.Current.SaveConfig();
                         GlobalData.Current.PlaylistsNeedRefresh = true;
                     }
                     Downloads.Remove(id);

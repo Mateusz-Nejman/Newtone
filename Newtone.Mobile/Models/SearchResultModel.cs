@@ -90,7 +90,7 @@ namespace Newtone.Mobile.Models
                         {
                             foreach (var video in await client.Playlists.GetVideosAsync(playlistId))
                             {
-                                DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName);
+                                DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName, playlistId);
                             }
                         }
                     });

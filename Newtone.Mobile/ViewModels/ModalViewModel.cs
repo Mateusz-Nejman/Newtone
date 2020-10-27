@@ -19,8 +19,6 @@ namespace Newtone.Mobile.ViewModels
         private string badge;
         private bool badgeVisible;
         private bool topPanelVisible;
-        private PlayerPanel playerPanel;
-        private IDisposable loopSubscription;
         #endregion
 
         #region Properties
@@ -63,16 +61,6 @@ namespace Newtone.Mobile.ViewModels
             }
         }
 
-        public PlayerPanel PlayerPanel
-        {
-            get => playerPanel;
-            set
-            {
-                playerPanel = value;
-                OnPropertyChanged();
-            }
-        }
-
         public Grid Container { get; private set; }
         #endregion
 
@@ -111,11 +99,10 @@ namespace Newtone.Mobile.ViewModels
         }
         #endregion
         #region Constructors
-        public ModalViewModel(Grid container, string title, bool topPanelVisible = true, PlayerPanel panel = null)
+        public ModalViewModel(Grid container, string title, bool topPanelVisible = true)
         {
             ModalTitle = title;
             TopPanelVisible = topPanelVisible;
-            PlayerPanel = panel;
             Container = container;
         }
         #endregion
@@ -123,22 +110,18 @@ namespace Newtone.Mobile.ViewModels
 
         public void Appearing()
         {
-            var src = System.Reactive.Linq.Observable.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(200)).Timestamp();
-            loopSubscription = src.Subscribe(time => Tick());
+            
         }
 
         public void Disappearing()
         {
-            loopSubscription?.Dispose();
-            loopSubscription = null;
+            
         }
 
         public void Tick()
         {
             Badge = DownloadProcessing.BadgeCount.ToString();
             BadgeVisible = DownloadProcessing.BadgeCount > 0;
-
-            PlayerPanel?.Tick();
 
             if (Container.Children.Count > 0 && Container.Children[0] is ITimerContent content)
                 content.Tick();

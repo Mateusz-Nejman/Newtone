@@ -76,6 +76,9 @@
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" x:Name="container">
 
                 </Grid>
+                <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" IsVisible="{Binding SpinnerVisible}">
+                    <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center" Color="White"/>
+                </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" IsVisible="{Binding SearchSuggestionsVisible}" >
                     <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
                         <ListView VerticalOptions="FillAndExpand"

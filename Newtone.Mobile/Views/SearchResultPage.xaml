@@ -13,7 +13,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected" ItemsSource="{Binding Items}" ItemAppearing="SearchListView_ItemAppearing">
+            <ListView Grid.RowSpan="2" SelectionMode="Single" VerticalOptions="FillAndExpand" RowHeight="56" ItemSelected="SearchListView_ItemSelected" ItemsSource="{Binding Items}" ItemAppearing="SearchListView_ItemAppearing">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <viewcells:SearchResultViewCell/>

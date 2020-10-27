@@ -114,7 +114,10 @@ namespace Newtone.Mobile.Logic
                             GlobalData.Current.Playlists[answer].Add(filePath);
 
                         GlobalData.Current.SaveConfig();
+                        SnackbarBuilder.Show(Localization.SnackPlaylist);
                     }
+
+                    GlobalData.Current.PlaylistsNeedRefresh = true;
 
                 }
                 else if (item == Localization.TrackMenuDelete)
@@ -269,10 +272,11 @@ namespace Newtone.Mobile.Logic
                                 GlobalData.Current.Playlists[answer].Add(playlistItem);
                         }
                         
-
                         GlobalData.Current.SaveConfig();
+                        SnackbarBuilder.Show(Localization.SnackPlaylist);
                     }
 
+                    GlobalData.Current.PlaylistsNeedRefresh = true;
                     (sender as PlaylistGridItem).Page.Init();
                 }
                 else if(item == Localization.SyncAdd)
@@ -306,6 +310,7 @@ namespace Newtone.Mobile.Logic
 
                             }
                             GlobalData.Current.SaveConfig();
+                            GlobalData.Current.PlaylistsNeedRefresh = true;
                             (sender as PlaylistGridItem).Page.Init();
                             SnackbarBuilder.Show(Localization.Ready);
                         }
@@ -333,7 +338,7 @@ namespace Newtone.Mobile.Logic
 
                         GlobalData.Current.SaveConfig();
                         SnackbarBuilder.Show(Localization.Ready);
-
+                        GlobalData.Current.PlaylistsNeedRefresh = true;
                         (sender as PlaylistGridItem).Page.Init();
                     }
                 }

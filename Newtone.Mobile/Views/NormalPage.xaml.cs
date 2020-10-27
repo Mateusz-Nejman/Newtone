@@ -35,8 +35,6 @@ namespace Newtone.Mobile.Views
             Instance = this;
             Appearing += PageAppearing;
             Disappearing += PageDisappearing;
-
-            ViewModel.GotoTracks.Execute(null);
         }
         #endregion
         #region Public Methods

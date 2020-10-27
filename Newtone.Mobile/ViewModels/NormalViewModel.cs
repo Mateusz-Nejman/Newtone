@@ -47,6 +47,7 @@ namespace Newtone.Mobile.ViewModels
         private ObservableCollection<HistoryModel> suggestionItems;
         private bool searchSuggestionsVisible = false;
         private readonly Entry searchEntry;
+        private bool spinnerVisible;
         #endregion
 
         #region Properties
@@ -220,6 +221,16 @@ namespace Newtone.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool SpinnerVisible
+        {
+            get => spinnerVisible;
+            set
+            {
+                spinnerVisible = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region Commands
@@ -268,7 +279,7 @@ namespace Newtone.Mobile.ViewModels
                 if (gotoArtistsCommand == null)
                     gotoArtistsCommand = new ActionCommand(parameter =>
                     {
-                        if (currentButtonIndex != 1)
+                        if (currentButtonIndex != 1 || (parameter as bool?) == true)
                         {
                             SetContainer(artistPage, Localization.Artists);
                             Toggle(1);
@@ -372,6 +383,7 @@ namespace Newtone.Mobile.ViewModels
             SuggestionItems = new ObservableCollection<HistoryModel>();
             Container = container;
             PlayerPanel = panel;
+            SpinnerVisible = true;
 
             Directory.CreateDirectory(GlobalData.Current.MusicPath);
             if (!MainActivity.Loaded)
@@ -407,7 +419,7 @@ namespace Newtone.Mobile.ViewModels
                             }
                         });
                     }
-                    NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoTracks.Execute(true));
+                    NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoArtists.Execute(true));
                 });
             }
         }
@@ -440,6 +452,12 @@ namespace Newtone.Mobile.ViewModels
             SearchPlaceholder = Localization.Search;
             Badge = DownloadProcessing.BadgeCount.ToString();
             BadgeVisible = DownloadProcessing.BadgeCount > 0;
+            if (Container.Children.Count == 0)
+            {
+                SpinnerVisible = true;
+            }
+            else
+                SpinnerVisible = false;
 
             BadgeSyncVisible = SyncProcessing.Audios.Count > 0;
             BadgeSync = SyncProcessing.Audios.Count.ToString();

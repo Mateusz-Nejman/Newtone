@@ -145,6 +145,7 @@ namespace Newtone.Mobile.ViewModels.Custom
         public void Tick()
         {
             IsPanelVisible = GlobalData.Current.MediaSource != null;
+
             if (GlobalData.Current.MediaSource != null)
             {
                 Artist = GlobalData.Current.MediaSource.Artist;
