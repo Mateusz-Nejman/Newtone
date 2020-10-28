@@ -26,11 +26,12 @@ namespace Newtone.Mobile.Views
         #region Public Methods
         public void Appearing()
         {
-            
+            //Not implemented
         }
 
         public void Disappearing()
         {
+            //Not implemented
         }
         public void Init()
         {

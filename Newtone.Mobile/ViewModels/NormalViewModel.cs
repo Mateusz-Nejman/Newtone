@@ -22,7 +22,7 @@ namespace Newtone.Mobile.ViewModels
         #region Fields
         private readonly TracksPage tracksPage = new TracksPage();
         private readonly ArtistPage artistPage = new ArtistPage();
-        private readonly PlaylistPage playlistPage = new PlaylistPage();
+        private PlaylistPage playlistPage;
         private SettingsPage settingsPage;
 
         private string pageTitle;
@@ -300,6 +300,8 @@ namespace Newtone.Mobile.ViewModels
                     {
                         if (currentButtonIndex != 2)
                         {
+                            if (playlistPage == null)
+                                playlistPage = new PlaylistPage();
                             SetContainer(playlistPage, Localization.Playlists);
                             Toggle(2);
                         }
@@ -407,15 +409,12 @@ namespace Newtone.Mobile.ViewModels
 
                     if (GlobalData.Current.AutoDownload && MainActivity.IsInternet())
                     {
-                        Task autoDownloadTask = Task.Run(async () =>
+                        Task.Run(async () =>
                         {
                             YoutubeClient client = new YoutubeClient();
                             foreach (var key in GlobalData.Current.WebToLocalPlaylists.Keys)
                             {
-                                foreach (var video in await client.Playlists.GetVideosAsync(key))
-                                {
-                                    DownloadProcessing.Add(video.Id, video.Title, video.Url, GlobalData.Current.WebToLocalPlaylists[key]);
-                                }
+                                DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(key), GlobalData.Current.WebToLocalPlaylists[key], key, true);
                             }
                         });
                     }
@@ -429,9 +428,8 @@ namespace Newtone.Mobile.ViewModels
         {
             var src = System.Reactive.Linq.Observable.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(200)).Timestamp();
             loopSubscription = src.Subscribe(time => Tick());
-            if (Container.Children.Count > 0)
-                if (Container.Children[0] is IVisibleContent)
-                    (Container.Children[0] as IVisibleContent).Appearing();
+            if (Container.Children.Count > 0 && Container.Children[0] is IVisibleContent)
+                (Container.Children[0] as IVisibleContent).Appearing();
 
             if(GlobalData.Current.Audios.Count == 0)
             {
@@ -474,7 +472,7 @@ namespace Newtone.Mobile.ViewModels
         {
             string searchedText = EntryText ?? "";
             var newList = SearchProcessing.GenerateSearchSuggestions().FindAll(
-                item => SearchProcessing.Similiar(searchedText, item) > 0);
+                item => searchedText.ToLowerInvariant().Contains(item.ToLowerInvariant()) || item.ToLowerInvariant().Contains(searchedText.ToLowerInvariant()));
 
             SuggestionItems.Clear();
             foreach (var item in newList)

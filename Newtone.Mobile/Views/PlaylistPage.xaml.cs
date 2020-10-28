@@ -1,5 +1,6 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Mobile.Views.ViewCells;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,8 @@ namespace Newtone.Mobile.Views
                     generatedChildrens.Add(layout);
                 }
 
+                GenerateRecomended();
+
                 trackGrid.Children.Clear();
                 generatedChildrens.ForEach(trackGrid.Children.Add);
             }
@@ -95,6 +98,43 @@ namespace Newtone.Mobile.Views
 
                 Device.BeginInvokeOnMainThread(Init);
                 GlobalData.Current.PlaylistsNeedRefresh = false;
+            }
+        }
+        #endregion
+        #region Private Methods
+        private void GenerateRecomended()
+        {
+            if (MainActivity.IsInternet() && GlobalData.Current.RecomendedPlaylists.Count == 0)
+            {
+                GlobalData.Current.RecomendedPlaylists = RecomendedPlaylists.GetRecomendedPlaylists();
+            }
+
+            int pos = 0;
+            string model0 = null;
+
+            foreach (var key in GlobalData.Current.RecomendedPlaylists.Keys)
+            {
+                if (pos == 0)
+                {
+                    model0 = GlobalData.Current.RecomendedPlaylists[key];
+                    pos = 1;
+                }
+                else
+                {
+                    Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
+                    layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+                    layout.Children.Add(new PlaylistGridItem(this, GlobalData.Current.RecomendedPlaylists[key]), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+
+                    generatedChildrens.Add(layout);
+                    pos = 0;
+                }
+            }
+
+            if (pos == 1)
+            {
+                Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
+                layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(200));
+                generatedChildrens.Add(layout);
             }
         }
         #endregion

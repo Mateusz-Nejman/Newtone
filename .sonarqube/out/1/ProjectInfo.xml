@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
-  <ProjectName>Newtone.Core</ProjectName>
+  <ProjectName>LocalizationGenerator</ProjectName>
   <ProjectLanguage>C#</ProjectLanguage>
   <ProjectType>Product</ProjectType>
-  <ProjectGuid>caf75c7f-9e2b-4f7a-bf22-ba84b2947c69</ProjectGuid>
-  <FullPath>D:\Projekty\CS\Newtone\Newtone.Core\Newtone.Core.csproj</FullPath>
+  <ProjectGuid>c45f454e-c44a-4022-80a4-01eca7dffabe</ProjectGuid>
+  <FullPath>D:\Projekty\CS\Newtone\LocalizationGenerator\LocalizationGenerator.csproj</FullPath>
   <IsExcluded>false</IsExcluded>
   <AnalysisResults>
     <AnalysisResult Id="FilesToAnalyze" Location="D:\Projekty\CS\Newtone\.sonarqube\out\1\FilesToAnalyze.txt" />
   </AnalysisResults>
   <AnalysisSettings>
-    <Property Name="sonar.cs.roslyn.reportFilePath">D:\Projekty\CS\Newtone\Newtone.Core\bin\Debug\netstandard2.1\Newtone.Core.dll.RoslynCA.json|D:\Projekty\CS\Newtone\Newtone.Core\bin\Debug\netstandard2.1\Newtone.Core.dll.RoslynCA.json</Property>
+    <Property Name="sonar.cs.roslyn.reportFilePath">D:\Projekty\CS\Newtone\LocalizationGenerator\bin\Debug\netcoreapp3.1\LocalizationGenerator.dll.RoslynCA.json|D:\Projekty\CS\Newtone\LocalizationGenerator\bin\Debug\netcoreapp3.1\LocalizationGenerator.dll.RoslynCA.json</Property>
     <Property Name="sonar.cs.analyzer.projectOutPath">D:\Projekty\CS\Newtone\.sonarqube\out\1</Property>
   </AnalysisSettings>
   <Configuration>Debug</Configuration>
   <Platform>AnyCPU</Platform>
-  <TargetFramework>netstandard2.1</TargetFramework>
+  <TargetFramework>netcoreapp3.1</TargetFramework>
 </ProjectInfo>

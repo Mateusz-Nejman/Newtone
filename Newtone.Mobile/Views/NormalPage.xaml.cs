@@ -1,15 +1,9 @@
-﻿using Newtone.Core;
-using Newtone.Core.Logic;
-using Newtone.Core.Processing;
+﻿using Newtone.Core.Logic;
 using System;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Newtone.Mobile.ViewModels;
-using System.Reactive.Linq;
 using Newtone.Mobile.Logic;
-using YoutubeExplode;
 
 namespace Newtone.Mobile.Views
 {
@@ -50,12 +44,6 @@ namespace Newtone.Mobile.Views
         public bool IsBlocked()
         {
             return blocker.IsVisible;
-        }
-        #endregion
-        #region Protected Methods
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
         }
         #endregion
         #region Private Methods

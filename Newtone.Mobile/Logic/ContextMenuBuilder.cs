@@ -33,14 +33,17 @@ namespace Newtone.Mobile.Logic
 
             menuItems.Add(Localization.TrackMenuDelete);
 
-            PopupMenu menu = new PopupMenu(MainActivity.Instance, (View)sender, menuItems.ToArray());
+            PopupMenu menu = new PopupMenu(MainActivity.Instance, sender, menuItems.ToArray());
             menu.OnSelect += async(item) =>
             {
                 Page page = NormalPage.Instance;
                 var track = GlobalData.Current.Audios[filePath];
 
                 if (track == null)
+                {
                     SnackbarBuilder.Show(Localization.SnackFileExists);
+                    return;
+                }
 
                 if (item == Localization.TrackMenuEdit)
                 {
@@ -300,10 +303,7 @@ namespace Newtone.Mobile.Logic
 
                             if(GlobalData.Current.WebToLocalPlaylists.ContainsValue(playlistName))
                             {
-                                var key = GlobalData.Current.WebToLocalPlaylists.Where(keyPair =>
-                                {
-                                    return keyPair.Value == playlistName;
-                                }).First().Key;
+                                var key = GlobalData.Current.WebToLocalPlaylists.First(keyPair => keyPair.Value == playlistName).Key;
 
                                 if (GlobalData.Current.WebToLocalPlaylists.ContainsKey(key))
                                     GlobalData.Current.WebToLocalPlaylists[key] = answer;
@@ -326,10 +326,7 @@ namespace Newtone.Mobile.Logic
 
                         if (GlobalData.Current.WebToLocalPlaylists.ContainsValue(playlistName))
                         {
-                            var key = GlobalData.Current.WebToLocalPlaylists.Where(keyPair =>
-                            {
-                                return keyPair.Value == playlistName;
-                            }).First().Key;
+                            var key = GlobalData.Current.WebToLocalPlaylists.First(keyPair => keyPair.Value == playlistName).Key;
 
                             if (GlobalData.Current.WebToLocalPlaylists.ContainsKey(key))
                                 GlobalData.Current.WebToLocalPlaylists.Remove(key);

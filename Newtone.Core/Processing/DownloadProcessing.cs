@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using YoutubeExplode;
-using YoutubeExplode.Exceptions;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
@@ -41,6 +40,88 @@ namespace Newtone.Core.Processing
         public static Dictionary<string, DownloadModel> GetDownloads()
         {
             return Downloads;
+        }
+
+        public static void AddRange(IEnumerable<Video> playlist, string playlistName, string playlistId, bool withRemove = false)
+        {
+            Console.WriteLine("Add range " + playlistName + " " + playlistId);
+
+            string currentItem = null;
+            foreach(var video in playlist)
+            {
+                if(Downloads.ContainsKey(video.Id))
+                {
+                    currentItem = video.Id;
+                }
+                else
+                {
+                    if(GlobalData.Current.DownloadedIds.Contains(video.Id))
+                    {
+                        string filename = "";
+
+                        GlobalData.Current.AudioTags.Keys.ForEach(key =>
+                        {
+                            var item = GlobalData.Current.AudioTags[key];
+                            if (item.Id == video.Id)
+                                filename = key;
+                        });
+
+                        if(currentItem == null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(playlistName))
+                            {
+                                if (!GlobalData.Current.Playlists.ContainsKey(playlistName))
+                                    GlobalData.Current.Playlists.Add(playlistName, new List<string>());
+
+                                if (!GlobalData.Current.Playlists[playlistName].Contains(filename) && !string.IsNullOrWhiteSpace(filename))
+                                {
+                                    GlobalData.Current.Playlists[playlistName].Add(filename);
+                                    GlobalData.Current.SaveConfig();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Downloads[currentItem].TracksToAddAfterDownload.Add(playlistName, filename);
+                        }
+                    }
+                    else
+                    {
+                        Downloads.Add(video.Id, new DownloadModel()
+                        {
+                            Id = video.Id,
+                            Url = video.Url,
+                            Title = video.Title,
+                            PlaylistName = playlistName,
+                            Progress = 0.0,
+                            PlaylistID = playlistId
+                        });
+
+                        currentItem = video.Id;
+
+                        if (downloadTask == null)
+                        {
+                            downloadTask = new Task(async () => await TaskAction());
+                            downloadTask.Start();
+                        }
+                    }
+                }
+            }
+
+            if(withRemove && GlobalData.Current.Playlists.ContainsKey(playlistName))
+            {
+                List<string> ids = playlist.Select(item => item.Id.ToString()).ToList();
+                
+                foreach(var path in GlobalData.Current.Playlists[playlistName].ToList())
+                {
+                    if(GlobalData.Current.AudioTags.ContainsKey(path) && !ids.Contains(GlobalData.Current.AudioTags[path].Id))
+                    {
+                        GlobalData.Current.Playlists[playlistName].Remove(path);
+                    }
+                }
+
+                GlobalData.Current.SaveConfig();
+            }
         }
 
         public static void Add(string id, string title, string url, string playlist, string playlistId = "")
@@ -125,6 +206,11 @@ namespace Newtone.Core.Processing
                         if (!GlobalData.Current.Playlists[model.PlaylistName].Contains(filename))
                         {
                             GlobalData.Current.Playlists[model.PlaylistName].Add(filename);
+
+                            foreach(var key in model.TracksToAddAfterDownload.Keys)
+                            {
+                                GlobalData.Current.Playlists[key].Add(model.TracksToAddAfterDownload[key]);
+                            }
                         }
 
                         if (model.PlaylistID != "")

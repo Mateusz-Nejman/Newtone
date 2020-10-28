@@ -54,10 +54,7 @@ namespace Newtone.Mobile.ViewModels.ViewCells
                         }
                         else
                         {
-                            foreach (var video in await client.Playlists.GetVideosAsync(playlistId))
-                            {
-                                DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName);
-                            }
+                            DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(playlistId), playlistName, playlistId);
                         }
                     });
 

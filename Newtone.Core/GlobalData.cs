@@ -48,6 +48,7 @@ namespace Newtone.Core
         public Dictionary<string, List<string>> Artists { get; set; }
         public Dictionary<string, List<string>> Playlists { get; set; }
         public Dictionary<string, string> WebToLocalPlaylists { get; set; }
+        public Dictionary<string,string> RecomendedPlaylists { get; set; }
         public List<MediaSource> CurrentPlaylist { get; set; }
         public int PlaylistPosition { get; set; }
         public int QueuePosition { get; set; }
@@ -91,6 +92,7 @@ namespace Newtone.Core
             DownloadedIds = new List<string>();
             CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
             WebToLocalPlaylists = new Dictionary<string, string>();
+            RecomendedPlaylists = new Dictionary<string, string>(); //name, url
             DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
 
             History = new List<Newtone.Core.Models.HistoryModel>();

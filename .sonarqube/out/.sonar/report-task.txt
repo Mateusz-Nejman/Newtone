@@ -2,5 +2,5 @@ projectKey=Newtone
 serverUrl=http://localhost:9000
 serverVersion=8.5.0.37579
 dashboardUrl=http://localhost:9000/dashboard?id=Newtone
-ceTaskId=AXVWWczSgdkFYVd4gRMC
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXVWWczSgdkFYVd4gRMC
+ceTaskId=AXVrXdM-CiMbw3vdzg3S
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXVrXdM-CiMbw3vdzg3S

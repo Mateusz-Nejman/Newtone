@@ -1,4 +1,6 @@
-﻿namespace Newtone.Core.Models
+﻿using System.Collections.Generic;
+
+namespace Newtone.Core.Models
 {
     public class DownloadModel:PropertyChangedBase
     {
@@ -79,6 +81,8 @@
                 return string.Format("{0:0.00}", Progress * 100.0) + "%";
             }
         }
+
+        public Dictionary<string, string> TracksToAddAfterDownload { get; } = new Dictionary<string, string>(); //playlist name, track id
         #endregion
     }
 }

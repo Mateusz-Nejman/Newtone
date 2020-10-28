@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows.Input;
 using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
@@ -15,6 +16,7 @@ namespace Newtone.Mobile.ViewModels.ViewCells
         #region Fields
         private string playlistName;
         private string tracksText;
+        private string playlistUrl;
         private ImageSource image;
         #endregion
         #region Properties
@@ -26,6 +28,16 @@ namespace Newtone.Mobile.ViewModels.ViewCells
             set
             {
                 playlistName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PlaylistUrl
+        {
+            get => playlistUrl;
+            set
+            {
+                playlistUrl = value;
                 OnPropertyChanged();
             }
         }
@@ -59,7 +71,8 @@ namespace Newtone.Mobile.ViewModels.ViewCells
                 if (longPressedCommand == null)
                     longPressedCommand = new ActionCommand(parameter =>
                     {
-                        ContextMenuBuilder.BuildForPlaylist(View, PlaylistName);
+                        if(string.IsNullOrEmpty(PlaylistUrl))
+                            ContextMenuBuilder.BuildForPlaylist(View, PlaylistName);
                     });
 
                 return longPressedCommand;
@@ -74,7 +87,14 @@ namespace Newtone.Mobile.ViewModels.ViewCells
                 if (pressedCommand == null)
                     pressedCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Playlists[PlaylistName], PlaylistName), PlaylistName));
+                        if(string.IsNullOrEmpty(PlaylistUrl))
+                        {
+                            await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Playlists[PlaylistName], PlaylistName), PlaylistName));
+                        }
+                        else
+                        {
+                            await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(PlaylistUrl), PlaylistName));
+                        }
                     });
                 return pressedCommand;
             }
@@ -84,17 +104,26 @@ namespace Newtone.Mobile.ViewModels.ViewCells
         public PlaylistGridItemViewModel(string playlistName, Xamarin.Forms.View view)
         {
             View = view;
-            PlaylistName = playlistName;
-            TracksText = Localization.Tracks + ": " + GlobalData.Current.Playlists[playlistName].Count;
             Image = ImageSource.FromFile("EmptyTrack.png");
 
-            foreach (string filePath in GlobalData.Current.Playlists[playlistName])
+            if (playlistName.StartsWith("https:"))
             {
-                var source = GlobalData.Current.Audios[filePath];
-                if (source.Image != null)
+                PlaylistName = GlobalData.Current.RecomendedPlaylists.Keys.First(item => GlobalData.Current.RecomendedPlaylists[item] == playlistName);
+                PlaylistUrl = playlistName;
+            }
+            else
+            {
+                PlaylistName = playlistName;
+                TracksText = Localization.Tracks + ": " + GlobalData.Current.Playlists[playlistName].Count;
+
+                foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    Image = ImageProcessing.FromArray(source.Image);
-                    break;
+                    var source = GlobalData.Current.Audios[filePath];
+                    if (source.Image != null)
+                    {
+                        Image = ImageProcessing.FromArray(source.Image);
+                        break;
+                    }
                 }
             }
         }

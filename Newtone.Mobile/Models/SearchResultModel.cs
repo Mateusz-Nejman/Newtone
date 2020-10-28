@@ -21,11 +21,7 @@ namespace Newtone.Mobile.Models
         {
             get
             {
-                if (thumb == null && Image != null)
-                {
-                    thumb = ImageProcessing.FromArray(Image);
-                    OnPropertyChanged();
-                }
+                CheckThumb();
                 return thumb;
             }
             set
@@ -60,24 +56,21 @@ namespace Newtone.Mobile.Models
                         string playlistName = "";
                         var urlType = SearchProcessing.CheckLink(elems[1]);
 
-                        if (urlType.ContainsKey(SearchProcessing.Query.Playlist))
+                        if (urlType.ContainsKey(SearchProcessing.Query.Playlist) && urlType.ContainsKey(SearchProcessing.Query.Video))
                         {
-                            if (urlType.ContainsKey(SearchProcessing.Query.Video))
+                            if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
                             {
-                                if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
-                                {
-                                    playlistId = "";
-                                }
-                                else
-                                {
-                                    playlistId = urlType[SearchProcessing.Query.Playlist];
+                                playlistId = "";
+                            }
+                            else
+                            {
+                                playlistId = urlType[SearchProcessing.Query.Playlist];
 
-                                    if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
-                                    {
-                                        var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.Query.Playlist]);
-                                        string newPlaylistName = await NormalPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
-                                        playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
-                                    }
+                                if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
+                                {
+                                    var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.Query.Playlist]);
+                                    string newPlaylistName = await NormalPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
+                                    playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
                                 }
                             }
                         }
@@ -88,10 +81,7 @@ namespace Newtone.Mobile.Models
                         }
                         else
                         {
-                            foreach (var video in await client.Playlists.GetVideosAsync(playlistId))
-                            {
-                                DownloadProcessing.Add(video.Id, video.Title, video.Url, playlistName, playlistId);
-                            }
+                            DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(playlistId), playlistName, playlistId);
                         }
                     });
 
@@ -116,8 +106,17 @@ namespace Newtone.Mobile.Models
         #region Public Methods
         public void CheckChanges()
         {
-            var thumb = Thumb;
-            thumb.GetType(); //WTF
+            CheckThumb();
+        }
+        #endregion
+        #region Private Methods
+        private void CheckThumb()
+        {
+            if (thumb == null && Image != null)
+            {
+                thumb = ImageProcessing.FromArray(Image);
+                OnPropertyChanged(() => Thumb);
+            }
         }
         #endregion
     }
