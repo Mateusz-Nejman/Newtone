@@ -155,7 +155,8 @@ namespace Newtone.Mobile
         {
             try
             {
-                StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
+                Directory.CreateDirectory(GlobalData.Current.MusicPath + "/Debug");
+                StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/Debug/log.txt", true);
                 streamWriter.WriteLine("ERROR " + DateTime.Now.ToString());
                 streamWriter.WriteLine("Exception: " + e.Message);
                 streamWriter.WriteLine("StackTrace: " + e.StackTrace);
@@ -208,7 +209,7 @@ namespace Newtone.Mobile
             GlobalData.Current.MediaPlayer.SetNativeActions(MediaPlayerHelper.Play);
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
-            ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/consoleDebug.txt");
+            ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/Debug/consoleDebug.txt");
             GlobalData.Current.IncludedPaths = new List<string>()
             {
                 GlobalData.Current.MusicPath,
@@ -227,22 +228,16 @@ namespace Newtone.Mobile
             Android.Net.Uri uri = intent.Data;
             if (uri != null)
             {
-                
-                GlobalData.Current.AudioFromIntent = true;
                 string filepath = HexToString(FilterUriString(uri.Path.Replace("/external_files", Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)));
 
                 if (File.Exists(filepath))
                 {
-                    Newtone.Core.Media.MediaSource source = MediaProcessing.GetSource(filepath);
+                    MediaSource source = MediaProcessing.GetSource(filepath);
 
                     if (GlobalData.Current.MediaPlayer != null)
                         GlobalData.Current.MediaPlayer.Stop();
 
-                    GlobalData.Current.MediaSource = source;
-                    GlobalData.Current.PlaylistPosition = 0;
-                    GlobalData.Current.CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>() { source };
-                    GlobalData.Current.MediaPlayer.Load(filepath);
-                    GlobalData.Current.MediaPlayer.Play();
+                    GlobalData.Current.MediaPlayer.LoadPlaylist(() => new List<MediaSource>() { source }, 0, true, true);
                 }
                 else
                 {

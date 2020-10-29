@@ -83,10 +83,12 @@ namespace Newtone.Mobile.Views
         }
         public void Appearing()
         {
+            //Not implemented
         }
 
         public void Disappearing()
         {
+            //Not implemented
         }
 
         public void Tick()

@@ -49,6 +49,8 @@ namespace Newtone.Core.Logic
         {
             try
             {
+                FileInfo fileInfo = new FileInfo(savePath);
+                Directory.CreateDirectory(fileInfo.Directory.FullName);
                 StreamWriter streamWriter = new StreamWriter(savePath, true);
                 streamWriter.WriteLine(data);
                 streamWriter.Close();

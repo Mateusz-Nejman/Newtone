@@ -11,8 +11,17 @@ namespace Newtone.Core.Media
         {
             Dictionary<string, string> playlists = new Dictionary<string, string>(); //Name, url
 
-            using WebClient client = new WebClient();
-            byte[] data = client.DownloadData("https://mateusz-nejman.pl/recomended_playlists.txt");
+            byte[] data;
+            try
+            {
+                using WebClient client = new WebClient();
+                data = client.DownloadData("https://mateusz-nejman.pl/recomended_playlists.txt");
+            }
+            catch
+            {
+                return playlists;
+            }
+
             string buffer = Encoding.UTF8.GetString(data);
 
             string[] lines = buffer.Split('\n', System.StringSplitOptions.RemoveEmptyEntries);
