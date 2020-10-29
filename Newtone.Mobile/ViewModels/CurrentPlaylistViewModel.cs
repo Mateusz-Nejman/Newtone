@@ -65,13 +65,7 @@ namespace Newtone.Mobile.ViewModels
 
             if (index >= 0 && index < TrackItems.Count)
             {
-                var model = TrackItems[index];
-
-                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[index];
-                GlobalData.Current.PlaylistPosition = index;
-                GlobalData.Current.QueuePosition = index;
-                GlobalData.Current.MediaPlayer.Load(model.FilePath);
-                MediaPlayerHelper.Play();
+                GlobalData.Current.MediaPlayer.LoadPlaylist(TrackItems.Select(item => item.FilePath).ToList(), index, true, true);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
         }

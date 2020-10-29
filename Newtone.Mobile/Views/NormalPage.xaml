@@ -80,10 +80,6 @@
                     <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center" Color="White"/>
                 </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" IsVisible="{Binding SearchSuggestionsVisible}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
                     <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
                         <ListView VerticalOptions="FillAndExpand"
                           ItemSelected="SuggestionList_ItemSelected"  ItemsSource="{Binding SuggestionItems}">
@@ -101,10 +97,6 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </ScrollView>
-                    <StackLayout>
-                        <Label Text="Oficjalne playlisty"/>
-                        
-                    </StackLayout>
                 </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" Grid.Row="2">
                     <Grid.ColumnDefinitions>

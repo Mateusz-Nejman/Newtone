@@ -47,7 +47,21 @@ namespace Newtone.Core.Processing
             Console.WriteLine("Add range " + playlistName + " " + playlistId);
 
             string currentItem = null;
-            foreach(var video in playlist)
+
+            if (playlistId != "")
+            {
+                if (!GlobalData.Current.WebToLocalPlaylists.ContainsKey(playlistId))
+                {
+                    GlobalData.Current.WebToLocalPlaylists.Add(playlistId, playlistName);
+                }
+                else
+                {
+                    GlobalData.Current.WebToLocalPlaylists[playlistId] = playlistName;
+                }
+            }
+
+            GlobalData.Current.SaveConfig();
+            foreach (var video in playlist)
             {
                 if(Downloads.ContainsKey(video.Id))
                 {
@@ -82,7 +96,10 @@ namespace Newtone.Core.Processing
                         }
                         else
                         {
-                            Downloads[currentItem].TracksToAddAfterDownload.Add(playlistName, filename);
+                            if(!Downloads[currentItem].TracksToAddAfterDownload.ContainsKey(playlistName))
+                            {
+                                Downloads[currentItem].TracksToAddAfterDownload.Add(playlistName, filename);
+                            }
                         }
                     }
                     else

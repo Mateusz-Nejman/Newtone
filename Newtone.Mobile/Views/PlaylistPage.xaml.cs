@@ -104,7 +104,7 @@ namespace Newtone.Mobile.Views
         #region Private Methods
         private void GenerateRecomended()
         {
-            if (MainActivity.IsInternet() && GlobalData.Current.RecomendedPlaylists.Count == 0)
+            if (MainActivity.IsInternet())
             {
                 GlobalData.Current.RecomendedPlaylists = RecomendedPlaylists.GetRecomendedPlaylists();
             }

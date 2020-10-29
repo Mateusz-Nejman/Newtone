@@ -11,6 +11,7 @@ using Android.Support.V4.Media.Session;
 using Android.Views;
 using Newtone.Core;
 using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Core.Processing;
 using Newtone.Mobile.Logic;
 using Newtone.Mobile.Models;
@@ -73,17 +74,14 @@ namespace Newtone.Mobile.Media
             if(Global.AudioFocusRequest != null)
                 am.AbandonAudioFocusRequest(Global.AudioFocusRequest);
 
-            //MediaPlayerService.Instance.StopSelf();
             Global.MediaSession.Active = false;
             GlobalData.Current.MediaPlayer.Stop();
-            //MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnPause()
         {
             ConsoleDebug.WriteLine("MediaSessionCallback OnPause()");
             GlobalData.Current.MediaPlayer.Pause();
-            //MediaPlayerService.Instance.StopForeground(false);
         }
 
         public override void OnSkipToNext()
@@ -138,23 +136,12 @@ namespace Newtone.Mobile.Media
                     bool played = false;
                     foreach (var playlistName in GlobalData.Current.Playlists.Keys)
                     {
-                        string checkedString = CyrylicToUnicode.IsCyrylic(playlistName) ? CyrylicToUnicode.Convert(playlistName) : playlistName;
                         double similiarity = SearchProcessing.CalculateSimilarity(query, playlistName);
-                        if (playlistName.ToLowerInvariant().Contains(query) || query.Contains(playlistName.ToLowerInvariant()) || similiarity >= 0.8)
+                        if ((playlistName.ToLowerInvariant().Contains(query) || query.Contains(playlistName.ToLowerInvariant()) || similiarity >= 0.8) && GlobalData.Current.Playlists[playlistName].Count > 0)
                         {
-                            if (GlobalData.Current.Playlists[playlistName].Count > 0)
-                            {
-                                GlobalData.Current.CurrentPlaylist.Clear();
-
-                                GlobalData.Current.Playlists[playlistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
-
-                                GlobalData.Current.PlaylistPosition = 0;
-                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
-                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
-                                MediaPlayerHelper.Play();
-                                played = true;
-                                break;
-                            }
+                            GlobalData.Current.MediaPlayer.LoadPlaylist(GlobalData.Current.Playlists[playlistName], 0, true, true);
+                            played = true;
+                            break;
                         }
                     }
 
@@ -164,20 +151,11 @@ namespace Newtone.Mobile.Media
                         {
                             string checkedString = CyrylicToUnicode.IsCyrylic(artistName) ? CyrylicToUnicode.Convert(artistName) : artistName;
                             double similiarity = SearchProcessing.CalculateSimilarity(query, artistName);
-                            if (checkedString.ToLowerInvariant().Contains(query) || query.Contains(checkedString.ToLowerInvariant()) || similiarity >= 0.8)
+                            if ((checkedString.ToLowerInvariant().Contains(query) || query.Contains(checkedString.ToLowerInvariant()) || similiarity >= 0.8) && GlobalData.Current.Artists[artistName].Count > 0)
                             {
-                                if (GlobalData.Current.Artists[artistName].Count > 0)
-                                {
-                                    GlobalData.Current.CurrentPlaylist.Clear();
-                                    GlobalData.Current.Artists[artistName].ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]));
-
-                                    GlobalData.Current.PlaylistPosition = 0;
-                                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
-                                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
-                                    MediaPlayerHelper.Play();
-                                    played = true;
-                                    break;
-                                }
+                                GlobalData.Current.MediaPlayer.LoadPlaylist(GlobalData.Current.Artists[artistName], 0, true, true);
+                                played = true;
+                                break;
                             }
                         }
                     }
@@ -190,6 +168,7 @@ namespace Newtone.Mobile.Media
                             beforeSort.Add(new TrackModel(track).CheckChanges());
                         }
                         var afterSort = new List<TrackModel>(beforeSort.OrderBy(item => item.TrackString));
+                        List<string> afterSortPaths = new List<string>(afterSort.Select(item => item.FilePath));
 
                         for (int a = 0; a < afterSort.Count; a++)
                         {
@@ -198,13 +177,7 @@ namespace Newtone.Mobile.Media
 
                             if (trackText.ToLowerInvariant().Contains(query) || query.Contains(trackText.ToLowerInvariant()))
                             {
-                                GlobalData.Current.CurrentPlaylist.Clear();
-                                afterSort.ForEach(track => GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track.FilePath]));
-
-                                GlobalData.Current.PlaylistPosition = a;
-                                GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[a];
-                                GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[a].FilePath);
-                                MediaPlayerHelper.Play();
+                                GlobalData.Current.MediaPlayer.LoadPlaylist(afterSortPaths, a, true, true);
                                 played = true;
                                 break;
                             }

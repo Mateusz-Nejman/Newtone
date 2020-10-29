@@ -222,17 +222,7 @@ namespace Newtone.Mobile.Logic
                 {
                     if (GlobalData.Current.Playlists[playlistName].Count > 0)
                     {
-                        GlobalData.Current.CurrentPlaylist.Clear();
-
-                        foreach (var track in GlobalData.Current.Playlists[playlistName])
-                        {
-                            GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]);
-                        }
-
-                        GlobalData.Current.PlaylistPosition = 0;
-                        GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
-                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
-                        MediaPlayerHelper.Play();
+                        GlobalData.Current.MediaPlayer.LoadPlaylist(GlobalData.Current.Playlists[playlistName], 0, true, true);
                     }
                 }
                 else if(item == Localization.TrackMenuPlaylist)
@@ -372,17 +362,7 @@ namespace Newtone.Mobile.Logic
                 {
                     if (GlobalData.Current.Artists[artistName].Count > 0)
                     {
-                        GlobalData.Current.CurrentPlaylist.Clear();
-
-                        foreach (var track in GlobalData.Current.Artists[artistName])
-                        {
-                            GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[track]);
-                        }
-
-                        GlobalData.Current.PlaylistPosition = 0;
-                        GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
-                        GlobalData.Current.MediaPlayer.Load(GlobalData.Current.CurrentPlaylist[0].FilePath);
-                        MediaPlayerHelper.Play();
+                        GlobalData.Current.MediaPlayer.LoadPlaylist(GlobalData.Current.Artists[artistName], 0, true, true);
                     }
                 }
                 else if(item == Localization.TrackMenuPlaylist)

@@ -71,9 +71,6 @@ namespace Newtone.Core
         public PlayerMode PlayerMode { get; set; }
         public string DataPath { get; set; }
         public string MusicPath { get; set; }
-
-        public AsyncEndController AsyncEndController { get; } = new AsyncEndController();
-
         public List<string> ExcludedPaths { get; set; }
         public List<string> IncludedPaths { get; set; }
         public string CurrentLanguage { get; set; }
@@ -243,41 +240,6 @@ namespace Newtone.Core
                     AutoDownload = System.Text.Encoding.UTF8.GetString(playerModeData) == "true";
                 }
 
-                if (!AudioFromIntent)
-                {
-                    int playlistPosition = 0;
-
-                    if (nsec.Exists("playlistPosition"))
-                    {
-                        byte[] playlistPositionData = nsec.Get("playlistPosition");
-                        string playlistPositionBuffer = System.Text.Encoding.ASCII.GetString(playlistPositionData);
-                        playlistPosition = int.Parse(playlistPositionBuffer);
-                    }
-
-                    if (nsec.Exists("playlist"))
-                    {
-                        byte[] playlistData = nsec.Get("playlist");
-                        string[] files = System.Text.Encoding.UTF8.GetString(playlistData).Split(':', StringSplitOptions.RemoveEmptyEntries);
-
-                        CurrentPlaylist = new List<MediaSource>();
-
-                        if (playlistPosition < files.Length && Audios.ContainsKey(files[playlistPosition]))
-                        {
-                            PlaylistPosition = playlistPosition;
-                            MediaSource = Audios[files[playlistPosition]];
-                            MediaPlayer.Load(files[playlistPosition]);
-                        }
-
-                        files.ForEach(filepath =>
-                        {
-                            if (File.Exists(filepath) && Audios.ContainsKey(filepath))
-                            {
-                                CurrentPlaylist.Add(Audios[filepath]);
-                            }
-                        });
-                    }
-                }
-
                 nsec.Dispose();
             }
         }
@@ -331,20 +293,6 @@ namespace Newtone.Core
             int playerMode = (int)PlayerMode;
             buffer = playerMode.ToString();
             nsec.AddFile("playerMode", System.Text.Encoding.UTF8.GetBytes(buffer));
-
-            nsec.AddFile("playlistPosition", System.Text.Encoding.ASCII.GetBytes(PlaylistPosition.ToString()));
-
-            if (CurrentPlaylist.Count > 0)
-            {
-                buffer = "";
-
-                CurrentPlaylist.ForEach(mediaSource =>
-                {
-                    string item = mediaSource.FilePath;
-                    buffer += item + ';';
-                });
-                nsec.AddFile("playlist", System.Text.Encoding.UTF8.GetBytes(buffer));
-            }
             buffer = "";
 
             MostTracks.ForEach(counter =>

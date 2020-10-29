@@ -1,8 +1,13 @@
 ﻿using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using YoutubeExplode;
+using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Media
 {
@@ -11,6 +16,7 @@ namespace Newtone.Core.Media
         #region Fields
         private readonly IPlayerController webPC;
         private readonly IPlayerController localPC;
+        private readonly List<int> randomIndexes = new List<int>();
         #endregion
         #region Properties
         public IBasePlayer BasePlayer { get; private set; }
@@ -54,6 +60,8 @@ namespace Newtone.Core.Media
         {
             get => PlayerController is LocalPlayerController;
         }
+
+        public Action NativePlay { get; private set; }
         #endregion
         #region Constructors
         public CrossPlayer(IBasePlayer basePlayer)
@@ -67,6 +75,75 @@ namespace Newtone.Core.Media
         }
         #endregion
         #region Public Methods
+        public void SetNativeActions(Action play = null)
+        {
+            NativePlay = play;
+        }
+        public void LoadPlaylist(List<string> playlist, int currentIndex, bool load, bool play)
+        {
+            LoadPlaylist(() =>
+            {
+                List<MediaSource> newPlaylist = new List<MediaSource>();
+
+                playlist.ForEach(track => newPlaylist.Add(GlobalData.Current.Audios[track]));
+
+                return newPlaylist;
+            }, currentIndex, load, play);
+        }
+
+        public void LoadPlaylist(string playlistUrl, int currentIndex, MediaSource initial, bool load, bool play)
+        {
+            GlobalData.Current.CurrentPlaylist.Clear();
+            GlobalData.Current.CurrentPlaylist.Add(initial);
+            GlobalData.Current.MediaSource = initial;
+            GlobalData.Current.PlaylistPosition = currentIndex;
+            GlobalData.Current.QueuePosition = currentIndex;
+            new Task(() =>
+            {
+                if (load)
+                    Load(GlobalData.Current.MediaSourcePath);
+                if (play)
+                    NativePlay?.Invoke();
+            }).Start();
+            new Task(async () =>
+            {
+                YoutubeClient youtubeClient = new YoutubeClient();
+                var playlist = await youtubeClient.Playlists.GetVideosAsync(playlistUrl).BufferAsync(20);
+
+                if (playlist.Count > 0)
+                {
+                    using WebClient client = new WebClient();
+                    GlobalData.Current.CurrentPlaylist.Clear();
+                    GlobalData.Current.PlaylistPosition = 0;
+                    foreach (var _item in playlist)
+                    {
+                        byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
+                        GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                        {
+                            Artist = _item.Author,
+                            Duration = _item.Duration,
+                            FilePath = _item.Id,
+                            Image = data,
+                            Title = _item.Title,
+                            Type = Newtone.Core.Media.MediaSource.SourceType.Web
+                        });
+                    }
+                }
+            }).Start();
+        }
+
+        public void LoadPlaylist(Func<List<MediaSource>> playlist, int currentIndex, bool load, bool play)
+        {
+            randomIndexes.Clear();
+            GlobalData.Current.CurrentPlaylist = playlist();
+            GlobalData.Current.PlaylistPosition = currentIndex;
+            GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[currentIndex];
+
+            if (load)
+                Load(GlobalData.Current.MediaSource.FilePath);
+            if(play)
+                NativePlay?.Invoke();
+        }
         public void Load(string filename)
         {
             IsLoading = true;
@@ -137,9 +214,11 @@ namespace Newtone.Core.Media
                     int addValue = 0;
                     if (GlobalData.Current.PlayerMode == PlayerMode.All)
                         addValue = 1;
-                    else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
-                        addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
+
                     GlobalData.Current.PlaylistPosition += addValue;
+
+                    if (GlobalData.Current.PlayerMode == PlayerMode.Random)
+                        GlobalData.Current.PlaylistPosition = GetRandom(GlobalData.Current.CurrentPlaylist.Count);
 
                     GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
                 }
@@ -177,9 +256,12 @@ namespace Newtone.Core.Media
                     int addValue = 0;
                     if (GlobalData.Current.PlayerMode == PlayerMode.All)
                         addValue = 1;
-                    else if (GlobalData.Current.PlayerMode == PlayerMode.Random)
-                        addValue = Random.Next(0, GlobalData.Current.CurrentPlaylist.Count);
+
                     GlobalData.Current.PlaylistPosition -= addValue;
+
+                    if (GlobalData.Current.PlayerMode == PlayerMode.Random)
+                        GlobalData.Current.PlaylistPosition = GetRandom(GlobalData.Current.CurrentPlaylist.Count);
+                    
 
                     GlobalData.Current.PlaylistPosition = Logic.Range.GetRangeInt(0, GlobalData.Current.CurrentPlaylist.Count - 1, GlobalData.Current.PlaylistPosition);
                 }
@@ -234,6 +316,21 @@ namespace Newtone.Core.Media
         }
         #endregion
         #region Private Methods
+        private int GetRandom(int max)
+        {
+            if (randomIndexes.Count == max)
+                randomIndexes.Clear();
+
+            int randomNumber = Random.Next(0,max);
+
+            if (randomIndexes.Contains(randomNumber))
+                return GetRandom(max);
+            else
+            {
+                randomIndexes.Add(randomNumber);
+                return randomNumber;
+            }
+        }
         private void SetPlayerController(IPlayerController playerController)
         {
             PlayerController = playerController;

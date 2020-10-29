@@ -23,8 +23,6 @@ using Newtone.Mobile.Logic;
 using Newtone.Mobile.Media;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
-using System.Reactive.Linq;
-using System.Linq;
 
 namespace Newtone.Mobile
 {
@@ -80,7 +78,7 @@ namespace Newtone.Mobile
             }
             catch
             {
-
+                //Ignore
             }
         }
 
@@ -95,7 +93,7 @@ namespace Newtone.Mobile
             }
             catch
             {
-
+                //Ignore
             }
 
         }
@@ -166,7 +164,10 @@ namespace Newtone.Mobile
                 streamWriter.Close();
                 GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, e.ToString());
             }
-            catch { }
+            catch
+            {
+                //Ignore
+            }
         }
         private void InitializeGlobalVariables()
         {
@@ -204,6 +205,7 @@ namespace Newtone.Mobile
 
             GlobalData.Current.Initialize();
             GlobalData.Current.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
+            GlobalData.Current.MediaPlayer.SetNativeActions(MediaPlayerHelper.Play);
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
             ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/consoleDebug.txt");
@@ -217,12 +219,9 @@ namespace Newtone.Mobile
 
         private void ProcessNewIntent(Intent intent)
         {
-            if(intent.Extras != null)
+            if(intent.Extras != null && !string.IsNullOrWhiteSpace(intent.Extras.GetString("query", "")))
             {
-                if(!string.IsNullOrWhiteSpace(intent.Extras.GetString("query","")))
-                {
-                    MediaSessionCallback.ProcessSearch(intent.Extras.GetString("query", ""));
-                }
+                MediaSessionCallback.ProcessSearch(intent.Extras.GetString("query", ""));
             }
             
             Android.Net.Uri uri = intent.Data;
@@ -345,16 +344,17 @@ namespace Newtone.Mobile
 
             foreach(NetworkInfo info in netInfo)
             {
-                if(info.TypeName.Contains("WIFI",StringComparison.OrdinalIgnoreCase))
+                if(info.IsConnected)
                 {
-                    if (info.IsConnected)
+                    if (info.TypeName.Contains("WIFI", StringComparison.OrdinalIgnoreCase))
+                    {
                         haveConnectedWifi = true;
-                }
+                    }
 
-                if(info.TypeName.Contains("MOBILE",StringComparison.OrdinalIgnoreCase))
-                {
-                    if (info.IsConnected)
+                    if (info.TypeName.Contains("MOBILE", StringComparison.OrdinalIgnoreCase))
+                    {
                         haveConnectedMobile = true;
+                    }
                 }
             }
 

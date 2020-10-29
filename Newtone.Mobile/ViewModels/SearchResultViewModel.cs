@@ -1,15 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Newtone.Core;
 using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
-using Newtone.Mobile.Media;
 using Newtone.Mobile.Processing;
 using Newtone.Mobile.Views;
 using Xamarin.Forms;
-using YoutubeExplode;
 
 namespace Newtone.Mobile.ViewModels
 {
@@ -115,12 +116,25 @@ namespace Newtone.Mobile.ViewModels
                     }
 
                     GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[e.SelectedItemIndex];
+
+                    GlobalData.Current.MediaPlayer.LoadPlaylist(() =>
+                    {
+                        List<MediaSource> newPlaylist = Items.Select(_item => new MediaSource()
+                        {
+                            Artist = _item.Author,
+                            Duration = _item.Duration,
+                            FilePath = _item.Id,
+                            Image = _item.Image,
+                            Title = _item.Title,
+                            Type = _item.Id.Length == 11 ? Newtone.Core.Media.MediaSource.SourceType.Web : Core.Media.MediaSource.SourceType.Local
+                        }).ToList();
+
+                        return newPlaylist;
+                    }, index, true, true);
                 }
                 else
                 {
-                    GlobalData.Current.PlaylistPosition = 0;
-
-                    GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
+                    GlobalData.Current.MediaPlayer.LoadPlaylist(item.MixId, 0, new Newtone.Core.Media.MediaSource()
                     {
                         Artist = item.Author,
                         Duration = item.Duration,
@@ -128,51 +142,10 @@ namespace Newtone.Mobile.ViewModels
                         Image = item.Image,
                         Title = item.Title,
                         Type = Newtone.Core.Media.MediaSource.SourceType.Web
-                    });
-
-                    GlobalData.Current.MediaSource = GlobalData.Current.CurrentPlaylist[0];
+                    }, true, true);
                 }
 
                 await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
-
-
-                new Task(() =>
-                {
-                    GlobalData.Current.MediaPlayer.Load(GlobalData.Current.MediaSource.FilePath);
-                    MediaPlayerHelper.Play();
-
-                    if (!string.IsNullOrEmpty(item.MixId))
-                    {
-                        new Task(async () =>
-                        {
-                        YoutubeClient youtubeClient = new YoutubeClient();
-                        var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).BufferAsync(20);
-
-                            if (playlist.Count > 0)
-                            {
-                                using (WebClient client = new WebClient())
-                                {
-                                    GlobalData.Current.CurrentPlaylist.Clear();
-                                    GlobalData.Current.PlaylistPosition = 0;
-                                    foreach (var _item in playlist)
-                                    {
-                                        byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
-                                        GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
-                                        {
-                                            Artist = _item.Author,
-                                            Duration = _item.Duration,
-                                            FilePath = _item.Id,
-                                            Image = data,
-                                            Title = _item.Title,
-                                            Type = Newtone.Core.Media.MediaSource.SourceType.Web
-                                        });
-                                    }
-                                }
-                            }
-                        }).Start();
-                    }
-                }).Start();
-
 
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
@@ -180,41 +153,38 @@ namespace Newtone.Mobile.ViewModels
 
         public void SearchListView_ItemAppearing(int itemIndex)
         {
-            if(pageLoaded)
+            if(pageLoaded && itemIndex == Items.Count - 1 && maxItems > 0 && Items.Count < maxItems)
             {
-                if(itemIndex == Items.Count - 1 && maxItems > 0 && Items.Count < maxItems)
+                pageLoaded = false;
+                currentPage++;
+
+                Task.Run(async () =>
                 {
-                    pageLoaded = false;
-                    currentPage++;
+                    SpinnerVisible = true;
+                    if (MainActivity.IsInternet())
+                        maxItems = await SearchProcessing.Search(searchedText, rawItems, currentPage);
 
-                    Task.Run(async () =>
+                    using (WebClient webClient = new WebClient())
                     {
-                        SpinnerVisible = true;
-                        if (MainActivity.IsInternet())
-                            maxItems = await SearchProcessing.Search(searchedText, rawItems, currentPage);
-
-                        using (WebClient webClient = new WebClient())
+                        for (int a = 0; a < Items.Count; a++)
                         {
-                            for (int a = 0; a < Items.Count; a++)
+                            if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
                             {
-                                if (!string.IsNullOrEmpty(Items[a].ThumbUrl))
-                                {
-                                    byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
-                                    Items[a].Image = data;
-                                }
-                                else
-                                {
-                                    Items[a].Thumb = ImageProcessing.FromArray(Items[a].Image);
-                                }
-                                Items[a].CheckChanges();
+                                byte[] data = webClient.DownloadData(Items[a].ThumbUrl);
+                                Items[a].Image = data;
                             }
-
-                            pageLoaded = true;
+                            else
+                            {
+                                Items[a].Thumb = ImageProcessing.FromArray(Items[a].Image);
+                            }
+                            Items[a].CheckChanges();
                         }
 
-                        SpinnerVisible = false;
-                    });
-                }
+                        pageLoaded = true;
+                    }
+
+                    SpinnerVisible = false;
+                });
             }
         }
         #endregion

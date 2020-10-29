@@ -34,6 +34,7 @@ BD:\Projekty\CS\Newtone\Newtone.Core\Media\LocalPlayerController.csutf-8A
 8D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaSource.csutf-8D
 ;D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaSourceTag.csutf-8@
 7D:\Projekty\CS\Newtone\Newtone.Core\Media\PlayerMode.csutf-8I
+@D:\Projekty\CS\Newtone\Newtone.Core\Media\RecomendedPlaylists.csutf-8I
 @D:\Projekty\CS\Newtone\Newtone.Core\Media\WebPlayerController.csutf-8B
 9D:\Projekty\CS\Newtone\Newtone.Core\Models\ArtistModel.csutf-8D
 ;D:\Projekty\CS\Newtone\Newtone.Core\Models\DownloadModel.csutf-8C

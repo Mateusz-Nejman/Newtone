@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -412,9 +413,10 @@ namespace Newtone.Mobile.ViewModels
                         Task.Run(async () =>
                         {
                             YoutubeClient client = new YoutubeClient();
-                            foreach (var key in GlobalData.Current.WebToLocalPlaylists.Keys)
+                            foreach (var key in GlobalData.Current.WebToLocalPlaylists.Keys.ToList())
                             {
-                                DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(key), GlobalData.Current.WebToLocalPlaylists[key], key, true);
+                                if(GlobalData.Current.Playlists.ContainsKey(GlobalData.Current.WebToLocalPlaylists[key]))
+                                    DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(key), GlobalData.Current.WebToLocalPlaylists[key], key, true);
                             }
                         });
                     }

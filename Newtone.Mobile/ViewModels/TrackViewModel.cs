@@ -106,18 +106,7 @@ namespace Newtone.Mobile.ViewModels
 
             if (index >= 0 && index < Items.Count)
             {
-                var model = Items[index];
-
-                GlobalData.Current.MediaSource = GlobalData.Current.Audios[model.FilePath];
-                GlobalData.Current.QueuePosition = index;
-                GlobalData.Current.CurrentPlaylist.Clear();
-                GlobalData.Current.PlaylistPosition = index;
-                foreach (var item in Items)
-                {
-                    GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[item.FilePath]);
-                }
-                GlobalData.Current.MediaPlayer.Load(model.FilePath);
-                MediaPlayerHelper.Play();
+                GlobalData.Current.MediaPlayer.LoadPlaylist(Items.Select(item => item.FilePath).ToList(), index, true, true);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
         }
