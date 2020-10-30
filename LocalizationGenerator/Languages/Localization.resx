@@ -334,7 +334,7 @@
     <value>Wyczyść wszystkie dane</value>
   </data>
   <data name="Settings3" xml:space="preserve">
-    <value>Wybierz motyw</value>
+    <value>Ignoruj wyciszanie utworów podczas rozmowy</value>
   </data>
   <data name="Settings4" xml:space="preserve">
     <value>Dodaj folder do listy skanowanych folderów</value>

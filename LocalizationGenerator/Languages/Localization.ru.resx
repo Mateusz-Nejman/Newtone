@@ -322,7 +322,7 @@
     <value>Удалить все данные</value>
   </data>
   <data name="Settings3" xml:space="preserve">
-    <value>Выберите тему</value>
+    <value>Игнорировать треки отключения звука во время разговора</value>
   </data>
   <data name="Settings4" xml:space="preserve">
     <value>Добавить папку в список отсканированных папок</value>

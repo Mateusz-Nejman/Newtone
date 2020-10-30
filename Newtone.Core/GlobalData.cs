@@ -79,6 +79,7 @@ namespace Newtone.Core
         public bool PlaylistsNeedRefresh { get; set; }
         public bool HistoryNeedRefresh { get; set; }
         public int IncludedPathsToSkip { get; set; }
+        public bool IgnoreAutoFocus { get; set; }
         #endregion
         #region Public Methods
         public void Initialize()
@@ -100,6 +101,7 @@ namespace Newtone.Core
             Playlists = new Dictionary<string, List<string>>();
 
             ExcludedPaths = new List<string>();
+            IgnoreAutoFocus = false;
         }
 
         public void LoadConfig()
@@ -236,8 +238,14 @@ namespace Newtone.Core
 
                 if (nsec.Exists("autoDownload"))
                 {
-                    byte[] playerModeData = nsec.Get("autoDownload");
-                    AutoDownload = System.Text.Encoding.UTF8.GetString(playerModeData) == "true";
+                    byte[] autoDownload = nsec.Get("autoDownload");
+                    AutoDownload = System.Text.Encoding.UTF8.GetString(autoDownload) == "true";
+                }
+
+                if(nsec.Exists("ignoreAutoFocus"))
+                {
+                    byte[] ignoreAutoFocus = nsec.Get("ignoreAutoFocus");
+                    IgnoreAutoFocus = System.Text.Encoding.UTF8.GetString(ignoreAutoFocus) == "true";
                 }
 
                 nsec.Dispose();
@@ -338,6 +346,8 @@ namespace Newtone.Core
             }
 
             nsec.AddFile("autoDownload", System.Text.Encoding.UTF8.GetBytes(AutoDownload ? "true" : "false"));
+
+            nsec.AddFile("ignoreAutoFocus", System.Text.Encoding.UTF8.GetBytes(IgnoreAutoFocus ? "true" : "false"));
 
             File.WriteAllBytes(DataPath + "/newtone.nsec2", nsec.Save());
 

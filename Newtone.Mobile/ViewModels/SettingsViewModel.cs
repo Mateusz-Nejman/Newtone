@@ -66,7 +66,8 @@ namespace Newtone.Mobile.ViewModels
                 new SettingsModel() { Name = Localization.Settings2 },
                 new SettingsModel() { Name = Localization.Settings4 },
                 new SettingsModel() { Name = Localization.Settings5 },
-                new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.Current.AutoDownload ? Localization.Yes : Localization.No }
+                new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.Current.AutoDownload ? Localization.Yes : Localization.No },
+                new SettingsModel() { Name = Localization.Settings3, Description = GlobalData.Current.IgnoreAutoFocus ? Localization.Yes : Localization.No }
             };
             Version = "v" + MainActivity.Instance.PackageManager.GetPackageInfo(MainActivity.Instance.PackageName, 0).VersionName;
         }
@@ -151,6 +152,23 @@ namespace Newtone.Mobile.ViewModels
                         }
                         GlobalData.Current.SaveConfig();
                         SnackbarBuilder.Show(Localization.SettingsChanges);
+                    }
+                    else if (e.SelectedItemIndex == 5)
+                    {
+                        string newOption = await NormalPage.Instance.DisplayActionSheet(Localization.Settings3, Localization.Cancel, null, Localization.Yes, Localization.No);
+
+                        if (newOption == Localization.Yes)
+                        {
+                            GlobalData.Current.IgnoreAutoFocus = true;
+                            Items[5].Description = Localization.Yes;
+                        }
+                        else if (newOption == Localization.No)
+                        {
+                            GlobalData.Current.IgnoreAutoFocus = false;
+                            Items[5].Description = Localization.No;
+                        }
+                        GlobalData.Current.SaveConfig();
+                        SnackbarBuilder.Show(Localization.Ready);
                     }
                 }
                 (sender as ListView).SelectedItem = null;

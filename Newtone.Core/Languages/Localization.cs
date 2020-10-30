@@ -311,7 +311,7 @@ public static string Settings1 { get { return CurrentLocalization.Settings1; } }
 /// </summary>
 public static string Settings2 { get { return CurrentLocalization.Settings2; } }
 /// <summary>
-/// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz motyw
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Ignoruj wyciszanie utworów podczas rozmowy
 /// </summary>
 public static string Settings3 { get { return CurrentLocalization.Settings3; } }
 /// <summary>
@@ -532,7 +532,7 @@ public string Settings = "Ustawienia";
 public string Settings0 = "Wygeneruj tagi dla plików lokalnych";
 public string Settings1 = "Automatyczne tagi";
 public string Settings2 = "Wyczyść wszystkie dane";
-public string Settings3 = "Wybierz motyw";
+public string Settings3 = "Ignoruj wyciszanie utworów podczas rozmowy";
 public string Settings4 = "Dodaj folder do listy skanowanych folderów";
 public string Settings5 = "Język";
 public string SettingsChanges = "Zmiany będą widoczne po ponownym uruchomieniu aplikacji";

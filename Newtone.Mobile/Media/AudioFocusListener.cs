@@ -9,7 +9,7 @@ namespace Newtone.Mobile.Media
         #region Public Methods
         public void OnAudioFocusChange([GeneratedEnum] AudioFocus focusChange)
         {
-            if (GlobalData.Current.MediaPlayer != null)
+            if (GlobalData.Current.MediaPlayer != null && !GlobalData.Current.IgnoreAutoFocus)
             {
                 if (focusChange == AudioFocus.Loss && GlobalData.Current.MediaPlayer.CurrentPosition > 10)
                     MediaPlayerHelper.Pause();

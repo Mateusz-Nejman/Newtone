@@ -322,7 +322,7 @@
     <value>Clear data</value>
   </data>
   <data name="Settings3" xml:space="preserve">
-    <value>Choose a theme</value>
+    <value>Ignore muting tracks during a call</value>
   </data>
   <data name="Settings4" xml:space="preserve">
     <value>Add folder to scanned paths</value>

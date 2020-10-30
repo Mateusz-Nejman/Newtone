@@ -318,17 +318,25 @@ namespace Newtone.Core.Media
         #region Private Methods
         private int GetRandom(int max)
         {
-            if (randomIndexes.Count == max)
+            if (randomIndexes.Count >= max || randomIndexes.Count == 0)
+            {
                 randomIndexes.Clear();
+                for(int a = 0; a < max; a++)
+                {
+                    randomIndexes.Add(a);
+                }
+            }
 
             int randomNumber = Random.Next(0,max);
 
             if (randomIndexes.Contains(randomNumber))
-                return GetRandom(max);
+            {
+                randomIndexes.Remove(randomNumber);
+                return randomNumber;
+            }
             else
             {
-                randomIndexes.Add(randomNumber);
-                return randomNumber;
+                return GetRandom(max);
             }
         }
         private void SetPlayerController(IPlayerController playerController)

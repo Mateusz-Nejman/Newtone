@@ -709,7 +709,7 @@ namespace LocalizationGenerator.Languages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Wybierz motyw.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Ignoruj wyciszanie utworów podczas rozmowy.
         /// </summary>
         internal static string Settings3 {
             get {
