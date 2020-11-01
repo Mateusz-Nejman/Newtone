@@ -51,7 +51,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="32"/>
                     </Grid.RowDefinitions>
-                    <custom:AudioSliderControl Margin="0,0,0,5" ThumbColor="Transparent" x:Name="audioSlider" Max="{Binding AudioSliderMax}" ValueChange="{Binding AudioSliderValue}"/>
+                    <custom:AudioSliderControl Margin="0,0,0,5" ThumbColor="Transparent" x:Name="audioSlider" MaxWithoutBaseEvents="{Binding AudioSliderMax}" ValueWithoutBaseEvents="{Binding AudioSliderValue}"/>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
 

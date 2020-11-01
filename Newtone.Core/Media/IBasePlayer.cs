@@ -16,6 +16,7 @@
         float GetVolume();
         void SetNotification(bool isPlaying);
         void Prepare();
+        void Prepared(CrossPlayer player);
         void AfterPrev();
         void AfterNext();
     }

@@ -20,7 +20,7 @@ namespace Newtone.Core.Media
         #endregion
         #region Properties
         public IBasePlayer BasePlayer { get; private set; }
-        private IPlayerController PlayerController { get; set; }
+        public IPlayerController PlayerController { get; private set; }
         private Random Random { get; set; }
         public bool IsPlaying
         {
@@ -169,13 +169,11 @@ namespace Newtone.Core.Media
 
             Console.WriteLine("Load " + filename + " using " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerControler"));
             PlayerController?.Load(this, filename);
-            Console.WriteLine("Loaded");
+            Console.WriteLine("Loaded "+filename);
             try
             {
-                Console.WriteLine("Prepare");
+                Console.WriteLine("Prepare "+filename);
                 BasePlayer?.Prepare();
-                PlayerController?.Prepared(this);
-                Console.WriteLine("Prepared");
             }
             catch(Exception e)
             {

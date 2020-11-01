@@ -1,91 +1,66 @@
-﻿using System.ComponentModel;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Newtone.Mobile.Views.Custom
 {
-    public class AudioSliderControl:Slider, INotifyPropertyChanged
+    public class AudioSliderControl:Slider
     {
-        #region Fields
-        private double value;
-        #endregion
         #region Properties
         private static AudioSliderControl Instance { get; set; }
-        public static readonly BindableProperty MaxProperty = BindableProperty.Create("Max", typeof(double), typeof(AudioSliderControl), null, propertyChanged: OnMax);
-        public static readonly BindableProperty ValueChangeProperty = BindableProperty.Create("ValueChange", typeof(double), typeof(AudioSliderControl), null, propertyChanged: OnValueChanged);
-        public double Max
-        {
-            get => (double)GetValue(MaxProperty);
+        public static readonly BindableProperty ValueWithoutBaseEventsProperty = BindableProperty.Create("ValueWithoutBaseEvents", typeof(double), typeof(AudioSliderControl), null, propertyChanged: OnValueWithoutBaseEventsChanged); //Without seek
+        public static readonly BindableProperty MaxWithoutBaseEventsProperty = BindableProperty.Create("MaxWithoutBaseEvents", typeof(double), typeof(AudioSliderControl), null, propertyChanged: OnMaxWithoutBaseEventsChanged); //Without seek
 
+        public double ValueWithoutBaseEvents
+        {
+            get => Value;
             set
             {
-                Maximum = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Maximum");
-            }
-        }
-        public double ValueNew
-        {
-            get
-            {
-                return value;
-            }
-            private set
-            {
-                this.value = value;
+                InvokeEvents = false;
                 Value = value;
                 OnPropertyChanged("Value");
             }
         }
 
-        public double ValueChange
+        public double MaxWithoutBaseEvents
         {
-            get => value;
+            get => Maximum;
             set
             {
-                SetValue(value);
-                OnPropertyChanged("Value");
+                InvokeEvents = false;
+                Maximum = value;
+                OnPropertyChanged("Maximum");
             }
         }
+
+        private bool InvokeEvents { get; set; }
         #endregion
         #region Events & Delegates
         public delegate void ValueChangedHandler(object sender, ValueChangedArgs e);
-        public event ValueChangedHandler ValueNewChanged;
+        public event ValueChangedHandler ValueNewChanged; //With seek
         #endregion
         #region Constructors
         public AudioSliderControl()
         {
             ValueChanged += AudioSlider_ValueChanged;
             Instance = this;
+            InvokeEvents = true;
         }
         #endregion
         #region Private Methods
-        private void AudioSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+        private void AudioSlider_ValueChanged(object sender, ValueChangedEventArgs e) //With seek
         {
-            ValueNewChanged?.Invoke(sender, new ValueChangedArgs() { Value = e.NewValue });
+            if(InvokeEvents)
+                ValueNewChanged?.Invoke(sender, new ValueChangedArgs() { Value = e.NewValue });
+
+            InvokeEvents = true;
         }
-        private static void OnValueChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnValueWithoutBaseEventsChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            Instance.ValueChange = (double)newValue;
+            Instance.ValueWithoutBaseEvents = (double)newValue;
         }
 
-        private static void OnMax(BindableObject bindable, object oldValue, object newValue)
+        private static void OnMaxWithoutBaseEventsChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            Instance.Max = (double)newValue;
-        }
-        #endregion
-        #region Public Methods
-        public void SetValue(double value)
-        {
-            ValueChanged -= AudioSlider_ValueChanged;
-            Value = value;
-            ValueChanged += AudioSlider_ValueChanged;
-        }
-
-        public void SetMax(double value)
-        {
-            ValueChanged -= AudioSlider_ValueChanged;
-            Max = value;
-            ValueChanged += AudioSlider_ValueChanged;
+            Instance.MaxWithoutBaseEvents = (double)newValue;
         }
         #endregion
         #region Nested Classes

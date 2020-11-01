@@ -10,14 +10,6 @@ namespace Newtone.Mobile.Views.Custom
     public class AudioSliderControlRenderer : SliderRenderer
     {
         #region Protected Methods
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Slider> e)
-        {
-            base.OnElementChanged(e);
-            if (e.OldElement != null || e.NewElement == null)
-                return;
-
-
-        }
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             base.OnLayout(changed, l, t, r, b);
