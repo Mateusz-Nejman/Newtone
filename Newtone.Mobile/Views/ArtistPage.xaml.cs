@@ -15,6 +15,7 @@ namespace Newtone.Mobile.Views
     {
         #region Fields
         private static IList<View> generatedChildrens;
+        private bool isInitializing = false;
         #endregion
         #region Constructors
         public ArtistPage()
@@ -35,8 +36,10 @@ namespace Newtone.Mobile.Views
         }
         public void Init()
         {
+            isInitializing = true;
             if(generatedChildrens == null)
             {
+                generatedChildrens = new List<View>();
                 List<string> beforeSort = new List<string>();
                 string unknown = null;
 
@@ -52,8 +55,6 @@ namespace Newtone.Mobile.Views
 
                 if (unknown != null)
                     afterSort.Add(unknown);
-
-                generatedChildrens = new List<View>();
 
                 int pos = 0;
                 string model0 = null;
@@ -82,27 +83,32 @@ namespace Newtone.Mobile.Views
                     generatedChildrens.Add(layout);
                 }
 
-                trackGrid.Children.Clear();
-                generatedChildrens.ForEach(trackGrid.Children.Add);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    trackGrid.Children.Clear();
+                    generatedChildrens.ForEach(trackGrid.Children.Add);
+                });
             }
             else
             {
                 if(trackGrid.Children.Count == 0 && generatedChildrens?.Count > 0)
                 {
-                    generatedChildrens.ForEach(trackGrid.Children.Add);
+                    Device.BeginInvokeOnMainThread(() => generatedChildrens.ForEach(trackGrid.Children.Add));
                 }
             }
-            
+            isInitializing = false;
         }
 
         public void Tick()
         {
-            if (GlobalData.Current.ArtistsNeedRefresh)
+            if (GlobalData.Current.ArtistsNeedRefresh && !isInitializing)
             {
                 if (generatedChildrens != null)
+                {
                     generatedChildrens = null;
+                }
 
-                Device.BeginInvokeOnMainThread(Init);
+                Init();
                 GlobalData.Current.ArtistsNeedRefresh = false;
             }
         }

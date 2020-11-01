@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Newtone.Core.Logic
 {
@@ -19,7 +20,7 @@ namespace Newtone.Core.Logic
 
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            foreach (T element in enumerable)
+            foreach (T element in enumerable.ToList())
                 action(element);
         }
     }

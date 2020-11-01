@@ -391,6 +391,7 @@ namespace Newtone.Mobile.ViewModels
             Directory.CreateDirectory(GlobalData.Current.MusicPath);
             if (!MainActivity.Loaded)
             {
+                GotoArtists.Execute(true);
                 GlobalData.Current.LoadTags();
                 Task task;
                 if(CacheLoader.IsCacheAvailable())
@@ -420,7 +421,6 @@ namespace Newtone.Mobile.ViewModels
                             }
                         });
                     }
-                    NormalPage.Instance.Dispatcher.BeginInvokeOnMainThread(() => GotoArtists.Execute(true));
                 });
             }
         }
