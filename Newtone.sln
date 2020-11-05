@@ -14,11 +14,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Mobile", "Newtone.Mobile\Newtone.Mobile.csproj", "{AC390898-9C23-4377-8B39-DE5EC7B461B4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalizationGenerator", "LocalizationGenerator\LocalizationGenerator.csproj", "{C45F454E-C44A-4022-80A4-01ECA7DFFABE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyAdapter", "SpotifyAdapter\SpotifyAdapter.csproj", "{EA60B497-B9BB-4AFF-AFC7-4186481727F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newtone.Mobile.UI", "Newtone.Mobile.UI\Newtone.Mobile.UI.csproj", "{5293F713-266B-484E-90BD-D7E6BAE42423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Mobile.Droid", "Newtone.Mobile.Droid\Newtone.Mobile.Droid.csproj", "{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Mobile.IOS", "Newtone.Mobile.IOS\Newtone.Mobile.IOS.csproj", "{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,12 +42,6 @@ Global
 		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC390898-9C23-4377-8B39-DE5EC7B461B4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,6 +52,18 @@ Global
 		{EA60B497-B9BB-4AFF-AFC7-4186481727F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA60B497-B9BB-4AFF-AFC7-4186481727F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA60B497-B9BB-4AFF-AFC7-4186481727F5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5293F713-266B-484E-90BD-D7E6BAE42423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5293F713-266B-484E-90BD-D7E6BAE42423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5293F713-266B-484E-90BD-D7E6BAE42423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5293F713-266B-484E-90BD-D7E6BAE42423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

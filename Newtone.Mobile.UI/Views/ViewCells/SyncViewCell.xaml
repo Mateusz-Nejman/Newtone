@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
+          xmlns:viewcells="clr-namespace:Newtone.Mobile.UI.ViewModels.ViewCells"
+          x:Class="Newtone.Mobile.UI.Views.ViewCells.SyncViewCell">
+    <ViewCell.BindingContext>
+        <viewcells:SyncViewCellViewModel/>
+    </ViewCell.BindingContext>
+    <ViewCell.View>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="{Binding TrackString}" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation" VerticalTextAlignment="Center"/>
+            <custom:CustomImageButton Grid.Column="1" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" x:Name="menuButton" Command="{Binding OpenMenu}" CommandParameter="{x:Reference menuButton}" Tag="{Binding Info}" IsVisible="{Binding AllowContextMenu}" Padding="10"/>
+        </Grid>
+    </ViewCell.View>
+</ViewCell>

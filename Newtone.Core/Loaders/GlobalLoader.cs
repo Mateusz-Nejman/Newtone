@@ -27,7 +27,7 @@ namespace Newtone.Core.Loaders
 
         public static void AddTrack(MediaSource source)
         {
-            if(!GlobalData.Current.Audios.ContainsKey(source.FilePath) && File.Exists(source.FilePath))
+            if (!GlobalData.Current.Audios.ContainsKey(source.FilePath) && File.Exists(source.FilePath))
             {
                 GlobalData.Current.Audios.Add(source.FilePath, source);
 
