@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using Newtone.Core;
 using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Mobile.UI.Views;
 using Xamarin.Forms;
@@ -67,6 +68,10 @@ namespace Newtone.Mobile.UI.ViewModels
                 {
                     beforeSort.Add(new TrackModel(GlobalData.Current.Audios[track], playlistName).CheckChanges());
                 }
+                else if(GlobalData.Current.SavedTracks.ContainsKey(track))
+                {
+                    beforeSort.Add(new TrackModel(GlobalData.Current.SavedTracks[track], playlistName).CheckChanges());
+                }
             }
             TrackItems = new ObservableCollection<TrackModel>(playlistName == "" ? beforeSort.OrderBy(item => item.TrackString).ToList() : beforeSort);
         }
@@ -80,12 +85,50 @@ namespace Newtone.Mobile.UI.ViewModels
                 _ = NormalPage.NavigationInstance.PopModalAsync();
                 return;
             }
+
+            if(GlobalData.Current.PlaylistsNeedRefresh)
+            {
+                TrackItems.Clear();
+
+                List<TrackModel> beforeSort = new List<TrackModel>();
+                foreach (string track in tracks)
+                {
+                    if (GlobalData.Current.Audios.ContainsKey(track))
+                    {
+                        beforeSort.Add(new TrackModel(GlobalData.Current.Audios[track], playlistName).CheckChanges());
+                    }
+                    else if (GlobalData.Current.SavedTracks.ContainsKey(track))
+                    {
+                        beforeSort.Add(new TrackModel(GlobalData.Current.SavedTracks[track], playlistName).CheckChanges());
+                    }
+                }
+                var afterSort = playlistName == "" ? beforeSort.OrderBy(item => item.TrackString).ToList() : beforeSort;
+
+                foreach(var item in afterSort)
+                {
+                    TrackItems.Add(item);
+                }
+
+                GlobalData.Current.PlaylistsNeedRefresh = false;
+            }
+
             foreach (var model in TrackItems.ToList())
             {
 
                 if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
                 {
                     var source = GlobalData.Current.Audios[model.FilePath];
+                    if (model.Artist != source.Artist || model.Title != source.Title)
+                    {
+                        int index = TrackItems.IndexOf(model);
+                        TrackItems[index].Title = source.Title;
+                        TrackItems[index].Artist = source.Artist;
+                    }
+                    model.CheckChanges();
+                }
+                else if(GlobalData.Current.SavedTracks.ContainsKey(model.FilePath))
+                {
+                    var source = GlobalData.Current.SavedTracks[model.FilePath];
                     if (model.Artist != source.Artist || model.Title != source.Title)
                     {
                         int index = TrackItems.IndexOf(model);

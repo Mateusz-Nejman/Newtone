@@ -23,7 +23,7 @@
                 <Label Text="{Binding Author}" FontFamily="{Static local:Fonts.Thin}" FontSize="16" TextColor="{Static local:Colors.TextColor}" LineBreakMode="TailTruncation"/>
             </StackLayout>
             <Label Text="{Binding DurationString}" VerticalOptions="Center" Grid.Column="2" FontFamily="{Static local:Fonts.Thin}" FontSize="16" TextColor="{Static local:Colors.TextColor}"/>
-            <custom:CustomImageButton Source="DownloadIcon.png" Tag="{Binding VideoData}" Grid.Column="3" Style="{StaticResource TransparentImageButton}" x:Name="downloadButton" Command="{Binding DownloadClicked}" CommandParameter="{Binding VideoData}" IsVisible="{Binding IsVisible}"/>
+            <custom:CustomImageButton Source="MenuIcon.png" Tag="{Binding VideoData}" Grid.Column="3" Style="{StaticResource TransparentImageButton}" x:Name="downloadButton" Command="{Binding DownloadClicked}" CommandParameter="{x:Reference downloadButton}" IsVisible="{Binding IsVisible}"/>
         </Grid>
     </ViewCell.View>
 </ViewCell>

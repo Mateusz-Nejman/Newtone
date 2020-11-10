@@ -117,10 +117,14 @@ namespace Newtone.Mobile.UI.Models
                 this.Image = (GlobalData.Current.Audios[FilePath].Image == null || GlobalData.Current.Audios[FilePath].Image.Length == 0) ? ImageSource.FromFile("EmptyTrack.png") : ImageProcessing.FromArray(GlobalData.Current.Audios[FilePath].Image);
             else
             {
-                var source = GlobalData.Current.CurrentPlaylist.Find(src => src.FilePath == model.FilePath);
+                Newtone.Core.Media.MediaSource source = null;
+                if (GlobalData.Current.SavedTracks.ContainsKey(FilePath))
+                    source = GlobalData.Current.SavedTracks[FilePath];
+                else
+                    source = GlobalData.Current.CurrentPlaylist.Find(src => src.FilePath == model.FilePath);
 
                 if (source != null)
-                    this.Image = ImageProcessing.FromArray(source.Image);
+                    this.Image = (source.Image == null || source.Image.Length == 0) ? ImageSource.FromFile("EmptyTrack.png") : ImageProcessing.FromArray(source.Image);
             }
         }
 

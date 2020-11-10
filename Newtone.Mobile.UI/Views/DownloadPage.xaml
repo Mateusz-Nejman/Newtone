@@ -8,7 +8,11 @@
         <viewmodels:DownloadViewModel/>
     </ContentView.BindingContext>
     <ContentView.Content>
-        <ListView SelectionMode="Single" VerticalOptions="FillAndExpand" ItemsSource="{Binding Items}">
+        <ListView 
+            SelectionMode="Single" 
+            VerticalOptions="FillAndExpand" 
+            ItemsSource="{Binding Items}"
+            BackgroundColor="Transparent">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <viewcells:DownloadViewCell/>

@@ -2,9 +2,12 @@
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
+using Newtone.Mobile.IOS.Logic;
 using Newtone.Mobile.IOS.Media;
+using Newtone.Mobile.IOS.Processing;
 using Newtone.Mobile.UI;
 using Newtone.Mobile.UI.Logic;
+using System;
 using System.Collections.Generic;
 using UIKit;
 
@@ -26,10 +29,16 @@ namespace Newtone.Mobile.IOS
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
             global::Xamarin.Forms.Forms.Init();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             InitializeGlobalVariables();
             LoadApplication(new App());
 
             return base.FinishedLaunching(uiApplication, launchOptions);
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            GlobalData.Current.Messenger.Show(MessageGenerator.EMessageType.Error, (e.ExceptionObject as Exception).ToString());
         }
 
         private void InitializeGlobalVariables()
@@ -37,12 +46,13 @@ namespace Newtone.Mobile.IOS
             Global.Application = new IosApplication();
             Global.Permissions = new IosPermissions();
             Global.ContextMenuBuilder = new IosContextMenuBuilder();
+            Global.ImageProcessing = new IosImageProcessing();
 
             GlobalData.Current.Initialize();
             GlobalData.Current.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
             //TODO GlobalData.Current.MediaPlayer.SetNativeActions(MediaPlayerHelper.Play);
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
-            GlobalData.Current.MusicPath = NSBundle.MainBundle.BundlePath;
+            GlobalData.Current.MusicPath = GlobalData.Current.DataPath;
             ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/consoleDebug.txt");
             GlobalData.Current.IncludedPaths = new List<string>()
             {

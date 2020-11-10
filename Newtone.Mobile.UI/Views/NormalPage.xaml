@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
              xmlns:local="clr-namespace:Newtone.Mobile.UI"
-             x:Class="Newtone.Mobile.UI.Views.NormalPage">
+             x:Class="Newtone.Mobile.UI.Views.NormalPage" x:Name="page"
+             BackgroundColor="{Static local:Colors.ColorSecondary}">
     <ContentPage.Content>
         <Grid>
             <Grid RowSpacing="0" x:Name="outerGrid">
@@ -16,7 +17,6 @@
                 <Grid BackgroundColor="{Static local:Colors.ColorSecondary}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
                     <Frame CornerRadius="30" BackgroundColor="Transparent" Padding="5,10">
@@ -44,21 +44,6 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <custom:CustomImageButton Source="UploadIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoSync}"/>
-                        <Grid Grid.Row="1" x:Name="badgeBubbleSync" IsVisible="{Binding BadgeSyncVisible}">
-                            <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
-                            <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding BadgeSync}" TextColor="{Static local:Colors.TextColor}"/>
-                        </Grid>
-                    </Grid>
-                    <Grid Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
                         <custom:CustomImageButton Source="DownloadIcon.png" Style="{StaticResource TransparentImageButton}" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="20" Command="{Binding GotoDownload}"/>
                         <Grid Grid.Row="1" IsVisible="{Binding BadgeVisible}">
                             <Frame CornerRadius="32" Margin="4" BackgroundColor="{Static local:Colors.BadgeColor}"/>
@@ -75,8 +60,11 @@
                 </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" IsVisible="{Binding SearchSuggestionsVisible}">
                     <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Fill" VerticalOptions="Fill" Orientation="Vertical">
-                        <ListView VerticalOptions="FillAndExpand"
-                          ItemSelected="SuggestionList_ItemSelected"  ItemsSource="{Binding SuggestionItems}">
+                        <ListView 
+                            VerticalOptions="FillAndExpand"
+                            ItemSelected="SuggestionList_ItemSelected"
+                            ItemsSource="{Binding SuggestionItems}"
+                            BackgroundColor="Transparent">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>

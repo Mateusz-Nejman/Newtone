@@ -57,7 +57,10 @@ namespace Newtone.Mobile.UI.ViewModels
             }
         }
 
+        public bool BackButtonVisible => Device.RuntimePlatform == Device.iOS;
+
         public Grid Container { get; private set; }
+        public bool DownloadButtonVisible => !(Container.Children.Count > 0 && Container.Children[0] is DownloadPage);
         #endregion
 
         #region Commands
@@ -87,10 +90,25 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (toDownloadPage == null)
                     toDownloadPage = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads, false));
+                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
                     });
 
                 return toDownloadPage;
+            }
+        }
+
+        private ICommand backCommand;
+        public ICommand BackCommand
+        {
+            get
+            {
+                if (backCommand == null)
+                    backCommand = new ActionCommand(async (parameter) =>
+                    {
+                        await NormalPage.NavigationInstance.PopModalAsync();
+                    });
+
+                return backCommand;
             }
         }
         #endregion

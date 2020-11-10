@@ -4,6 +4,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Newtone.Mobile.UI.ViewModels;
 using Newtone.Mobile.UI.Logic;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Newtone.Mobile.UI.Views
 {
@@ -25,6 +27,9 @@ namespace Newtone.Mobile.UI.Views
         public NormalPage()
         {
             InitializeComponent();
+            On<iOS>().SetUseSafeArea(true);
+            var safeAreaInset = On<iOS>().SafeAreaInsets();
+            page.Padding = safeAreaInset;
             BindingContext = ViewModel = new NormalViewModel(container, playerPanel, searchEntry);
             Instance = this;
             Appearing += PageAppearing;

@@ -4,6 +4,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Newtone.Mobile.UI.ViewModels;
 using Newtone.Core.Logic;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Newtone.Mobile.UI.Views
 {
@@ -17,10 +19,14 @@ namespace Newtone.Mobile.UI.Views
         public FullScreenPage()
         {
             InitializeComponent();
+            On<iOS>().SetUseSafeArea(true);
+            var safeAreaInset = On<iOS>().SafeAreaInsets();
+            Padding = safeAreaInset;
             ViewModel = BindingContext as FullScreenViewModel;
             Appearing += PageAppearing;
             Disappearing += PageDisappearing;
             audioSlider.ValueNewChanged += AudioSlider_ValueNewChanged;
+            trackBlur.On<iOS>().UseBlurEffect(BlurEffectStyle.Light);
         }
         #endregion
         #region Private Methods

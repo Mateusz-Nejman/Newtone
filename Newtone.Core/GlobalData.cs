@@ -1,12 +1,15 @@
-﻿using Nejman.NSEC2;
+﻿using AngleSharp.Text;
+using Nejman.NSEC2;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Newtone.Core
 {
@@ -43,6 +46,7 @@ namespace Newtone.Core
         public CrossPlayer MediaPlayer { get; set; }
 
         public Dictionary<string, MediaSource> Audios { get; set; }
+        public Dictionary<string, MediaSource> SavedTracks { get; set; }
         public Dictionary<string, MediaSourceTag> AudioTags { get; set; }
         public List<string> DownloadedIds { get; set; }
         public Dictionary<string, List<string>> Artists { get; set; }
@@ -77,6 +81,7 @@ namespace Newtone.Core
         public MessageGenerator Messenger { get; set; }
         public bool ArtistsNeedRefresh { get; set; }
         public bool PlaylistsNeedRefresh { get; set; }
+        public bool CurrentPlaylistNeedRefresh { get; set; }
         public bool HistoryNeedRefresh { get; set; }
         public int IncludedPathsToSkip { get; set; }
         public bool IgnoreAutoFocus { get; set; }
@@ -86,6 +91,7 @@ namespace Newtone.Core
         {
             Artists = new Dictionary<string, List<string>>();
             Audios = new Dictionary<string, Newtone.Core.Media.MediaSource>();
+            SavedTracks = new Dictionary<string, MediaSource>();
             AudioTags = new Dictionary<string, MediaSourceTag>();
             DownloadedIds = new List<string>();
             CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
@@ -136,7 +142,7 @@ namespace Newtone.Core
 
                         items.ForEach(filepath =>
                         {
-                            if (File.Exists(filepath))
+                            if (File.Exists(filepath) || filepath.Length == 11)
                             {
                                 playlist.Add(filepath);
                             }
@@ -381,7 +387,7 @@ namespace Newtone.Core
                     counter += 1;
                 });
 
-                nsec.AddFile("tags", System.Text.Encoding.UTF8.GetBytes(buffer));
+                nsec.AddFile("data", System.Text.Encoding.UTF8.GetBytes(buffer));
 
                 File.WriteAllBytes(DataPath + "/newtoneTags.nsec2", nsec.Save());
             }
@@ -398,10 +404,11 @@ namespace Newtone.Core
                 nsec.Load(fileStream);
                 nsec.SetDebug(false);
 
-                string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get("tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get(nsec.Exists("data") ? "data" : "tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 tags.ForEach(tagItem =>
                 {
                     string[] values = tagItem.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+                    Debug.WriteLine("Load tags for " + values[0]);
 
                     MediaSourceTag tag = new MediaSourceTag()
                     {
@@ -416,6 +423,62 @@ namespace Newtone.Core
   
                     AudioTags.Add(values[0], tag);
                 });
+
+                nsec.Dispose();
+            }
+        }
+
+        public void SaveSavedTracks()
+        {
+            if(SavedTracks.Count > 0)
+            {
+                NSEC2 nsec = new NSEC2(NSEC_HASH);
+                nsec.SetDebug(false);
+
+                int counter = 0;
+                StringBuilder buffer = new StringBuilder();
+
+                SavedTracks.ForEach(keypair =>
+                {
+                    string imageName = "image" + counter;
+                    nsec.AddFile(imageName, keypair.Value.Image ?? new byte[0]);
+                    buffer.AppendLine(keypair.Key + SEPARATOR + keypair.Value.Artist + SEPARATOR + keypair.Value.Title+SEPARATOR+imageName);
+                    counter++;
+                });
+
+                nsec.AddFile("data", Encoding.UTF8.GetBytes(buffer.ToString()));
+                File.WriteAllBytes(DataPath + "/newtoneSavedTracks.nsec2", nsec.Save());
+                nsec.Dispose();
+            }
+        }
+
+        public void LoadSavedTracks()
+        {
+            if(File.Exists(DataPath+"/newtoneSavedTracks.nsec2"))
+            {
+                NSEC2 nsec = new NSEC2(NSEC_HASH);
+                nsec.SetDebug(false);
+                nsec.Load(File.OpenRead(DataPath + "/newtoneSavedTracks.nsec2"));
+                byte[] bufferData = nsec.Get("data");
+                string[] data = Encoding.UTF8.GetString(bufferData).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach(var dataLine in data)
+                {
+                    string[] elems = dataLine.Split(SEPARATOR);
+                    MediaSource newSource = new MediaSource()
+                    {
+                        FilePath = elems[0],
+                        Artist = elems[1],
+                        Title = elems[2]
+                    };
+
+                    if(nsec.TryGet(elems[3], out byte[] imageData))
+                    {
+                        newSource.Image = imageData;
+                    }
+
+                    SavedTracks.Add(elems[0], newSource);
+                }
 
                 nsec.Dispose();
             }

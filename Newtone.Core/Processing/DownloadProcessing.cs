@@ -5,6 +5,7 @@ using Newtone.Core.Media;
 using Newtone.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -44,7 +45,7 @@ namespace Newtone.Core.Processing
 
         public static void AddRange(IEnumerable<Video> playlist, string playlistName, string playlistId, bool withRemove = false)
         {
-            Console.WriteLine("Add range " + playlistName + " " + playlistId);
+            Debug.WriteLine("Add range " + playlistName + " " + playlistId);
 
             string currentItem = null;
 
@@ -143,7 +144,7 @@ namespace Newtone.Core.Processing
 
         public static void Add(string id, string title, string url, string playlist, string playlistId = "")
         {
-            Console.WriteLine("Add " + id + " " + title);
+            Debug.WriteLine("Add " + id + " " + title);
             if (id == "")
                 YoutubeExplodeExtensions.TryParseVideoId(url, out id);
 
@@ -214,6 +215,8 @@ namespace Newtone.Core.Processing
                     currentId = id;
                     DownloadModel model = Downloads[id];
                     string filename = await Download(id);
+
+                    GlobalLoader.ReplaceSavedTrack(id, filename);
 
                     if (!string.IsNullOrWhiteSpace(model.PlaylistName))
                     {

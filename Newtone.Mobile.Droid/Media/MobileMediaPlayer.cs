@@ -1,8 +1,10 @@
 ﻿using System;
 using Android.Media;
+using Android.OS;
 using Android.Support.V4.Media.Session;
 using Newtone.Core;
 using Newtone.Core.Media;
+using Debug = System.Diagnostics.Debug;
 
 namespace Newtone.Mobile.Droid.Media
 {
@@ -27,7 +29,7 @@ namespace Newtone.Mobile.Droid.Media
         #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
-            Console.WriteLine("Start Prepared");
+            Debug.WriteLine("Start Prepared");
             Prepared(GlobalData.Current.MediaPlayer);
             prepared = true;
             Seek(0);
@@ -86,13 +88,13 @@ namespace Newtone.Mobile.Droid.Media
 
         public void Load(string filename)
         {
-            Console.WriteLine("Start load");
+            Debug.WriteLine("Start load");
             checkSafeTime = true;
             prepared = false;
             MediaPlayer.Reset();
             MediaPlayer.SetDataSource(filename);
             MediaPlayerService.Instance.SetNotificationData(PlaybackStateCompat.StatePaused);
-            Console.WriteLine("End load");
+            Debug.WriteLine("End load");
         }
 
         public void Pause()
@@ -128,7 +130,7 @@ namespace Newtone.Mobile.Droid.Media
 
         public void Seek(double seek)
         {
-            Console.WriteLine("Seek to " + seek);
+            Debug.WriteLine("Seek to " + seek);
             MediaPlayer.SeekTo((int)seek * 1000);
             MediaPlayerService.Instance.ShowNotification();
         }

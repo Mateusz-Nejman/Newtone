@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Newtone.Core.Logic
@@ -13,7 +14,7 @@ namespace Newtone.Core.Logic
         {
             string output = "[" + DateTime.Now.ToString() + "]: " + text;
             if (GlobalData.Current.IsDebugMode)
-                Console.WriteLine(output);
+                Debug.WriteLine(output);
 
             if (IsLogFile())
                 WriteLog(output);
@@ -23,7 +24,7 @@ namespace Newtone.Core.Logic
         {
             string output = "[" + DateTime.Now.ToString() + "]: " + e;
             if (GlobalData.Current.IsDebugMode)
-                Console.WriteLine(output);
+                Debug.WriteLine(output);
 
             if (IsLogFile())
                 WriteLog(output);
@@ -33,7 +34,7 @@ namespace Newtone.Core.Logic
         {
             string output = "[" + DateTime.Now.ToString() + "]: " + o;
             if (GlobalData.Current.IsDebugMode)
-                Console.WriteLine(output);
+                Debug.WriteLine(output);
 
             if (IsLogFile())
                 WriteLog(output);

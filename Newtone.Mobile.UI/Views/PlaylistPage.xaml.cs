@@ -1,4 +1,5 @@
 ﻿using Newtone.Core;
+using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Mobile.UI.Views.ViewCells;
@@ -73,7 +74,10 @@ namespace Newtone.Mobile.UI.Views
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     trackGrid.Children.Clear();
-                    generatedChildrens.ForEach(trackGrid.Children.Add);
+                    foreach (var item in generatedChildrens.ToList())
+                    {
+                        trackGrid.Children.Add(item);
+                    }
                 });
             }
             else
@@ -128,8 +132,8 @@ namespace Newtone.Mobile.UI.Views
                 else
                 {
                     Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                    layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
-                    layout.Children.Add(new PlaylistGridItem(this, GlobalData.Current.RecomendedPlaylists[key]), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+                    layout.Children.Add(new PlaylistWebGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
+                    layout.Children.Add(new PlaylistWebGridItem(this, GlobalData.Current.RecomendedPlaylists[key]), Constraint.RelativeToParent(parent => parent.Width * 0.5), null, Constraint.RelativeToParent(parent => parent.Width * 0.5), Constraint.Constant(150));
 
                     generatedChildrens.Add(layout);
                     pos = 0;
@@ -139,7 +143,7 @@ namespace Newtone.Mobile.UI.Views
             if (pos == 1)
             {
                 Xamarin.Forms.RelativeLayout layout = new Xamarin.Forms.RelativeLayout();
-                layout.Children.Add(new PlaylistGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(200));
+                layout.Children.Add(new PlaylistWebGridItem(this, model0), null, null, Constraint.RelativeToParent(parent => parent.Width), Constraint.Constant(200));
                 generatedChildrens.Add(layout);
             }
         }

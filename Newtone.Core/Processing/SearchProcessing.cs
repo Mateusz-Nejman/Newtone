@@ -2,6 +2,7 @@
 using Newtone.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web;
 using YoutubeExplode;
@@ -76,7 +77,7 @@ namespace Newtone.Core.Processing
             else if(validators.ContainsKey(Query.Search) || validators.ContainsKey(Query.None))
             {
                 var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(Query.None) ? Query.None : Query.Search], fromPage, 1).BufferAsync();
-                Console.WriteLine("Searched " + videos.Count);
+                Debug.WriteLine("Searched " + videos.Count);
                 foreach(var video in videos)
                 {
                     model.Add(new SearchResultModel()

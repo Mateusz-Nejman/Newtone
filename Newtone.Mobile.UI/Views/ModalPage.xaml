@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Newtone.Mobile.UI"
              xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
-             x:Class="Newtone.Mobile.UI.Views.ModalPage">
+             x:Class="Newtone.Mobile.UI.Views.ModalPage" x:Name="page"
+             BackgroundColor="{Static local:Colors.ColorSecondary}">
     <ContentPage.Content>
         <Grid>
             <Grid RowSpacing="0">
@@ -14,11 +15,13 @@
                 </Grid.RowDefinitions>
                 <Grid BackgroundColor="{Static local:Colors.ColorSecondary}" HeightRequest="60" x:Name="topPanel" IsVisible="{Binding TopPanelVisible}">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="{Binding ModalTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" x:Name="titleLabel"/>
-                    <Grid Grid.Column="1">
+                    <custom:CustomImageButton Padding="20" Source="BackIcon.png" Style="{StaticResource TransparentImageButton}" IsVisible="{Binding BackButtonVisible}" Command="{Binding BackCommand}" />
+                    <Label Grid.Column="1" Text="{Binding ModalTitle}" TextColor="{Static local:Colors.TextColor}" FontFamily="{Static local:Fonts.Medium}" Margin="20,0,0,0" FontSize="26" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" x:Name="titleLabel"/>
+                    <Grid Grid.Column="2" IsVisible="{Binding DownloadButtonVisible}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>

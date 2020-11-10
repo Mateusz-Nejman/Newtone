@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Newtone.Core;
+using Newtone.Core.Media;
 using Newtone.Mobile.UI.Models;
 using Newtone.Mobile.UI.Processing;
 using Xamarin.Forms;
@@ -32,7 +33,11 @@ namespace Newtone.Mobile.UI.ViewModels
                 ImageSource image = ImageSource.FromFile("EmptyTrack.png");
                 foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    var source = GlobalData.Current.Audios[filePath];
+                    MediaSource source = null;
+                    if (filePath.Length == 11)
+                        source = GlobalData.Current.SavedTracks[filePath];
+                    else
+                        source = GlobalData.Current.Audios[filePath];
                     if (source.Image != null)
                     {
                         image = ImageProcessing.FromArray(source.Image);
@@ -63,7 +68,11 @@ namespace Newtone.Mobile.UI.ViewModels
                 ImageSource image = ImageSource.FromFile("EmptyTrack.png");
                 foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    var source = GlobalData.Current.Audios[filePath];
+                    MediaSource source = null;
+                    if (filePath.Length == 11)
+                        source = GlobalData.Current.SavedTracks[filePath];
+                    else
+                        source = GlobalData.Current.Audios[filePath];
                     if (source.Image != null)
                     {
                         image = ImageProcessing.FromArray(source.Image);

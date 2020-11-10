@@ -1,13 +1,9 @@
-﻿using CoreFoundation;
-using CoreTelephony;
-using Foundation;
+﻿using Foundation;
 using Newtone.Core.Logic;
 using Newtone.Mobile.UI.Logic;
-using System;
-using System.Net;
 using SystemConfiguration;
 
-namespace Newtone.Mobile.IOS.Media
+namespace Newtone.Mobile.IOS.Logic
 {
     public class IosApplication : IApplication
     {

@@ -277,6 +277,15 @@ namespace LocalizationGenerator.Languages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobierz.
+        /// </summary>
+        internal static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony.
         /// </summary>
         internal static string FileCorrupted {

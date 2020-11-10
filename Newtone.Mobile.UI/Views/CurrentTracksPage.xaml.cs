@@ -1,4 +1,5 @@
 ﻿using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Mobile.UI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace Newtone.Mobile.UI.Views
             InitializeComponent();
 
             BindingContext = ViewModel = new CurrentTracksViewModel(tracks, playlistName);
-
         }
         #endregion
         #region Public Methods

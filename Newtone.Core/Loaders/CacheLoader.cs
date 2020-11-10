@@ -2,6 +2,7 @@
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace Newtone.Core.Loaders
                 if(nsec.TryGet("cache",out byte[] data))
                 {
                     string[] cache = Encoding.UTF8.GetString(data).Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                    Console.WriteLine("Load " + cache.Length + " cached files");
+                    Debug.WriteLine("Load " + cache.Length + " cached files");
                     cache.ForEach(filepath =>
                     {
                         if (File.Exists(filepath))

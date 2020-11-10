@@ -33,6 +33,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <OptimizePNGs>true</OptimizePNGs>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -76,13 +77,14 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Processing\IosImageProcessing.cs" />
     <Compile Include="Views\AudioSliderControlRenderer.cs" />
     <Compile Include="Views\PressGestureMaskRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
-    <Compile Include="Media\IosApplication.cs" />
-    <Compile Include="Media\IosContextMenuBuilder.cs" />
-    <Compile Include="Media\IosPermissions.cs" />
+    <Compile Include="Logic\IosApplication.cs" />
+    <Compile Include="Logic\IosContextMenuBuilder.cs" />
+    <Compile Include="Logic\IosPermissions.cs" />
     <Compile Include="Media\MobileMediaPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -135,7 +137,13 @@
     <ImageAsset Include="Assets.xcassets\ExpandIcon.imageset\ExpandIcon.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\NewtoneIcon.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\MenuIcon.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\NewtoneIcon.imageset\NewtoneIcon.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\NextIcon.imageset\Contents.json">
@@ -292,8 +300,5 @@
       <Name>Newtone.Mobile.UI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logic\" />
-    <Folder Include="Processing\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

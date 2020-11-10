@@ -12,7 +12,7 @@
     <ContentPage.Content>
         <Grid>
             <Grid IsVisible="{Binding BackgroundGridVisible}">
-                <Image Source="{Binding TrackBlur}" Aspect="AspectFill"/>
+                <Image Source="{Binding TrackBlur}" Aspect="AspectFill" x:Name="trackBlur"/>
                 <Grid BackgroundColor="#99000000">
 
                 </Grid>
@@ -73,7 +73,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="60"/>
                             </Grid.ColumnDefinitions>
-                            <custom:CustomImageButton Grid.Column="1" Source="{Binding MenuButton}" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" x:Name="actionButton" Command="{Binding MenuButtonCommand}" CommandParameter="{x:Reference actionButton}"/>
+                            <custom:CustomImageButton Grid.Column="1" Source="MenuIcon.png" Style="{StaticResource TransparentImageButton}" VerticalOptions="Start" Margin="4,0,4,0" x:Name="actionButton" Command="{Binding MenuButtonCommand}" CommandParameter="{x:Reference actionButton}"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="2">

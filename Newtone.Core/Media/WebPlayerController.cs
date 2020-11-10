@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeExplode;
@@ -24,7 +25,7 @@ namespace Newtone.Core.Media
                 manifest = await client.Videos.Streams.GetManifestAsync(filepath);
                 foreach(var item in manifest.GetAudioOnly())
                 {
-                    Console.WriteLine(item.Size + " " + item.Bitrate + " " + item.AudioCodec);
+                    Debug.WriteLine(item.Size + " " + item.Bitrate + " " + item.AudioCodec);
                 }
                 player.BasePlayer.Load(manifest.GetAudioOnly().Where(info => info.AudioCodec.Contains("mp4a")).OrderByDescending(info => info.Bitrate.BitsPerSecond).First().Url);
             }).Wait();

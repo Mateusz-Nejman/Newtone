@@ -49,7 +49,7 @@ namespace Newtone.Mobile.Droid.Media
                 }
                 catch (System.Exception e)
                 {
-                    Console.WriteLine("MediaSessionCallback OnPlay Exception " + e);
+                    System.Diagnostics.Debug.WriteLine("MediaSessionCallback OnPlay Exception " + e);
                     StreamWriter streamWriter = new StreamWriter(GlobalData.Current.MusicPath + "/log.txt", true);
                     streamWriter.WriteLine("ERROR from MediaSessionCallback " + DateTime.Now.ToString());
                     streamWriter.WriteLine("Exception: " + e.Message);

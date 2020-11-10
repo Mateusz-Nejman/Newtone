@@ -3,6 +3,7 @@ using Newtone.Core.Processing;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Loaders
 {
@@ -88,6 +89,50 @@ namespace Newtone.Core.Loaders
             if (GlobalData.Current.MediaSource != null && GlobalData.Current.MediaSource.FilePath == newSource.FilePath)
                 GlobalData.Current.MediaSource = newSource;
             GlobalData.Current.SaveTags();
+        }
+
+        public static void AddSavedTrack(Video video)
+        {
+            if(!GlobalData.Current.SavedTracks.ContainsKey(video.Id))
+            {
+                GlobalData.Current.SavedTracks.Add(video.Id, new MediaSource() { Artist = video.Author, Title = video.Title, Duration = video.Duration, FilePath = video.Id, Type = MediaSource.SourceType.Web });
+                GlobalData.Current.SaveSavedTracks();
+            }
+        }
+        public static void RemoveSavedTrack(string id)
+        {
+            foreach(var playlist in GlobalData.Current.Playlists.Keys)
+            {
+                GlobalData.Current.Playlists[playlist].Remove(id);
+            }
+
+            GlobalData.Current.SavedTracks.Remove(id);
+            GlobalData.Current.SaveSavedTracks();
+            GlobalData.Current.SaveConfig();
+        }
+
+        public static void ReplaceSavedTrack(string savedId, string newFilePath)
+        {
+            foreach(var playlist in GlobalData.Current.Playlists.Keys)
+            {
+                if (GlobalData.Current.Playlists[playlist].Contains(savedId))
+                {
+                    GlobalData.Current.Playlists[playlist][GlobalData.Current.Playlists[playlist].IndexOf(savedId)] = newFilePath;
+                    GlobalData.Current.PlaylistsNeedRefresh = true;
+                }
+            }
+
+            int currentIndex = GlobalData.Current.CurrentPlaylist.FindIndex(source => source.FilePath == savedId);
+            if (currentIndex >= 0)
+            {
+                GlobalData.Current.CurrentPlaylist[currentIndex] = GlobalData.Current.Audios[newFilePath];
+                GlobalData.Current.CurrentPlaylistNeedRefresh = true;
+            }
+
+            RemoveSavedTrack(savedId);
+
+            GlobalData.Current.SaveSavedTracks();
+            GlobalData.Current.SaveConfig();
         }
         #endregion
     }

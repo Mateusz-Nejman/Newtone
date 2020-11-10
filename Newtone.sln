@@ -63,6 +63,7 @@ Global
 		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09BFF83D-0E84-4D53-B12A-5BAA536F68C7}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

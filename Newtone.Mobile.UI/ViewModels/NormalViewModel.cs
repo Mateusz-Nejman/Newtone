@@ -333,21 +333,6 @@ namespace Newtone.Mobile.UI.ViewModels
             }
         }
 
-        private ICommand gotoSyncCommand;
-        public ICommand GotoSync
-        {
-            get
-            {
-                if (gotoSyncCommand == null)
-                    gotoSyncCommand = new ActionCommand(async (parameter) =>
-                    {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SyncPage(), Localization.SyncSending, false));
-                    });
-
-                return gotoSyncCommand;
-            }
-        }
-
         private ICommand gotoDownloadCommand;
         public ICommand GotoDownload
         {
@@ -356,7 +341,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (gotoDownloadCommand == null)
                     gotoDownloadCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads, false));
+                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
                     });
 
                 return gotoDownloadCommand;
@@ -393,17 +378,15 @@ namespace Newtone.Mobile.UI.ViewModels
             if (!Global.Loaded)
             {
                 GlobalData.Current.LoadTags();
-                Task task;
-                if (CacheLoader.IsCacheAvailable())
+                GlobalData.Current.LoadSavedTracks();
+                Task task = Task.Run(async() =>
                 {
-                    task = Task.Run(async () =>
-                    {
+                    if (CacheLoader.IsCacheAvailable())
                         CacheLoader.LoadCache();
-                        await GlobalLoader.Load();
-                    });
-                }
-                else
-                    task = Task.Run(async () => await GlobalLoader.Load());
+
+                    await GlobalLoader.Load();
+                });
+                
                 task.ContinueWith(t =>
                 {
                     GlobalData.Current.LoadConfig();
@@ -433,10 +416,11 @@ namespace Newtone.Mobile.UI.ViewModels
             if (Container.Children.Count > 0 && Container.Children[0] is IVisibleContent)
                 (Container.Children[0] as IVisibleContent).Appearing();
 
-            if (GlobalData.Current.Audios.Count == 0)
+            if (GlobalData.Current.Audios.Count == 0 && GlobalData.Current.SavedTracks.Count == 0)
             {
                 GlobalData.Current.LoadTags();
                 CacheLoader.LoadCache();
+                GlobalData.Current.LoadSavedTracks();
                 GlobalData.Current.LoadConfig();
             }
         }
@@ -452,18 +436,10 @@ namespace Newtone.Mobile.UI.ViewModels
             SearchPlaceholder = Localization.Search;
             Badge = DownloadProcessing.BadgeCount.ToString();
             BadgeVisible = DownloadProcessing.BadgeCount > 0;
-            if (Container.Children.Count == 0)
-            {
-                SpinnerVisible = true;
-            }
-            else
-                SpinnerVisible = false;
-
-            BadgeSyncVisible = SyncProcessing.Audios.Count > 0;
-            BadgeSync = SyncProcessing.Audios.Count.ToString();
+            SpinnerVisible = Container.Children.Count == 0 || !Global.Loaded;
             PlayerPanel?.Tick();
 
-            foreach (var children in Container.Children)
+            foreach (var children in Container.Children.ToList())
             {
                 if (children.IsVisible && children is ITimerContent content)
                     content.Tick();
@@ -493,7 +469,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 else
                     await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
 
-                (sender as Xamarin.Forms.ListView).SelectedItem = null;
+                (sender as ListView).SelectedItem = null;
             }
         }
 

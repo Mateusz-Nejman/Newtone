@@ -16,11 +16,7 @@ namespace Newtone.Mobile.IOS.Views
         #region Constructors
         public PressGestureMaskRenderer()
         {
-            UILongPressGestureRecognizer longPressGestureRecognizer = new UILongPressGestureRecognizer(() => view?.HandleLongPress(view, EventArgs.Empty));
-            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += (sender, e) => view?.HandlePress(view, EventArgs.Empty);
-            this.AddGestureRecognizer(longPressGestureRecognizer);
-            this.Element.GestureRecognizers.Add(tapGestureRecognizer);
+            
         }
         #endregion
         #region Protected Methods
@@ -28,9 +24,15 @@ namespace Newtone.Mobile.IOS.Views
         {
             base.OnElementChanged(e);
 
-            if(e.NewElement != null)
+            if (e.NewElement != null)
             {
                 view = e.NewElement as PressGestureMask;
+                UILongPressGestureRecognizer longPressGestureRecognizer = new UILongPressGestureRecognizer(() => view?.HandleLongPress(view, EventArgs.Empty));
+                TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += (sender, e1) => view?.HandlePress(view, EventArgs.Empty);
+                this.AddGestureRecognizer(longPressGestureRecognizer);
+                view.GestureRecognizers.Clear();
+                view.GestureRecognizers.Add(tapGestureRecognizer);
             }
         }
         #endregion

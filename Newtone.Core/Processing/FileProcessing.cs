@@ -1,5 +1,6 @@
 ﻿using Newtone.Core.Media;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -33,6 +34,7 @@ namespace Newtone.Core.Processing
                 {
                     MediaSource source = MediaProcessing.GetSource(filepath);
 
+                    Debug.Write("Load " + filepath);
                     if (source != null && !containers.Contains(source))
                     {
                         containers.Add(source);

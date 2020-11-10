@@ -24,6 +24,7 @@ this.Cover = "Обложка";
 this.CoverLoad = "Загрузите обложку";
 this.CoverSave = "Сохранить обложку";
 this.Disconnect = "Отключить";
+this.Download = "Скачать";
 this.FileCorrupted = "Файл поврежден";
 this.FileDownloaded = "Скачано";
 this.FolderExists = "Папка не существует";

@@ -6,6 +6,8 @@ using Xamarin.Forms.Xaml;
 using Newtone.Mobile.UI.ViewModels;
 using System.Reactive.Linq;
 using Newtone.Core;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Newtone.Mobile.UI.Views
 {
@@ -22,6 +24,9 @@ namespace Newtone.Mobile.UI.Views
         public ModalPage(ContentView content, string title, bool topPanelVisible = true, bool playerPanelVisible = true)
         {
             InitializeComponent();
+            On<iOS>().SetUseSafeArea(true);
+            var safeAreaInset = On<iOS>().SafeAreaInsets();
+            page.Padding = safeAreaInset;
             BindingContext = ViewModel = new ModalViewModel(container, title, topPanelVisible);
             container.Children.Add(content);
 
@@ -29,6 +34,7 @@ namespace Newtone.Mobile.UI.Views
             Disappearing += PageDisappearing;
 
             playerPanel.IsVisible = playerPanelVisible;
+            ViewModel.OnPropertyChanged(() => ViewModel.DownloadButtonVisible);
         }
         #endregion
         #region Private Methods
@@ -50,7 +56,7 @@ namespace Newtone.Mobile.UI.Views
         {
             if (playerPanel != null)
             {
-                playerPanel.IsVisible = GlobalData.Current.MediaSource != null;
+                Device.BeginInvokeOnMainThread(() => playerPanel.IsVisible = GlobalData.Current.MediaSource != null);
                 playerPanel?.Tick();
             }
 

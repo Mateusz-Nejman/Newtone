@@ -16,7 +16,8 @@
             IsPullToRefreshEnabled="True" 
             RefreshCommand="{Binding Refresh}" 
             RefreshControlColor="#0f4c75" 
-            IsRefreshing="{Binding IsRefreshing}">
+            IsRefreshing="{Binding IsRefreshing}"
+            BackgroundColor="Transparent">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <viewcells:TrackViewCell/>

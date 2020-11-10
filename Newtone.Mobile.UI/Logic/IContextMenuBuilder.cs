@@ -11,5 +11,6 @@ namespace Newtone.Mobile.UI.Logic
         void BuildForSyncList(View sender, string modelInfo, List<string> elements, Action<string> action);
         void BuildForPlaylist(View sender, string playlistName, List<string> elements, Func<View, string, string, Task> action);
         void BuildForArtist(View sender, string artistName, List<string> elements, Func<View, string, string, Task> action);
+        void BuildForSearchResult(View sender, string modelInfo, List<string> elements, Func<View, string, string, Task> action);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtone.Mobile.Droid.Views;
 using Newtone.Mobile.UI.Logic;
+using Xamarin.Forms;
 
 namespace Newtone.Mobile.Droid.Logic
 {
@@ -17,6 +18,11 @@ namespace Newtone.Mobile.Droid.Logic
         public void BuildForPlaylist(Xamarin.Forms.View sender, string playlistName, List<string> elements, Func<Xamarin.Forms.View, string, string, Task> action)
         {
             Build(sender, elements, async (item) => await action(sender, playlistName, item));
+        }
+
+        public void BuildForSearchResult(View sender, string modelInfo, List<string> elements, Func<View, string, string, Task> action)
+        {
+            Build(sender, elements, async(item) => await action(sender, modelInfo, item));
         }
 
         public void BuildForSyncList(Xamarin.Forms.View sender, string modelInfo, List<string> elements, Action<string> action)

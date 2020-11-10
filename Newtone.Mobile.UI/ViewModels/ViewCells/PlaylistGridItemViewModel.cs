@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
+using Newtone.Core.Media;
 using Newtone.Core.Models;
 using Newtone.Mobile.UI.Logic;
 using Newtone.Mobile.UI.Processing;
@@ -118,8 +119,13 @@ namespace Newtone.Mobile.UI.ViewModels.ViewCells
 
                 foreach (string filePath in GlobalData.Current.Playlists[playlistName])
                 {
-                    var source = GlobalData.Current.Audios[filePath];
-                    if (source.Image != null)
+                    MediaSource source = null;
+
+                    if (filePath.Length == 11)
+                        source = GlobalData.Current.SavedTracks[filePath];
+                    else
+                        source = GlobalData.Current.Audios[filePath];
+                    if (source.Image != null && source.Image.Length > 0)
                     {
                         Image = ImageProcessing.FromArray(source.Image);
                         break;

@@ -9,6 +9,9 @@ using System.Linq;
 using Newtone.Mobile.UI.Views;
 using System.Threading.Tasks;
 using Newtone.Mobile.UI.Views.ViewCells;
+using YoutubeExplode;
+using Newtone.Core.Logic;
+using System.Net;
 
 namespace Newtone.Mobile.UI.Logic
 {
@@ -26,7 +29,7 @@ namespace Newtone.Mobile.UI.Logic
             string filePath = elems[0];
             string playlistName = elems[1];
 
-            List<string> menuItems = new List<string>() { Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd };
+            List<string> menuItems = new List<string>() { filePath.Length == 11 ? Localization.Download : Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue };
             if (!string.IsNullOrEmpty(playlistName))
                 menuItems.Add(Localization.SyncAddPlaylist);
 
@@ -35,34 +38,61 @@ namespace Newtone.Mobile.UI.Logic
             Global.ContextMenuBuilder.BuildForTrack(sender, modelInfo, filePath, playlistName, menuItems, TrackAction);
         }
 
-        public static void BuildForSyncList(View sender, string modelInfo)
-        {
-            CurrentModelInfo = modelInfo;
-
-            List<string> elements = new List<string>() { Localization.TrackMenuDelete, Localization.Clear };
-
-            Global.ContextMenuBuilder.BuildForSyncList(sender, modelInfo, elements, SyncListAction);
-        }
-
         public static void BuildForPlaylist(View sender, string playlistName)
         {
-            List<string> elements = new List<string>() { Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd, Localization.ChangeName, Localization.TrackMenuDelete };
+            List<string> elements = new List<string>() { Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.ChangeName, Localization.TrackMenuDelete };
 
             Global.ContextMenuBuilder.BuildForPlaylist(sender, playlistName, elements, PlaylistAction);
         }
 
         public static void BuildForArtist(View sender, string artistName)
         {
-            List<string> elements = new List<string>() { Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.SyncAdd };
+            List<string> elements = new List<string>() { Localization.PlaylistPlay, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue };
 
             Global.ContextMenuBuilder.BuildForArtist(sender, artistName, elements, ArtistAction);
+        }
+
+        public static void BuildForSearchResult(View sender, string modelInfo)
+        {
+            List<string> elements = new List<string>() { Localization.Download, Localization.TrackMenuPlaylist };
+
+            Global.ContextMenuBuilder.BuildForSearchResult(sender, modelInfo, elements, SearchResultAction);
         }
         #endregion
         #region Private Methods
         private static async Task TrackAction(string filePath, string item, string playlistName)
         {
             Page page = NormalPage.Instance;
-            var track = GlobalData.Current.Audios[filePath];
+
+            if(filePath.Length == 11 && !GlobalData.Current.SavedTracks.ContainsKey(filePath))
+            {
+                YoutubeClient client = new YoutubeClient();
+                var video = await client.Videos.GetAsync(filePath);
+
+                var mediaSource = new Core.Media.MediaSource()
+                {
+                    Artist = video.Author,
+                    Duration = video.Duration,
+                    FilePath = video.Id,
+                    Title = video.Title,
+                    Type = Core.Media.MediaSource.SourceType.Web
+                };
+
+                try
+                {
+                    using WebClient webClient = new WebClient();
+                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                    mediaSource.Image = thumbData;
+                }
+                catch
+                {
+                    //Ignore
+                }
+
+                GlobalData.Current.SavedTracks.Add(filePath, mediaSource);
+                GlobalData.Current.SaveSavedTracks();
+            }
+            var track = filePath.Length == 11 ? GlobalData.Current.SavedTracks[filePath] : GlobalData.Current.Audios[filePath];
 
             if (track == null)
             {
@@ -159,6 +189,11 @@ namespace Newtone.Mobile.UI.Logic
                         if (File.Exists(filePath))
                             File.Delete(filePath);
 
+                        if(filePath.Length == 11)
+                        {
+                            GlobalLoader.RemoveSavedTrack(filePath);
+                        }
+
                         if (GlobalData.Current.Artists[track.Artist].Contains(track.FilePath))
                             GlobalData.Current.Artists[track.Artist].Remove(track.FilePath);
 
@@ -192,16 +227,6 @@ namespace Newtone.Mobile.UI.Logic
                     Global.Application.ShowSnackbar(Localization.Ready);
                 }
             }
-            else if (item == Localization.SyncAdd)
-            {
-                SyncProcessing.AddFile(filePath);
-                Global.Application.ShowSnackbar(Localization.Ready);
-            }
-            else if (item == Localization.SyncAddPlaylist)
-            {
-                SyncProcessing.AddFiles(GlobalData.Current.Playlists[playlistName]);
-                Global.Application.ShowSnackbar(Localization.Ready);
-            }
             else if (item == Localization.TrackMenuQueue)
             {
                 if (GlobalData.Current.CurrentPlaylist.Count > 0)
@@ -211,21 +236,16 @@ namespace Newtone.Mobile.UI.Logic
                         GlobalData.Current.QueuePosition = GlobalData.Current.PlaylistPosition;
                     }
 
-                    GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, GlobalData.Current.Audios[filePath]);
+                    GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, filePath.Length == 11 ? GlobalData.Current.SavedTracks[filePath] : GlobalData.Current.Audios[filePath]);
                     GlobalData.Current.QueuePosition++;
                     Global.Application.ShowSnackbar(Localization.SnackQueue);
                 }
             }
-        }
-        private static void SyncListAction(string item)
-        {
-            string[] elems = CurrentModelInfo.Split(GlobalData.SEPARATOR, System.StringSplitOptions.None);
-            string filePath = elems[0];
-
-            if (item == Localization.TrackMenuDelete)
-                SyncProcessing.Audios.Remove(filePath);
-            else if (item == Localization.Clear)
-                SyncProcessing.Audios.Clear();
+            else if(item == Localization.Download)
+            {
+                DownloadProcessing.Add(filePath, track.Title, "", "");
+                Global.Application.ShowSnackbar(Localization.Ready);
+            }
         }
         private static async Task PlaylistAction(View sender, string playlistName, string item)
         {
@@ -281,13 +301,6 @@ namespace Newtone.Mobile.UI.Logic
                 }
 
                 GlobalData.Current.PlaylistsNeedRefresh = true;
-                (sender as PlaylistGridItem).Page.Init();
-            }
-            else if (item == Localization.SyncAdd)
-            {
-                SyncProcessing.AddFiles(GlobalData.Current.Playlists[playlistName]);
-                Global.Application.ShowSnackbar(Localization.Ready);
-
                 (sender as PlaylistGridItem).Page.Init();
             }
             if (item == Localization.ChangeName)
@@ -416,11 +429,6 @@ namespace Newtone.Mobile.UI.Logic
 
                 (sender as ArtistGridItem).Page.Init();
             }
-            else if (item == Localization.SyncAdd)
-            {
-                SyncProcessing.AddFiles(GlobalData.Current.Artists[artistName]);
-                Global.Application.ShowSnackbar(Localization.Ready);
-            }
             else if (item == Localization.TrackMenuQueue)
             {
                 if (GlobalData.Current.CurrentPlaylist.Count > 0)
@@ -437,6 +445,125 @@ namespace Newtone.Mobile.UI.Logic
                             GlobalData.Current.CurrentPlaylist.Insert(GlobalData.Current.QueuePosition + 1, GlobalData.Current.Audios[artistTrack]);
                             GlobalData.Current.QueuePosition++;
                         }
+                    }
+                }
+            }
+        }
+        private static async Task SearchResultAction(View sender, string tag, string item)
+        {
+            Page page = NormalPage.Instance;
+
+            if (item == Localization.Download)
+            {
+                string[] elems = tag.Split(GlobalData.SEPARATOR);
+                YoutubeClient client = new YoutubeClient();
+                string playlistId = "";
+                string playlistName = "";
+                var urlType = SearchProcessing.CheckLink(elems[1]);
+
+                if (urlType.ContainsKey(SearchProcessing.Query.Playlist))
+                {
+                    if (urlType.ContainsKey(SearchProcessing.Query.Video))
+                    {
+                        if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
+                        {
+                            playlistId = "";
+                        }
+                        else
+                        {
+                            playlistId = urlType[SearchProcessing.Query.Playlist];
+
+                            if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
+                            {
+                                var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.Query.Playlist]);
+                                string newPlaylistName = await NormalPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
+                                playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
+                            }
+                        }
+                    }
+                }
+
+                if (playlistId == "")
+                {
+                    DownloadProcessing.Add("", elems[0], elems[1], "");
+                }
+                else
+                {
+                    DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(playlistId), playlistName, playlistId);
+                }
+            }
+            else if (item == Localization.TrackMenuPlaylist)
+            {
+                string[] elems = tag.Split(GlobalData.SEPARATOR);
+                ConsoleDebug.WriteLine("Tag: " + tag);
+                YoutubeClient client = new YoutubeClient();
+                var urlType = SearchProcessing.CheckLink(elems[1]);
+
+                if (urlType.ContainsKey(SearchProcessing.Query.Video))
+                {
+                    List<string> positions = new List<string>()
+                    {
+                        Localization.NewPlaylist
+                    };
+
+                    foreach (string playlist in GlobalData.Current.Playlists.Keys)
+                        positions.Add(playlist);
+
+                    string answer = await page.DisplayActionSheet(Localization.ChoosePlaylist, Localization.Cancel, null, positions.ToArray());
+
+                    if(!GlobalData.Current.SavedTracks.ContainsKey(urlType[SearchProcessing.Query.Video]))
+                    {
+                        var video = await client.Videos.GetAsync(urlType[SearchProcessing.Query.Video]);
+
+                        var mediaSource = new Core.Media.MediaSource()
+                        {
+                            Artist = video.Author,
+                            Duration = video.Duration,
+                            FilePath = video.Id,
+                            Title = video.Title,
+                            Type = Core.Media.MediaSource.SourceType.Web
+                        };
+
+                        try
+                        {
+                            using WebClient webClient = new WebClient();
+                            byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                            mediaSource.Image = thumbData;
+                        }
+                        catch
+                        {
+                            //Ignore
+                        }
+
+                        GlobalData.Current.SavedTracks.Add(urlType[SearchProcessing.Query.Video], mediaSource);
+                        GlobalData.Current.SaveSavedTracks();
+                    }
+
+                    if (answer == Localization.NewPlaylist)
+                    {
+                        string playlist = await page.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, Localization.Add, Localization.Cancel, Localization.Playlist, -1, null, Localization.NewPlaylist);
+
+                        if (!string.IsNullOrEmpty(playlist))
+                        {
+                            if (GlobalData.Current.Playlists.ContainsKey(playlist))
+                                GlobalData.Current.Playlists[playlist].Add(urlType[SearchProcessing.Query.Video]);
+                            else
+                                GlobalData.Current.Playlists.Add(playlist, new List<string>() { urlType[SearchProcessing.Query.Video] });
+
+                            GlobalData.Current.PlaylistsNeedRefresh = true;
+                            GlobalData.Current.SaveConfig();
+
+                            Global.Application.ShowSnackbar(Localization.SnackPlaylist);
+                        }
+                    }
+                    else if (GlobalData.Current.Playlists.ContainsKey(answer))
+                    {
+                        if (!GlobalData.Current.Playlists[answer].Contains(urlType[SearchProcessing.Query.Video]))
+                            GlobalData.Current.Playlists[answer].Add(urlType[SearchProcessing.Query.Video]);
+
+                        GlobalData.Current.PlaylistsNeedRefresh = true;
+                        GlobalData.Current.SaveConfig();
+                        Global.Application.ShowSnackbar(Localization.SnackPlaylist);
                     }
                 }
             }

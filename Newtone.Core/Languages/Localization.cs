@@ -119,6 +119,10 @@ public static string CoverSave { get { return CurrentLocalization.CoverSave; } }
 /// </summary>
 public static string Disconnect { get { return CurrentLocalization.Disconnect; } }
 /// <summary>
+/// Wyszukuje zlokalizowany ciąg podobny do ciągu Pobierz
+/// </summary>
+public static string Download { get { return CurrentLocalization.Download; } }
+/// <summary>
 /// Wyszukuje zlokalizowany ciąg podobny do ciągu Plik jest uszkodzony
 /// </summary>
 public static string FileCorrupted { get { return CurrentLocalization.FileCorrupted; } }
@@ -484,6 +488,7 @@ public string Cover = "Okładka";
 public string CoverLoad = "Wczytaj okładkę";
 public string CoverSave = "Zapisz okładkę";
 public string Disconnect = "Rozłącz";
+public string Download = "Pobierz";
 public string FileCorrupted = "Plik jest uszkodzony";
 public string FileDownloaded = "Pobrano";
 public string FolderExists = "Folder nie istnieje";

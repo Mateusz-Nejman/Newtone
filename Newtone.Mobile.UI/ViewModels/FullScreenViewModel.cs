@@ -5,7 +5,6 @@ using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
-using Newtone.Core.Processing;
 using Newtone.Mobile.UI.Logic;
 using Newtone.Mobile.UI.Processing;
 using Newtone.Mobile.UI.Views;
@@ -25,13 +24,11 @@ namespace Newtone.Mobile.UI.ViewModels
         private string trackDuration;
         private ImageSource middleButton; //Play or pause
         private ImageSource modeButton;
-        private ImageSource menuButton;
         private bool backgroundGridVisible;
         private double audioSliderMax;
         private double audioSliderValue;
 
         private readonly bool stopTimer = false;
-        private bool isMenuImage = true;
         private bool isPlayImage = true;
         private string playedTrack = "";
         private PlayerMode playerMode = PlayerMode.All;
@@ -126,16 +123,6 @@ namespace Newtone.Mobile.UI.ViewModels
             set
             {
                 modeButton = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ImageSource MenuButton
-        {
-            get => menuButton;
-            set
-            {
-                menuButton = value;
                 OnPropertyChanged();
             }
         }
@@ -262,14 +249,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (menuButtonCommand == null)
                     menuButtonCommand = new ActionCommand(parameter =>
                     {
-                        if (GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
-                        {
-                            ContextMenuBuilder.BuildForTrack((Xamarin.Forms.View)parameter, GlobalData.Current.MediaSource.FilePath + GlobalData.SEPARATOR);
-                        }
-                        else
-                        {
-                            DownloadProcessing.Add(GlobalData.Current.MediaSource.FilePath, GlobalData.Current.MediaSource.Title, "", "");
-                        }
+                        ContextMenuBuilder.BuildForTrack((Xamarin.Forms.View)parameter, GlobalData.Current.MediaSource.FilePath + GlobalData.SEPARATOR);
                     });
 
                 return menuButtonCommand;
@@ -293,7 +273,6 @@ namespace Newtone.Mobile.UI.ViewModels
         #region Constructors
         public FullScreenViewModel()
         {
-            MenuButton = ImageSource.FromFile("MenuIcon.png");
             MiddleButton = ImageSource.FromFile("PlayIcon.png");
             ModeButton = ImageSource.FromFile("RepeatIcon.png");
         }
@@ -374,18 +353,6 @@ namespace Newtone.Mobile.UI.ViewModels
                     ModeButton = ImageSource.FromFile("RandomIcon.png");
 
                 playerMode = GlobalData.Current.PlayerMode;
-            }
-
-            if (isMenuImage && GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Web)
-            {
-                MenuButton = ImageSource.FromFile("DownloadIcon.png");
-                isMenuImage = false;
-            }
-
-            if (!isMenuImage && GlobalData.Current.MediaSource.Type == Newtone.Core.Media.MediaSource.SourceType.Local)
-            {
-                MenuButton = ImageSource.FromFile("MenuIcon.png");
-                isMenuImage = true;
             }
             return !stopTimer;
         }

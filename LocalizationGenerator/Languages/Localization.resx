@@ -189,6 +189,9 @@
   <data name="Disconnect" xml:space="preserve">
     <value>Rozłącz</value>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Pobierz</value>
+  </data>
   <data name="FileCorrupted" xml:space="preserve">
     <value>Plik jest uszkodzony</value>
   </data>

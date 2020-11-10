@@ -24,6 +24,7 @@ this.Cover = "Cover";
 this.CoverLoad = "Load cover";
 this.CoverSave = "Save cover";
 this.Disconnect = "Disconnect";
+this.Download = "Download";
 this.FileCorrupted = "File is corrupted";
 this.FileDownloaded = "Downloaded";
 this.FolderExists = "The folder does not exist";

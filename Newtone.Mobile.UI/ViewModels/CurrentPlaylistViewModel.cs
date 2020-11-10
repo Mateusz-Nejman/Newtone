@@ -73,6 +73,17 @@ namespace Newtone.Mobile.UI.ViewModels
         {
             foreach (var model in TrackItems.ToList())
                 model.CheckChanges();
+
+            if(GlobalData.Current.CurrentPlaylistNeedRefresh)
+            {
+                TrackItems.Clear();
+
+                foreach(var track in GlobalData.Current.CurrentPlaylist.ToList())
+                {
+                    TrackItems.Add(new TrackModel(track, "", false));
+                }
+                GlobalData.Current.CurrentPlaylistNeedRefresh = false;
+            }
         }
         #endregion
     }

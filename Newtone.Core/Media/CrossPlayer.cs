@@ -2,6 +2,7 @@
 using Newtone.Core.Logic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -85,7 +86,7 @@ namespace Newtone.Core.Media
             {
                 List<MediaSource> newPlaylist = new List<MediaSource>();
 
-                playlist.ForEach(track => newPlaylist.Add(GlobalData.Current.Audios[track]));
+                playlist.ForEach(track => newPlaylist.Add(track.Length == 11 ? GlobalData.Current.SavedTracks[track] : GlobalData.Current.Audios[track]));
 
                 return newPlaylist;
             }, currentIndex, load, play);
@@ -167,18 +168,18 @@ namespace Newtone.Core.Media
                 }
             }
 
-            Console.WriteLine("Load " + filename + " using " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerControler"));
+            Debug.WriteLine("Load " + filename + " using " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerControler"));
             PlayerController?.Load(this, filename);
-            Console.WriteLine("Loaded "+filename);
+            Debug.WriteLine("Loaded "+filename);
             try
             {
-                Console.WriteLine("Prepare "+filename);
+                Debug.WriteLine("Prepare "+filename);
                 BasePlayer?.Prepare();
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
-                Console.WriteLine("Error in " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerController"));
+                Debug.WriteLine(e);
+                Debug.WriteLine("Error in " + (PlayerController is WebPlayerController ? "WebPlayerController" : "LocalPlayerController"));
                 Error(GlobalData.ERROR_CORRUPTED);
                 IsLoading = false;
             }

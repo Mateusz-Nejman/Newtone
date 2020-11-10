@@ -3,6 +3,8 @@ using Newtone.Mobile.UI.ViewModels.Custom;
 using System;
 
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
 
 namespace Newtone.Mobile.UI.Views.Custom
@@ -18,6 +20,7 @@ namespace Newtone.Mobile.UI.Views.Custom
         {
             InitializeComponent();
             ViewModel = BindingContext as PlayerPanelViewModel;
+            backgroundImage.On<iOS>().UseBlurEffect(BlurEffectStyle.Light);
         }
         #endregion
         #region Public Methods

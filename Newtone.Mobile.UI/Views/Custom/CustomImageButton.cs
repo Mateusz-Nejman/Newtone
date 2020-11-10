@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace Newtone.Mobile.UI.Views.Custom
@@ -42,7 +43,7 @@ namespace Newtone.Mobile.UI.Views.Custom
 
             // Fire event
             toggleButton.Toggled?.Invoke(toggleButton, new ToggledEventArgs(isToggled));
-            Console.WriteLine("Change toggle to " + isToggled);
+            Debug.WriteLine("Change toggle to " + isToggled);
             // Set the visual state
             VisualStateManager.GoToState(toggleButton, isToggled ? "ToggledOn" : "Normal");
         }
