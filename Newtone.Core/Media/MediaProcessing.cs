@@ -19,8 +19,7 @@ namespace Newtone.Core.Media
             try
             {
                 ATL.Track audioFile = new ATL.Track(filePath);
-                if (audioFile.DurationMs < MINIMUM_TRACK_DURATION * 1000)
-                    return null;
+                Console.WriteLine(audioFile.DurationMs);
                 container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;
 
                 container.Artist = audioFile.Artist == "" ? Localization.UnknownArtist : audioFile.Artist;
@@ -51,6 +50,12 @@ namespace Newtone.Core.Media
                 container.Artist = newTags.Author;
                 container.Title = newTags.Title;
                 container.Image ??= newTags.Image;
+
+                if(container.Duration.TotalMilliseconds == 0)
+                {
+                    container.Duration = newTags.TempDuration;
+                }
+
 
                 if (!string.IsNullOrEmpty(newTags.Id) && !GlobalData.Current.DownloadedIds.Contains(newTags.Id))
                     GlobalData.Current.DownloadedIds.Add(newTags.Id);

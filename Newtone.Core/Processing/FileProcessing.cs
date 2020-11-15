@@ -16,10 +16,14 @@ namespace Newtone.Core.Processing
 
                 string[] mp3Files = null;
                 string[] m4aFiles = null;
+                string[] oggFiles = null;
+                string[] opusFiles = null;
                 try
                 {
                     mp3Files = Directory.GetFiles(directory, "*.mp3");
                     m4aFiles = Directory.GetFiles(directory, "*.m4a");
+                    oggFiles = Directory.GetFiles(directory, "*.ogg");
+                    opusFiles = Directory.GetFiles(directory, "*.opus");
                 }
                 catch
                 {
@@ -29,6 +33,8 @@ namespace Newtone.Core.Processing
                 List<string> files = new List<string>();
                 files.AddRange(mp3Files);
                 files.AddRange(m4aFiles);
+                files.AddRange(oggFiles);
+                files.AddRange(opusFiles);
 
                 files.ForEach(filepath =>
                 {

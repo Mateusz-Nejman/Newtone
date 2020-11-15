@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Nejman.Xamarin.FocusLibrary;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
@@ -21,6 +23,7 @@ namespace Newtone.Mobile.UI.ViewModels
         #endregion
         #region Properties
         public ObservableCollection<TrackModel> TrackItems { get; private set; }
+        public ObservableCollection<NListViewItem> ListItems { get; private set; }
         public bool IsRefreshing
         {
             get => isRefreshing;
@@ -29,6 +32,11 @@ namespace Newtone.Mobile.UI.ViewModels
                 isRefreshing = value;
                 OnPropertyChanged();
             }
+        }
+
+        public Func<NListViewItem, View> ItemTemplate
+        {
+            get => item => new Views.TV.ViewCells.TrackViewCell(item);
         }
         #endregion
         #region Commands
@@ -55,6 +63,24 @@ namespace Newtone.Mobile.UI.ViewModels
                 return refresh;
             }
         }
+
+        private ICommand itemSelected;
+        public ICommand ItemSelected
+        {
+            get
+            {
+                if (itemSelected == null)
+                    itemSelected = new ActionCommand(parameter =>
+                    {
+                        int index = (int)parameter;
+                        if (index >= 0 && index < TrackItems.Count)
+                        {
+                            GlobalData.Current.MediaPlayer.LoadPlaylist(TrackItems.Select(item => item.FilePath).ToList(), index, true, true);
+                        }
+                    });
+                return itemSelected;
+            }
+        }
         #endregion
         #region Constructors
         public CurrentTracksViewModel(List<string> tracks, string playlistName)
@@ -74,6 +100,12 @@ namespace Newtone.Mobile.UI.ViewModels
                 }
             }
             TrackItems = new ObservableCollection<TrackModel>(playlistName == "" ? beforeSort.OrderBy(item => item.TrackString).ToList() : beforeSort);
+            ListItems = new ObservableCollection<NListViewItem>();
+
+            foreach(var item in TrackItems)
+            {
+                ListItems.Add(item);
+            }
         }
         #endregion
         #region Public Methods
@@ -82,13 +114,14 @@ namespace Newtone.Mobile.UI.ViewModels
         {
             if (TrackItems.Count == 0)
             {
-                _ = NormalPage.NavigationInstance.PopModalAsync();
+                _ = Global.NavigationInstance.PopModalAsync();
                 return;
             }
 
             if(GlobalData.Current.PlaylistsNeedRefresh)
             {
                 TrackItems.Clear();
+                ListItems.Clear();
 
                 List<TrackModel> beforeSort = new List<TrackModel>();
                 foreach (string track in tracks)
@@ -107,6 +140,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 foreach(var item in afterSort)
                 {
                     TrackItems.Add(item);
+                    ListItems.Add(TrackItems[^1]);
                 }
 
                 GlobalData.Current.PlaylistsNeedRefresh = false;
@@ -123,6 +157,7 @@ namespace Newtone.Mobile.UI.ViewModels
                         int index = TrackItems.IndexOf(model);
                         TrackItems[index].Title = source.Title;
                         TrackItems[index].Artist = source.Artist;
+                        ListItems[index] = model;
                     }
                     model.CheckChanges();
                 }
@@ -134,23 +169,23 @@ namespace Newtone.Mobile.UI.ViewModels
                         int index = TrackItems.IndexOf(model);
                         TrackItems[index].Title = source.Title;
                         TrackItems[index].Artist = source.Artist;
+                        ListItems[index] = model;
                     }
                     model.CheckChanges();
                 }
                 else
                 {
                     TrackItems.Remove(model);
+                    Device.BeginInvokeOnMainThread(() => ListItems.Remove(model));
                 }
             }
         }
 
         public void TrackListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            int index = e.SelectedItemIndex;
-
-            if (index >= 0 && index < TrackItems.Count)
+            ItemSelected.Execute(e.SelectedItemIndex);
+            if (!Global.TV)
             {
-                GlobalData.Current.MediaPlayer.LoadPlaylist(TrackItems.Select(item => item.FilePath).ToList(), index, true, true);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
         }

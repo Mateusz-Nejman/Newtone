@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:Newtone.Mobile.UI.ViewModels"
+             xmlns:local="clr-namespace:Newtone.Mobile.UI"
+             xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core" xmlns:focuslibrary="clr-namespace:Nejman.Xamarin.FocusLibrary"
+             x:Class="Newtone.Mobile.UI.Views.TV.SettingsPage">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="DefaultButton">
+                <Setter Property="BackgroundColor" Value="{Static local:Colors.ColorPrimary}"/>
+                <Setter Property="BorderColor" Value="{Static local:Colors.ColorThirdary}"/>
+                <Setter Property="TextColor" Value="{Static local:Colors.TextColor}"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#fe000000"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#12ffffff"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#FE000000"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.BindingContext>
+        <viewmodels:SettingsViewModel/>
+    </ContentView.BindingContext>
+    <ContentView.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                <Label Text="Newtone" FontSize="48" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center"/>
+                <Label Text="{Binding Version}" FontSize="16" TextColor="{x:Static local:Colors.BadgeColor}" FontFamily="{x:Static local:Fonts.Black}" HorizontalOptions="Center"/>
+                <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Regular}"/>
+                <Label Text="{x:Static localization:Localization.AboutDesc}" FontSize="16" TextColor="{x:Static local:Colors.TextColor}" FontFamily="{x:Static local:Fonts.Regular}" LineBreakMode="WordWrap"/>
+                <focuslibrary:NButton 
+                    x:Name="wwwButton" 
+                    Style="{StaticResource DefaultButton}" 
+                    Text="{Static localization:Localization.AboutWWW}" 
+                    NCommand="{Binding GotoWWW}"
+                    NextFocusRight="{x:Reference settingsList}"/>
+            </StackLayout>
+            <focuslibrary:NUntouchedListView
+                Grid.Column="1"
+                Orientation="Vertical"
+                NItemHeight="72"
+                NFocusColor="White"
+                NItemWidth="400"
+                NItemTemplate="{Binding ItemTemplate}"
+                NItemSource="{Binding ListItems}"
+                x:Name="settingsList"
+                NextFocusLeft="{x:Reference wwwButton}"
+                />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

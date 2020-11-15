@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
+             xmlns:local="clr-namespace:Newtone.Mobile.UI" 
+             xmlns:viewmodels="clr-namespace:Newtone.Mobile.UI.ViewModels" 
+             xmlns:focuslibrary="clr-namespace:Nejman.Xamarin.FocusLibrary"
+             x:Class="Newtone.Mobile.UI.Views.TV.LanguageSelectPage"
+             BackgroundColor="{x:Static local:Colors.ColorPrimary}">
+    <ContentPage.BindingContext>
+        <viewmodels:LanguageSelectViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <focuslibrary:NImageButton Margin="10" x:Name="nImageButtonPoland" Grid.Row="1" Source="PolandFlag.png" NCommand="{Binding Polish}" Style="{StaticResource NTransparentImageButton}" IsNFocused="True" NextFocusRight="{x:Reference nImageButtonEngland}"/>
+            <focuslibrary:NImageButton Margin="10" x:Name="nImageButtonEngland" Grid.Row="1" Grid.Column="1" Source="EnglandFlag.png" NCommand="{Binding English}" Style="{StaticResource NTransparentImageButton}" NextFocusLeft="{x:Reference nImageButtonPoland}" NextFocusRight="{x:Reference nImageButtonRussia}"/>
+            <focuslibrary:NImageButton Margin="10" x:Name="nImageButtonRussia" Grid.Row="1" Grid.Column="2" Source="RussiaFlag.png" NCommand="{Binding Russian}" Style="{StaticResource NTransparentImageButton}" NextFocusLeft="{x:Reference nImageButtonEngland}"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

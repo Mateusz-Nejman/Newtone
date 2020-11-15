@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
+             xmlns:local="clr-namespace:Newtone.Mobile.UI"
+             x:Class="Newtone.Mobile.UI.Views.TV.ViewCells.ArtistGridItem">
+    <ContentView.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="18"/>
+            </Grid.RowDefinitions>
+
+            <Image Source="{Binding Image}"
+                   Aspect="AspectFill"/>
+            <Label 
+                Text="{Binding Name}"
+                TextColor="{Static local:Colors.TextColor}" 
+                FontFamily="{x:Static local:Fonts.Regular}" 
+                FontSize="14" 
+                LineBreakMode="TailTruncation"
+                HorizontalOptions="Center" 
+                HorizontalTextAlignment="Center"
+                Grid.Row="1"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

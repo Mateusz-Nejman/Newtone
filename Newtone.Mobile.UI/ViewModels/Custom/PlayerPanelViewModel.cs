@@ -126,7 +126,7 @@ namespace Newtone.Mobile.UI.ViewModels.Custom
                     {
                         if (GlobalData.Current.MediaSource != null)
                         {
-                            await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
+                            await Global.NavigationInstance.PushModalAsync(new FullScreenPage());
                         }
                     });
                 return gotoPlayerCommand;

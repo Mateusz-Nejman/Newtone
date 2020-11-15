@@ -9,21 +9,6 @@ namespace Newtone.Mobile.UI.ViewModels
 {
     public class LanguageSelectViewModel : PropertyChangedBase
     {
-        #region Fields
-        private string nextPage;
-        #endregion
-        #region Properties
-        public string NextPage
-        {
-            get => nextPage;
-            set
-            {
-                nextPage = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
-
         #region Commands
         private ICommand english;
         public ICommand English
@@ -71,9 +56,8 @@ namespace Newtone.Mobile.UI.ViewModels
         }
         #endregion
         #region Constructors
-        public LanguageSelectViewModel(string nextPage)
+        public LanguageSelectViewModel()
         {
-            NextPage = nextPage;
         }
         #endregion
         #region Private Methods
@@ -82,10 +66,12 @@ namespace Newtone.Mobile.UI.ViewModels
         {
             GlobalData.Current.CurrentLanguage = lang;
             Localization.RefreshLanguage();
-            if (NextPage == "permissions")
+            if(Global.TV)
+                App.Instance.MainPage = new Views.TV.PermissionPage();
+            else
+            {
                 App.Instance.MainPage = new PermissionPage();
-            else if (NextPage == "firststart")
-                App.Instance.MainPage = new FirstStartPage();
+            }
         }
         #endregion
     }

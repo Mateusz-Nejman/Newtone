@@ -21,11 +21,12 @@ using Newtone.Core.Processing;
 using Newtone.Core.Languages;
 using Newtone.Mobile.UI.Logic;
 using Newtone.Mobile.Droid.Media;
-using Newtone.Mobile.UI.Views;
 using Xamarin.Forms;
 using Newtone.Mobile.UI;
 using Newtone.Mobile.Droid.Logic;
 using Newtone.Mobile.Droid.Processing;
+using Nejman.Xamarin.FocusLibrary;
+using Android.Views;
 
 namespace Newtone.Mobile.Droid
 {
@@ -34,10 +35,12 @@ namespace Newtone.Mobile.Droid
     [IntentFilter(new[] { MediaStore.IntentActionMediaPlayFromSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { MediaStore.IntentActionMediaSearch }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic })]
     [IntentFilter(new[] { Intent.ActionGetContent }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable, Intent.CategoryAppMusic }, DataMimeType = "audio/*")]
+    [IntentFilter(new[] { Intent.ActionMain }, Categories = new[] { Intent.CategoryLeanbackLauncher })]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         #region Fields
         private bool backPressed = false;
+        private bool shortPress = false;
         public static MainActivity Instance { get; set; }
         #endregion
         #region Protected Methods
@@ -135,6 +138,71 @@ namespace Newtone.Mobile.Droid
 
             }
         }
+
+        public override bool OnKeyDown([GeneratedEnum] Keycode keyCode, KeyEvent e)
+        {
+            var currentElement = FocusContext.GetFocusElement();
+
+            if (keyCode == Keycode.DpadLeft)
+                currentElement.FocusLeft();
+            else if (keyCode == Keycode.DpadRight)
+                currentElement.FocusRight();
+            else if (keyCode == Keycode.DpadUp)
+                currentElement.FocusUp();
+            else if (keyCode == Keycode.DpadDown)
+                currentElement.FocusDown();
+            else if (keyCode == Keycode.Back)
+                OnBackPressed();
+            else if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter && e.Action == KeyEventActions.Down)
+            {
+                e.StartTracking();
+                if (e.RepeatCount == 0)
+                {
+                    shortPress = true;
+                }
+            }
+
+            return true;
+        }
+
+        public override bool OnKeyLongPress([GeneratedEnum] Keycode keyCode, KeyEvent e)
+        {
+            if(keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter)
+            {
+                shortPress = false;
+                var currentElement = FocusContext.GetFocusElement();
+
+                if(currentElement is NListViewItem listViewItem)
+                {
+                    listViewItem.LongFocusAction();
+                    return true;
+                }
+
+                if(currentElement is NUntouchedListView listView)
+                {
+                    listView.LongFocusAction();
+                    return true;
+                }
+            }
+
+            return true;
+        }
+
+        public override bool OnKeyUp([GeneratedEnum] Keycode keyCode, KeyEvent e)
+        {
+            if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter)
+            {
+                if(shortPress)
+                {
+                    var currentElement = FocusContext.GetFocusElement();
+                    currentElement.FocusAction();
+                }
+
+                shortPress = false;
+            }
+
+            return true;
+        }
         #endregion
         #region Private Methods
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
@@ -176,6 +244,8 @@ namespace Newtone.Mobile.Droid
             UI.Global.Application = new DroidApplication();
             UI.Global.ImageProcessing = new DroidImageProcessing();
             UI.Global.ContextMenuBuilder = new DroidContextMenuBuilder();
+            UI.Global.TV = ((UiModeManager)GetSystemService(UiModeService)).CurrentModeType == Android.Content.Res.UiMode.TypeTelevision;
+            GlobalData.Current.MediaFormat = UI.Global.TV ? Core.Media.MediaFormat.ogg : Core.Media.MediaFormat.m4a;
 
             Global.AssetManager = this.Assets;
 
@@ -309,7 +379,7 @@ namespace Newtone.Mobile.Droid
         #region Public Methods
         public override void OnBackPressed()
         {
-            if (NormalPage.NavigationInstance.NavigationStack.Count == 0 && NormalPage.NavigationInstance.ModalStack.Count == 0)
+            if (Newtone.Mobile.UI.Global.NavigationInstance.NavigationStack.Count == 0 && Newtone.Mobile.UI.Global.NavigationInstance.ModalStack.Count == 0)
             {
                 if (backPressed)
                     base.OnBackPressed();
@@ -326,7 +396,7 @@ namespace Newtone.Mobile.Droid
             }
             else
             {
-                NormalPage.NavigationInstance.Pop();
+                Newtone.Mobile.UI.Global.NavigationInstance.Pop();
             }
 
         }

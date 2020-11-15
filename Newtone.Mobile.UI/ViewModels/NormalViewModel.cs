@@ -246,7 +246,7 @@ namespace Newtone.Mobile.UI.ViewModels
                         if (GlobalData.Current.MediaSource != null)
                         {
 
-                            await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
+                            await Global.NavigationInstance.PushModalAsync(new FullScreenPage());
                         }
                     });
                 return gotoPlayerCommand;
@@ -341,7 +341,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (gotoDownloadCommand == null)
                     gotoDownloadCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
+                        await Global.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
                     });
 
                 return gotoDownloadCommand;
@@ -465,9 +465,9 @@ namespace Newtone.Mobile.UI.ViewModels
             if (index >= 0 && index < SuggestionItems.Count)
             {
                 if (Global.Application.HasInternet())
-                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
+                    await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
                 else
-                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                    await Global.Page.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
 
                 (sender as ListView).SelectedItem = null;
             }

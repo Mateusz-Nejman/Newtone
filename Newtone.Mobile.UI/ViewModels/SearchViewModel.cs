@@ -101,7 +101,7 @@ namespace Newtone.Mobile.UI.ViewModels
             SearchText = searchText;
             if (!string.IsNullOrEmpty(SearchText))
             {
-                await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SearchText), SearchText));
+                await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SearchText), SearchText));
             }
         }
 
@@ -112,9 +112,9 @@ namespace Newtone.Mobile.UI.ViewModels
             if (index >= 0 && index < Items.Count)
             {
                 if (Global.Application.HasInternet())
-                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(Items[index].Text), Items[index].Text));
+                    await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(Items[index].Text), Items[index].Text));
                 else
-                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                    await Global.Page.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
 
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
@@ -127,9 +127,9 @@ namespace Newtone.Mobile.UI.ViewModels
             if (index >= 0 && index < SuggestionItems.Count)
             {
                 if (Global.Application.HasInternet())
-                    await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
+                    await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(SuggestionItems[index].Text), SuggestionItems[index].Text));
                 else
-                    await NormalPage.Instance.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
+                    await Global.Page.DisplayAlert(Localization.Warning, Localization.NoConnection, Localization.Cancel);
 
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }

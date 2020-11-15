@@ -203,7 +203,7 @@ namespace Newtone.Mobile.Droid.Media
                                 items[a].Image = data;
                                 items[a].CheckChanges();
 
-                                GlobalData.Current.CurrentPlaylist.Add(items[a]);
+                                GlobalData.Current.CurrentPlaylist.Add(items[a].ToMediaSource());
 
                                 if (a == 0)
                                 {

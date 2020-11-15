@@ -1,4 +1,6 @@
-﻿namespace Newtone.Core.Media
+﻿using System;
+
+namespace Newtone.Core.Media
 {
     public class MediaSourceTag
     {
@@ -7,6 +9,7 @@
         public string Title { get; set; }
         public string Author { get; set; }
         public byte[] Image { get; set; }
+        public TimeSpan TempDuration { get; set; }
         #endregion
     }
 }

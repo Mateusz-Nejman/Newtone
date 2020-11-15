@@ -17,11 +17,25 @@ namespace Newtone.Mobile.UI
             Instance = this;
             if (Global.Permissions.IsValid() && File.Exists(GlobalData.Current.DataPath + "/newtone.nsec2"))
             {
-                MainPage = new NormalPage();
+                if(Global.TV)
+                {
+                    MainPage = new Views.TV.NormalPage();
+                }
+                else
+                {
+                    MainPage = new NormalPage();
+                }
             }
             else
             {
-                MainPage = new LanguageSelectPage("permissions");
+                if(Global.TV)
+                {
+                    MainPage = new Views.TV.LanguageSelectPage();
+                }
+                else
+                {
+                    MainPage = new LanguageSelectPage();
+                }
             }
         }
         #endregion

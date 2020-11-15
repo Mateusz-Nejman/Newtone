@@ -72,7 +72,7 @@ namespace Newtone.Mobile.UI.ViewModels.ViewCells
                 if (pressedCommand == null)
                     pressedCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Artists[ArtistName], ""), ArtistName));
+                        await Global.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Artists[ArtistName], ""), ArtistName));
                     });
                 return pressedCommand;
             }
@@ -80,6 +80,12 @@ namespace Newtone.Mobile.UI.ViewModels.ViewCells
         #endregion
         #region Constructors
         public ArtistGridItemViewModel(string artistName, Xamarin.Forms.View view)
+        {
+            Initialize(artistName, view);
+        }
+        #endregion
+        #region Public Methods
+        public void Initialize(string artistName, View view)
         {
             View = view;
             ArtistName = artistName;

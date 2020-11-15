@@ -103,10 +103,7 @@ namespace Newtone.Mobile.UI.Views
         {
             if (GlobalData.Current.ArtistsNeedRefresh && !isInitializing && Global.Loaded)
             {
-                if (generatedChildrens != null)
-                {
-                    generatedChildrens = null;
-                }
+                generatedChildrens = null;
 
                 Init();
                 GlobalData.Current.ArtistsNeedRefresh = false;

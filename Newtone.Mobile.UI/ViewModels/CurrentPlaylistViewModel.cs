@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Nejman.Xamarin.FocusLibrary;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
@@ -25,6 +27,11 @@ namespace Newtone.Mobile.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Func<NListViewItem, View> ItemTemplate
+        {
+            get => item => new Views.TV.ViewCells.TrackViewCell(item);
+        }
         #endregion
         #region Commands
         private ICommand refresh;
@@ -39,11 +46,29 @@ namespace Newtone.Mobile.UI.ViewModels
                         TrackItems = new ObservableCollection<TrackModel>();
                         foreach (var track in GlobalData.Current.CurrentPlaylist)
                         {
-                            TrackItems.Add(new TrackModel(track, "", false));
+                            TrackItems.Add(new TrackModel(track, "", false, true));
                         }
                         IsRefreshing = false;
                     });
                 return refresh;
+            }
+        }
+
+        private ICommand itemSelected;
+        public ICommand ItemSelected
+        {
+            get
+            {
+                if (itemSelected == null)
+                    itemSelected = new ActionCommand(parameter =>
+                    {
+                        int index = (int)parameter;
+                        if (index >= 0 && index < TrackItems.Count)
+                        {
+                            GlobalData.Current.MediaPlayer.LoadPlaylist(TrackItems.Select(item => item.FilePath).ToList(), index, true, true);
+                        }
+                    });
+                return itemSelected;
             }
         }
         #endregion
@@ -53,18 +78,16 @@ namespace Newtone.Mobile.UI.ViewModels
             TrackItems = new ObservableCollection<TrackModel>();
             foreach (var track in GlobalData.Current.CurrentPlaylist)
             {
-                TrackItems.Add(new TrackModel(track, "", false));
+                TrackItems.Add(new TrackModel(track, "", false, true));
             }
         }
         #endregion
         #region Public Methods
         public void TrackListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            int index = e.SelectedItemIndex;
-
-            if (index >= 0 && index < TrackItems.Count)
+            ItemSelected.Execute(e.SelectedItemIndex);
+            if(!Global.TV)
             {
-                GlobalData.Current.MediaPlayer.LoadPlaylist(TrackItems.Select(item => item.FilePath).ToList(), index, true, true);
                 (sender as Xamarin.Forms.ListView).SelectedItem = null;
             }
         }
@@ -80,7 +103,7 @@ namespace Newtone.Mobile.UI.ViewModels
 
                 foreach(var track in GlobalData.Current.CurrentPlaylist.ToList())
                 {
-                    TrackItems.Add(new TrackModel(track, "", false));
+                    TrackItems.Add(new TrackModel(track, "", false, true));
                 }
                 GlobalData.Current.CurrentPlaylistNeedRefresh = false;
             }

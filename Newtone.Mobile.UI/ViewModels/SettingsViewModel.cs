@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
+using Nejman.Xamarin.FocusLibrary;
 using Newtone.Core;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
-using Newtone.Mobile.UI.Views;
+using Newtone.Mobile.UI.Views.TV.ViewCells;
 using Xamarin.Forms;
 using SettingsModel = Newtone.Mobile.UI.Models.SettingsModel;
 
@@ -30,6 +31,8 @@ namespace Newtone.Mobile.UI.ViewModels
             }
         }
 
+        public ObservableCollection<NListViewItem> ListItems { get; set; }
+
         public string Version
         {
             get => version;
@@ -39,6 +42,8 @@ namespace Newtone.Mobile.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Func<NListViewItem, View> ItemTemplate => item => new SettingsViewCell(item);
         #endregion
         #region Commands
         private ICommand gotoWWW;
@@ -67,6 +72,13 @@ namespace Newtone.Mobile.UI.ViewModels
                 new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.Current.AutoDownload ? Localization.Yes : Localization.No },
                 new SettingsModel() { Name = Localization.Settings3, Description = GlobalData.Current.IgnoreAutoFocus ? Localization.Yes : Localization.No }
             };
+
+            ListItems = new ObservableCollection<NListViewItem>();
+            foreach(var item in Items)
+            {
+                ListItems.Add(item);
+            }
+
             Version = "v" + Global.Application.GetVersion();
         }
         #endregion
@@ -120,7 +132,7 @@ namespace Newtone.Mobile.UI.ViewModels
                     }
                     else if (e.SelectedItemIndex == 3)
                     {
-                        string newLang = await NormalPage.Instance.DisplayActionSheet(Localization.Settings5, Localization.Cancel, null, Localization.LanguagePL, Localization.LanguageEN, Localization.LanguageRU);
+                        string newLang = await Global.Page.DisplayActionSheet(Localization.Settings5, Localization.Cancel, null, Localization.LanguagePL, Localization.LanguageEN, Localization.LanguageRU);
                         if (newLang == Localization.LanguagePL)
                             GlobalData.Current.CurrentLanguage = "pl";
                         else if (newLang == Localization.LanguageEN)
@@ -134,7 +146,7 @@ namespace Newtone.Mobile.UI.ViewModels
                     }
                     else if (e.SelectedItemIndex == 4)
                     {
-                        string newOption = await NormalPage.Instance.DisplayActionSheet(Localization.AutoDownload, Localization.Cancel, null, Localization.Yes, Localization.No);
+                        string newOption = await Global.Page.DisplayActionSheet(Localization.AutoDownload, Localization.Cancel, null, Localization.Yes, Localization.No);
 
                         if (newOption == Localization.Yes)
                         {
@@ -151,7 +163,7 @@ namespace Newtone.Mobile.UI.ViewModels
                     }
                     else if (e.SelectedItemIndex == 5)
                     {
-                        string newOption = await NormalPage.Instance.DisplayActionSheet(Localization.Settings3, Localization.Cancel, null, Localization.Yes, Localization.No);
+                        string newOption = await Global.Page.DisplayActionSheet(Localization.Settings3, Localization.Cancel, null, Localization.Yes, Localization.No);
 
                         if (newOption == Localization.Yes)
                         {

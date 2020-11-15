@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Newtone.Mobile.UI.Processing
@@ -18,7 +17,7 @@ namespace Newtone.Mobile.UI.Processing
 
         public static ImageSource FromArray(byte[] source)
         {
-            return ImageSource.FromStream(() => new MemoryStream(source));
+            return source == null ? ImageSource.FromFile("EmptyTrack.png") : ImageSource.FromStream(() => new MemoryStream(source));
         }
         #endregion
     }

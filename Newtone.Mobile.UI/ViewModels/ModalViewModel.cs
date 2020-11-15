@@ -74,7 +74,7 @@ namespace Newtone.Mobile.UI.ViewModels
                     {
                         if (GlobalData.Current.MediaSource != null)
                         {
-                            await NormalPage.NavigationInstance.PushModalAsync(new FullScreenPage());
+                            await Global.NavigationInstance.PushModalAsync(new FullScreenPage());
                         }
                     });
 
@@ -90,7 +90,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (toDownloadPage == null)
                     toDownloadPage = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
+                        await Global.NavigationInstance.PushModalAsync(new ModalPage(new DownloadPage(), Localization.TitleDownloads));
                     });
 
                 return toDownloadPage;
@@ -105,7 +105,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (backCommand == null)
                     backCommand = new ActionCommand(async (parameter) =>
                     {
-                        await NormalPage.NavigationInstance.PopModalAsync();
+                        await Global.NavigationInstance.PopModalAsync();
                     });
 
                 return backCommand;
@@ -124,12 +124,12 @@ namespace Newtone.Mobile.UI.ViewModels
 
         public void Appearing()
         {
-
+            //Not implemented
         }
 
         public void Disappearing()
         {
-
+            //Not implemented
         }
 
         public void Tick()

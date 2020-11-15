@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:focuslibrary="clr-namespace:Nejman.Xamarin.FocusLibrary"
+             x:Class="Newtone.Mobile.UI.Views.TV.SearchResultPage">
+    <ContentView.Content>
+        <focuslibrary:NUntouchedListView 
+            x:Name="searchResultList" 
+            NItemWidth="200" 
+            NItemHeight="200"
+            NFocusColor="White"
+            NItemAppearing="{Binding ItemAppearing}"
+            NItemTemplate="{Binding ItemTemplate}"
+            NItemSource="{Binding ListItems}"
+            NOrientation="Horizontal"
+            />
+    </ContentView.Content>
+</ContentView>

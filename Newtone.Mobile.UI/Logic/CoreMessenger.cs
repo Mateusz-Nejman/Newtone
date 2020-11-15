@@ -16,7 +16,7 @@ namespace Newtone.Mobile.UI.Logic
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await NormalPage.Instance.DisplayAlert(Localization.Warning, message, "OK");
+                await Global.Page.DisplayAlert(Localization.Warning, message, "OK");
             });
         }
 

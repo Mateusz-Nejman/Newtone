@@ -47,7 +47,6 @@ AD:\Projekty\CS\Newtone\Newtone.Core\Models\PropertyChangedBase.csutf-8H
 8D:\Projekty\CS\Newtone\Newtone.Core\Models\TrackModel.csutf-8M
 DD:\Projekty\CS\Newtone\Newtone.Core\Processing\DownloadProcessing.csutf-8I
 @D:\Projekty\CS\Newtone\Newtone.Core\Processing\FileProcessing.csutf-8K
-BD:\Projekty\CS\Newtone\Newtone.Core\Processing\SearchProcessing.csutf-8I
-@D:\Projekty\CS\Newtone\Newtone.Core\Processing\SyncProcessing.csutf-8w
+BD:\Projekty\CS\Newtone\Newtone.Core\Processing\SearchProcessing.csutf-8w
 lD:\Projekty\CS\Newtone\Newtone.Core\obj\Debug\netstandard2.1\.NETStandard,Version=v2.1.AssemblyAttributes.csutf-8d
 YD:\Projekty\CS\Newtone\Newtone.Core\obj\Debug\netstandard2.1\Newtone.Core.AssemblyInfo.csutf-8

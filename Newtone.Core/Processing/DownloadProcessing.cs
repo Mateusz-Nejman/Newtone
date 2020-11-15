@@ -209,7 +209,7 @@ namespace Newtone.Core.Processing
             string currentId = "";
             try
             {
-                if(Downloads.Keys.Count > 0)
+                if (Downloads.Keys.Count > 0)
                 {
                     string id = Downloads.Keys.First();
                     currentId = id;
@@ -227,7 +227,7 @@ namespace Newtone.Core.Processing
                         {
                             GlobalData.Current.Playlists[model.PlaylistName].Add(filename);
 
-                            foreach(var key in model.TracksToAddAfterDownload.Keys)
+                            foreach (var key in model.TracksToAddAfterDownload.Keys)
                             {
                                 GlobalData.Current.Playlists[key].Add(model.TracksToAddAfterDownload[key]);
                             }
@@ -286,7 +286,7 @@ namespace Newtone.Core.Processing
                 Replace('<', '_').
                 Replace('>', '_').
                 Replace('|', '_');
-            FileInfo fileInfo = new FileInfo(Path.Combine(GlobalData.Current.MusicPath, fileName + ".m4a"));
+            FileInfo fileInfo = new FileInfo(Path.Combine(GlobalData.Current.MusicPath, fileName + (GlobalData.Current.MediaFormat == MediaFormat.m4a ? ".m4a" : ".opus")));
 
             if (GlobalData.Current.DownloadedIds.Contains(id))
                 return fileInfo.FullName;
@@ -295,7 +295,8 @@ namespace Newtone.Core.Processing
 
             manifest.GetAudio().ForEach(item =>
             {
-                if (item.AudioCodec.Contains("mp4a"))
+                Console.WriteLine(item.AudioCodec);
+                if (item.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus"))
                 {
                     if (streamInfo == null)
                         streamInfo = item;
@@ -304,7 +305,7 @@ namespace Newtone.Core.Processing
                         streamInfo = item;
                 }
             });
-            await client.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(GlobalData.Current.MusicPath, fileName + ".m4a"), progress);
+            await client.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(GlobalData.Current.MusicPath, fileName + (GlobalData.Current.MediaFormat == MediaFormat.m4a ? ".m4a" : ".opus")), progress);
             string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
             string artist = splitted.Length == 1 ? video.Author : splitted[0];
             string title = splitted[splitted.Length == 1 ? 0 : 1];
@@ -327,10 +328,12 @@ namespace Newtone.Core.Processing
                 GlobalData.Current.AudioTags[f].Title = title;
                 GlobalData.Current.AudioTags[f].Image = picture;
                 GlobalData.Current.AudioTags[f].Id = video.Id;
+
+                GlobalData.Current.AudioTags[f].TempDuration = GlobalData.Current.MediaFormat == MediaFormat.m4a ? TimeSpan.FromMilliseconds(0) : video.Duration;
             }
             else
             {
-                GlobalData.Current.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id });
+                GlobalData.Current.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id, TempDuration = GlobalData.Current.MediaFormat == MediaFormat.ogg ? video.Duration : TimeSpan.FromMilliseconds(0) });
             }
 
             MediaSource container = MediaProcessing.GetSource(fileInfo.FullName);

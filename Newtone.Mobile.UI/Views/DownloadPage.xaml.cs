@@ -1,6 +1,5 @@
 ﻿using Newtone.Core.Logic;
 using Newtone.Mobile.UI.ViewModels;
-using System;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -28,12 +27,12 @@ namespace Newtone.Mobile.UI.Views
 
         public void Appearing()
         {
-            throw new NotImplementedException();
+            //Not implemented
         }
 
         public void Disappearing()
         {
-            throw new NotImplementedException();
+            //Not implemented
         }
         #endregion
     }

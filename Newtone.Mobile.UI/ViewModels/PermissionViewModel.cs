@@ -19,6 +19,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (grant == null)
                     grant = new ActionCommand(parameter =>
                     {
+                        System.Diagnostics.Debug.WriteLine("Permission Grant");
                         Global.Permissions.Request();
                     });
                 return grant;
@@ -38,7 +39,15 @@ namespace Newtone.Mobile.UI.ViewModels
             {
                 GlobalData.Current.SaveConfig();
 
-                App.Instance.MainPage = new NormalPage();
+                if(Global.TV)
+                {
+                    App.Instance.MainPage = new Views.TV.NormalPage();
+                }
+                else
+                {
+                    App.Instance.MainPage = new NormalPage();
+                }
+                
                 Task.Run(async () => {
                     await PopToRootAsync();
                 }).Wait();

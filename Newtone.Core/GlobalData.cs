@@ -1,5 +1,4 @@
-﻿using AngleSharp.Text;
-using Nejman.NSEC2;
+﻿using Nejman.NSEC2;
 using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
@@ -85,6 +84,7 @@ namespace Newtone.Core
         public bool HistoryNeedRefresh { get; set; }
         public int IncludedPathsToSkip { get; set; }
         public bool IgnoreAutoFocus { get; set; }
+        public MediaFormat MediaFormat { get; set; } = MediaFormat.m4a;
         #endregion
         #region Public Methods
         public void Initialize()
@@ -379,8 +379,16 @@ namespace Newtone.Core
 
                     string bufferItem = filepath + SEPARATOR + mediaSource.Author + SEPARATOR + mediaSource.Title + SEPARATOR + name;
 
-                    if (!string.IsNullOrWhiteSpace(mediaSource.Id))
-                        bufferItem += SEPARATOR + mediaSource.Id;
+                    bufferItem += SEPARATOR + mediaSource.Id;
+
+                    if(mediaSource.TempDuration == null)
+                    {
+                        bufferItem += SEPARATOR + "0";
+                    }
+                    else
+                    {
+                        bufferItem += SEPARATOR + mediaSource.TempDuration.TotalMilliseconds;
+                    }
 
                     bufferItem += "\n";
                     buffer += bufferItem;
@@ -407,16 +415,19 @@ namespace Newtone.Core
                 string[] tags = System.Text.Encoding.UTF8.GetString(nsec.Get(nsec.Exists("data") ? "data" : "tags")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 tags.ForEach(tagItem =>
                 {
-                    string[] values = tagItem.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+                    string[] values = tagItem.Split(SEPARATOR);
                     Debug.WriteLine("Load tags for " + values[0]);
 
                     MediaSourceTag tag = new MediaSourceTag()
                     {
                         Author = values[1],
                         Title = values[2],
-                        Image = nsec.Get(values[3]).Length > 0 ? nsec.Get(values[3]) : null,
-                        Id = values.Length > 4 ? values[4] : null
+                        Id = values.Length > 4 ? values[4] : null,
+                        TempDuration = values.Length > 5 ? TimeSpan.FromMilliseconds(double.Parse(values[5])) : TimeSpan.Zero
                     };
+
+                    nsec.TryGet(values[3], out byte[] data);
+                    tag.Image = data;
 
                     if (values.Length > 4 && !DownloadedIds.Contains(values[4]) && File.Exists(values[0]))
                         DownloadedIds.Add(values[4]);

@@ -1,6 +1,4 @@
-﻿using Newtone.Mobile.UI.ViewModels;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Newtone.Mobile.UI.Views
@@ -9,10 +7,9 @@ namespace Newtone.Mobile.UI.Views
     public partial class LanguageSelectPage : ContentPage
     {
         #region Constructors
-        public LanguageSelectPage(string nextPage)
+        public LanguageSelectPage()
         {
             InitializeComponent();
-            BindingContext = new LanguageSelectViewModel(nextPage);
         }
         #endregion
     }

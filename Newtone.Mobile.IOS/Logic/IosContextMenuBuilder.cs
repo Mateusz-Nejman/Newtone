@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtone.Core.Languages;
+using Newtone.Mobile.UI;
 using Newtone.Mobile.UI.Logic;
 using Newtone.Mobile.UI.Views;
 using Xamarin.Forms;
@@ -16,7 +17,7 @@ namespace Newtone.Mobile.IOS.Logic
             if(!opened)
             {
                 opened = true;
-                string selected = await NormalPage.Instance.DisplayActionSheet("", Localization.Cancel, null, elements.ToArray());
+                string selected = await Global.Page.DisplayActionSheet("", Localization.Cancel, null, elements.ToArray());
 
                 if (selected != Localization.Cancel)
                 {
@@ -31,7 +32,7 @@ namespace Newtone.Mobile.IOS.Logic
             if(!opened)
             {
                 opened = true;
-                string selected = await NormalPage.Instance.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
+                string selected = await Global.Page.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
 
                 if (selected != Localization.Cancel)
                 {
@@ -46,7 +47,7 @@ namespace Newtone.Mobile.IOS.Logic
             if(!opened)
             {
                 opened = true;
-                string selected = await NormalPage.Instance.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
+                string selected = await Global.Page.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
 
                 if (selected != Localization.Cancel)
                 {
@@ -61,7 +62,7 @@ namespace Newtone.Mobile.IOS.Logic
             if(!opened)
             {
                 opened = true;
-                string selected = await NormalPage.Instance.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
+                string selected = await Global.Page.DisplayActionSheet("", Localization.Cancel, Localization.Cancel, elements.ToArray());
 
                 if (selected != Localization.Cancel)
                 {

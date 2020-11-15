@@ -27,7 +27,7 @@ namespace Newtone.Core.Media
                 {
                     Debug.WriteLine(item.Size + " " + item.Bitrate + " " + item.AudioCodec);
                 }
-                player.BasePlayer.Load(manifest.GetAudioOnly().Where(info => info.AudioCodec.Contains("mp4a")).OrderByDescending(info => info.Bitrate.BitsPerSecond).First().Url);
+                player.BasePlayer.Load(manifest.GetAudioOnly().Where(info => info.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus")).OrderByDescending(info => info.Bitrate.BitsPerSecond).First().Url);
             }).Wait();
             
         }

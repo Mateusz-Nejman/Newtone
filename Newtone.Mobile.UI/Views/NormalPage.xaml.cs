@@ -14,14 +14,6 @@ namespace Newtone.Mobile.UI.Views
     {
         #region Properties
         private NormalViewModel ViewModel { get; set; }
-        public static NormalPage Instance { get; set; }
-        public static NavigationWrapper NavigationInstance
-        {
-            get
-            {
-                return new NavigationWrapper(Instance.Navigation);
-            }
-        }
         #endregion
         #region Constructors
         public NormalPage()
@@ -31,7 +23,8 @@ namespace Newtone.Mobile.UI.Views
             var safeAreaInset = On<iOS>().SafeAreaInsets();
             page.Padding = safeAreaInset;
             BindingContext = ViewModel = new NormalViewModel(container, playerPanel, searchEntry);
-            Instance = this;
+            Global.NavigationInstance = new NavigationWrapper(this.Navigation);
+            Global.Page = this;
             Appearing += PageAppearing;
             Disappearing += PageDisappearing;
         }
@@ -66,7 +59,7 @@ namespace Newtone.Mobile.UI.Views
         {
             if (!string.IsNullOrEmpty(ViewModel?.EntryText))
             {
-                await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(ViewModel?.EntryText), ViewModel?.EntryText));
+                await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(ViewModel?.EntryText), ViewModel?.EntryText));
             }
         }
         private void Entry_Focused(object sender, FocusEventArgs e)

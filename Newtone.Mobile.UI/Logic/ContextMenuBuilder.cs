@@ -62,7 +62,7 @@ namespace Newtone.Mobile.UI.Logic
         #region Private Methods
         private static async Task TrackAction(string filePath, string item, string playlistName)
         {
-            Page page = NormalPage.Instance;
+            Page page = Global.Page;
 
             if(filePath.Length == 11 && !GlobalData.Current.SavedTracks.ContainsKey(filePath))
             {
@@ -258,7 +258,7 @@ namespace Newtone.Mobile.UI.Logic
             }
             else if (item == Localization.TrackMenuPlaylist)
             {
-                Page page = NormalPage.Instance;
+                Page page = UI.Global.Page;
                 List<string> positions = new List<string>()
                 {
                     Localization.NewPlaylist
@@ -301,11 +301,14 @@ namespace Newtone.Mobile.UI.Logic
                 }
 
                 GlobalData.Current.PlaylistsNeedRefresh = true;
-                (sender as PlaylistGridItem).Page.Init();
+                if(!Global.TV)
+                {
+                    (sender as PlaylistGridItem).Page.Init();
+                }
             }
             if (item == Localization.ChangeName)
             {
-                string answer = await NormalPage.Instance.DisplayPromptAsync(Localization.ChangeName, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylistHint, -1, null, playlistName);
+                string answer = await Global.Page.DisplayPromptAsync(Localization.ChangeName, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylistHint, -1, null, playlistName);
                 if (!string.IsNullOrEmpty(answer))
                 {
                     if (GlobalData.Current.Playlists.ContainsKey(answer))
@@ -325,14 +328,17 @@ namespace Newtone.Mobile.UI.Logic
                         }
                         GlobalData.Current.SaveConfig();
                         GlobalData.Current.PlaylistsNeedRefresh = true;
-                        (sender as PlaylistGridItem).Page.Init();
+                        if (!Global.TV)
+                        {
+                            (sender as PlaylistGridItem).Page.Init();
+                        }
                         Global.Application.ShowSnackbar(Localization.Ready);
                     }
                 }
             }
             else if (item == Localization.TrackMenuDelete)
             {
-                bool answer = await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.QuestionDeletePlaylist + " " + playlistName + "?", Localization.Yes, Localization.No);
+                bool answer = await Global.Page.DisplayAlert(Localization.Question, Localization.QuestionDeletePlaylist + " " + playlistName + "?", Localization.Yes, Localization.No);
 
                 if (answer)
                 {
@@ -350,7 +356,10 @@ namespace Newtone.Mobile.UI.Logic
                     GlobalData.Current.SaveConfig();
                     Global.Application.ShowSnackbar(Localization.Ready);
                     GlobalData.Current.PlaylistsNeedRefresh = true;
-                    (sender as PlaylistGridItem).Page.Init();
+                    if(!Global.TV)
+                    {
+                        (sender as PlaylistGridItem).Page.Init();
+                    }
                 }
             }
             else if (item == Localization.TrackMenuQueue)
@@ -385,7 +394,7 @@ namespace Newtone.Mobile.UI.Logic
             }
             else if (item == Localization.TrackMenuPlaylist)
             {
-                Page page = NormalPage.Instance;
+                Page page = Global.Page;
                 List<string> positions = new List<string>()
                 {
                     Localization.NewPlaylist
@@ -427,7 +436,10 @@ namespace Newtone.Mobile.UI.Logic
                     GlobalData.Current.SaveConfig();
                 }
 
-                (sender as ArtistGridItem).Page.Init();
+                if(!Global.TV)
+                {
+                    (sender as ArtistGridItem).Page.Init();
+                }
             }
             else if (item == Localization.TrackMenuQueue)
             {
@@ -451,7 +463,7 @@ namespace Newtone.Mobile.UI.Logic
         }
         private static async Task SearchResultAction(View sender, string tag, string item)
         {
-            Page page = NormalPage.Instance;
+            Page page = Global.Page;
 
             if (item == Localization.Download)
             {
@@ -465,7 +477,7 @@ namespace Newtone.Mobile.UI.Logic
                 {
                     if (urlType.ContainsKey(SearchProcessing.Query.Video))
                     {
-                        if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
+                        if (await Global.Page.DisplayAlert(Localization.Question, Localization.PlaylistOrTrack, Localization.Track, Localization.Playlist))
                         {
                             playlistId = "";
                         }
@@ -473,10 +485,10 @@ namespace Newtone.Mobile.UI.Logic
                         {
                             playlistId = urlType[SearchProcessing.Query.Playlist];
 
-                            if (await NormalPage.Instance.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
+                            if (await Global.Page.DisplayAlert(Localization.Question, Localization.PlaylistDownload, Localization.Yes, Localization.No))
                             {
                                 var playlist = await client.Playlists.GetAsync(urlType[SearchProcessing.Query.Playlist]);
-                                string newPlaylistName = await NormalPage.Instance.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
+                                string newPlaylistName = await Global.Page.DisplayPromptAsync(Localization.NewPlaylist, Localization.NewPlaylistHint, "OK", Localization.Cancel, Localization.NewPlaylist, -1, null, playlist.Title);
                                 playlistName = string.IsNullOrWhiteSpace(newPlaylistName) ? "" : newPlaylistName;
                             }
                         }

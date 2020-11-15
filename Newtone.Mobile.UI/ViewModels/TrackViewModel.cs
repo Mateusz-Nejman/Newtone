@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Nejman.Xamarin.FocusLibrary;
 using Newtone.Core;
 using Newtone.Core.Logic;
 using Newtone.Core.Models;
@@ -17,6 +19,7 @@ namespace Newtone.Mobile.UI.ViewModels
         #endregion
         #region Properties
         public ObservableCollection<TrackModel> Items { get; set; }
+        public ObservableCollection<NListViewItem> ListItems { get; set; }
         public bool IsRefreshing
         {
             get => isRefreshing;
@@ -25,6 +28,10 @@ namespace Newtone.Mobile.UI.ViewModels
                 isRefreshing = value;
                 OnPropertyChanged();
             }
+        }
+        public Func<NListViewItem, View> ItemTemplate
+        {
+            get => item => new Views.TV.ViewCells.TrackViewCell(item);
         }
         #endregion
         #region Commands
@@ -58,6 +65,12 @@ namespace Newtone.Mobile.UI.ViewModels
                 beforeSort.Add(new TrackModel(track).CheckChanges());
             }
             Items = new ObservableCollection<TrackModel>(beforeSort.OrderBy(item => item.TrackString));
+            ListItems = new ObservableCollection<NListViewItem>();
+
+            foreach(var item in Items)
+            {
+                ListItems.Add(item);
+            }
         }
         #endregion
         #region Public Methods
@@ -67,6 +80,7 @@ namespace Newtone.Mobile.UI.ViewModels
             if (Items.Count != GlobalData.Current.Audios.Count)
             {
                 Items.Clear();
+                ListItems.Clear();
                 List<TrackModel> beforeSort = new List<TrackModel>();
                 foreach (var track in GlobalData.Current.Audios.Values.ToList())
                 {
@@ -75,6 +89,7 @@ namespace Newtone.Mobile.UI.ViewModels
                 foreach (var item in beforeSort.OrderBy(item => item.TrackString))
                 {
                     Items.Add(item);
+                    ListItems.Add(Items[^1]);
                 }
             }
             foreach (var model in Items.ToList())
@@ -82,17 +97,19 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
                 {
                     var source = GlobalData.Current.Audios[model.FilePath];
+                    int index = Items.IndexOf(model);
                     if (model.Artist != source.Artist || model.Title != source.Title)
                     {
-                        int index = Items.IndexOf(model);
                         Items[index].Title = source.Title;
                         Items[index].Artist = source.Artist;
                     }
                     model.CheckChanges();
+                    ListItems[index] = model;
                 }
                 else
                 {
                     Items.Remove(model);
+                    ListItems.Remove(model);
                 }
             }
 

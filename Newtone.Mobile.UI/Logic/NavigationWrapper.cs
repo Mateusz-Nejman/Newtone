@@ -72,6 +72,12 @@ namespace Newtone.Mobile.UI.Logic
                     if (modal.GetType() != modal1.GetType())
                         modalBlocked = false;
 
+                    if(modal is Views.TV.ModalPage modalTVPage1 && modal1 is Views.TV.ModalPage modalTVPage2)
+                    {
+                        if (modalTVPage1.GetContentType() != modalTVPage2.GetContentType())
+                            modalBlocked = false;
+                    }
+
                     if (modal is ModalPage modalPage1 && modal1 is ModalPage modalPage2)
                     {
                         if (modalPage1.GetContentType() != modalPage2.GetContentType())
@@ -98,8 +104,14 @@ namespace Newtone.Mobile.UI.Logic
         }
         public async Task PopModalAsync()
         {
-
-            await Navigation?.PopModalAsync();
+            try
+            {
+                await Navigation?.PopModalAsync();
+            }
+            catch
+            {
+                //Ignore
+            }
             if (Navigation.NavigationStack.Count > 0)
             {
                 if (Navigation.NavigationStack.Last() is INavigationContainer container)

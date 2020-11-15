@@ -90,11 +90,11 @@ namespace Newtone.Mobile.UI.ViewModels.ViewCells
                     {
                         if (string.IsNullOrEmpty(PlaylistUrl))
                         {
-                            await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Playlists[PlaylistName], PlaylistName), PlaylistName));
+                            await Global.NavigationInstance.PushModalAsync(new ModalPage(new CurrentTracksPage(GlobalData.Current.Playlists[PlaylistName], PlaylistName), PlaylistName));
                         }
                         else
                         {
-                            await NormalPage.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(PlaylistUrl), PlaylistName));
+                            await Global.NavigationInstance.PushModalAsync(new ModalPage(new SearchResultPage(PlaylistUrl), PlaylistName));
                         }
                     });
                 return pressedCommand;
