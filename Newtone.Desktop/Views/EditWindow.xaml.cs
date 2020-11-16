@@ -15,10 +15,10 @@ namespace Newtone.Desktop.Views
     /// </summary>
     public partial class EditWindow : Window
     {
-        //TODO Cut files
         #region Properties
         private string FilePath { get; set; }
-        private bool IsImage {
+        private bool IsImage
+        {
             get
             {
                 return Image != null && Image.Length > 0;
@@ -38,26 +38,41 @@ namespace Newtone.Desktop.Views
             artistBox.Text = source.Artist;
             titleBox.Text = source.Title;
             AfterEdit = false;
-  
+
         }
         #endregion
         #region Private Methods
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
 
-            if(!string.IsNullOrWhiteSpace(artistBox.Text) && !string.IsNullOrWhiteSpace(titleBox.Text))
+            if (!string.IsNullOrWhiteSpace(artistBox.Text) && !string.IsNullOrWhiteSpace(titleBox.Text))
             {
-                MediaSource newSource = GlobalData.Current.Audios[FilePath].Clone();
-                newSource.Title = titleBox.Text;
-                newSource.Artist = artistBox.Text;
-                if (NewImage != null && NewImage.Length > 0)
-                    newSource.Image = NewImage;
-                GlobalLoader.ChangeTrack(GlobalData.Current.Audios[FilePath], newSource);
+                string userArtist = artistBox.Text;
+                string userTitle = titleBox.Text;
+
+                if (userArtist != null && userTitle != null)
+                {
+                    if (!GlobalData.Current.AudioTags.ContainsKey(FilePath))
+                    {
+                        GlobalData.Current.AudioTags.Add(FilePath, new Newtone.Core.Media.MediaSourceTag() { Author = userArtist, Title = userTitle });
+                    }
+
+                    GlobalData.Current.AudioTags[FilePath].Author = userArtist;
+                    GlobalData.Current.AudioTags[FilePath].Title = userTitle;
+                    var newSource = GlobalData.Current.Audios[FilePath].Clone();
+                    newSource.Title = userTitle;
+                    newSource.Artist = userArtist;
+
+                    if (NewImage != null && NewImage.Length > 0)
+                        newSource.Image = NewImage;
+                    GlobalLoader.ChangeTrack(GlobalData.Current.Audios[FilePath], newSource);
+                    GlobalData.Current.SaveTags();
+                    GlobalData.Current.Messenger.Show(Core.Logic.MessageGenerator.EMessageType.Snackbar ,Core.Languages.Localization.Ready);
+                }
                 AfterEdit = true;
-                SnackbarBuilder.Show(Core.Languages.Localization.Ready);
                 this.Close();
             }
-            
+
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -78,21 +93,21 @@ namespace Newtone.Desktop.Views
                 }
                 catch
                 {
-
+                    //Ignore
                 }
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-           if(IsImage)
+            if (IsImage)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
                     Filter = "PNG (*.png)|*.png"
                 };
                 if (saveFileDialog.ShowDialog(MainWindow.Instance) == true)
-                    File.WriteAllBytes(saveFileDialog.FileName+".png", Image);
+                    File.WriteAllBytes(saveFileDialog.FileName + ".png", Image);
             }
         }
         #endregion

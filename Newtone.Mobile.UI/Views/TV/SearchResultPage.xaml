@@ -4,15 +4,24 @@
              xmlns:focuslibrary="clr-namespace:Nejman.Xamarin.FocusLibrary"
              x:Class="Newtone.Mobile.UI.Views.TV.SearchResultPage">
     <ContentView.Content>
-        <focuslibrary:NUntouchedListView 
-            x:Name="searchResultList" 
-            NItemWidth="200" 
-            NItemHeight="200"
-            NFocusColor="White"
-            NItemAppearing="{Binding ItemAppearing}"
-            NItemTemplate="{Binding ItemTemplate}"
-            NItemSource="{Binding ListItems}"
-            NOrientation="Horizontal"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <focuslibrary:NUntouchedListView 
+                x:Name="searchResultList" 
+                NItemWidth="200" 
+                NItemHeight="200"
+                NFocusColor="White"
+                NItemAppearing="{Binding ItemAppearing}"
+                NItemTemplate="{Binding ItemTemplate}"
+                NItemSource="{Binding ListItems}"
+                NOrientation="Horizontal"
             />
+            <Grid IsVisible="{Binding SpinnerVisible}" Grid.Row="1">
+                <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center" Color="White"/>
+            </Grid>
+        </Grid>
     </ContentView.Content>
 </ContentView>

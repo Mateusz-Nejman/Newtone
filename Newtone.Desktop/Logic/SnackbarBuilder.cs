@@ -2,7 +2,7 @@
 
 namespace Newtone.Desktop.Logic
 {
-    public class SnackbarBuilder
+    public static class SnackbarBuilder
     {
         #region Public Methods
         public static void Show(string text)

@@ -23,7 +23,7 @@ namespace Newtone.Desktop.Media
         #region Private Methods
         private void MediaPlayer_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            if(e.Exception == null && CurrentFile != null && ((MediaPlayer.PlaybackState == PlaybackState.Playing && CurrentFile.Position > CurrentFile.Length - 2000) || (MediaPlayer.PlaybackState == PlaybackState.Stopped && CurrentFile.Position > CurrentFile.Length - 2000)))
+            if (e.Exception == null && CurrentFile != null && ((MediaPlayer.PlaybackState == PlaybackState.Playing && CurrentFile.Position > CurrentFile.Length - 2000) || (MediaPlayer.PlaybackState == PlaybackState.Stopped && CurrentFile.Position > CurrentFile.Length - 2000)))
             {
                 CurrentFile.Position = 0;
                 GlobalData.Current.MediaPlayer.Next();
@@ -35,16 +35,17 @@ namespace Newtone.Desktop.Media
 
         public void AfterNext()
         {
-            
+            //Not implemented
         }
 
         public void AfterPrev()
         {
-            
+            //Not implemented
         }
 
         public void Error(string text)
         {
+            //Not implemented
         }
 
         public bool GetCanSeek()
@@ -80,13 +81,13 @@ namespace Newtone.Desktop.Media
 
         public void Pause()
         {
-            if(IsPrepared)
+            if (IsPrepared)
                 MediaPlayer.Pause();
         }
 
         public void Play()
         {
-            if(IsPrepared)
+            if (IsPrepared)
                 MediaPlayer.Play();
         }
 
@@ -98,7 +99,7 @@ namespace Newtone.Desktop.Media
 
         public void Reset()
         {
-            if(CurrentFile != null)
+            if (CurrentFile != null)
                 CurrentFile.Dispose();
             CurrentFile = null;
         }
@@ -127,7 +128,12 @@ namespace Newtone.Desktop.Media
         {
             MediaPlayer.Stop();
         }
-#endregion
+
+        public void Prepared(CrossPlayer player)
+        {
+            //Not implemented
+        }
+        #endregion
 
     }
 }

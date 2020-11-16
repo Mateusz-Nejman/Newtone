@@ -31,7 +31,7 @@ namespace Newtone.Desktop.Views
         {
             if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
-                
+
                 GlobalData.Current.MediaPlayer.Seek(e.Value);
             }
         }

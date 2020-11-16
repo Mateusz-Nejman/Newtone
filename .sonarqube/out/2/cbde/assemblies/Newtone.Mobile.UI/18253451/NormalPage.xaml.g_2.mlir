@@ -1,0 +1,63 @@
+func @_Newtone.Mobile.UI.Views.TV.NormalPage.InitializeComponent$$() -> () loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :54 :8) {
+^entry :
+br ^0
+
+^0: // SimpleBlock
+%0 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :56 :12) // global::Xamarin.Forms.Xaml.Extensions (SimpleMemberAccessExpression)
+%1 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :56 :63) // this (ThisExpression)
+%2 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :56 :69) // typeof(NormalPage) (TypeOfExpression)
+%3 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :56 :12) // global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(NormalPage)) (InvocationExpression)
+%4 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :57 :19) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%5 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :57 :107) // this (ThisExpression)
+%6 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :57 :113) // "page" (StringLiteralExpression)
+%7 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :57 :19) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.ContentPage>(this, "page") (InvocationExpression)
+%8 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :58 :24) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%9 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :58 :105) // this (ThisExpression)
+%10 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :58 :111) // "outerGrid" (StringLiteralExpression)
+%11 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :58 :24) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Grid>(this, "outerGrid") (InvocationExpression)
+%12 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :59 :27) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%13 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :59 :130) // this (ThisExpression)
+%14 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :59 :136) // "searchButton" (StringLiteralExpression)
+%15 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :59 :27) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NImageButton>(this, "searchButton") (InvocationExpression)
+%16 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :60 :29) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%17 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :60 :132) // this (ThisExpression)
+%18 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :60 :138) // "settingsButton" (StringLiteralExpression)
+%19 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :60 :29) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NImageButton>(this, "settingsButton") (InvocationExpression)
+%20 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :61 :29) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%21 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :61 :132) // this (ThisExpression)
+%22 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :61 :138) // "downloadButton" (StringLiteralExpression)
+%23 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :61 :29) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NImageButton>(this, "downloadButton") (InvocationExpression)
+%24 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :62 :24) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%25 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :62 :105) // this (ThisExpression)
+%26 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :62 :111) // "container" (StringLiteralExpression)
+%27 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :62 :24) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Grid>(this, "container") (InvocationExpression)
+%28 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :63 :27) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%29 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :63 :130) // this (ThisExpression)
+%30 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :63 :136) // "playerButton" (StringLiteralExpression)
+%31 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :63 :27) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NImageButton>(this, "playerButton") (InvocationExpression)
+%32 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :64 :26) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%33 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :64 :130) // this (ThisExpression)
+%34 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :64 :136) // "trackButton" (StringLiteralExpression)
+%35 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :64 :26) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NToggleButton>(this, "trackButton") (InvocationExpression)
+%36 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :65 :27) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%37 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :65 :131) // this (ThisExpression)
+%38 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :65 :137) // "artistButton" (StringLiteralExpression)
+%39 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :65 :27) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NToggleButton>(this, "artistButton") (InvocationExpression)
+%40 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :66 :29) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%41 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :66 :133) // this (ThisExpression)
+%42 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :66 :139) // "playlistButton" (StringLiteralExpression)
+%43 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :66 :29) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Nejman.Xamarin.FocusLibrary.NToggleButton>(this, "playlistButton") (InvocationExpression)
+%44 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :67 :26) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%45 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :67 :134) // this (ThisExpression)
+%46 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :67 :140) // "playerPanel" (StringLiteralExpression)
+%47 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :67 :26) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Newtone.Mobile.UI.Views.TV.Custom.PlayerPanel>(this, "playerPanel") (InvocationExpression)
+%48 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :68 :22) // global::Xamarin.Forms.NameScopeExtensions (SimpleMemberAccessExpression)
+%49 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :68 :103) // this (ThisExpression)
+%50 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :68 :109) // "blocker" (StringLiteralExpression)
+%51 = cbde.unknown : none loc("D:\\Projekty\\CS\\Newtone\\Newtone.Mobile.UI\\obj\\Debug\\netstandard2.1\\Views\\TV\\NormalPage.xaml.g.cs" :68 :22) // global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Grid>(this, "blocker") (InvocationExpression)
+br ^1
+
+^1: // ExitBlock
+return
+
+}

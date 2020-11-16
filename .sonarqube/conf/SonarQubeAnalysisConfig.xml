@@ -101,7 +101,7 @@
     <Property Name="sonar.core.id">BF41A1F2-AXVFIMhGPqmnCsCHJ7-D</Property>
     <Property Name="sonar.coverage.exclusions">Newtone.Core/Languages/*</Property>
     <Property Name="sonar.global.exclusions">Newtone.Core/Languages/*</Property>
-    <Property Name="sonar.core.startTime">10.11.2020 19:47:02</Property>
+    <Property Name="sonar.core.startTime">15.11.2020 19:09:21</Property>
     <Property Name="sonar.exclusions">Newtone.Core/Languages/*</Property>
   </ServerSettings>
   <LocalSettings />

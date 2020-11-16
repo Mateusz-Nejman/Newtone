@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Newtone.Core;
+using Newtone.Core.Languages;
 using Newtone.Core.Loaders;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
@@ -7,7 +8,6 @@ using Newtone.Core.Models;
 using Newtone.Core.Processing;
 using Newtone.Desktop.Logic;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -54,21 +54,21 @@ namespace Newtone.Desktop.ViewModels
                                     if (!GlobalData.Current.AudioTags.ContainsKey(filepath))
                                     {
                                         var tag = GlobalData.Current.Audios[filepath];
-                                        if (tag.Artist == Newtone.Core.Languages.Localization.UnknownArtist)
+                                        if (tag.Artist == Localization.UnknownArtist)
                                         {
                                             FileInfo fileInfo = new FileInfo(filepath);
 
                                             string name = fileInfo.Name.Replace(fileInfo.Extension, "");
                                             string[] splitted = name.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
 
-                                            string artist = splitted.Length == 1 ? Newtone.Core.Languages.Localization.UnknownArtist : splitted[0];
+                                            string artist = splitted.Length == 1 ? Localization.UnknownArtist : splitted[0];
                                             string title = splitted[splitted.Length == 1 ? 0 : 1];
                                             GlobalData.Current.AudioTags.Add(filepath, new MediaSourceTag() { Author = artist, Title = title });
                                         }
                                     }
                                 }
                                 GlobalData.Current.SaveTags();
-                                SnackbarBuilder.Show(Core.Languages.Localization.Ready);
+                                SnackbarBuilder.Show(Localization.Ready);
                             }
                             else if (index == 1)
                             {
@@ -78,7 +78,7 @@ namespace Newtone.Desktop.ViewModels
                                 {
                                     File.Delete(file);
                                 }
-                                SnackbarBuilder.Show(Core.Languages.Localization.Ready);
+                                SnackbarBuilder.Show(Localization.Ready);
                             }
                             else if (index == 2)
                             {
@@ -91,20 +91,20 @@ namespace Newtone.Desktop.ViewModels
                                 };
                                 if (folderBrowser.ShowDialog() == true)
                                 {
-                                    string newPath = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
+                                    string newPath = Path.GetDirectoryName(folderBrowser.FileName);
 
                                     if (!GlobalData.Current.IncludedPaths.Contains(newPath))
                                     {
                                         GlobalData.Current.IncludedPaths.Add(newPath);
                                         Task.Run(async () => {
-                                            var files = await FileProcessing.Scan(newPath, new List<string>());
+                                            var files = await FileProcessing.Scan(newPath);
 
                                             foreach (var file in files)
                                             {
                                                 GlobalLoader.AddTrack(file);
                                             }
                                         });
-                                        SnackbarBuilder.Show(Core.Languages.Localization.Ready);
+                                        SnackbarBuilder.Show(Localization.Ready);
                                         GlobalData.Current.SaveConfig();
                                     }
                                 }
@@ -124,11 +124,14 @@ namespace Newtone.Desktop.ViewModels
         #region Constructors
         public SettingsViewModel()
         {
-            Items = new ObservableCollection<SettingsModel>();
-            Items.Add(new SettingsModel() { Name = Core.Languages.Localization.Settings0 });
-            Items.Add(new SettingsModel() { Name = Core.Languages.Localization.Settings2 });
-            Items.Add(new SettingsModel() { Name = Core.Languages.Localization.Settings4 });
-            Items.Add(new SettingsModel() { Name = Core.Languages.Localization.Settings5 });
+            Items = new ObservableCollection<SettingsModel>
+            {
+                new SettingsModel() { Name = Localization.Settings0 },
+                new SettingsModel() { Name = Localization.Settings2 },
+                new SettingsModel() { Name = Localization.Settings4 },
+                new SettingsModel() { Name = Localization.Settings5 },
+                new SettingsModel() { Name = Localization.AutoDownload, Description = GlobalData.Current.AutoDownload ? Localization.Yes : Localization.No }
+            };
         }
         #endregion
     }

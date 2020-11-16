@@ -1,6 +1,7 @@
 ﻿using Newtone.Core;
 using Newtone.Core.Loaders;
 using Newtone.Core.Models;
+using Newtone.Core.Processing;
 using Newtone.Desktop.Logic;
 using Newtone.Desktop.Media;
 using Newtone.Desktop.Processing;
@@ -8,14 +9,16 @@ using Newtone.Desktop.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using YoutubeExplode;
 
 namespace Newtone.Desktop.ViewModels
 {
-    public class MainViewModel:PropertyChangedBase
+    public class MainViewModel : PropertyChangedBase
     {
         #region Fields
         private string snackbarText;
@@ -47,18 +50,39 @@ namespace Newtone.Desktop.ViewModels
         {
             InitializeGlobalVariables();
             GlobalData.Current.LoadTags();
-            Task task;
-            if(CacheLoader.IsCacheAvailable())
+            GlobalData.Current.LoadSavedTracks();
+            Task task = Task.Run(async () =>
             {
-                task = Task.Run(() =>
-                {
+                if (CacheLoader.IsCacheAvailable())
                     CacheLoader.LoadCache();
-                    Task.Run(async () => await GlobalLoader.Load());
-                });
-            }
-            else
-                task = Task.Run(async () => await GlobalLoader.Load());
-            task.ContinueWith(t => Task.Run(GlobalData.Current.LoadConfig));
+
+                await GlobalLoader.Load();
+            });
+
+            task.ContinueWith(t =>
+            {
+                GlobalData.Current.LoadConfig();
+
+                if (GlobalData.Current.AutoDownload)
+                {
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            YoutubeClient client = new YoutubeClient();
+                            foreach (var key in GlobalData.Current.WebToLocalPlaylists.Keys.ToList())
+                            {
+                                if (GlobalData.Current.Playlists.ContainsKey(GlobalData.Current.WebToLocalPlaylists[key]))
+                                    DownloadProcessing.AddRange(await client.Playlists.GetVideosAsync(key), GlobalData.Current.WebToLocalPlaylists[key], key, true);
+                            }
+                        }
+                        catch
+                        {
+                            //Ignore
+                        }
+                    });
+                }
+            });
         }
         #endregion
         #region Public Methods
@@ -125,6 +149,7 @@ namespace Newtone.Desktop.ViewModels
             Directory.CreateDirectory(GlobalData.Current.DataPath);
             Directory.CreateDirectory(GlobalData.Current.MusicPath);
             GlobalData.Current.MediaPlayer = new Core.Media.CrossPlayer(new DesktopMediaPlayer());
+            GlobalData.Current.MediaPlayer.SetNativeActions(GlobalData.Current.MediaPlayer.Play);
             GlobalData.Current.IncludedPaths = new List<string>()
             {
                 GlobalData.Current.MusicPath,

@@ -96,12 +96,6 @@ namespace Nejman.Xamarin.FocusLibrary
             FocusContext.FocusDown(this);
         }
 
-        public new void Unfocus()
-        {
-            System.Console.WriteLine("Entry unfocus");
-            base.Unfocus();
-        }
-
         public void FocusAction()
         {
             base.Focus();

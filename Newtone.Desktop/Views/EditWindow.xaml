@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         Title="{x:Static localization:Localization.TrackMenuEdit}" Height="491" Width="240" ResizeMode="NoResize" Background="#1f1f1f">
     <StackPanel Margin="5">
-        <Button x:Name="cutButton" Content="Przycinanie utworu" Click="SubmitButton_Click" Style="{StaticResource DefaultButton}"/>
         <TextBlock Text="{x:Static localization:Localization.Title}" Margin="4" Foreground="White"/>
         <TextBox x:Name="titleBox" Style="{StaticResource DefaultTextBox}"/>
         <TextBlock Text="{x:Static localization:Localization.Artist}" Margin="4" Foreground="White"/>

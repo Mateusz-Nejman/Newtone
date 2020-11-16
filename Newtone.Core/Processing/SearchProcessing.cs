@@ -119,7 +119,29 @@ namespace Newtone.Core.Processing
 
                 bool searchValid = link.IndexOf("search_query=") >= 0;
 
-                if(searchValid)
+                string trimmed = link.Trim();
+
+                if(trimmed.ToLowerInvariant().StartsWith("video:"))
+                {
+                    string temp = trimmed.Substring(6);
+                    if(temp.Length == 11)
+                    {
+                        videoId = temp;
+                        videoValid = true;
+                    }
+                }
+
+                if (trimmed.ToLowerInvariant().StartsWith("playlist:"))
+                {
+                    string temp = trimmed.Substring(9);
+                    if (temp.Length == 11)
+                    {
+                        playlistId = temp;
+                        playlistValid = true;
+                    }
+                }
+
+                if (searchValid)
                     searchValue = HttpUtility.UrlDecode(link.Substring(link.IndexOf("search_query=") + 13));
 
                 if (videoValid)

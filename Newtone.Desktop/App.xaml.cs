@@ -9,7 +9,7 @@ namespace Newtone.Desktop
     /// </summary>
     public partial class App : Application
     {
-        private static KeyboardListener listener = new KeyboardListener();
+        private readonly static KeyboardListener listener = new KeyboardListener();
         public App()
         {
             listener.KeyUp += Listener_KeyUp;
@@ -19,23 +19,23 @@ namespace Newtone.Desktop
         {
             var key = args.Key;
 
-            if(key == System.Windows.Input.Key.MediaPlayPause)
+            if (key == System.Windows.Input.Key.MediaPlayPause)
             {
                 if (GlobalData.Current.MediaPlayer.IsPlaying)
                     GlobalData.Current.MediaPlayer.Pause();
                 else
                     GlobalData.Current.MediaPlayer.Play();
             }
-            else if(key == System.Windows.Input.Key.MediaStop)
+            else if (key == System.Windows.Input.Key.MediaStop)
             {
                 GlobalData.Current.MediaPlayer.Stop();
             }
-            else if(key == System.Windows.Input.Key.MediaNextTrack)
+            else if (key == System.Windows.Input.Key.MediaNextTrack)
             {
                 GlobalData.Current.MediaPlayer.Next();
                 GlobalData.Current.MediaPlayer.Play();
             }
-            else if(key == System.Windows.Input.Key.MediaPreviousTrack)
+            else if (key == System.Windows.Input.Key.MediaPreviousTrack)
             {
                 GlobalData.Current.MediaPlayer.Prev();
                 GlobalData.Current.MediaPlayer.Play();

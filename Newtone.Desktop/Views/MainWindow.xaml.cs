@@ -35,7 +35,7 @@ namespace Newtone.Desktop.Views
             this.MouseDown += MainWindow_MouseDown;
             this.StateChanged += MainWindow_StateChanged;
             TopBarButtonClicked += MainWindow_TopBarButtonClicked;
-            
+
 
         }
         #endregion
@@ -84,7 +84,7 @@ namespace Newtone.Desktop.Views
                 if (e.ClickCount == 2)
                 {
                     var mp = Mouse.GetPosition(this);
-                    if(new Rect(0,0,Width,ViewModel?.IsNormalWindow == true ? 60 : 32).Contains(mp))
+                    if (new Rect(0, 0, Width, ViewModel?.IsNormalWindow == true ? 60 : 32).Contains(mp))
                     {
                         if (this.WindowState == WindowState.Maximized)
                         {
@@ -95,13 +95,13 @@ namespace Newtone.Desktop.Views
                             this.WindowState = WindowState.Maximized;
                         }
                     }
-                    
+
                 }
                 else
                     this.DragMove();
         }
 
-        
+
 
         private void MediaNext_Executed(object sender, ExecutedRoutedEventArgs e)
         {

@@ -84,7 +84,7 @@
                         <focusLibrary:NImageButton 
                             x:Name="playerButton"
                             Source="PlayIcon.png" 
-                            Style="{StaticResource TransparentImageButton}" 
+                            Style="{StaticResource NTransparentImageButton}" 
                             Padding="20" 
                             NCommand="{Binding GotoPlayer}"
                             NextFocusUp="{Binding FocusElementDown}"
@@ -95,7 +95,7 @@
                         <focusLibrary:NToggleButton 
                             x:Name="trackButton"
                             Source="TrackIcon.png" 
-                            Style="{StaticResource TransparentImageButton}" 
+                            Style="{StaticResource NTransparentImageButton}" 
                             Padding="20" 
                             NCommand="{Binding GotoTracks}" 
                             IsToggled="{Binding TracksButtonToggled}"
@@ -108,7 +108,7 @@
                         <focusLibrary:NToggleButton 
                             x:Name="artistButton"
                             Source="ArtistIcon.png" 
-                            Style="{StaticResource TransparentImageButton}" 
+                            Style="{StaticResource NTransparentImageButton}" 
                             Padding="20" 
                             NCommand="{Binding GotoArtists}" 
                             IsToggled="{Binding ArtistsButtonToggled}"
@@ -121,7 +121,7 @@
                         <focusLibrary:NToggleButton 
                             x:Name="playlistButton"
                             Source="PlaylistIcon.png" 
-                            Style="{StaticResource TransparentImageButton}" 
+                            Style="{StaticResource NTransparentImageButton}" 
                             Padding="20" 
                             NCommand="{Binding GotoPlaylists}" 
                             IsToggled="{Binding PlaylistsButtonToggled}"

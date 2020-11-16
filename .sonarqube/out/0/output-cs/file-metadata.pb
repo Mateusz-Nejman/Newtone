@@ -28,6 +28,7 @@ ED:\Projekty\CS\Newtone\Newtone.Core\Logic\YoutubeExplodeExtensions.csutf-8A
 8D:\Projekty\CS\Newtone\Newtone.Core\Media\IBasePlayer.csutf-8G
 >D:\Projekty\CS\Newtone\Newtone.Core\Media\IPlayerController.csutf-8K
 BD:\Projekty\CS\Newtone\Newtone.Core\Media\LocalPlayerController.csutf-8A
+8D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaFormat.csutf-8A
 8D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaOutput.csutf-8E
 <D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaOutputType.csutf-8E
 <D:\Projekty\CS\Newtone\Newtone.Core\Media\MediaProcessing.csutf-8A

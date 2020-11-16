@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Newtone.Desktop.ViewModels
 {
-    public class AlertViewModel:PropertyChangedBase
+    public class AlertViewModel : PropertyChangedBase
     {
         #region Fields
         private string title;

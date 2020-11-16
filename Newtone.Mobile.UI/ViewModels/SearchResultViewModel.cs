@@ -125,7 +125,6 @@ namespace Newtone.Mobile.UI.ViewModels
 
             Task.Run(async () =>
             {
-                Console.WriteLine("Task.Run start");
                 SpinnerVisible = true;
                 SearchProcessing.SearchOffline(searchedText, rawItems);
 
@@ -163,7 +162,6 @@ namespace Newtone.Mobile.UI.ViewModels
                 }
 
                 SpinnerVisible = false;
-                Console.WriteLine("Task.Run end");
             });
         }
         #endregion

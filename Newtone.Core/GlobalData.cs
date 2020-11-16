@@ -97,7 +97,8 @@ namespace Newtone.Core
             CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
             WebToLocalPlaylists = new Dictionary<string, string>();
             RecomendedPlaylists = new Dictionary<string, string>(); //name, url
-            DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData) + "\\NSEC\\Newtone";
+            Console.WriteLine(DataPath);
 
             History = new List<Newtone.Core.Models.HistoryModel>();
             LastTracks = new Newtone.Core.Logic.TrackCounter[GlobalData.MAXTRACKSINLASTLIST];

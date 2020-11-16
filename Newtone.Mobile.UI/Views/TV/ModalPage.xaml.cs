@@ -50,7 +50,6 @@ namespace Newtone.Mobile.UI.Views.TV
 
         private void PageAppearing(object sender, EventArgs e)
         {
-            Console.WriteLine("ModalPage Appearing start");
             var src = System.Reactive.Linq.Observable.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(200)).Timestamp();
             loopSubscription = src.Subscribe(time => Tick());
             ViewModel?.Appearing();
@@ -72,7 +71,6 @@ namespace Newtone.Mobile.UI.Views.TV
                     focusContent.TopElement.IsNFocused = true;
                 }
             }
-            Console.WriteLine("ModalPage Appearing end");
         }
 
         private void Tick()

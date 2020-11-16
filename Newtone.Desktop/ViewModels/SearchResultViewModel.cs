@@ -12,7 +12,7 @@ using YoutubeExplode;
 
 namespace Newtone.Desktop.ViewModels
 {
-    public class SearchResultViewModel:PropertyChangedBase
+    public class SearchResultViewModel : PropertyChangedBase
     {
         #region Fields
         private ObservableCollection<Newtone.Desktop.Models.SearchResultModel> items;
@@ -132,6 +132,7 @@ namespace Newtone.Desktop.ViewModels
         #region Constructors
         public SearchResultViewModel(string searchedText, SearchResultPage page)
         {
+            //TODO Maybe
             Items = new ObservableCollection<Models.SearchResultModel>();
             RawItems = new ObservableBridge<Core.Models.SearchResultModel>
             {

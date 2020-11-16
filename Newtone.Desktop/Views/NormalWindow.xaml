@@ -61,7 +61,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="46"/>
                 <ColumnDefinition Width="46"/>
                 <ColumnDefinition Width="46"/>
@@ -74,17 +73,16 @@
             <Button Content="{x:Static localization:Localization.Playlists}" Style="{StaticResource TopPanelButton}" Grid.Column="3" x:Name="topPanelPlaylistsButton" Command="{Binding GotoPlaylists}" CommandParameter="{x:Reference Control}"/>
             <Button Content="{x:Static localization:Localization.Search}" Style="{StaticResource TopPanelButton}" Grid.Column="4" x:Name="topPanelSearchButton" Command="{Binding GotoSearch}" CommandParameter="{x:Reference Control}"/>
             <Button Content="{x:Static localization:Localization.Settings}" Style="{StaticResource TopPanelButton}" Grid.Column="5" x:Name="topPanelSettingsButton" Command="{Binding GotoSettings}" CommandParameter="{x:Reference Control}"/>
-            <custom:BadgeButton x:Name="uploadButton" Grid.Column="7" Width="32" Command="{Binding GotoSync}" CommandParameter="{x:Reference Control}"/>
-            <custom:BadgeButton x:Name="downloadButton" Grid.Column="8" Width="32" Command="{Binding GotoDownload}" CommandParameter="{x:Reference Control}"/>
-            <TextBox Width="200" Height="30" Text="" Grid.Column="9" KeyUp="SearchBox_KeyUp" x:Name="searchBox" Margin="0,0,10,0" Style="{StaticResource DefaultTextBox}"/>
-            
-            <Button Grid.Column="10" Style="{StaticResource TransparentButton}" Command="{Binding Minimize}">
+            <custom:BadgeButton x:Name="downloadButton" Grid.Column="7" Width="32" Command="{Binding GotoDownload}" CommandParameter="{x:Reference Control}"/>
+            <TextBox Width="200" Height="30" Text="" Grid.Column="8" KeyUp="SearchBox_KeyUp" x:Name="searchBox" Margin="0,0,10,0" Style="{StaticResource DefaultTextBox}"/>
+
+            <Button Grid.Column="9" Style="{StaticResource TransparentButton}" Command="{Binding Minimize}">
                 <Image Source="../Resources/MinimizeIcon.png" Stretch="Uniform"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
-            <Button Grid.Column="11" Style="{StaticResource TransparentButton}" Command="{Binding Maximize}">
+            <Button Grid.Column="10" Style="{StaticResource TransparentButton}" Command="{Binding Maximize}">
                 <Image Source="{Binding MaximizeIcon}" Stretch="Uniform"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
-            <Button Grid.Column="12" Style="{StaticResource TransparentButton}" Command="{Binding Close}">
+            <Button Grid.Column="11" Style="{StaticResource TransparentButton}" Command="{Binding Close}">
                 <Image Source="../Resources/CloseIcon.png" Stretch="Uniform"  HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </Grid>

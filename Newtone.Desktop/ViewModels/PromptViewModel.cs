@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Newtone.Desktop.ViewModels
 {
-    public class PromptViewModel:PropertyChangedBase
+    public class PromptViewModel : PropertyChangedBase
     {
         #region Fields
         private string title;

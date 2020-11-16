@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace Newtone.Desktop.ViewModels.Custom
 {
-    public class PlayerPanelViewModel:PropertyChangedBase
+    public class PlayerPanelViewModel : PropertyChangedBase
     {
         #region Fields
         private Timer timer;

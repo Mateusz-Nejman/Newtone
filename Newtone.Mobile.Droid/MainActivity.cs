@@ -46,7 +46,6 @@ namespace Newtone.Mobile.Droid
         #region Protected Methods
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            ConsoleDebug.WriteLine("MainActivity OnCreate()");
             Instance = this;
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -60,13 +59,11 @@ namespace Newtone.Mobile.Droid
             InitializeGlobalVariables();
 
             LoadApplication(new App());
-            ConsoleDebug.WriteLine("MainActivity Service MediaPlayerService");
             this.ApplicationContext.StartServiceCompat<MediaPlayerService>();
         }
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            ConsoleDebug.WriteLine("MainActivity OnNewIntent()");
             ProcessNewIntent(intent);
             if (!Global.WakeLock?.IsHeld == true)
                 Global.WakeLock?.Acquire();
@@ -74,7 +71,6 @@ namespace Newtone.Mobile.Droid
         protected override void OnStart()
         {
             base.OnStart();
-            ConsoleDebug.WriteLine("MainActivity OnStart()");
             try
             {
                 Global.MediaBrowser.Connect();
@@ -88,7 +84,6 @@ namespace Newtone.Mobile.Droid
         protected override void OnStop()
         {
             base.OnStop();
-            ConsoleDebug.WriteLine("MainActivity OnStop()");
             MediaControllerCompat.GetMediaController(this)?.UnregisterCallback(Global.ControllerCallback);
             try
             {
@@ -151,9 +146,28 @@ namespace Newtone.Mobile.Droid
                 currentElement.FocusUp();
             else if (keyCode == Keycode.DpadDown)
                 currentElement.FocusDown();
-            else if (keyCode == Keycode.Back)
+            else if (keyCode == Keycode.Back || keyCode == Keycode.ButtonB)
                 OnBackPressed();
-            else if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter && e.Action == KeyEventActions.Down)
+            else if (keyCode == Keycode.MediaPlay)
+                MediaPlayerHelper.Play();
+            else if (keyCode == Keycode.MediaPause)
+                MediaPlayerHelper.Pause();
+            else if (keyCode == Keycode.MediaPlayPause)
+            {
+                if (GlobalData.Current.MediaPlayer.IsPlaying)
+                {
+                    MediaPlayerHelper.Pause();
+                }
+                else
+                {
+                    MediaPlayerHelper.Play();
+                }
+            }
+            else if (keyCode == Keycode.MediaNext)
+                MediaPlayerHelper.Next();
+            else if (keyCode == Keycode.MediaPrevious)
+                MediaPlayerHelper.Prev();
+            else if ((keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter || keyCode == Keycode.ButtonSelect || keyCode == Keycode.ButtonA || keyCode == Keycode.NumpadEnter) && e.Action == KeyEventActions.Down)
             {
                 e.StartTracking();
                 if (e.RepeatCount == 0)
@@ -167,7 +181,7 @@ namespace Newtone.Mobile.Droid
 
         public override bool OnKeyLongPress([GeneratedEnum] Keycode keyCode, KeyEvent e)
         {
-            if(keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter)
+            if(keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter || keyCode == Keycode.ButtonSelect || keyCode == Keycode.ButtonA || keyCode == Keycode.NumpadEnter)
             {
                 shortPress = false;
                 var currentElement = FocusContext.GetFocusElement();
@@ -190,7 +204,7 @@ namespace Newtone.Mobile.Droid
 
         public override bool OnKeyUp([GeneratedEnum] Keycode keyCode, KeyEvent e)
         {
-            if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter)
+            if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter || keyCode == Keycode.ButtonSelect || keyCode == Keycode.ButtonA || keyCode == Keycode.NumpadEnter)
             {
                 if(shortPress)
                 {
@@ -275,7 +289,8 @@ namespace Newtone.Mobile.Droid
 
             Global.MetadataBuilder = new MediaMetadataCompat.Builder();
             Global.StateBuilder = new PlaybackStateCompat.Builder();
-            Global.StateBuilder.SetActions(PlaybackStateCompat.ActionPlay | PlaybackStateCompat.ActionPlayPause | PlaybackStateCompat.ActionSkipToNext | PlaybackStateCompat.ActionSkipToPrevious | PlaybackStateCompat.ActionPause);
+            Global.StateBuilder.SetActions(PlaybackStateCompat.ActionPlay | PlaybackStateCompat.ActionPlayPause | PlaybackStateCompat.ActionPlayFromSearch | PlaybackStateCompat.ActionPlayFromUri
+                | PlaybackStateCompat.ActionPrepare | PlaybackStateCompat.ActionPrepareFromSearch | PlaybackStateCompat.ActionPrepareFromUri | PlaybackStateCompat.ActionPlayFromMediaId | PlaybackStateCompat.ActionPause);
             Global.ControllerCallback = new MediaControllerCallback();
             Global.ConnectionCallback = new MediaBrowserConnectionCallback();
             Global.AudioFocusListener = new AudioFocusListener();

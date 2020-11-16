@@ -21,8 +21,6 @@ namespace Newtone.Mobile.UI.Views.TV
             TopElement = searchResultList;
             BottomElement = searchResultList;
             BindingContext = ViewModel = new SearchResultViewModel(searchedText);
-
-            Console.WriteLine("SearchResultPAge end of construction");
         }
         #endregion
     }

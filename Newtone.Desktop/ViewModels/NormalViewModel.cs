@@ -51,7 +51,7 @@ namespace Newtone.Desktop.ViewModels
                     gotoTracks = new ActionCommand(parameter =>
                     {
                         var window = parameter as NormalWindow;
-                        if(CurrentTopPanelButtonIndex != 0)
+                        if (CurrentTopPanelButtonIndex != 0)
                         {
                             window.TopPanelButton_Click(0, new TrackPage());
                             CurrentTopPanelButtonIndex = 0;
@@ -69,7 +69,7 @@ namespace Newtone.Desktop.ViewModels
                     gotoArtists = new ActionCommand(parameter =>
                     {
                         var window = parameter as NormalWindow;
-                        if(CurrentTopPanelButtonIndex != 1)
+                        if (CurrentTopPanelButtonIndex != 1)
                         {
                             window.TopPanelButton_Click(1, new ArtistPage());
                             CurrentTopPanelButtonIndex = 1;
@@ -101,7 +101,7 @@ namespace Newtone.Desktop.ViewModels
         {
             get
             {
-                if(gotoSearch == null)
+                if (gotoSearch == null)
                     gotoSearch = new ActionCommand(parameter =>
                     {
                         var window = parameter as NormalWindow;
@@ -119,7 +119,7 @@ namespace Newtone.Desktop.ViewModels
         {
             get
             {
-                if(gotoSettings == null)
+                if (gotoSettings == null)
                     gotoSettings = new ActionCommand(parameter =>
                     {
                         var window = parameter as NormalWindow;
@@ -141,7 +141,6 @@ namespace Newtone.Desktop.ViewModels
                     gotoSync = new ActionCommand(parameter =>
                     {
                         var window = parameter as NormalWindow;
-                        window.TopPanelButton_Click(-1, new SyncPage());
                     });
                 return gotoSync;
             }
@@ -214,10 +213,9 @@ namespace Newtone.Desktop.ViewModels
         }
         #endregion
         #region Public Methods
-        public void Tick(NormalWindow window, BadgeButton syncButton, BadgeButton downloadButton)
+        public void Tick(NormalWindow window, BadgeButton downloadButton)
         {
             downloadButton.BadgeCount = DownloadProcessing.BadgeCount;
-            syncButton.BadgeCount = SyncProcessing.Audios.Count;
             if (window.windowContainer.Children.Count > 0 && window.windowContainer.Children[0] is ITimerContent content)
             {
                 content.Tick();

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace Newtone.Desktop.Views.Custom
 {
-    public class TagButton:Button
+    public class TagButton : Button
     {
         #region Properties
         public string Value

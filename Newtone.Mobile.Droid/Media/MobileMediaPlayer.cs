@@ -1,6 +1,5 @@
 ﻿using System;
 using Android.Media;
-using Android.OS;
 using Android.Support.V4.Media.Session;
 using Newtone.Core;
 using Newtone.Core.Media;
@@ -29,12 +28,9 @@ namespace Newtone.Mobile.Droid.Media
         #region Private Methods
         private void MediaPlayer_Prepared(object sender, EventArgs e)
         {
-            Debug.WriteLine("Start Prepared");
             Prepared(GlobalData.Current.MediaPlayer);
             prepared = true;
             Seek(0);
-            Console.WriteLine("End Prepared");
-            Console.WriteLine("Current position: " + MediaPlayer.CurrentPosition);
         }
 
         private void MediaPlayer_Completion(object sender, EventArgs e)

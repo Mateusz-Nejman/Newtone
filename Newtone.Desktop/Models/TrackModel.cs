@@ -20,7 +20,7 @@ namespace Newtone.Desktop.Models
             get { return visibility; }
             set
             {
-               if(visibility != value)
+                if (visibility != value)
                 {
                     visibility = value;
                     OnPropertyChanged();
@@ -37,7 +37,7 @@ namespace Newtone.Desktop.Models
             set
             {
                 string newValue = value;
-                if(newValue != trackString)
+                if (newValue != trackString)
                 {
                     trackString = newValue;
                     OnPropertyChanged();
@@ -64,7 +64,7 @@ namespace Newtone.Desktop.Models
             this.Title = model.Title;
             bool isTag = GlobalData.Current.AudioTags.Keys.Any(key => key == FilePath);
 
-            if(isTag)
+            if (isTag)
             {
                 BitmapImage bmp = new BitmapImage();
                 bmp.BeginInit();
@@ -87,7 +87,7 @@ namespace Newtone.Desktop.Models
         public TrackModel CheckChanges()
         {
             Visibility = FilePath == GlobalData.Current.MediaSourcePath ? Visibility.Visible : Visibility.Hidden;
-            TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : string.Concat(Artist," - ",Title);
+            TrackString = this.Artist == Newtone.Core.Languages.Localization.UnknownArtist ? Title : string.Concat(Artist, " - ", Title);
             return this;
         }
         #endregion

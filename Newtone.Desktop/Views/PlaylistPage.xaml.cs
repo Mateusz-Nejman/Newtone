@@ -22,10 +22,6 @@ namespace Newtone.Desktop.Views
         }
         #endregion
         #region Private Methods
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel?.ListView_SelectionChanged(listView, e);
-        }
         private void TrackListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ViewModel?.TrackListView_PreviewMouseLeftButtonUp(listView, trackListView);
@@ -52,5 +48,15 @@ namespace Newtone.Desktop.Views
             throw new NotImplementedException();
         }
         #endregion
+
+        private void ListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel?.ListView_SelectionChanged(listView);
+        }
+
+        private void ListView_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel?.PlaylistListView_PreviewMouseRightButtonUp(listView);
+        }
     }
 }

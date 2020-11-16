@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Newtone.Desktop.Views"
              xmlns:localization="clr-namespace:Newtone.Core.Languages;assembly=Newtone.Core"
-             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates" xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
+             xmlns:datatemplates="clr-namespace:Newtone.Desktop.Views.Custom.DataTemplates" 
+             xmlns:viewmodels="clr-namespace:Newtone.Desktop.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -23,7 +24,7 @@
 
         <TextBlock Text="{x:Static localization:Localization.Playlists}" Style="{StaticResource PageTitle}"/>
 
-        <ListView Grid.Row="1" Background="#141414" x:Name="listView" SelectionChanged="ListView_SelectionChanged" ItemsSource="{Binding Items}">
+        <ListView Grid.Row="1" Background="#141414" x:Name="listView" PreviewMouseLeftButtonUp="ListView_PreviewMouseLeftButtonUp" PreviewMouseRightButtonUp="ListView_PreviewMouseRightButtonUp"  ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding TrackElem}" Style="{StaticResource ListViewText}"/>

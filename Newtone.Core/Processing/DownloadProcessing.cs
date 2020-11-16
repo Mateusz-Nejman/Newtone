@@ -295,7 +295,6 @@ namespace Newtone.Core.Processing
 
             manifest.GetAudio().ForEach(item =>
             {
-                Console.WriteLine(item.AudioCodec);
                 if (item.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus"))
                 {
                     if (streamInfo == null)

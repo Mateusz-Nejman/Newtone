@@ -25,7 +25,7 @@
         </StackPanel>
         <TextBlock Text="{Binding DurationString}" VerticalAlignment="Center" Grid.Column="2" FontFamily="Roboto Thin" FontSize="16" Foreground="White"/>
         <custom:TagButton Value="{Binding VideoData}" Grid.Column="3" Style="{StaticResource TransparentButton}" x:Name="downloadButton" Click="DownloadButton_Click">
-            <Image Source="../../../Resources/downloadIcon.png"/>
+            <Image Source="../../../Resources/menuIcon.png"/>
         </custom:TagButton>
     </Grid>
 </UserControl>

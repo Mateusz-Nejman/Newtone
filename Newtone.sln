@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newtone.Core", "Newtone.Core\Newtone.Core.csproj", "{CAF75C7F-9E2B-4F7A-BF22-BA84B2947C69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newtone.Desktop", "Newtone.Desktop\Newtone.Desktop.csproj", "{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6D51138E-BC39-40B5-84EF-EEFC4A6B789F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -24,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Mobile.Droid", "New
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Mobile.IOS", "Newtone.Mobile.IOS\Newtone.Mobile.IOS.csproj", "{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtone.Desktop", "Newtone.Desktop\Newtone.Desktop.csproj", "{C7F4DD77-CA87-493C-A9B8-13AD1787AFF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,10 +38,6 @@ Global
 		{CAF75C7F-9E2B-4F7A-BF22-BA84B2947C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAF75C7F-9E2B-4F7A-BF22-BA84B2947C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAF75C7F-9E2B-4F7A-BF22-BA84B2947C69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{357AE43B-8D63-4D72-9F8A-FF45BE673CB0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C45F454E-C44A-4022-80A4-01ECA7DFFABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,6 +61,10 @@ Global
 		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
 		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{9FAC1B8D-43A9-4DF8-BE70-1BD75119E2F5}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{C7F4DD77-CA87-493C-A9B8-13AD1787AFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F4DD77-CA87-493C-A9B8-13AD1787AFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F4DD77-CA87-493C-A9B8-13AD1787AFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F4DD77-CA87-493C-A9B8-13AD1787AFF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

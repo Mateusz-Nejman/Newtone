@@ -40,7 +40,7 @@
             <focuslibrary:NImageButton 
                 Source="{Binding PlayButton}" 
                 Grid.Column="2" 
-                Style="{StaticResource TransparentImageButton}" 
+                Style="{StaticResource NTransparentImageButton}" 
                 Padding="20" 
                 x:Name="playButton" 
                 NCommand="{Binding PlayPause}"

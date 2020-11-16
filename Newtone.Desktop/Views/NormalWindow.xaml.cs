@@ -1,5 +1,6 @@
 ﻿using Newtone.Desktop.Logic;
 using Newtone.Desktop.ViewModels;
+using System;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,9 +23,6 @@ namespace Newtone.Desktop.Views
         {
             InitializeComponent();
             DataContext = ViewModel = new NormalViewModel(new Button[] { topPanelTracksButton, topPanelArtistsButton, topPanelPlaylistsButton, topPanelSearchButton, topPanelSettingsButton }, this);
-
-            downloadButton.Source = "DownloadPageIcon.png";
-            uploadButton.Source = "UploadPageIcon.png";
             Timer = new Timer
             {
                 Interval = 200
@@ -41,19 +39,26 @@ namespace Newtone.Desktop.Views
             {
                 Dispatcher.Invoke(() => {
                     ViewModel.SearchString = searchBox.Text;
-                    ViewModel?.Tick(this, uploadButton, downloadButton);
+                    ViewModel?.Tick(this, downloadButton);
                 });
             }
             catch
             {
-
+                //Ignore
             }
         }
         private void SearchBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !string.IsNullOrEmpty(ViewModel.SearchString))
+            try
             {
-                TopPanelButton_Click(3, new SearchResultPage(ViewModel.SearchString));
+                if (e.Key == Key.Enter && !string.IsNullOrEmpty(ViewModel.SearchString))
+                {
+                    TopPanelButton_Click(3, new SearchResultPage(ViewModel.SearchString));
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
@@ -62,7 +67,7 @@ namespace Newtone.Desktop.Views
             var menu = ContextMenuBuilder.BuildForIcon();
             menu.IsOpen = true;
         }
-        
+
         #endregion
         #region Public Methods
         public void ChangeMaximizeIcon(ImageSource newSource)
@@ -77,7 +82,7 @@ namespace Newtone.Desktop.Views
         public void TopPanelButton_Click(int index, UIElement element)
         {
             SetContainer(element);
-            ViewModel?.SelectTopPanelButton(index,this);
+            ViewModel?.SelectTopPanelButton(index, this);
         }
         #endregion
     }

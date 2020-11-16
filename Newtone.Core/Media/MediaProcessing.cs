@@ -19,7 +19,6 @@ namespace Newtone.Core.Media
             try
             {
                 ATL.Track audioFile = new ATL.Track(filePath);
-                Console.WriteLine(audioFile.DurationMs);
                 container.Title = audioFile.Title == "" || audioFile.Title == null ? new FileInfo(filePath).Name : audioFile.Title;
 
                 container.Artist = audioFile.Artist == "" ? Localization.UnknownArtist : audioFile.Artist;

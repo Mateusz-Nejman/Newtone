@@ -43,7 +43,7 @@ namespace Newtone.Desktop.ViewModels
 
             foreach (string artist in GlobalData.Current.Artists.Keys)
             {
-                if(GlobalData.Current.Artists[artist].Count > 0)
+                if (GlobalData.Current.Artists[artist].Count > 0)
                     ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
             }
         }
@@ -101,9 +101,25 @@ namespace Newtone.Desktop.ViewModels
                 if (needRefresh)
                     trackListView.Items.Refresh();
             }
+
+            if(GlobalData.Current.ArtistsNeedRefresh)
+            {
+                listView.SelectedIndex = -1;
+                trackListView.SelectedIndex = -1;
+
+                ArtistItems.Clear();
+                TrackItems.Clear();
+
+                foreach (string artist in GlobalData.Current.Artists.Keys)
+                {
+                    if (GlobalData.Current.Artists[artist].Count > 0)
+                        ArtistItems.Add(new ArtistModel() { Name = artist, TrackCount = GlobalData.Current.Artists[artist].Count });
+                }
+                GlobalData.Current.ArtistsNeedRefresh = false;
+            }
         }
 
-        public void ListView_SelectionChanged(ListView listView, SelectionChangedEventArgs e)
+        public void ListView_SelectionChanged(ListView listView)
         {
             int index = listView.SelectedIndex;
             TrackItems.Clear();
@@ -155,6 +171,18 @@ namespace Newtone.Desktop.ViewModels
                 var menu = ContextMenuBuilder.BuildForTrack(TrackItems[index].FilePath);
                 menu.IsOpen = true;
                 menu.PlacementTarget = trackListView;
+            }
+        }
+
+        public void ArtistListView_PreviewMouseRightButtonUp(ListView listView)
+        {
+            int index = listView.SelectedIndex;
+
+            if(index >= 0 && index < ArtistItems.Count)
+            {
+                var menu = ContextMenuBuilder.BuildForArtist(ArtistItems[index].Name);
+                menu.IsOpen = true;
+                menu.PlacementTarget = listView;
             }
         }
         #endregion

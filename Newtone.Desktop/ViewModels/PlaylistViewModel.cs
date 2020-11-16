@@ -39,18 +39,19 @@ namespace Newtone.Desktop.ViewModels
         #region Constructors
         public PlaylistViewModel()
         {
+            //TODO
             Items = new ObservableCollection<PlaylistModel>();
             TrackItems = new ObservableCollection<Newtone.Desktop.Models.TrackModel>();
 
             foreach (string playlist in GlobalData.Current.Playlists.Keys)
             {
-                if(GlobalData.Current.Playlists[playlist].Count > 0)
+                if (GlobalData.Current.Playlists[playlist].Count > 0)
                     Items.Add(new PlaylistModel() { Name = playlist, TrackCount = GlobalData.Current.Playlists[playlist].Count });
             }
         }
         #endregion
         #region Public Methods
-        public void ListView_SelectionChanged(ListView listView, SelectionChangedEventArgs e)
+        public void ListView_SelectionChanged(ListView listView)
         {
             int index = listView.SelectedIndex;
             TrackItems.Clear();
@@ -63,7 +64,10 @@ namespace Newtone.Desktop.ViewModels
                     {
                         TrackItems.Add(new Models.TrackModel(GlobalData.Current.Audios[path]));
                     }
-
+                    else if(path.Length == 11 && GlobalData.Current.SavedTracks.ContainsKey(path))
+                    {
+                        TrackItems.Add(new Models.TrackModel(GlobalData.Current.SavedTracks[path]));
+                    }
                 }
             }
         }
@@ -95,34 +99,24 @@ namespace Newtone.Desktop.ViewModels
                 EditWindow.AfterEdit = false;
             }
 
-            if ((Items.Count == 0 || listView.SelectedIndex == -1 ? "" : Items[listView.SelectedIndex].Name) != "")
+            if(GlobalData.Current.PlaylistsNeedRefresh)
             {
-                bool needRefresh = false;
-                foreach (var model in TrackItems.ToList())
+                trackListView.SelectedIndex = -1;
+                listView.SelectedIndex = -1;
+
+                Items.Clear();
+                TrackItems.Clear();
+
+                foreach (string playlist in GlobalData.Current.Playlists.Keys)
                 {
-
-                    if (GlobalData.Current.Audios.ContainsKey(model.FilePath))
-                    {
-                        MediaSource source = GlobalData.Current.Audios[model.FilePath];
-                        if (model.Artist != source.Artist || model.Title != source.Title)
-                        {
-                            int index = TrackItems.IndexOf(model);
-                            TrackItems[index].Title = source.Title;
-                            TrackItems[index].Artist = source.Artist;
-                        }
-
-                        model.CheckChanges();
-                    }
-                    else
-                    {
-                        TrackItems.Remove(model);
-                        needRefresh = true;
-                    }
-
-
+                    if (GlobalData.Current.Playlists[playlist].Count > 0)
+                        Items.Add(new PlaylistModel() { Name = playlist, TrackCount = GlobalData.Current.Playlists[playlist].Count });
                 }
-                if (needRefresh)
-                    trackListView.Items.Refresh();
+
+                listView.Items.Refresh();
+                trackListView.Items.Refresh();
+                GlobalData.Current.PlaylistsNeedRefresh = false;
+                trackListView.Items.Refresh();
             }
         }
 
@@ -132,13 +126,16 @@ namespace Newtone.Desktop.ViewModels
 
             if (index >= 0 && index < TrackItems.Count)
             {
-                MediaSource source = GlobalData.Current.Audios[TrackItems.Count == 0 ? "" : TrackItems[trackListView.SelectedIndex].FilePath];
+                string filePath = TrackItems.Count == 0 ? "" : TrackItems[trackListView.SelectedIndex].FilePath;
+                MediaSource source = filePath.Length == 11 ? GlobalData.Current.SavedTracks[filePath] : GlobalData.Current.Audios[filePath];
                 GlobalData.Current.CurrentPlaylist.Clear();
 
                 foreach (string path in GlobalData.Current.Playlists[Items.Count == 0 || listView.SelectedIndex == -1 ? "" : Items[listView.SelectedIndex].Name])
                 {
                     if (GlobalData.Current.Audios.ContainsKey(path))
                         GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.Audios[path]);
+                    else if (path.Length == 11 && GlobalData.Current.SavedTracks.ContainsKey(path))
+                        GlobalData.Current.CurrentPlaylist.Add(GlobalData.Current.SavedTracks[path]);
                 }
 
                 GlobalData.Current.MediaSource = source;
@@ -160,6 +157,18 @@ namespace Newtone.Desktop.ViewModels
                 var menu = ContextMenuBuilder.BuildForTrack(TrackItems[index].FilePath, Items.Count == 0 || listView.SelectedIndex == -1 ? "" : Items[listView.SelectedIndex].Name);
                 menu.IsOpen = true;
                 menu.PlacementTarget = trackListView;
+            }
+        }
+
+        public void PlaylistListView_PreviewMouseRightButtonUp(ListView listView)
+        {
+            int index = listView.SelectedIndex;
+
+            if (index >= 0 && index < Items.Count)
+            {
+                var menu = ContextMenuBuilder.BuildForPlaylist(Items[index].Name);
+                menu.IsOpen = true;
+                menu.PlacementTarget = listView;
             }
         }
         #endregion

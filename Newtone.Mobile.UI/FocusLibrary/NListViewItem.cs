@@ -56,10 +56,7 @@ namespace Nejman.Xamarin.FocusLibrary
             if (frame != null)
             {
                 frame.BorderColor = IsNFocused ? NFocusColor : Color.Transparent;
-                Console.WriteLine(IsNFocused ? "Color Red" : "Transparent");
             }
-            else
-                System.Diagnostics.Debug.WriteLine("Frame null!");
 
             if(IsNFocused && ParentListView.NItemAppearing?.CanExecute(ParentListView.NFocusedIndex) == true)
             {
@@ -104,9 +101,7 @@ namespace Nejman.Xamarin.FocusLibrary
         {
             if (ParentListView.NOrientation == ScrollOrientation.Vertical)
             {
-                Console.WriteLine("FocusUp Parent");
                 ParentListView.FocusUp();
-                
             }
             else
             {
@@ -121,7 +116,6 @@ namespace Nejman.Xamarin.FocusLibrary
         {
             if (ParentListView.NOrientation == ScrollOrientation.Vertical)
             {
-                Console.WriteLine("FocusDown Parent");
                 ParentListView.FocusDown();
             }
             else

@@ -1,8 +1,13 @@
 # Newtone
-Mobile Music Player with streaming & downloading from YT
+Multiplatform Music Player with streaming & downloading from YT
 
-## Newtone.Desktop
-Newtone Desktop is actualy unsupported due to targeting in mobile apps.
+## Targets
+- Android phones (ready, in-development)
+- Android TV (ready, in-development)
+- Android Auto
+- IOS (prototype)
+- Mac
+- Windows (ready, in-development)
 
 ## Features
 
@@ -12,3 +17,4 @@ Newtone Desktop is actualy unsupported due to targeting in mobile apps.
 - Smartbands support
 - Google assistant support
 - Auto updating playlists (from YT)
+- Multi source playlists (offline + online)

@@ -1,26 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>NewtoneIcon.ico</ApplicationIcon>
-    <StartupObject>Newtone.Desktop.App</StartupObject>
-    <Authors>Mateusz Nejman</Authors>
-    <Product>Newtone Music Player</Product>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>NewtoneDesktop.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
-    <Version>1.0.1</Version>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="C:\Users\Mateusz\.nuget\packages\naudio.vorbis\1.2.0\contentFiles\any\netstandard2.0\LICENSE" />
+    <None Remove="C:\Users\Mateusz\.nuget\packages\naudio.vorbis\1.2.0\contentFiles\any\netstandard2.0\README.md" />
     <None Remove="Resources\ArtistIcon.png" />
     <None Remove="Resources\BackIcon.png" />
     <None Remove="Resources\CloseIcon.png" />
     <None Remove="Resources\CollapseIcon.png" />
     <None Remove="Resources\DownloadIcon.png" />
-    <None Remove="Resources\DownloadPageIcon.png" />
     <None Remove="Resources\EmptyTrack.png" />
     <None Remove="Resources\ExpandIcon.png" />
     <None Remove="Resources\Fonts\Roboto-Black.ttf" />
@@ -47,21 +42,28 @@
     <None Remove="Resources\SettingsIcon.png" />
     <None Remove="Resources\StopIcon.png" />
     <None Remove="Resources\TrackIcon.png" />
-    <None Remove="Resources\UploadPageIcon.png" />
+    <None Remove="Resources\UploadIcon.png" />
     <None Remove="Resources\VolumeDownIcon.png" />
     <None Remove="Resources\VolumeIcon.png" />
     <None Remove="Resources\VolumeUpIcon.png" />
-    <None Remove="Views\NormalWindow.xaml~RF529ff17.TMP" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="NAudio" Version="1.10.0" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0-rc.1.20451.14" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.2.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Newtone.Core\Newtone.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Windows.Foundation.UniversalApiContract">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.18362.0\Windows.Foundation.UniversalApiContract\8.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -70,7 +72,6 @@
     <Resource Include="Resources\CloseIcon.png" />
     <Resource Include="Resources\CollapseIcon.png" />
     <Resource Include="Resources\DownloadIcon.png" />
-    <Resource Include="Resources\DownloadPageIcon.png" />
     <Resource Include="Resources\EmptyTrack.png" />
     <Resource Include="Resources\ExpandIcon.png" />
     <Resource Include="Resources\Fonts\Roboto-Black.ttf" />
@@ -97,7 +98,7 @@
     <Resource Include="Resources\SettingsIcon.png" />
     <Resource Include="Resources\StopIcon.png" />
     <Resource Include="Resources\TrackIcon.png" />
-    <Resource Include="Resources\UploadPageIcon.png" />
+    <Resource Include="Resources\UploadIcon.png" />
     <Resource Include="Resources\VolumeDownIcon.png" />
     <Resource Include="Resources\VolumeIcon.png" />
     <Resource Include="Resources\VolumeUpIcon.png" />

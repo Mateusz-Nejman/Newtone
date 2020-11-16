@@ -57,7 +57,6 @@ namespace Nejman.Xamarin.FocusLibrary
         #region Public Methods
         public new void FocusAction()
         {
-            Console.WriteLine("ToggleButton Focus");
             base.FocusAction();
             VisualStateManager.GoToState(this, IsToggled ? "ToggledOn" : "Normal");
         }

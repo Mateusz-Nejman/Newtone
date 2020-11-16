@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Newtone.Desktop.ViewModels
 {
-    public class AboutViewModel:PropertyChangedBase
+    public class AboutViewModel : PropertyChangedBase
     {
         #region Fields
         private string versionText;

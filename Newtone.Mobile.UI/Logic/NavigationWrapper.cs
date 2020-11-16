@@ -23,7 +23,6 @@ namespace Newtone.Mobile.UI.Logic
         #region Constructors
         public NavigationWrapper(INavigation nav)
         {
-
             Navigation = nav;
         }
         #endregion
@@ -32,13 +31,10 @@ namespace Newtone.Mobile.UI.Logic
         {
             if (Navigation.NavigationStack.Count > 0)
             {
-                if (Navigation.NavigationStack.Last() is INavigationContainer container)
+                if (Navigation.NavigationStack.Last() is INavigationContainer container && !container.IsBlocked())
                 {
-                    if (!container.IsBlocked())
-                    {
-                        container.Block();
-                        await Navigation?.PushAsync(page);
-                    }
+                    container.Block();
+                    await Navigation?.PushAsync(page);
                 }
             }
             else
@@ -58,31 +54,30 @@ namespace Newtone.Mobile.UI.Logic
                 }
             }
             else
-                navBlocked = true;
-
-            if (Navigation.ModalStack.Count > 0)
             {
-                if (Navigation.ModalStack.Last() is INavigationContainer container)
+                navBlocked = true;
+            }
+
+            if (Navigation.ModalStack.Count > 0 && Navigation.ModalStack.Last() is INavigationContainer modalContainer)
+            {
+                modalContainer.Block();
+                modalBlocked = true;
+                var modal = Navigation.ModalStack.Last();
+                var modal1 = page;
+
+                if (modal.GetType() != modal1.GetType())
                 {
-                    container.Block();
-                    modalBlocked = true;
-                    var modal = Navigation.ModalStack.Last();
-                    var modal1 = page;
+                    modalBlocked = false;
+                }
 
-                    if (modal.GetType() != modal1.GetType())
-                        modalBlocked = false;
+                if (modal is Views.TV.ModalPage modalTVPage1 && modal1 is Views.TV.ModalPage modalTVPage2 && modalTVPage1.GetContentType() != modalTVPage2.GetContentType())
+                {
+                    modalBlocked = false;
+                }
 
-                    if(modal is Views.TV.ModalPage modalTVPage1 && modal1 is Views.TV.ModalPage modalTVPage2)
-                    {
-                        if (modalTVPage1.GetContentType() != modalTVPage2.GetContentType())
-                            modalBlocked = false;
-                    }
-
-                    if (modal is ModalPage modalPage1 && modal1 is ModalPage modalPage2)
-                    {
-                        if (modalPage1.GetContentType() != modalPage2.GetContentType())
-                            modalBlocked = false;
-                    }
+                if (modal is ModalPage modalPage1 && modal1 is ModalPage modalPage2 && modalPage1.GetContentType() != modalPage2.GetContentType())
+                {
+                    modalBlocked = false;
                 }
             }
 
@@ -96,10 +91,9 @@ namespace Newtone.Mobile.UI.Logic
         public async Task PopAsync()
         {
             await Navigation?.PopAsync();
-            if (Navigation.NavigationStack.Count > 0)
+            if (Navigation.NavigationStack.Count > 0 && Navigation.NavigationStack.Last() is INavigationContainer container)
             {
-                if (Navigation.NavigationStack.Last() is INavigationContainer container)
-                    container.Unblock();
+                container.Unblock();
             }
         }
         public async Task PopModalAsync()
@@ -112,19 +106,17 @@ namespace Newtone.Mobile.UI.Logic
             {
                 //Ignore
             }
-            if (Navigation.NavigationStack.Count > 0)
+            if (Navigation.NavigationStack.Count > 0 && Navigation.NavigationStack.Last() is INavigationContainer container)
             {
-                if (Navigation.NavigationStack.Last() is INavigationContainer container)
-                    container.Unblock();
+                container.Unblock();
             }
 
-            if (Navigation.ModalStack.Count > 0)
+            if (Navigation.ModalStack.Count > 0 && Navigation.ModalStack.Last() is INavigationContainer modalContainer)
             {
-                if (Navigation.ModalStack.Last() is INavigationContainer container)
-                    container.Unblock();
+                modalContainer.Unblock();
             }
         }
-        public async void Pop()
+        public async Task Pop()
         {
             if (Navigation.ModalStack.Count > 0)
                 await PopModalAsync();

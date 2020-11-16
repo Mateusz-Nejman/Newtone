@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -10,7 +9,6 @@ using AndroidX.Core.App;
 using AndroidX.Media;
 using AndroidX.Media.Session;
 using Newtone.Core;
-using Newtone.Core.Logic;
 using static AndroidX.Media.App.NotificationCompat;
 
 namespace Newtone.Mobile.Droid.Media
@@ -19,9 +17,6 @@ namespace Newtone.Mobile.Droid.Media
     [IntentFilter(new String[] { "android.media.browse.MediaBrowserService" })]
     public class MediaPlayerService : MediaBrowserServiceCompat
     {
-        #region Fields
-        private PlaybackStateCompat.Builder stateBuilder;
-        #endregion
         #region Properties
         public static MediaPlayerService Instance { get; set; }
         #endregion
@@ -38,7 +33,6 @@ namespace Newtone.Mobile.Droid.Media
         public override void OnCreate()
         {
             base.OnCreate();
-            ConsoleDebug.WriteLine("MediaPlayerService OnCreate()");
             Instance = this;
             Global.MediaSession = new MediaSessionCompat(BaseContext, "newtone");
             var intent = new Intent(BaseContext, typeof(MainActivity));
@@ -48,11 +42,7 @@ namespace Newtone.Mobile.Droid.Media
             Global.MediaSession.SetFlags(MediaSessionCompat.FlagHandlesTransportControls | MediaSessionCompat.FlagHandlesMediaButtons | MediaSessionCompat.FlagHandlesQueueCommands);
             Global.MediaSession.SetCallback(new MediaSessionCallback());
 
-            stateBuilder = new PlaybackStateCompat.Builder()
-                .SetActions(PlaybackStateCompat.ActionPlay | PlaybackStateCompat.ActionPlayPause | PlaybackStateCompat.ActionPlayFromSearch | PlaybackStateCompat.ActionPlayFromUri
-                | PlaybackStateCompat.ActionPrepare | PlaybackStateCompat.ActionPrepareFromSearch | PlaybackStateCompat.ActionPrepareFromUri);
-
-            Global.MediaSession.SetPlaybackState(stateBuilder.Build());
+            Global.MediaSession.SetPlaybackState(Global.StateBuilder?.Build());
             SessionToken = Global.MediaSession.SessionToken;
             StartForeground(0, GetNotification());
         }
@@ -118,7 +108,10 @@ namespace Newtone.Mobile.Droid.Media
                     Global.NotificationManager?.Notify(0, n);
                 }
             }
-            catch { }
+            catch
+            {
+                //Ignore
+            }
         }
 
         public void SetNotificationData(int state)
@@ -129,7 +122,10 @@ namespace Newtone.Mobile.Droid.Media
                 Global.StateBuilder.SetState(state, (long)(GlobalData.Current.MediaPlayer.CurrentPosition * 1000.0), 1.0f);
                 Global.MediaSession.SetPlaybackState(Global.StateBuilder.Build());
             }
-            catch { }
+            catch
+            {
+                //Ignore
+            }
         }
         #endregion
     }

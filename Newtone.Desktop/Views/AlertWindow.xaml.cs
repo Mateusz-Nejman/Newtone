@@ -12,7 +12,7 @@ namespace Newtone.Desktop.Views
         public AlertWindow(string title, string message, string confirm, string cancel)
         {
             InitializeComponent();
-            DataContext = new AlertViewModel(this, title, message, confirm,cancel);
+            DataContext = new AlertViewModel(this, title, message, confirm, cancel);
         }
         #endregion
     }

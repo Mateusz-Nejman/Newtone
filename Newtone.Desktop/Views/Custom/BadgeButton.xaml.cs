@@ -16,7 +16,6 @@ namespace Newtone.Desktop.Views.Custom
         #region Properties
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(BadgeButton));
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(BadgeButton));
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(string), typeof(BadgeButton));
         public int BadgeCount
         {
             get
@@ -27,27 +26,6 @@ namespace Newtone.Desktop.Views.Custom
             {
                 badgeCount = value;
                 badgeText.Text = badgeCount < 10 ? badgeCount.ToString() : "9+";
-            }
-        }
-
-        public string Source
-        {
-            get
-            {
-                return (string)base.GetValue(SourceProperty);
-            }
-            set
-            {
-                base.SetValue(SourceProperty, value);
-
-                if (Source == "DownloadPageIcon.png")
-                {
-                    badgeImage.Source = ImageProcessing.FromArray(Properties.Resources.DownloadPageIcon);
-                }
-                else if(Source == "UploadPageIcon.png")
-                {
-                    badgeImage.Source = ImageProcessing.FromArray(Properties.Resources.UploadPageIcon);
-                }
             }
         }
 
@@ -71,12 +49,13 @@ namespace Newtone.Desktop.Views.Custom
             }
 
         }
-        
+
         #endregion
         #region Constructors
         public BadgeButton()
         {
             InitializeComponent();
+            badgeImage.Source = ImageProcessing.FromArray(Properties.Resources.DownloadIcon);
         }
         #endregion
         #region Private Methods

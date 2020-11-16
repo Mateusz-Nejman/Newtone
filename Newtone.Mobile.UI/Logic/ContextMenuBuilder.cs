@@ -29,11 +29,7 @@ namespace Newtone.Mobile.UI.Logic
             string filePath = elems[0];
             string playlistName = elems[1];
 
-            List<string> menuItems = new List<string>() { filePath.Length == 11 ? Localization.Download : Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue };
-            if (!string.IsNullOrEmpty(playlistName))
-                menuItems.Add(Localization.SyncAddPlaylist);
-
-            menuItems.Add(Localization.TrackMenuDelete);
+            List<string> menuItems = new List<string>() { filePath.Length == 11 ? Localization.Download : Localization.TrackMenuEdit, Localization.TrackMenuPlaylist, Localization.TrackMenuQueue, Localization.TrackMenuDelete };
 
             Global.ContextMenuBuilder.BuildForTrack(sender, modelInfo, filePath, playlistName, menuItems, TrackAction);
         }
@@ -432,7 +428,6 @@ namespace Newtone.Mobile.UI.Logic
                             GlobalData.Current.Playlists[answer].Add(playlistItem);
                     }
 
-
                     GlobalData.Current.SaveConfig();
                 }
 
@@ -507,7 +502,6 @@ namespace Newtone.Mobile.UI.Logic
             else if (item == Localization.TrackMenuPlaylist)
             {
                 string[] elems = tag.Split(GlobalData.SEPARATOR);
-                ConsoleDebug.WriteLine("Tag: " + tag);
                 YoutubeClient client = new YoutubeClient();
                 var urlType = SearchProcessing.CheckLink(elems[1]);
 

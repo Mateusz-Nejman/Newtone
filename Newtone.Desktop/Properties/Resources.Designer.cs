@@ -63,40 +63,40 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] ArtistIcon {
+        internal static System.Byte[] ArtistIcon {
             get {
                 object obj = ResourceManager.GetObject("ArtistIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] BackIcon {
+        internal static System.Byte[] BackIcon {
             get {
                 object obj = ResourceManager.GetObject("BackIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] CloseIcon {
+        internal static System.Byte[] CloseIcon {
             get {
                 object obj = ResourceManager.GetObject("CloseIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] CollapseIcon {
+        internal static System.Byte[] CollapseIcon {
             get {
                 object obj = ResourceManager.GetObject("CollapseIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
@@ -113,219 +113,209 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] DownloadPageIcon {
-            get {
-                object obj = ResourceManager.GetObject("DownloadPageIcon", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
-        /// </summary>
-        internal static byte[] EmptyTrack {
+        internal static System.Byte[] EmptyTrack {
             get {
                 object obj = ResourceManager.GetObject("EmptyTrack", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] ExpandIcon {
+        internal static System.Byte[] ExpandIcon {
             get {
                 object obj = ResourceManager.GetObject("ExpandIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] HomeIcon {
+        internal static System.Byte[] HomeIcon {
             get {
                 object obj = ResourceManager.GetObject("HomeIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] Maximize1Icon {
+        internal static System.Byte[] Maximize1Icon {
             get {
                 object obj = ResourceManager.GetObject("Maximize1Icon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] MaximizeIcon {
+        internal static System.Byte[] MaximizeIcon {
             get {
                 object obj = ResourceManager.GetObject("MaximizeIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] MenuIcon {
+        internal static System.Byte[] MenuIcon {
             get {
                 object obj = ResourceManager.GetObject("MenuIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] MinimizeIcon {
+        internal static System.Byte[] MinimizeIcon {
             get {
                 object obj = ResourceManager.GetObject("MinimizeIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] NewtoneIcon {
+        internal static System.Byte[] NewtoneIcon {
             get {
                 object obj = ResourceManager.GetObject("NewtoneIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] NextIcon {
+        internal static System.Byte[] NextIcon {
             get {
                 object obj = ResourceManager.GetObject("NextIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] PauseIcon {
+        internal static System.Byte[] PauseIcon {
             get {
                 object obj = ResourceManager.GetObject("PauseIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] PlayIcon {
+        internal static System.Byte[] PlayIcon {
             get {
                 object obj = ResourceManager.GetObject("PlayIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] PlaylistIcon {
+        internal static System.Byte[] PlaylistIcon {
             get {
                 object obj = ResourceManager.GetObject("PlaylistIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] PrevIcon {
+        internal static System.Byte[] PrevIcon {
             get {
                 object obj = ResourceManager.GetObject("PrevIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] RandomIcon {
+        internal static System.Byte[] RandomIcon {
             get {
                 object obj = ResourceManager.GetObject("RandomIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] RepeatIcon {
+        internal static System.Byte[] RepeatIcon {
             get {
                 object obj = ResourceManager.GetObject("RepeatIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] RepeatOneIcon {
+        internal static System.Byte[] RepeatOneIcon {
             get {
                 object obj = ResourceManager.GetObject("RepeatOneIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] SearchIcon {
+        internal static System.Byte[] SearchIcon {
             get {
                 object obj = ResourceManager.GetObject("SearchIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] SettingsIcon {
+        internal static System.Byte[] SettingsIcon {
             get {
                 object obj = ResourceManager.GetObject("SettingsIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] StopIcon {
+        internal static System.Byte[] StopIcon {
             get {
                 object obj = ResourceManager.GetObject("StopIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] TrackIcon {
+        internal static System.Byte[] TrackIcon {
             get {
                 object obj = ResourceManager.GetObject("TrackIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] UploadPageIcon {
+        internal static byte[] UploadIcon {
             get {
-                object obj = ResourceManager.GetObject("UploadPageIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("UploadIcon", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -333,30 +323,30 @@ namespace Newtone.Desktop.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] VolumeDownIcon {
+        internal static System.Byte[] VolumeDownIcon {
             get {
                 object obj = ResourceManager.GetObject("VolumeDownIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] VolumeIcon {
+        internal static System.Byte[] VolumeIcon {
             get {
                 object obj = ResourceManager.GetObject("VolumeIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Byte[].
         /// </summary>
-        internal static byte[] VolumeUpIcon {
+        internal static System.Byte[] VolumeUpIcon {
             get {
                 object obj = ResourceManager.GetObject("VolumeUpIcon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Byte[])(obj));
             }
         }
     }

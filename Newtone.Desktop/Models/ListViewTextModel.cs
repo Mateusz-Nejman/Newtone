@@ -2,7 +2,7 @@
 
 namespace Newtone.Desktop.Models
 {
-    public class ListViewTextModel:PropertyChangedBase
+    public class ListViewTextModel : PropertyChangedBase
     {
         #region Fields
         private string text;
