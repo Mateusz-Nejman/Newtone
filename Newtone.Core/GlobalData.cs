@@ -97,7 +97,7 @@ namespace Newtone.Core
             CurrentPlaylist = new List<Newtone.Core.Media.MediaSource>();
             WebToLocalPlaylists = new Dictionary<string, string>();
             RecomendedPlaylists = new Dictionary<string, string>(); //name, url
-            DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData) + "\\NSEC\\Newtone";
+            DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData) + "/NSEC/Newtone";
             Console.WriteLine(DataPath);
 
             History = new List<Newtone.Core.Models.HistoryModel>();
@@ -261,6 +261,7 @@ namespace Newtone.Core
 
         public void SaveConfig()
         {
+            Directory.CreateDirectory(DataPath);
             NSEC2 nsec = new NSEC2(NSEC_HASH);
 
             string buffer = MediaPlayer.GetVolume().ToString();
