@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="101" android:versionName="6.0001" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="102" android:versionName="6.0002" package="com.nejman.nsec.music_player" android:installLocation="preferExternal">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="29" />
   <application 
     android:allowBackup="true" 

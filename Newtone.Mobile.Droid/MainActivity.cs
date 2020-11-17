@@ -136,6 +136,9 @@ namespace Newtone.Mobile.Droid
 
         public override bool OnKeyDown([GeneratedEnum] Keycode keyCode, KeyEvent e)
         {
+            if (!UI.Global.TV)
+                return base.OnKeyDown(keyCode, e);
+
             var currentElement = FocusContext.GetFocusElement();
 
             if (keyCode == Keycode.DpadLeft)
@@ -181,6 +184,9 @@ namespace Newtone.Mobile.Droid
 
         public override bool OnKeyLongPress([GeneratedEnum] Keycode keyCode, KeyEvent e)
         {
+            if (!UI.Global.TV)
+                return base.OnKeyLongPress(keyCode, e);
+
             if(keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter || keyCode == Keycode.ButtonSelect || keyCode == Keycode.ButtonA || keyCode == Keycode.NumpadEnter)
             {
                 shortPress = false;
@@ -204,6 +210,9 @@ namespace Newtone.Mobile.Droid
 
         public override bool OnKeyUp([GeneratedEnum] Keycode keyCode, KeyEvent e)
         {
+            if (!UI.Global.TV)
+                return base.OnKeyUp(keyCode, e);
+
             if (keyCode == Keycode.Enter || keyCode == Keycode.DpadCenter || keyCode == Keycode.ButtonSelect || keyCode == Keycode.ButtonA || keyCode == Keycode.NumpadEnter)
             {
                 if(shortPress)
