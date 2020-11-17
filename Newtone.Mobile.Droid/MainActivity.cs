@@ -310,6 +310,7 @@ namespace Newtone.Mobile.Droid
             GlobalData.Current.MediaPlayer.SetNativeActions(MediaPlayerHelper.Play);
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
+            GlobalData.Current.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/Debug/consoleDebug.txt");
             GlobalData.Current.IncludedPaths = new List<string>()
             {
