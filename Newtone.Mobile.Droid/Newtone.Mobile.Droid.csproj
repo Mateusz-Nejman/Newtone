@@ -103,7 +103,6 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\AudioSliderControlRenderer.cs" />
-    <Compile Include="Views\NPressGestureMaskRenderer.cs" />
     <Compile Include="Views\PopupMenu.cs" />
     <Compile Include="Views\PressGestureMaskRenderer.cs" />
   </ItemGroup>

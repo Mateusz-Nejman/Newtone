@@ -54,6 +54,8 @@ namespace Nejman.Xamarin.FocusLibrary
             set { SetValue(NextFocusDownProperty, value); }
             get { return (INFocusElement)GetValue(NextFocusDownProperty); }
         }
+
+        public INFocusElement PrevionsElement { get; set; } //not used
         #endregion
         #region Constructors
         public NEntry()
@@ -73,6 +75,7 @@ namespace Nejman.Xamarin.FocusLibrary
             bool isFocused = (bool)newValue;
 
             focusButton.BackgroundColor = isFocused ? focusButton.NFocusColor : Color.Transparent;
+            focusButton.PrevionsElement = null;
         }
         #endregion
         #region Public Methods

@@ -3,24 +3,26 @@ using Xamarin.Forms;
 
 namespace Nejman.Xamarin.FocusLibrary
 {
-    public class NButton : Button, INFocusElement
+    internal class NKeyboardTextButton : Button, INFocusElement
     {
         #region Properties
         public static readonly BindableProperty IsNFocusedProperty =
-            BindableProperty.Create("IsNFocused", typeof(bool), typeof(NButton), false, propertyChanged: OnIsNFocusedChanged);
-        public static readonly BindableProperty NFocusColorProperty =
-            BindableProperty.Create("NFocusColor", typeof(Color), typeof(NButton), Color.White);
+            BindableProperty.Create("IsNFocused", typeof(bool), typeof(NKeyboardTextButton), false, propertyChanged: OnIsNFocusedChanged);
+        public static readonly BindableProperty NBackColorProperty =
+            BindableProperty.Create("NBackColor", typeof(Color), typeof(NKeyboardTextButton), Color.White);
+        public static readonly BindableProperty NFontColorProperty =
+            BindableProperty.Create("NFontColor", typeof(Color), typeof(NKeyboardTextButton), Color.Black);
 
         public static readonly BindableProperty NextFocusLeftProperty =
-            BindableProperty.Create("NextFocusLeft", typeof(INFocusElement), typeof(NButton));
+            BindableProperty.Create("NextFocusLeft", typeof(INFocusElement), typeof(NKeyboardTextButton));
         public static readonly BindableProperty NextFocusRightProperty =
-            BindableProperty.Create("NextFocusRight", typeof(INFocusElement), typeof(NButton));
+            BindableProperty.Create("NextFocusRight", typeof(INFocusElement), typeof(NKeyboardTextButton));
         public static readonly BindableProperty NextFocusUpProperty =
-            BindableProperty.Create("NextFocusUp", typeof(INFocusElement), typeof(NButton));
+            BindableProperty.Create("NextFocusUp", typeof(INFocusElement), typeof(NKeyboardTextButton));
         public static readonly BindableProperty NextFocusDownProperty =
-            BindableProperty.Create("NextFocusDown", typeof(INFocusElement), typeof(NButton));
+            BindableProperty.Create("NextFocusDown", typeof(INFocusElement), typeof(NKeyboardTextButton));
         public static readonly BindableProperty NCommandProperty =
-            BindableProperty.Create("NCommand", typeof(ICommand), typeof(NButton));
+            BindableProperty.Create("NCommand", typeof(ICommand), typeof(NKeyboardTextButton));
 
         public bool IsNFocused
         {
@@ -28,10 +30,16 @@ namespace Nejman.Xamarin.FocusLibrary
             get { return (bool)GetValue(IsNFocusedProperty); }
         }
 
-        public Color NFocusColor
+        public Color NBackColor
         {
-            set { SetValue(NFocusColorProperty, value); }
-            get { return (Color)GetValue(NFocusColorProperty); }
+            set { SetValue(NBackColorProperty, value); }
+            get { return (Color)GetValue(NBackColorProperty); }
+        }
+
+        public Color NFontColor
+        {
+            set { SetValue(NFontColorProperty, value); }
+            get { return (Color)GetValue(NFontColorProperty); }
         }
 
         public INFocusElement NextFocusLeft
@@ -67,23 +75,26 @@ namespace Nejman.Xamarin.FocusLibrary
         public INFocusElement PrevionsElement { get; set; } //not used
         #endregion
         #region Constructors
-        public NButton()
+        public NKeyboardTextButton()
         {
             FocusContext.Register(this);
-            this.BorderWidth = 2;
+            this.BorderWidth = 0;
+            this.BorderColor = Color.Transparent;
+            TextTransform = TextTransform.None;
         }
 
-        ~NButton()
+        ~NKeyboardTextButton()
         {
             FocusContext.Unregister(this);
         }
         #endregion
         #region Private Methods
-        private static void OnIsNFocusedChanged(BindableObject bindable, object oldValue, object newValue)
+        internal static void OnIsNFocusedChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            NButton focusButton = (NButton)bindable;
+            NKeyboardTextButton focusButton = (NKeyboardTextButton)bindable;
             bool isFocused = (bool)newValue;
-            focusButton.BorderColor = isFocused ? focusButton.NFocusColor : Color.Transparent;
+            focusButton.BackgroundColor = isFocused ? focusButton.NFontColor : focusButton.NBackColor;
+            focusButton.TextColor = isFocused ? focusButton.NBackColor : focusButton.NFontColor;
             focusButton.PrevionsElement = null;
         }
         #endregion

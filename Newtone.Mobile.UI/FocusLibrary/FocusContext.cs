@@ -77,6 +77,7 @@ namespace Nejman.Xamarin.FocusLibrary
                     oldElement.IsNFocused = false;
                 }
                 UnfocusAll();
+                newElement.PrevionsElement = oldElement;
                 newElement.IsNFocused = true;
                 return true;
             }

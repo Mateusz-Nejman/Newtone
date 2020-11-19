@@ -38,6 +38,7 @@ namespace Nejman.Xamarin.FocusLibrary
         public INFocusElement NextFocusDown { get; set; }
 
         public NUntouchedListView ParentListView { get; set; }
+        public INFocusElement PrevionsElement { get; set; } //not used
         #endregion
         #region Constructors
         protected NListViewItem()
@@ -62,6 +63,8 @@ namespace Nejman.Xamarin.FocusLibrary
             {
                 ParentListView.NItemAppearing?.Execute(ParentListView.NFocusedIndex);
             }
+
+            PrevionsElement = null;
         }
         #endregion
         #region Public Methods

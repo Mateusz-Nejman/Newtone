@@ -145,6 +145,8 @@ namespace Nejman.Xamarin.FocusLibrary
             set { SetValue(NItemAppearingProperty, value); }
             get { return (ICommand)GetValue(NItemAppearingProperty); }
         }
+
+        public INFocusElement PrevionsElement { get; set; }
         #endregion
         #region Constructors
         public NUntouchedListView()
@@ -170,8 +172,49 @@ namespace Nejman.Xamarin.FocusLibrary
             NUntouchedListView focusButton = (NUntouchedListView)bindable;
             bool isFocused = (bool)newValue;
 
+
             if (isFocused)
             {
+                /*if(focusButton.NItemSource.Count == 0 && focusButton.PrevionsElement != null)
+                {
+                    var thisPosition = focusButton.GetScreenCoordinates();
+                    var previousPosition = (focusButton.PrevionsElement as VisualElement).GetScreenCoordinates();
+                    bool left = previousPosition.X < thisPosition.X;
+                    bool up = previousPosition.Y < thisPosition.Y;
+
+                    if (up)
+                    {
+                        if (!FocusContext.FocusDown(focusButton))
+                        {
+                            FocusContext.FocusUp(focusButton);
+                        }
+                    }
+                    else if (left)
+                    {
+                        if (!FocusContext.FocusRight(focusButton))
+                        {
+                            FocusContext.FocusLeft(focusButton);
+                        }
+                    }
+                    else if(!up)
+                    {
+                        if (!FocusContext.FocusUp(focusButton))
+                        {
+                            FocusContext.FocusDown(focusButton);
+                        }
+                    }
+                    else if(!left)
+                    {
+                        if (!FocusContext.FocusLeft(focusButton))
+                        {
+                            FocusContext.FocusRight(focusButton);
+                        }
+                    }
+
+                    return;
+                }*/
+                //TODO later
+
                 focusButton.active = true;
             }
 
@@ -186,7 +229,9 @@ namespace Nejman.Xamarin.FocusLibrary
             {
                 focusButton.NItemSource[focusButton.NFocusedIndex].IsNFocused = true;
                 (focusButton.container.Children[focusButton.NFocusedIndex] as Frame).BorderColor = focusButton.NFocusColor;
-            } 
+            }
+
+            focusButton.PrevionsElement = null;
         }
 
         private static void OrientationChanged(BindableObject bindable, object oldValue, object newValue)

@@ -63,6 +63,8 @@ namespace Nejman.Xamarin.FocusLibrary
             set { SetValue(NCommandProperty, value); }
             get { return (ICommand)GetValue(NCommandProperty); }
         }
+
+        public INFocusElement PrevionsElement { get; set; } //not used
         #endregion
         #region Constructors
         public NImageButton()
@@ -83,6 +85,7 @@ namespace Nejman.Xamarin.FocusLibrary
             bool isFocused = (bool)newValue;
 
             focusButton.BorderColor = isFocused ? focusButton.NFocusColor : Color.Transparent;
+            focusButton.PrevionsElement = null;
         }
         #endregion
         #region Public Methods

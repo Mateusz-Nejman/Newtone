@@ -39,7 +39,7 @@ namespace Newtone.Mobile.UI.Views.TV
             }
             else
             {
-                ViewModel.SearchText += clickedButton.ToLowerInvariant();
+                ViewModel.SearchText += clickedButton;
                 ViewModel.RefreshSuggestion();
             }
         }

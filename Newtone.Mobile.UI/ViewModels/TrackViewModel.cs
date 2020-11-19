@@ -104,7 +104,10 @@ namespace Newtone.Mobile.UI.ViewModels
                         Items[index].Artist = source.Artist;
                     }
                     model.CheckChanges();
-                    ListItems[index] = model;
+                    (ListItems[index] as TrackModel).Title = model.Title;
+                    (ListItems[index] as TrackModel).Artist = model.Artist;
+                    (ListItems[index] as TrackModel).Image = model.Image;
+                    (ListItems[index] as TrackModel).Duration = model.Duration;
                 }
                 else
                 {
