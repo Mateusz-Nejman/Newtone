@@ -9,7 +9,7 @@ using Newtone.Mobile.UI.Models;
 using Newtone.Mobile.UI.Processing;
 using Xamarin.Forms;
 
-namespace Newtone.Mobile.UI.ViewModels
+namespace Newtone.Mobile.UI.ViewModels.TV
 {
     public class PlaylistViewModel
     {
@@ -20,7 +20,18 @@ namespace Newtone.Mobile.UI.ViewModels
         {
             get
             {
-                return item => new Views.TV.ViewCells.PlaylistGridItem(item);
+
+                return item =>
+                {
+                    if((item as PlaylistModel).WebUrl.Length == 0)
+                    {
+                        return new Views.TV.ViewCells.PlaylistGridItem(item);
+                    }
+                    else
+                    {
+                        return new Views.TV.ViewCells.PlaylistWebGridItem(item);
+                    }
+                };
             }
         }
 
@@ -67,9 +78,28 @@ namespace Newtone.Mobile.UI.ViewModels
                 }
 
                 Items.Add(new PlaylistModel() { Image = image, Name = playlistName, TrackCount = GlobalData.Current.Playlists[playlistName].Count });
-                ListItems.Add(Items[Items.Count - 1]);
+                ListItems.Add(Items[^1]);
             }
+
+            GenerateRecomended();
             IsInitializing = false;
+        }
+        #endregion
+        #region Private Methods
+        private void GenerateRecomended()
+        {
+            if (Global.Application.HasInternet())
+            {
+                GlobalData.Current.RecomendedPlaylists = RecomendedPlaylists.GetRecomendedPlaylists();
+            }
+
+            foreach (var key in GlobalData.Current.RecomendedPlaylists.Keys)
+            {
+                string name = key;
+                string id = GlobalData.Current.RecomendedPlaylists[key];
+                Items.Add(new PlaylistModel() { Name = name, WebUrl = id });
+                ListItems.Add(Items[^1]);
+            }
         }
         #endregion
     }

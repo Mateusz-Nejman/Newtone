@@ -1,7 +1,7 @@
 ﻿using Nejman.Xamarin.FocusLibrary;
 using Newtone.Core;
 using Newtone.Core.Logic;
-using Newtone.Mobile.UI.ViewModels;
+using Newtone.Mobile.UI.ViewModels.TV;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

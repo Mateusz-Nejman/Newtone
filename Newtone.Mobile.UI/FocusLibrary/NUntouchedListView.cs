@@ -175,46 +175,6 @@ namespace Nejman.Xamarin.FocusLibrary
 
             if (isFocused)
             {
-                /*if(focusButton.NItemSource.Count == 0 && focusButton.PrevionsElement != null)
-                {
-                    var thisPosition = focusButton.GetScreenCoordinates();
-                    var previousPosition = (focusButton.PrevionsElement as VisualElement).GetScreenCoordinates();
-                    bool left = previousPosition.X < thisPosition.X;
-                    bool up = previousPosition.Y < thisPosition.Y;
-
-                    if (up)
-                    {
-                        if (!FocusContext.FocusDown(focusButton))
-                        {
-                            FocusContext.FocusUp(focusButton);
-                        }
-                    }
-                    else if (left)
-                    {
-                        if (!FocusContext.FocusRight(focusButton))
-                        {
-                            FocusContext.FocusLeft(focusButton);
-                        }
-                    }
-                    else if(!up)
-                    {
-                        if (!FocusContext.FocusUp(focusButton))
-                        {
-                            FocusContext.FocusDown(focusButton);
-                        }
-                    }
-                    else if(!left)
-                    {
-                        if (!FocusContext.FocusLeft(focusButton))
-                        {
-                            FocusContext.FocusRight(focusButton);
-                        }
-                    }
-
-                    return;
-                }*/
-                //TODO later
-
                 focusButton.active = true;
             }
 
@@ -225,7 +185,7 @@ namespace Nejman.Xamarin.FocusLibrary
                 (focusButton.container.Children[0] as Frame).BorderColor = focusButton.NFocusColor;
             }
 
-            if(isFocused && focusButton.NFocusedIndex >= 0)
+            if(isFocused && focusButton.NFocusedIndex >= 0 && focusButton.NFocusedIndex < focusButton.NItemSource.Count && focusButton.NFocusedIndex < focusButton.container.Children.Count)
             {
                 focusButton.NItemSource[focusButton.NFocusedIndex].IsNFocused = true;
                 (focusButton.container.Children[focusButton.NFocusedIndex] as Frame).BorderColor = focusButton.NFocusColor;

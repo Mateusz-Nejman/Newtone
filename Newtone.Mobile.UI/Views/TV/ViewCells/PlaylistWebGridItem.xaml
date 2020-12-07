@@ -11,7 +11,7 @@
                 <RowDefinition Height="18"/>
             </Grid.RowDefinitions>
 
-            <Image Source="{Binding Image}"
+            <Image Source="EmptyTrack.png"
                    Grid.RowSpan="2"
                    Aspect="AspectFill"/>
             <Grid BackgroundColor="#99000000" Grid.Row="1"/>

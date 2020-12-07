@@ -1,5 +1,4 @@
 ﻿using Newtone.Core;
-using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Mobile.UI.Views.ViewCells;

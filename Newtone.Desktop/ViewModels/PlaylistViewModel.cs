@@ -58,17 +58,22 @@ namespace Newtone.Desktop.ViewModels
 
             if (index >= 0 && index < Items.Count)
             {
-                foreach (string path in GlobalData.Current.Playlists[Items.Count == 0 || listView.SelectedIndex == -1 ? "" : Items[listView.SelectedIndex].Name])
+                var model = Items[index];
+                if(model.WebUrl.Length == 0)
                 {
-                    if (GlobalData.Current.Audios.ContainsKey(path))
+                    foreach (string path in GlobalData.Current.Playlists[Items.Count == 0 || listView.SelectedIndex == -1 ? "" : Items[listView.SelectedIndex].Name])
                     {
-                        TrackItems.Add(new Models.TrackModel(GlobalData.Current.Audios[path]));
-                    }
-                    else if(path.Length == 11 && GlobalData.Current.SavedTracks.ContainsKey(path))
-                    {
-                        TrackItems.Add(new Models.TrackModel(GlobalData.Current.SavedTracks[path]));
+                        if (GlobalData.Current.Audios.ContainsKey(path))
+                        {
+                            TrackItems.Add(new Models.TrackModel(GlobalData.Current.Audios[path]));
+                        }
+                        else if (path.Length == 11 && GlobalData.Current.SavedTracks.ContainsKey(path))
+                        {
+                            TrackItems.Add(new Models.TrackModel(GlobalData.Current.SavedTracks[path]));
+                        }
                     }
                 }
+                
             }
         }
 

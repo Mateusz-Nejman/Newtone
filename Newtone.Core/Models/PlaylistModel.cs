@@ -5,7 +5,7 @@
         #region Fields
         private string name;
         private int trackCount;
-        private string webUrl;
+        private string webUrl = "";
         #endregion
         #region Properties
         public string Name
@@ -32,7 +32,10 @@
         {
             get
             {
-                return string.Concat(Name, " (", TrackCount, ")");
+                if (WebUrl.Length == 0)
+                    return string.Concat(Name, " (", TrackCount, ")");
+                else
+                    return Name;
             }
         }
         public string WebUrl
