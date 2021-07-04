@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:Nejman.Newtone.Mobile.ViewModels" 
+             xmlns:viewcells="clr-namespace:Nejman.Newtone.Mobile.Views.ViewCells"
+             xmlns:mobile="clr-namespace:Nejman.Newtone.Mobile"
+             xmlns:localization="clr-namespace:Nejman.Newtone.Core.Localization;assembly=Nejman.Newtone.Core" xmlns:views="clr-namespace:Nejman.Newtone.Mobile.Views"
+             x:Class="Nejman.Newtone.Mobile.Views.SettingsPage"
+             Visual="Material" BackgroundColor="{x:Static mobile:Colors.PrimaryBackground}"
+             Shell.NavBarHasShadow="false">
+    <ContentPage.BindingContext>
+        <viewmodels:SettingsViewModel/>
+    </ContentPage.BindingContext>
+    <Shell.TitleView>
+        <views:BaseTitleView/>
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ScrollView VerticalOptions="Fill">
+                <StackLayout>
+                    <ListView 
+                    SelectionMode="Single" 
+                    RowHeight="72" 
+                    ItemSelected="SettingsList_ItemSelected" 
+                    ItemsSource="{Binding Items}" 
+                    BackgroundColor="Transparent">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <viewcells:SettingViewCell/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                        <Label Text="Newtone" FontSize="48" TextColor="{x:Static mobile:Colors.PrimaryText}" FontFamily="{x:Static mobile:Fonts.Black}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Version}" FontSize="16" TextColor="{x:Static mobile:Colors.ThirdaryBackground}" FontFamily="{x:Static mobile:Fonts.Black}" HorizontalOptions="Center"/>
+                        <Label Text="{x:Static localization:Localization.AboutAuthor}" FontSize="16" TextColor="{x:Static mobile:Colors.PrimaryText}" FontFamily="{x:Static mobile:Fonts.Regular}"/>
+                        <Label Text="{x:Static localization:Localization.AboutDesc}" FontSize="16" TextColor="{x:Static mobile:Colors.PrimaryText}" FontFamily="{x:Static mobile:Fonts.Regular}" LineBreakMode="WordWrap"/>
+                        <Button Margin="0,10,0,10" Text="{Static localization:Localization.AboutWWW}" Command="{Binding GotoWWW}" BackgroundColor="{Static mobile:Colors.SecondaryBackground}"
+                        TextColor="{Static mobile:Colors.SecondaryText}"/>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <views:PlayerPanel x:Name="playerPanel" Grid.Row="1"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

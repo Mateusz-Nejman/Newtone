@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest 
+  xmlns:android="http://schemas.android.com/apk/res/android" 
+  android:versionCode="700" 
+  android:versionName="7.0000" 
+  package="com.nejman.nsec.music_player"
+  android:installLocation="preferExternal"
+  >
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30" />
+    <application
+      android:allowBackup="true"
+      android:icon="@mipmap/app_icon"
+      android:label="Newtone"
+      android:roundIcon="@mipmap/icon_round"
+      android:appCategory="audio"
+      android:requestLegacyExternalStorage="true"
+      android:banner="@drawable/banner"
+      ></application>
+  <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive" />
+  <uses-feature android:name="android.software.leanback"
+        android:required="false" />
+  <uses-feature android:name="android.hardware.touchscreen"
+              android:required="false" />
+</manifest>
