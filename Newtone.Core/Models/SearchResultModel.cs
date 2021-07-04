@@ -1,6 +1,7 @@
 ﻿using Newtone.Core.Logic;
 using System;
 using System.Net;
+using YoutubeExplode.Common;
 using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Models
@@ -112,17 +113,16 @@ namespace Newtone.Core.Models
         {
             var ret = new SearchResultModel()
             {
-                Author = video.Author,
-                Duration = video.Duration,
+                Author = video.Author.Title,
+                Duration = video.Duration ?? TimeSpan.Zero,
                 Id = video.Id,
-                MixId = video.GetVideoMixPlaylistId(),
-                ThumbUrl = video.Thumbnails.MediumResUrl,
+                ThumbUrl = video.Thumbnails.GetWithHighestResolution().Url,
                 Title = video.Title,
                 VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url)
             };
 
             using WebClient client = new WebClient();
-            ret.Image = client.DownloadData(video.Thumbnails.MediumResUrl);
+            ret.Image = client.DownloadData(video.Thumbnails.GetWithHighestResolution().Url);
             return ret;
         }
         #endregion

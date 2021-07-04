@@ -60,7 +60,10 @@ namespace Newtone.Mobile.UI.Views.Custom
 
         private static void OnMaxWithoutBaseEventsChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            Instance.MaxWithoutBaseEvents = (double)newValue;
+            var value = (double)newValue;
+
+            if(!double.IsNaN(value))
+            Instance.MaxWithoutBaseEvents = value;
         }
         #endregion
         #region Nested Classes

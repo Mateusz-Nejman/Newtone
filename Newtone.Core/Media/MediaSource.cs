@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using YoutubeExplode.Videos;
+using YoutubeExplode.Common;
 
 namespace Newtone.Core.Media
 {
@@ -41,11 +42,11 @@ namespace Newtone.Core.Media
         public static explicit operator MediaSource(Video video)
         {
             using WebClient client = new WebClient();
-            byte[] picture = client.DownloadData(video.Thumbnails.MediumResUrl);
+            byte[] picture = client.DownloadData(video.Thumbnails.GetWithHighestResolution().Url);
             return new MediaSource()
             {
-                Artist = video.Author,
-                Duration = video.Duration,
+                Artist = video.Author.Title,
+                Duration = video.Duration ?? TimeSpan.Zero,
                 FilePath = video.Id,
                 Title = video.Title,
                 Type = SourceType.Web,

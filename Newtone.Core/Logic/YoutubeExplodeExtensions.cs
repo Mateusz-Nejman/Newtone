@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Logic
@@ -7,6 +8,11 @@ namespace Newtone.Core.Logic
     public static class YoutubeExplodeExtensions
     {
         #region Public Methods
+        public static string GetVideoMixPlaylistId(this PlaylistVideo video)
+        {
+            return "RD" + video.Id;
+        }
+
         public static string GetVideoMixPlaylistId(this Video video)
         {
             return "RD" + video.Id;

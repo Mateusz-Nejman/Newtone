@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:custom="clr-namespace:Newtone.Mobile.UI.Views.Custom"
+             x:Class="Newtone.Mobile.UI.Views.ViewCells.ArtistViewCell">
+    <ViewCell.View>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding Image}" Aspect="AspectFill" Margin="5"/>
+            <Label Text="{Binding Name}" Grid.Column="1" Style="{StaticResource ListViewText}" LineBreakMode="TailTruncation" VerticalTextAlignment="Center"/>
+            <Label Text="{Binding Duration}" Grid.Column="2" Style="{StaticResource ListViewText}" VerticalTextAlignment="Center"/>
+            <custom:CustomImageButton Grid.Column="3" Style="{StaticResource TransparentImageButton}" Source="MenuIcon.png" x:Name="menuButton" Command="{Binding LongPressedCommand}" CommandParameter="{x:Reference menuButton}" Padding="10"/>
+        </Grid>
+    </ViewCell.View>
+</ViewCell>

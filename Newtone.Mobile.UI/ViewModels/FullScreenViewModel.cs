@@ -264,9 +264,24 @@ namespace Newtone.Mobile.UI.ViewModels
                 if (expandList == null)
                     expandList = new ActionCommand(async (parameter) =>
                     {
-                        await Global.NavigationInstance.PushModalAsync(new ModalPage(new CurrentPlaylistPage(), "", false, false));
+                        await Global.NavigationInstance.PushModalAsync(new ModalPage(new CurrentPlaylistPage(), "", true, false));
                     });
                 return expandList;
+            }
+        }
+
+        private ICommand backCommand;
+        public ICommand BackCommand
+        {
+            get
+            {
+                if (backCommand == null)
+                    backCommand = new ActionCommand(async (parameter) =>
+                    {
+                        await Global.NavigationInstance.PopModalAsync();
+                    });
+
+                return backCommand;
             }
         }
         #endregion
@@ -338,9 +353,8 @@ namespace Newtone.Mobile.UI.ViewModels
             }
             if (GlobalData.Current.MediaPlayer.IsPlaying)
             {
-                AudioSliderMax = GlobalData.Current.MediaPlayer.Duration;
+                AudioSliderMax = GlobalData.Current.MediaSource.Duration.TotalSeconds;
                 AudioSliderValue = GlobalData.Current.MediaPlayer.CurrentPosition;
-
             }
 
             if (GlobalData.Current.PlayerMode != playerMode)

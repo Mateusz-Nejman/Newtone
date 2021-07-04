@@ -23,11 +23,11 @@ namespace Newtone.Core.Media
             Task.Run(async () =>
             {
                 manifest = await client.Videos.Streams.GetManifestAsync(filepath);
-                foreach(var item in manifest.GetAudioOnly())
+                foreach(var item in manifest.GetAudioOnlyStreams())
                 {
                     Debug.WriteLine(item.Size + " " + item.Bitrate + " " + item.AudioCodec);
                 }
-                player.BasePlayer.Load(manifest.GetAudioOnly().Where(info => info.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus")).OrderByDescending(info => info.Bitrate.BitsPerSecond).First().Url);
+                player.BasePlayer.Load(manifest.GetAudioOnlyStreams().Where(info => info.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus")).OrderByDescending(info => info.Bitrate.BitsPerSecond).First().Url);
             }).Wait();
             
         }

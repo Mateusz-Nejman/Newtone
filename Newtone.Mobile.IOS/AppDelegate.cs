@@ -50,7 +50,7 @@ namespace Newtone.Mobile.IOS
 
             GlobalData.Current.Initialize();
             GlobalData.Current.MediaPlayer = new CrossPlayer(new MobileMediaPlayer());
-            //TODO GlobalData.Current.MediaPlayer.SetNativeActions(MediaPlayerHelper.Play);
+            GlobalData.Current.MediaPlayer.SetNativeActions(GlobalData.Current.MediaPlayer.Play);
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = GlobalData.Current.DataPath;
             ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/consoleDebug.txt");

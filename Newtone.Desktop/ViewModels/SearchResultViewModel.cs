@@ -3,12 +3,15 @@ using Newtone.Core.Logic;
 using Newtone.Core.Models;
 using Newtone.Core.Processing;
 using Newtone.Desktop.Views;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 
 namespace Newtone.Desktop.ViewModels
 {
@@ -101,16 +104,16 @@ namespace Newtone.Desktop.ViewModels
                                     new Task(async () =>
                                     {
                                         YoutubeClient youtubeClient = new YoutubeClient();
-                                        var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).BufferAsync(20);
+                                        var playlist = await youtubeClient.Playlists.GetVideosAsync(item.MixId).CollectAsync(20);
 
                                         using WebClient client = new WebClient();
                                         foreach (var _item in playlist)
                                         {
-                                            byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
+                                            byte[] data = client.DownloadData(_item.Thumbnails.FirstOrDefault().Url);
                                             GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
                                             {
-                                                Artist = _item.Author,
-                                                Duration = _item.Duration,
+                                                Artist = _item.Author.Title,
+                                                Duration = _item.Duration ?? TimeSpan.Zero,
                                                 FilePath = _item.Id,
                                                 Image = data,
                                                 Title = _item.Title,

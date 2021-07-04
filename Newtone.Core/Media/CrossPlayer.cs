@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 using YoutubeExplode.Videos;
 
 namespace Newtone.Core.Media
@@ -109,7 +110,7 @@ namespace Newtone.Core.Media
             new Task(async () =>
             {
                 YoutubeClient youtubeClient = new YoutubeClient();
-                var playlist = await youtubeClient.Playlists.GetVideosAsync(playlistUrl).BufferAsync(20);
+                var playlist = await youtubeClient.Playlists.GetVideosAsync(playlistUrl).CollectAsync(20);
 
                 if (playlist.Count > 0)
                 {
@@ -118,11 +119,11 @@ namespace Newtone.Core.Media
                     GlobalData.Current.PlaylistPosition = 0;
                     foreach (var _item in playlist)
                     {
-                        byte[] data = client.DownloadData(_item.Thumbnails.MediumResUrl);
+                        byte[] data = client.DownloadData(_item.Thumbnails.GetWithHighestResolution().Url);
                         GlobalData.Current.CurrentPlaylist.Add(new Newtone.Core.Media.MediaSource()
                         {
-                            Artist = _item.Author,
-                            Duration = _item.Duration,
+                            Artist = _item.Author.Title,
+                            Duration = _item.Duration ?? TimeSpan.Zero,
                             FilePath = _item.Id,
                             Image = data,
                             Title = _item.Title,

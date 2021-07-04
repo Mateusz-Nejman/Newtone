@@ -19,22 +19,35 @@
             </Grid>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="60"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="80"/>
                 </Grid.RowDefinitions>
 
-                <Label Text="{Binding Title}" FontSize="16" FontFamily="{x:Static local:Fonts.Black}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0"/>
-                <Label Text="{Binding Artist}" Grid.Row="1" FontSize="16" FontFamily="{x:Static local:Fonts.Light}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0"/>
-                <RelativeLayout Margin="16" Grid.Row="2" VerticalOptions="Fill">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+                    <custom:CustomImageButton Padding="20" Source="BackIcon.png" Style="{StaticResource TransparentImageButton}" Command="{Binding BackCommand}" />
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Text="{Binding Title}" FontSize="16" FontFamily="{x:Static local:Fonts.Black}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0" LineBreakMode="TailTruncation"/>
+                        <Label Text="{Binding Artist}" Grid.Row="1" FontSize="16" FontFamily="{x:Static local:Fonts.Light}" TextColor="{Static local:Colors.TextColor}" HorizontalTextAlignment="Center" Margin="0,4,0,0" LineBreakMode="TailTruncation"/>
+                    </Grid>
+                </Grid>
+                <RelativeLayout Margin="16" Grid.Row="1" VerticalOptions="Fill">
                     <Image Source="{Binding TrackImage}" Aspect="AspectFill"
                            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width,Factor=1}"/>
                 </RelativeLayout>
 
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -42,7 +55,7 @@
                     <Label Text="{Binding TrackCurrentPosition}" HorizontalOptions="Start" TextColor="{Static local:Colors.TextColor}" Margin="5,0,0,0"/>
                     <Label Text="{Binding TrackDuration}" HorizontalOptions="End" Grid.Column="1" TextColor="{Static local:Colors.TextColor}" Margin="0,0,5,0"/>
                 </Grid>
-                <Grid Grid.Row="4" BackgroundColor="{Static local:Colors.ColorSecondary}">
+                <Grid Grid.Row="3" BackgroundColor="{Static local:Colors.ColorSecondary}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="15"/>
                         <RowDefinition Height="*"/>

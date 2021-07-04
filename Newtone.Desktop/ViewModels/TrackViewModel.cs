@@ -85,7 +85,7 @@ namespace Newtone.Desktop.ViewModels
         public TrackViewModel()
         {
             List<Models.TrackModel> beforeSort = new List<Models.TrackModel>();
-            foreach (var source in GlobalData.Current.Audios.Values)
+            foreach (var source in GlobalData.Current.Audios.Values.ToList())
             {
                 beforeSort.Add(new Models.TrackModel(source).CheckChanges());
             }

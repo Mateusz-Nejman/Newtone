@@ -2,33 +2,75 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using AVFoundation;
+using CoreMedia;
 using Foundation;
+using MediaPlayer;
 using Newtone.Core;
 using Newtone.Core.Media;
 using UIKit;
 
 namespace Newtone.Mobile.IOS.Media
 {
-    public class MobileMediaPlayer : IBasePlayer
+    public class MobileMediaPlayer : NSObject, IBasePlayer
     {
-        #region Fields
-        private bool checkSafeTime = true;
-        private bool prepared = false;
-        #endregion
         #region Properties
-        private AVAudioPlayer MediaPlayer { get; set; }
+        private AVPlayer MediaPlayer { get; set; }
         #endregion
         #region Constructors
         public MobileMediaPlayer()
         {
+            MediaPlayer = new AVPlayer();
+            MediaPlayer.AutomaticallyWaitsToMinimizeStalling = false;
+            var avSession = AVAudioSession.SharedInstance();
+            avSession.SetCategory(AVAudioSessionCategory.Playback);
+            avSession.SetActive(true, out NSError activationError);
 
-        }
-        #endregion
-        #region Private Methods
-        private void MediaPlayer_Completion(object sender, AVStatusEventArgs e)
-        {
-            GlobalData.Current.MediaPlayer.Next();
+            var commandCenter = MPRemoteCommandCenter.Shared;
+            commandCenter.PreviousTrackCommand.Enabled = true;
+            commandCenter.NextTrackCommand.Enabled = true;
+            commandCenter.TogglePlayPauseCommand.Enabled = true;
+            commandCenter.PlayCommand.Enabled = true;
+            commandCenter.PauseCommand.Enabled = true;
+
+            commandCenter.PreviousTrackCommand.AddTarget(commandEvent =>
+            {
+                GlobalData.Current.MediaPlayer.Prev();
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            commandCenter.NextTrackCommand.AddTarget(commandEvent =>
+            {
+                GlobalData.Current.MediaPlayer.Next();
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            commandCenter.TogglePlayPauseCommand.AddTarget(commandEvent =>
+            {
+                if (GetIsPlaying())
+                    GlobalData.Current.MediaPlayer.Play();
+                else
+                    GlobalData.Current.MediaPlayer.Pause();
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            commandCenter.PlayCommand.AddTarget(commandEvent =>
+            {
+                GlobalData.Current.MediaPlayer.Play();
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            commandCenter.PauseCommand.AddTarget(commandEvent =>
+            {
+                GlobalData.Current.MediaPlayer.Pause();
+                return MPRemoteCommandHandlerStatus.Success;
+            });
+
+            NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, notify =>
+            {
+                GlobalData.Current.MediaPlayer.Next();
+            });
         }
         #endregion
         #region Public Methods
@@ -49,17 +91,17 @@ namespace Newtone.Mobile.IOS.Media
 
         public double GetCurrentPosition()
         {
-            return MediaPlayer != null ? MediaPlayer.CurrentTime : 0;
+            return MediaPlayer != null ? MediaPlayer.CurrentTime.Seconds : 0;
         }
 
         public double GetDuration()
         {
-            return MediaPlayer != null ? MediaPlayer.Duration : 0;
+            return MediaPlayer != null && MediaPlayer.CurrentItem != null ? MediaPlayer.CurrentItem.Duration.Seconds : 0;
         }
 
         public bool GetIsPlaying()
         {
-            return MediaPlayer != null && MediaPlayer.Playing;
+            return MediaPlayer != null && MediaPlayer.Rate != 0 && MediaPlayer.Error == null;
         }
 
         public float GetVolume()
@@ -70,25 +112,46 @@ namespace Newtone.Mobile.IOS.Media
         public void Load(string filename)
         {
             Reset();
+            MediaPlayer.ReplaceCurrentItemWithPlayerItem(null);
 
-            MediaPlayer = AVAudioPlayer.FromUrl(NSUrl.FromFilename(filename));
+            NSUrl url = filename.StartsWith("https://") ? NSUrl.FromString(filename) : NSUrl.FromFilename(filename);
+            NSMutableDictionary dict = new NSMutableDictionary
+            {
+                { new NSString("AVURLAssetPreferPreciseDurationAndTimingKey"), new NSNumber(true) }
+            };
+            var playerItem = AVPlayerItem.FromAsset(AVUrlAsset.Create(url, new AVUrlAssetOptions(dict)));
+            MediaPlayer.ReplaceCurrentItemWithPlayerItem(playerItem);
         }
 
         public void Pause()
         {
             MediaPlayer?.Pause();
-            MediaPlayer.FinishedPlaying += MediaPlayer_Completion;
+            SetNotification(GetIsPlaying());
         }
 
         public void Play()
         {
             MediaPlayer?.Play();
+            SetNotification(GetIsPlaying());
+
+            Task.Run(async () =>
+            {
+                while (MediaPlayer.Rate != 0 && MediaPlayer.Error == null)
+                {
+                    var current = GlobalData.Current.MediaPlayer.CurrentPosition;
+                    var duration = GlobalData.Current.MediaSource.Duration.TotalSeconds;
+
+                    if(current >= duration)
+                    {
+                        GlobalData.Current.MediaPlayer.Next();
+                    }
+                    await Task.Delay(250);
+                }
+            });
         }
 
         public void Prepare()
         {
-            MediaPlayer.FinishedPlaying += MediaPlayer_Completion;
-            MediaPlayer.PrepareToPlay();
             Prepared(GlobalData.Current.MediaPlayer);
         }
 
@@ -100,25 +163,43 @@ namespace Newtone.Mobile.IOS.Media
         public void Reset()
         {
             Stop();
-
-            if(MediaPlayer != null)
-            {
-                MediaPlayer.Dispose();
-                MediaPlayer = null;
-            }
         }
 
         public void Seek(double seek)
         {
-            if (MediaPlayer == null)
-                return;
-
-            MediaPlayer.CurrentTime = seek;
+            if (seek < GetDuration())
+            {
+                MediaPlayer.Seek(CMTime.FromSeconds(seek, 4));
+                SetNotification(GetIsPlaying());
+            }
         }
 
         public void SetNotification(bool isPlaying)
         {
-            //TODO
+            InvokeOnMainThread(() => {
+                UIApplication.SharedApplication.BeginReceivingRemoteControlEvents();
+            });
+
+            if (GlobalData.Current.MediaSource == null)
+            {
+                MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = null;
+                return;
+            }
+
+            var currentSource = GlobalData.Current.MediaSource;
+            var item = new MPNowPlayingInfo();
+
+            item.Title = currentSource.Title;
+            item.Artist = currentSource.Artist;
+            item.ElapsedPlaybackTime = GetCurrentPosition();
+            item.PlaybackDuration = GetDuration();
+            item.PlaybackQueueIndex = GlobalData.Current.PlaylistPosition;
+            item.PlaybackQueueCount = GlobalData.Current.CurrentPlaylist.Count;
+            item.PlaybackRate = MediaPlayer == null ? 0 : MediaPlayer.Rate;
+            if(currentSource.Image != null)
+                item.Artwork = new MPMediaItemArtwork(UIImage.LoadFromData(NSData.FromArray(currentSource.Image)));
+
+            MPNowPlayingInfoCenter.DefaultCenter.NowPlaying = item;
         }
 
         public void SetVolume(float volume)
@@ -131,9 +212,10 @@ namespace Newtone.Mobile.IOS.Media
 
         public void Stop()
         {
-            MediaPlayer?.Stop();
             Seek(0);
+            MediaPlayer?.Pause();
         }
+
         #endregion
     }
 }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 
 namespace Newtone.Core.Processing
 {
@@ -63,12 +64,11 @@ namespace Newtone.Core.Processing
 
                 model.Add(new SearchResultModel()
                 {
-                    Author = video.Author,
-                    Duration = video.Duration,
+                    Author = video.Author.Title,
+                    Duration = video.Duration ?? TimeSpan.Zero,
                     Title = video.Title,
-                    ThumbUrl = video.Thumbnails.MediumResUrl,
+                    ThumbUrl = video.Thumbnails.GetWithHighestResolution().Url,
                     Id = video.Id,
-                    MixId = video.GetVideoMixPlaylistId(),
                     VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url)
                 });
 
@@ -76,17 +76,16 @@ namespace Newtone.Core.Processing
             }
             else if(validators.ContainsKey(Query.Search) || validators.ContainsKey(Query.None))
             {
-                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(Query.None) ? Query.None : Query.Search], fromPage, 1).BufferAsync();
+                var videos = await client.Search.GetVideosAsync(validators[validators.ContainsKey(Query.None) ? Query.None : Query.Search]).CollectAsync(20);
                 Debug.WriteLine("Searched " + videos.Count);
                 foreach(var video in videos)
                 {
                     model.Add(new SearchResultModel()
                     {
-                        Author = video.Author,
-                        Duration = video.Duration,
+                        Author = video.Author.Title,
+                        Duration = video.Duration ?? TimeSpan.Zero,
                         Id = video.Id,
-                        MixId = video.GetVideoMixPlaylistId(),
-                        ThumbUrl = video.Thumbnails.MediumResUrl,
+                        ThumbUrl = video.Thumbnails.GetWithHighestResolution().Url,
                         Title = video.Title,
                         VideoData = string.Concat(video.Title, GlobalData.SEPARATOR, video.Url)
                     });
@@ -94,10 +93,10 @@ namespace Newtone.Core.Processing
             }
             else if (validators.ContainsKey(Query.Playlist))
             {
-                var playlist = await client.Playlists.GetVideosAsync(validators[Query.Playlist]).BufferAsync(100);
+                var playlist = await client.Playlists.GetVideosAsync(validators[Query.Playlist]).CollectAsync(100);
                 foreach (var video in playlist)
                 {
-                    model.Add(new SearchResultModel() { Author = video.Author, Duration = video.Duration, Title = video.Title, ThumbUrl = video.Thumbnails.MediumResUrl, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[Query.Playlist] )});
+                    model.Add(new SearchResultModel() { Author = video.Author.Title, Duration = video.Duration ?? TimeSpan.Zero, Title = video.Title, ThumbUrl = video.Thumbnails.GetWithHighestResolution().Url, Id = video.Id, VideoData = string.Concat(video.Title,GlobalData.SEPARATOR,video.Url,"&list=",validators[Query.Playlist] )});
                 }
                 maxItems = playlist.Count;
             }

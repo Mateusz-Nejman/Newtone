@@ -16,6 +16,7 @@ using Newtone.Mobile.UI.Views.TV.Custom;
 using Xamarin.Forms;
 using YoutubeExplode;
 using Nejman.Xamarin.FocusLibrary;
+using YoutubeExplode.Common;
 
 namespace Newtone.Mobile.UI.ViewModels.TV
 {

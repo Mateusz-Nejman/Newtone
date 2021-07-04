@@ -23,7 +23,10 @@ namespace Newtone.Mobile.UI.Views
         #region Public Methods
         public void Tick()
         {
-            ViewModel?.Tick();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ViewModel?.Tick();
+            });
         }
         #endregion
         #region Private Methods

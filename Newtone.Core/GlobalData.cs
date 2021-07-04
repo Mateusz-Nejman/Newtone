@@ -3,6 +3,7 @@ using Newtone.Core.Languages;
 using Newtone.Core.Logic;
 using Newtone.Core.Media;
 using Newtone.Core.Models;
+using Newtone.Core.Speech;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -85,6 +86,8 @@ namespace Newtone.Core
         public int IncludedPathsToSkip { get; set; }
         public bool IgnoreAutoFocus { get; set; }
         public MediaFormat MediaFormat { get; set; } = MediaFormat.m4a;
+        public ISpeechBase SpeechBase { get; set; }
+        public ITalkBase TalkBase { get; set; }
         #endregion
         #region Public Methods
         public void Initialize()
@@ -116,6 +119,12 @@ namespace Newtone.Core
             Directory.CreateDirectory(MusicPath);
             if (File.Exists(DataPath + "/newtone.nsec2"))
             {
+                FileInfo configInfo = new FileInfo(DataPath + "/newtone.nsec2");
+                if(configInfo.Length == 0 && File.Exists(DataPath+"/newtoneCopy.nsec2"))
+                {
+                    File.Copy(DataPath + "/newtoneCopy.nsec2", DataPath + "/newtone.nsec2", true);
+                }
+
                 FileStream stream = File.OpenRead(DataPath + "/newtone.nsec2");
                 NSEC2 nsec = new NSEC2(NSEC_HASH);
                 nsec.Load(stream);
@@ -358,6 +367,7 @@ namespace Newtone.Core
             nsec.AddFile("ignoreAutoFocus", System.Text.Encoding.UTF8.GetBytes(IgnoreAutoFocus ? "true" : "false"));
 
             File.WriteAllBytes(DataPath + "/newtone.nsec2", nsec.Save());
+            File.Copy(DataPath + "/newtone.nsec2", DataPath + "/newtoneCopy.nsec2",true);
 
             nsec.Dispose();
         }

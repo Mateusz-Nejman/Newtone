@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 
 namespace Newtone.Desktop.ViewModels
 {

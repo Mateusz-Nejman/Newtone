@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using YoutubeExplode;
+using YoutubeExplode.Common;
+using YoutubeExplode.Playlists;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
@@ -43,7 +45,7 @@ namespace Newtone.Core.Processing
             return Downloads;
         }
 
-        public static void AddRange(IEnumerable<Video> playlist, string playlistName, string playlistId, bool withRemove = false)
+        public static void AddRange(IEnumerable<PlaylistVideo> playlist, string playlistName, string playlistId, bool withRemove = false)
         {
             Debug.WriteLine("Add range " + playlistName + " " + playlistId);
 
@@ -293,7 +295,7 @@ namespace Newtone.Core.Processing
 
             IStreamInfo streamInfo = null;
 
-            manifest.GetAudio().ForEach(item =>
+            manifest.GetAudioOnlyStreams().ForEach(item =>
             {
                 if (item.AudioCodec.Contains(GlobalData.Current.MediaFormat == MediaFormat.m4a ? "mp4a" : "opus"))
                 {
@@ -306,14 +308,14 @@ namespace Newtone.Core.Processing
             });
             await client.Videos.Streams.DownloadAsync(streamInfo, Path.Combine(GlobalData.Current.MusicPath, fileName + (GlobalData.Current.MediaFormat == MediaFormat.m4a ? ".m4a" : ".opus")), progress);
             string[] splitted = video.Title.Split(new string[] { " - ", " – ", "- ", " -" }, StringSplitOptions.RemoveEmptyEntries);
-            string artist = splitted.Length == 1 ? video.Author : splitted[0];
+            string artist = splitted.Length == 1 ? video.Author.Title : splitted[0];
             string title = splitted[splitted.Length == 1 ? 0 : 1];
 
             byte[] picture = null;
             try
             {
                 using WebClient wc = new WebClient();
-                picture = wc.DownloadData(video.Thumbnails.MediumResUrl);
+                picture = wc.DownloadData(video.Thumbnails.GetWithHighestResolution().Url);
             }
             catch
             {
@@ -328,11 +330,11 @@ namespace Newtone.Core.Processing
                 GlobalData.Current.AudioTags[f].Image = picture;
                 GlobalData.Current.AudioTags[f].Id = video.Id;
 
-                GlobalData.Current.AudioTags[f].TempDuration = GlobalData.Current.MediaFormat == MediaFormat.m4a ? TimeSpan.FromMilliseconds(0) : video.Duration;
+                GlobalData.Current.AudioTags[f].TempDuration = GlobalData.Current.MediaFormat == MediaFormat.m4a ? TimeSpan.FromMilliseconds(0) : (video.Duration ?? TimeSpan.Zero);
             }
             else
             {
-                GlobalData.Current.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id, TempDuration = GlobalData.Current.MediaFormat == MediaFormat.ogg ? video.Duration : TimeSpan.FromMilliseconds(0) });
+                GlobalData.Current.AudioTags.Add(fileInfo.FullName, new MediaSourceTag() { Author = artist, Title = title, Image = picture, Id = video.Id, TempDuration = GlobalData.Current.MediaFormat == MediaFormat.ogg ? (video.Duration ?? TimeSpan.Zero) : TimeSpan.FromMilliseconds(0) });
             }
 
             MediaSource container = MediaProcessing.GetSource(fileInfo.FullName);

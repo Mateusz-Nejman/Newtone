@@ -4,6 +4,7 @@ using Newtone.Core.Loaders;
 using Newtone.Core.Media;
 using Newtone.Core.Processing;
 using Newtone.Desktop.Views;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 
 namespace Newtone.Desktop.Logic
 {
@@ -332,8 +334,8 @@ namespace Newtone.Desktop.Logic
 
                 var mediaSource = new Core.Media.MediaSource()
                 {
-                    Artist = video.Author,
-                    Duration = video.Duration,
+                    Artist = video.Author.Title,
+                    Duration = video.Duration ?? TimeSpan.Zero,
                     FilePath = video.Id,
                     Title = video.Title,
                     Type = Core.Media.MediaSource.SourceType.Web
@@ -342,7 +344,7 @@ namespace Newtone.Desktop.Logic
                 try
                 {
                     using WebClient webClient = new WebClient();
-                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.FirstOrDefault().Url);
                     mediaSource.Image = thumbData;
                 }
                 catch
@@ -363,8 +365,8 @@ namespace Newtone.Desktop.Logic
 
                 var mediaSource = new Core.Media.MediaSource()
                 {
-                    Artist = video.Author,
-                    Duration = video.Duration,
+                    Artist = video.Author.Title,
+                    Duration = video.Duration ?? TimeSpan.Zero,
                     FilePath = video.Id,
                     Title = video.Title,
                     Type = Core.Media.MediaSource.SourceType.Web
@@ -373,7 +375,7 @@ namespace Newtone.Desktop.Logic
                 try
                 {
                     using WebClient webClient = new WebClient();
-                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.FirstOrDefault().Url);
                     mediaSource.Image = thumbData;
                 }
                 catch

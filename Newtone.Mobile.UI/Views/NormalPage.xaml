@@ -18,6 +18,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
                     <Frame CornerRadius="30" BackgroundColor="Transparent" Padding="5,10">
                         <Grid BackgroundColor="#80000000">
@@ -50,7 +51,7 @@
                             <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="{Binding Badge}" TextColor="{Static local:Colors.TextColor}"/>
                         </Grid>
                     </Grid>
-
+                    <custom:CustomImageButton Source="MicrophoneIcon.png" Grid.Column="2" Style="{StaticResource TransparentImageButton}" Padding="20" Command="{Binding GotoSpeech}"/>
                 </Grid>
                 <Grid BackgroundColor="{Static local:Colors.ColorPrimary}" Grid.Row="1" x:Name="container">
 

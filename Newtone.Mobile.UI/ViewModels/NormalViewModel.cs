@@ -15,6 +15,7 @@ using Newtone.Mobile.UI.Views;
 using Newtone.Mobile.UI.Views.Custom;
 using Xamarin.Forms;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 
 namespace Newtone.Mobile.UI.ViewModels
 {
@@ -22,7 +23,7 @@ namespace Newtone.Mobile.UI.ViewModels
     {
         #region Fields
         private readonly TracksPage tracksPage = new TracksPage();
-        private readonly ArtistPage artistPage = new ArtistPage();
+        private readonly ArtistListPage artistPage = new ArtistListPage();
         private PlaylistPage playlistPage;
         private SettingsPage settingsPage;
 
@@ -345,6 +346,22 @@ namespace Newtone.Mobile.UI.ViewModels
                     });
 
                 return gotoDownloadCommand;
+            }
+        }
+
+        private ICommand gotoSpeechCommand;
+        public ICommand GotoSpeech
+        {
+            get
+            {
+                if (gotoSpeechCommand == null)
+                    gotoSpeechCommand = new ActionCommand(parameter =>
+                    {
+                        //await Global.NavigationInstance.PushModalAsync(new ModalPage(new SpeechPage(), "Asystent"));
+                        GlobalData.Current.SpeechBase.StartSpeech();
+                    });
+
+                return gotoSpeechCommand;
             }
         }
 

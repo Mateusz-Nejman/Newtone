@@ -21,8 +21,12 @@ namespace Newtone.Mobile.IOS.Views
             base.OnElementChanged(e);
 
             AudioSliderControl control = Element as AudioSliderControl;
-            control.ThumbColor = Color.Transparent;
-            control.BackgroundColor = Color.FromRgb(26, 26, 26);
+
+            if(control != null)
+            {
+                //control.ThumbColor = Color.Transparent;
+                control.BackgroundColor = Color.FromRgb(26, 26, 26);
+            }
         }
         #endregion
     }

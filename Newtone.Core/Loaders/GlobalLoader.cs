@@ -1,5 +1,6 @@
 ﻿using Newtone.Core.Media;
 using Newtone.Core.Processing;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -95,7 +96,7 @@ namespace Newtone.Core.Loaders
         {
             if(!GlobalData.Current.SavedTracks.ContainsKey(video.Id))
             {
-                GlobalData.Current.SavedTracks.Add(video.Id, new MediaSource() { Artist = video.Author, Title = video.Title, Duration = video.Duration, FilePath = video.Id, Type = MediaSource.SourceType.Web });
+                GlobalData.Current.SavedTracks.Add(video.Id, new MediaSource() { Artist = video.Author.Title, Title = video.Title, Duration = video.Duration ?? TimeSpan.Zero, FilePath = video.Id, Type = MediaSource.SourceType.Web });
                 GlobalData.Current.SaveSavedTracks();
             }
         }

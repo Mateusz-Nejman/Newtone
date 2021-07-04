@@ -64,7 +64,7 @@ namespace Newtone.Mobile.UI.Models
                 if (longPressedCommand == null)
                     longPressedCommand = new ActionCommand(parameter =>
                     {
-                        ContextMenuBuilder.BuildForArtist(View, Name);
+                        ContextMenuBuilder.BuildForArtist(View ?? (View)parameter, Name);
                     });
 
                 return longPressedCommand;

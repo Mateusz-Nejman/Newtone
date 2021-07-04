@@ -23,5 +23,16 @@ namespace Newtone.Core.Logic
             foreach (T element in enumerable.ToList())
                 action(element);
         }
+
+        public static bool Contains<T>(this IEnumerable<T> enumerable, T item)
+        {
+            foreach(var enumerableItem in enumerable)
+            {
+                if (enumerableItem.Equals(item))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

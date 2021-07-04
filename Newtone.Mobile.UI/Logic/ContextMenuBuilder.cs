@@ -10,8 +10,10 @@ using Newtone.Mobile.UI.Views;
 using System.Threading.Tasks;
 using Newtone.Mobile.UI.Views.ViewCells;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 using Newtone.Core.Logic;
 using System.Net;
+using System;
 
 namespace Newtone.Mobile.UI.Logic
 {
@@ -67,8 +69,8 @@ namespace Newtone.Mobile.UI.Logic
 
                 var mediaSource = new Core.Media.MediaSource()
                 {
-                    Artist = video.Author,
-                    Duration = video.Duration,
+                    Artist = video.Author.Title,
+                    Duration = video.Duration ?? TimeSpan.Zero,
                     FilePath = video.Id,
                     Title = video.Title,
                     Type = Core.Media.MediaSource.SourceType.Web
@@ -77,7 +79,7 @@ namespace Newtone.Mobile.UI.Logic
                 try
                 {
                     using WebClient webClient = new WebClient();
-                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                    byte[] thumbData = webClient.DownloadData(video.Thumbnails.GetWithHighestResolution().Url);
                     mediaSource.Image = thumbData;
                 }
                 catch
@@ -523,8 +525,8 @@ namespace Newtone.Mobile.UI.Logic
 
                         var mediaSource = new Core.Media.MediaSource()
                         {
-                            Artist = video.Author,
-                            Duration = video.Duration,
+                            Artist = video.Author.Title,
+                            Duration = video.Duration ?? TimeSpan.Zero,
                             FilePath = video.Id,
                             Title = video.Title,
                             Type = Core.Media.MediaSource.SourceType.Web
@@ -533,7 +535,7 @@ namespace Newtone.Mobile.UI.Logic
                         try
                         {
                             using WebClient webClient = new WebClient();
-                            byte[] thumbData = webClient.DownloadData(video.Thumbnails.MediumResUrl);
+                            byte[] thumbData = webClient.DownloadData(video.Thumbnails.GetWithHighestResolution().Url);
                             mediaSource.Image = thumbData;
                         }
                         catch

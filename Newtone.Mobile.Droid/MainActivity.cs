@@ -27,6 +27,8 @@ using Newtone.Mobile.Droid.Logic;
 using Newtone.Mobile.Droid.Processing;
 using Nejman.Xamarin.FocusLibrary;
 using Android.Views;
+using Android.Speech;
+using Newtone.Mobile.Droid.Speech;
 
 namespace Newtone.Mobile.Droid
 {
@@ -131,6 +133,15 @@ namespace Newtone.Mobile.Droid
                     UI.Global.Application.ShowSnackbar(Localization.Ready);
                 }
 
+            }
+            else if(requestCode == 100 && resultCode == Result.Ok && data != null) //Speech
+            {
+                var matches = data.GetStringArrayListExtra(RecognizerIntent.ExtraResults);
+
+                if(matches.Count > 0)
+                {
+                    SpeechProcessing.Process(matches[0]);
+                }
             }
         }
 
@@ -311,6 +322,8 @@ namespace Newtone.Mobile.Droid
             GlobalData.Current.Messenger = new MessageGenerator(new CoreMessenger());
             GlobalData.Current.MusicPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/NSEC/Music_Player";
             GlobalData.Current.DataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            GlobalData.Current.SpeechBase = new SpeechDroid();
+            GlobalData.Current.TalkBase = new TalkDroid();
             ConsoleDebug.SetLogfile(GlobalData.Current.MusicPath + "/Debug/consoleDebug.txt");
             GlobalData.Current.IncludedPaths = new List<string>()
             {
@@ -399,6 +412,11 @@ namespace Newtone.Mobile.Droid
                     return retString;
             }
             return retString;
+        }
+
+        private bool CheckMicExists()
+        {
+            return Android.Content.PM.PackageManager.FeatureMicrophone == "android.hardware.microphone";
         }
         #endregion
         #region Public Methods
