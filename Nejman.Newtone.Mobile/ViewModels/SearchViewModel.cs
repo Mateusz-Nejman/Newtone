@@ -10,12 +10,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Nejman.Newtone.Mobile.ViewModels
 {
     [QueryProperty(nameof(SearchQuery), nameof(SearchQuery))]
+    [QueryProperty(nameof(SearchQueryBase), nameof(SearchQueryBase))]
     public class SearchViewModel : PropertyChangedBase
     {
         #region Fields
@@ -23,6 +25,7 @@ namespace Nejman.Newtone.Mobile.ViewModels
         private readonly ObservableBridge<MediaSource> rawItems;
         private bool spinnerVisible = false;
         private string searchQuery;
+        private string searchText;
         #endregion
 
         #region Properties
@@ -53,6 +56,26 @@ namespace Nejman.Newtone.Mobile.ViewModels
             {
                 searchQuery = value;
                 Task.Run(async () => await Search());
+            }
+        }
+
+        public string SearchQueryBase
+        {
+            get => HttpUtility.UrlEncode(searchQuery);
+            set
+            {
+                searchQuery = HttpUtility.UrlDecode(value);
+                Task.Run(async () => await Search());
+            }
+        }
+
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                searchText = value;
+                OnPropertyChanged();
             }
         }
         #endregion

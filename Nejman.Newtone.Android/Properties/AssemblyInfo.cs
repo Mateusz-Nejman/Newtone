@@ -23,8 +23,8 @@ using Android.App;
 //      Minor Version 
 //      Build Number
 //      Revision
-[assembly: AssemblyVersion("7.0000.0.0")]
-[assembly: AssemblyFileVersion("7.0000.0.0")]
+[assembly: AssemblyVersion("7.0001.0.0")]
+[assembly: AssemblyFileVersion("7.0001.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
 // Add some common permissions, these can be removed if not needed
@@ -32,3 +32,6 @@ using Android.App;
 [assembly: UsesPermission(Android.Manifest.Permission.Internet)]
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]
 [assembly: UsesPermission(Android.Manifest.Permission.WakeLock)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReadExternalStorage)]
+[assembly: UsesPermission(Android.Manifest.Permission.AccessMediaLocation)]
+[assembly: UsesPermission(Android.Manifest.Permission.ManageExternalStorage)]

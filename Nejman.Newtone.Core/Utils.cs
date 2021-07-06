@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Nejman.Newtone.Core
 {
-    internal static class Utils
+    public static class Utils
     {
         private static Random random;
 
-        public static Random Random
+        internal static Random Random
         {
             get
             {
@@ -21,9 +21,21 @@ namespace Nejman.Newtone.Core
             }
         }
 
-        public static int GetRandom(int max)
+        internal static int GetRandom(int max)
         {
             return Random.Next(0, max);
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

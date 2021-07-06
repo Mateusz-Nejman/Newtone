@@ -152,7 +152,7 @@ namespace Nejman.Newtone.Core.Data
 
                 CoreGlobal.Downloads.Remove(id);
             }
-            catch(YoutubeException e)
+            catch(Exception e)
             {
                 await MessageImplementation.Current.Show(Localization.Localization.Warning, e.Message, "", Localization.Localization.Cancel);
                 CoreGlobal.Downloads.Remove(currentId);

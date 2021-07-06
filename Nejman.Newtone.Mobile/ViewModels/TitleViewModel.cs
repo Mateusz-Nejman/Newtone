@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -79,7 +80,7 @@ namespace Nejman.Newtone.Mobile.ViewModels
 
         public void Search()
         {
-            ShellHelpers.GoTo($"{nameof(SearchPage)}?{nameof(SearchViewModel.SearchQuery)}={SearchText}");
+            ShellHelpers.GoTo($"{nameof(SearchPage)}?{nameof(SearchViewModel.SearchQueryBase)}={HttpUtility.UrlEncode(SearchText)}");
         }
 
         public void Appearing()

@@ -339,12 +339,6 @@ namespace Nejman.Newtone.Core.External
                 return true;
             }
 
-            if(playlistUrl.Length == 13)
-            {
-                playlistId = playlistUrl;
-                return true;
-            }
-
             return false;
         }
 
