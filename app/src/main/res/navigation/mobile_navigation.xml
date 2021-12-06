@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_tracks">
+
+    <fragment
+        android:id="@+id/navigation_artists"
+        android:name="com.nejman.nsec.music_player.ui.artists.ArtistsFragment"
+        android:label="@string/artists"
+        tools:layout="@layout/fragment_artists" />
+
+    <fragment
+        android:id="@+id/navigation_tracks"
+        android:name="com.nejman.nsec.music_player.ui.tracks.TracksFragment"
+        android:label="@string/tracks"
+        tools:layout="@layout/fragment_tracks" />
+
+    <fragment
+        android:id="@+id/navigation_playlists"
+        android:name="com.nejman.nsec.music_player.ui.playlists.PlaylistsFragment"
+        android:label="@string/playlists"
+        tools:layout="@layout/fragment_playlists" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.nejman.nsec.music_player.ui.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.nejman.nsec.music_player.ui.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_downloads"
+        android:name="com.nejman.nsec.music_player.ui.downloads.DownloadsFragment"
+        android:label="@string/download"
+        tools:layout="@layout/fragment_downloads" />
+
+    <fragment
+        android:id="@+id/navigation_player"
+        android:name="com.nejman.nsec.music_player.ui.player.PlayerFragment"
+        android:label="@string/play"
+        tools:layout="@layout/fragment_player" />
+
+    <action android:id="@+id/navigate_to_search"
+        app:destination="@id/navigation_search"/>
+    <action android:id="@+id/navigate_to_tracks"
+        app:destination="@id/navigation_tracks"/>
+    <action android:id="@+id/navigate_to_downloads"
+        app:destination="@id/navigation_downloads"/>
+    <action android:id="@+id/navigate_to_player"
+        app:destination="@id/navigation_player"/>
+</navigation>

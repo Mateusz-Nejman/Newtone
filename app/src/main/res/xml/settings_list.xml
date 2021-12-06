@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:key="ignoreBroadcast"
+        app:summary="@string/settings_changes"
+        app:title="@string/settings1" />
+
+    <Preference
+        app:key="about"
+        app:summary="@string/about_desc"
+        app:title="Newtone" />
+
+</PreferenceScreen>
