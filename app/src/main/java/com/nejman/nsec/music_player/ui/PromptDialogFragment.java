@@ -1,7 +1,6 @@
 package com.nejman.nsec.music_player.ui;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +25,7 @@ public class PromptDialogFragment extends DialogFragment {
     private final Consumer<? super String> consumer;
     private final String defaultValue;
 
-    public PromptDialogFragment(String title, String message, String yes, String no, String defaultValue, Consumer<? super String> consumer)
-    {
+    public PromptDialogFragment(String title, String message, String yes, String no, String defaultValue, Consumer<? super String> consumer) {
         this.title = title;
         this.message = message;
         this.yes = yes;
@@ -43,14 +41,12 @@ public class PromptDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.input_dialog, null);
-        ((TextView)view.findViewById(R.id.inputTitle)).setText(message);
-        EditText input = (EditText)view.findViewById(R.id.inputBox);
+        ((TextView) view.findViewById(R.id.inputTitle)).setText(message);
+        EditText input = view.findViewById(R.id.inputBox);
         input.setText(defaultValue);
         builder.setView(view).setTitle(title)
                 // Add action buttons
-                .setPositiveButton(yes, (dialog, id) -> {
-                    consumer.accept(input.getText().toString());
-                })
+                .setPositiveButton(yes, (dialog, id) -> consumer.accept(input.getText().toString()))
                 .setNegativeButton(no, (dialog, id) -> {
                     consumer.accept(input.getText().toString());
                     Objects.requireNonNull(PromptDialogFragment.this.getDialog()).cancel();

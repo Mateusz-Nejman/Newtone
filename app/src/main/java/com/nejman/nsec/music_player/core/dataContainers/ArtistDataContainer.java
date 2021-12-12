@@ -1,15 +1,12 @@
 package com.nejman.nsec.music_player.core.dataContainers;
 
-import android.graphics.BitmapFactory;
-
-import com.nejman.nsec.music_player.MainActivity;
-import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -35,15 +32,19 @@ public class ArtistDataContainer {
         }
 
         this.items.put(artist, new ArtistModel(artist, new ArrayList<>()));
-        this.artistAdded.onNext(this.items.get(artist));
+        this.artistAdded.onNext(Objects.requireNonNull(this.items.get(artist)));
     }
 
     public void add(MediaSource source) {
-        System.out.println("ArtistDataContainer.add source "+source.artist);
+        System.out.println("ArtistDataContainer.add source " + source.artist);
         createIfNotExists(source.artist);
 
         ArtistModel model = this.items.get(source.artist);
-        System.out.println("ArtistDataContainer.add model "+model.name);
+
+        if (model == null) {
+            return;
+        }
+        System.out.println("ArtistDataContainer.add model " + model.name);
 
         if (model.image == null && source.image != null) {
             model.image = source.image;
@@ -67,6 +68,10 @@ public class ArtistDataContainer {
 
     public void remove(String artist) {
         ArtistModel model = this.items.get(artist);
+
+        if (model == null) {
+            return;
+        }
         this.items.remove(artist);
         this.artistRemoved.onNext(model);
     }
@@ -80,9 +85,14 @@ public class ArtistDataContainer {
             return;
         }
 
-        this.items.get(artist).items.remove(source.path);
+        ArtistModel model = items.get(artist);
 
-        if (this.items.get(artist).items.size() == 0) {
+        if (model == null) {
+            return;
+        }
+        model.items.remove(source.path);
+
+        if (model.items.size() == 0) {
             remove(artist);
         }
     }

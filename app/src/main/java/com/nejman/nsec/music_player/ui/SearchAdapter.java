@@ -12,8 +12,6 @@ import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class SearchAdapter extends CursorAdapter {
 
@@ -29,17 +27,16 @@ public class SearchAdapter extends CursorAdapter {
 
     }
 
-    public String get(int index)
-    {
+    public String get(int index) {
         return items.get(index).query;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        System.out.println("cursor.getPosition: "+cursor.getPosition());
-        System.out.println("items.size: "+items.size());
-        System.out.println("text.getText: "+text.getText());
+        System.out.println("cursor.getPosition: " + cursor.getPosition());
+        System.out.println("items.size: " + items.size());
+        System.out.println("text.getText: " + text.getText());
         text.setText(items.get(cursor.getPosition()).query);
     }
 
@@ -50,11 +47,9 @@ public class SearchAdapter extends CursorAdapter {
 
         View view = inflater.inflate(R.layout.search_item, parent, false);
 
-        text = (TextView) view.findViewById(R.id.searchItem);
+        text = view.findViewById(R.id.searchItem);
 
         return view;
 
     }
-
-
 }

@@ -6,7 +6,6 @@ import java.io.IOException;
 
 public interface IPlayerController {
     void load(MediaPlayer mediaPlayer, String path) throws IOException;
+
     void loaded(MediaPlayer mediaPlayer);
-    void prepared(MediaPlayer mediaPlayer);
-    void completed(MediaPlayer mediaPlayer);
 }

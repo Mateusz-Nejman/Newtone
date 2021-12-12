@@ -13,19 +13,16 @@ public class PlaylistModel {
     public Bitmap image;
     public List<String> items;
 
-    public PlaylistModel(String name, Bitmap image, List<String> items)
-    {
+    public PlaylistModel(String name, Bitmap image, List<String> items) {
         this.name = name;
         this.image = image;
         this.items = items;
     }
 
-    public List<MediaSource> getSources()
-    {
+    public List<MediaSource> getSources() {
         List<MediaSource> sources = new ArrayList<>();
 
-        for(String filepath : items)
-        {
+        for (String filepath : items) {
             sources.add(DataContainer.getInstance().getMediaSources().get(filepath));
         }
 

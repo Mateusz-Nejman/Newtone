@@ -9,15 +9,12 @@ import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.MatrixCursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.os.Handler;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -34,35 +31,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nejman.nsec.music_player.core.DataContainer;
-import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
-import com.nejman.nsec.music_player.core.loaders.AudioLoader;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
+import com.nejman.nsec.music_player.databinding.ActivityMainBinding;
 import com.nejman.nsec.music_player.media.MediaPlayerHelper;
 import com.nejman.nsec.music_player.media.MediaSource;
-import com.nejman.nsec.music_player.databinding.ActivityMainBinding;
-import com.nejman.nsec.music_player.media.AudioFocusListener;
 import com.nejman.nsec.music_player.media.MusicPlaybackService;
 import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 import com.nejman.nsec.music_player.ui.SearchAdapter;
-import com.nejman.nsec.music_player.ui.search.SearchFragment;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.subjects.Subject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static String dataPath;
     public static String musicPath;
     public BottomNavigationView navigationView;
+    private boolean backPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +76,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.playerViewPlayButton.setOnClickListener(v -> {
-            if(NewtoneMediaPlayer.getInstance().isPlaying())
-            {
+            if (NewtoneMediaPlayer.getInstance().isPlaying()) {
                 NewtoneMediaPlayer.getInstance().pause();
-            }
-            else
-            {
+            } else {
                 NewtoneMediaPlayer.getInstance().play();
             }
         });
@@ -115,10 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 null); // optional Bundle
     }
 
-    public void updatePlayerSource(MediaSource source)
-    {
-        if(source == null)
-        {
+    public void updatePlayerSource(MediaSource source) {
+        if (source == null) {
             return;
         }
 
@@ -129,27 +113,21 @@ public class MainActivity extends AppCompatActivity {
             binding.playerViewTitle.setText(source.title);
             binding.playerViewArtist.setText(source.artist);
 
-            if(source.image == null)
-            {
+            if (source.image == null) {
                 binding.playerViewBackground.setVisibility(View.GONE);
                 binding.playerViewBackgroundDarker.setVisibility(View.GONE);
                 binding.playerViewImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty_track));
-            }
-            else
-            {
+            } else {
                 binding.playerViewBackground.setVisibility(View.VISIBLE);
                 binding.playerViewBackgroundDarker.setVisibility(View.VISIBLE);
-                binding.playerViewBackground.setImageBitmap(getBlurred(source.image));
+                binding.playerViewBackground.setImageBitmap(source.image);
                 binding.playerViewImage.setImageBitmap(source.image);
             }
         });
     }
 
-    public void updatePlayerState(boolean isPlaying)
-    {
-        runOnUiThread(() -> {
-            binding.playerViewPlayButton.setImageResource(isPlaying ? R.drawable.pause_icon : R.drawable.play_icon);
-        });
+    public void updatePlayerState(boolean isPlaying) {
+        runOnUiThread(() -> binding.playerViewPlayButton.setImageResource(isPlaying ? R.drawable.pause_icon : R.drawable.play_icon));
     }
 
     @Override
@@ -157,11 +135,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         try {
             mediaBrowser.connect();
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception e) {
             System.out.println("mediaBrowser.connect exception");
-            ignore.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -199,17 +175,23 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             MusicPlaybackService.instance.stopForeground(true);
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
 
         }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        System.out.println("onBackPressed");
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else if (!backPressed) {
+            this.backPressed = true;
+            Toast.makeText(this, R.string.back_pressed, Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(() -> backPressed = false, 2000);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -217,9 +199,7 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
-        }
-        else if(item.getItemId() == R.id.downloadButton)
-        {
+        } else if (item.getItemId() == R.id.downloadButton) {
             System.out.println("download button pressed");
             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_downloads);
         }
@@ -312,8 +292,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showPlayerPanel(boolean show)
-    {
+    public void showPlayerPanel(boolean show) {
         binding.playerView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
@@ -331,27 +310,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static Resources getRes() {
         return instance.getResources();
-    }
-
-    private Bitmap getBlurred(Bitmap bitmap) {
-        if (bitmap == null) {
-            return null;
-        }
-
-        Bitmap blurredBitmap = Bitmap.createBitmap(bitmap);
-
-        RenderScript rs = RenderScript.create(MainActivity.instance);
-
-        Allocation input = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SCRIPT);
-        Allocation output = Allocation.createTyped(rs, input.getType());
-
-        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, android.renderscript.Element.U8_4(rs));
-        script.setInput(input);
-        script.setRadius(25);
-        script.forEach(output);
-        output.copyTo(blurredBitmap);
-
-        return blurredBitmap;
     }
 
     private void initialize() {

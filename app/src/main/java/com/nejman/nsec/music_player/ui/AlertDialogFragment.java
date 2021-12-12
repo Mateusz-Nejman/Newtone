@@ -17,8 +17,7 @@ public class AlertDialogFragment extends DialogFragment {
     private final String no;
     private final Consumer<? super Boolean> consumer;
 
-    public AlertDialogFragment(String title, String message, String yes, String no, Consumer<? super Boolean> consumer)
-    {
+    public AlertDialogFragment(String title, String message, String yes, String no, Consumer<? super Boolean> consumer) {
         this.title = title;
         this.message = message;
         this.yes = yes;
@@ -31,12 +30,8 @@ public class AlertDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.requireActivity());
         builder.setTitle(title).setMessage(message)
-                .setPositiveButton(yes, (dialog, id) -> {
-                    consumer.accept(true);
-                })
-                .setNegativeButton(no, (dialog, id) -> {
-                    consumer.accept(false);
-                });
+                .setPositiveButton(yes, (dialog, id) -> consumer.accept(true))
+                .setNegativeButton(no, (dialog, id) -> consumer.accept(false));
         // Create the AlertDialog object and return it
         return builder.create();
     }

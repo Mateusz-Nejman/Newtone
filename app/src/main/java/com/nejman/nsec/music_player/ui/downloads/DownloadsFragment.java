@@ -1,34 +1,22 @@
 package com.nejman.nsec.music_player.ui.downloads;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
-import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.core.models.DownloadModel;
-import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.databinding.FragmentDownloadsBinding;
-import com.nejman.nsec.music_player.databinding.FragmentPlaylistsBinding;
-import com.nejman.nsec.music_player.media.MediaSource;
-import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
-import com.nejman.nsec.music_player.ui.artists.ArtistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +39,7 @@ public class DownloadsFragment extends WrappedFragment {
         binding.listView.setAdapter(adapter);
 
         adapter.addItems(DataContainer.getInstance().getDownloads().getAll());
-        downloadAdded = DataContainer.getInstance().getDownloads().addOnDownloadAdded(item -> adapter.addItem(item));
+        downloadAdded = DataContainer.getInstance().getDownloads().addOnDownloadAdded(item -> MainActivity.instance.runOnUiThread(() -> adapter.addItem(item)));
         downloadEdited = DataContainer.getInstance().getDownloads().addOnDownloadEdited(item -> MainActivity.instance.runOnUiThread(() -> adapter.editItem(item)));
         downloadRemoved = DataContainer.getInstance().getDownloads().addOnDownloadRemoved(item -> MainActivity.instance.runOnUiThread(() -> adapter.removeItem(item)));
 
@@ -78,10 +66,10 @@ public class DownloadsFragment extends WrappedFragment {
         downloadRemoved = null;
     }
 
-    private static class DownloadsAdapter extends BaseAdapter
-    {
+    private static class DownloadsAdapter extends BaseAdapter {
         private final ArrayList<DownloadModel> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+
         public DownloadsAdapter(Context context) {
             layoutInflater = LayoutInflater.from(context);
         }
@@ -101,15 +89,13 @@ public class DownloadsFragment extends WrappedFragment {
             return position;
         }
 
-        public void addItem(String id)
-        {
+        public void addItem(String id) {
             DownloadModel model = DataContainer.getInstance().getDownloads().get(id);
             items.add(model);
             notifyDataSetChanged();
         }
 
-        public void addItems(List<DownloadModel> models)
-        {
+        public void addItems(List<DownloadModel> models) {
             items.addAll(models);
             notifyDataSetChanged();
         }
@@ -125,33 +111,33 @@ public class DownloadsFragment extends WrappedFragment {
             removeItem(index);
         }
 
-        public void removeItem(int index)
-        {
+        public void removeItem(int index) {
             items.remove(index);
             notifyDataSetChanged();
         }
 
-        public void editItem(String id)
-        {
+        public void editItem(String id) {
             DownloadModel model = DataContainer.getInstance().getDownloads().get(id);
             int index = items.indexOf(model);
-            items.set(index, model);
 
-            notifyDataSetChanged();
+            if (index >= 0 && index < items.size()) {
+                items.set(index, model);
+
+                notifyDataSetChanged();
+            }
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             DownloadModel item = items.get(position);
-            if(convertView == null)
-            {
+            if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.download_item, null);
             }
 
             convertView.setTag(String.valueOf(position));
 
-            ((TextView)convertView.findViewById(R.id.textView)).setText(item.title);
-            ((TextView)convertView.findViewById(R.id.progressView)).setText(Integer.valueOf(item.progress)+"%");
+            ((TextView) convertView.findViewById(R.id.textView)).setText(item.title);
+            ((TextView) convertView.findViewById(R.id.progressView)).setText(item.progress + "%");
 
             return convertView;
         }

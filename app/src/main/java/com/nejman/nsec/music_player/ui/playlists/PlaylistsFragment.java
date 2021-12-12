@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,12 +19,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
-import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.databinding.FragmentPlaylistsBinding;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
-import com.nejman.nsec.music_player.ui.artists.ArtistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,10 +70,10 @@ public class PlaylistsFragment extends Fragment {
         playlistRemoved = null;
     }
 
-    private class PlaylistsAdapter extends BaseAdapter implements View.OnClickListener
-    {
+    private class PlaylistsAdapter extends BaseAdapter implements View.OnClickListener {
         private final ArrayList<PlaylistModel> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+
         public PlaylistsAdapter(Context context) {
             layoutInflater = LayoutInflater.from(context);
         }
@@ -96,15 +93,13 @@ public class PlaylistsFragment extends Fragment {
             return position;
         }
 
-        public void addItem(String playlistName)
-        {
+        public void addItem(String playlistName) {
             PlaylistModel model = DataContainer.getInstance().getPlaylists().get(playlistName);
             items.add(model);
             notifyDataSetChanged();
         }
 
-        public void addItems(List<PlaylistModel> playlists)
-        {
+        public void addItems(List<PlaylistModel> playlists) {
             items.addAll(playlists);
             notifyDataSetChanged();
         }
@@ -120,14 +115,12 @@ public class PlaylistsFragment extends Fragment {
             removeItem(index);
         }
 
-        public void removeItem(int index)
-        {
+        public void removeItem(int index) {
             items.remove(index);
             notifyDataSetChanged();
         }
 
-        public void editItem(String item)
-        {
+        public void editItem(String item) {
             PlaylistModel model = DataContainer.getInstance().getPlaylists().get(item);
             int index = items.indexOf(model);
             items.set(index, model);
@@ -138,15 +131,14 @@ public class PlaylistsFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             PlaylistModel item = items.get(position);
-            if(convertView == null)
-            {
+            if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.single_text_item, null);
                 convertView.setOnClickListener(this);
             }
 
             convertView.setTag(String.valueOf(position));
 
-            ((TextView)convertView.findViewById(R.id.textView)).setText(item.name);
+            ((TextView) convertView.findViewById(R.id.textView)).setText(item.name);
             convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
                 System.out.println("show menu");
                 ContextMenuBuilder.buildForPlaylist(v, item.name);
@@ -155,12 +147,10 @@ public class PlaylistsFragment extends Fragment {
 
             Bitmap imageNull = BitmapFactory.decodeResource(MainActivity.getRes(), R.drawable.empty_track);
 
-            for(String filepath : item.items)
-            {
+            for (String filepath : item.items) {
                 MediaSource source = DataContainer.getInstance().getMediaSources().get(filepath);
 
-                if(source.image != null)
-                {
+                if (source.image != null) {
                     imageNull = source.image;
                     break;
                 }

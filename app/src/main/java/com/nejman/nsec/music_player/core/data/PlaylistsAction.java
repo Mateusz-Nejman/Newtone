@@ -7,7 +7,6 @@ import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
-import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.ui.AlertDialogFragment;
 import com.nejman.nsec.music_player.ui.ListDialogFragment;
 import com.nejman.nsec.music_player.ui.PromptDialogFragment;
@@ -69,10 +68,8 @@ public class PlaylistsAction {
         alert.show(MainActivity.instance.getSupportFragmentManager(), "alert");
     }
 
-    public static void remove(String playlistName, String track)
-    {
-        if(!DataContainer.getInstance().getPlaylists().exists(playlistName))
-        {
+    public static void remove(String playlistName, String track) {
+        if (!DataContainer.getInstance().getPlaylists().exists(playlistName)) {
             return;
         }
 
@@ -80,11 +77,9 @@ public class PlaylistsAction {
         Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
     }
 
-    public static void changeName(String playlistName)
-    {
+    public static void changeName(String playlistName) {
         PromptDialogFragment prompt = new PromptDialogFragment(MainActivity.getResString(R.string.change_name), playlistName, "OK", MainActivity.getResString(R.string.cancel), playlistName, newName -> {
-            if(DataContainer.getInstance().getPlaylists().exists(newName))
-            {
+            if (DataContainer.getInstance().getPlaylists().exists(newName)) {
                 Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.playlist_exists), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -96,32 +91,26 @@ public class PlaylistsAction {
         prompt.show(MainActivity.instance.getSupportFragmentManager(), "prompt");
     }
 
-    private static void selectPlaylist(Consumer<? super String> selected)
-    {
+    private static void selectPlaylist(Consumer<? super String> selected) {
         selectPlaylist("", selected);
     }
 
-    private static void selectPlaylist(String newPlatylistDefaultName, Consumer<? super String> selected)
-    {
+    public static void selectPlaylist(String newPlatylistDefaultName, Consumer<? super String> selected) {
         List<String> positions = new ArrayList<>();
         positions.add(MainActivity.getResString(R.string.new_playlist));
 
-        for(PlaylistModel playlist : DataContainer.getInstance().getPlaylists().getAll())
-        {
+        for (PlaylistModel playlist : DataContainer.getInstance().getPlaylists().getAll()) {
             positions.add(playlist.name);
         }
 
         ListDialogFragment dialog = new ListDialogFragment(MainActivity.getResString(R.string.choose_playlist), positions, selectedInternal -> {
-            if(selectedInternal.equals(MainActivity.getResString(R.string.new_playlist)))
-            {
+            if (selectedInternal.equals(MainActivity.getResString(R.string.new_playlist))) {
                 PromptDialogFragment prompt = new PromptDialogFragment(MainActivity.getResString(R.string.new_playlist), MainActivity.getResString(R.string.new_playlist_hint), MainActivity.getResString(R.string.add), MainActivity.getResString(R.string.cancel), newPlatylistDefaultName.equals("") ? MainActivity.getResString(R.string.new_playlist) : newPlatylistDefaultName, selectedPlaylist -> {
                     Playlists.createIfNotExists(selectedPlaylist);
                     selected.accept(selectedPlaylist);
                 });
                 prompt.show(MainActivity.instance.getSupportFragmentManager(), "prompt");
-            }
-            else
-            {
+            } else {
                 selected.accept(selectedInternal);
             }
         });

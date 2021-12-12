@@ -4,32 +4,22 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.FragmentNavigator;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
-import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
-import com.nejman.nsec.music_player.databinding.FragmentSearchBinding;
 import com.nejman.nsec.music_player.databinding.FragmentTracksBinding;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
@@ -51,7 +41,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 public class TracksFragment extends WrappedFragment {
     private FragmentTracksBinding binding;
     private TracksAdapter adapter;
-    private String artist;
     private String playlist;
     private Disposable trackAdded;
     private Disposable trackEdited;
@@ -66,42 +55,39 @@ public class TracksFragment extends WrappedFragment {
 
         Bundle arguments = getArguments();
 
-        if(arguments == null)
-        {
+        if (arguments == null) {
             adapter.addItems(DataContainer.getInstance().getMediaSources().getAll());
-        }
-        else
-        {
+        } else {
             ActionBar actionBar = MainActivity.instance.getSupportActionBar();
+
+            if (actionBar == null) {
+                return root;
+            }
+
             actionBar.setDisplayHomeAsUpEnabled(true);
-            artist = arguments.getString("artist");
+            String artist = arguments.getString("artist");
             playlist = arguments.getString("playlist");
 
-            if(artist != null)
-            {
+            if (artist != null) {
                 actionBar.setTitle(artist);
 
                 ArtistModel artistModel = DataContainer.getInstance().getArtists().get(artist);
 
                 List<MediaSource> sources = new ArrayList<>();
 
-                for(String path : artistModel.items)
-                {
+                for (String path : artistModel.items) {
                     sources.add(DataContainer.getInstance().getMediaSources().get(path));
                 }
 
                 adapter.addItems(sources);
-            }
-            else if(playlist != null)
-            {
+            } else if (playlist != null) {
                 actionBar.setTitle(playlist);
 
                 PlaylistModel playlistModel = DataContainer.getInstance().getPlaylists().get(playlist);
 
                 List<MediaSource> sources = new ArrayList<>();
 
-                for(String path : playlistModel.items)
-                {
+                for (String path : playlistModel.items) {
                     sources.add(DataContainer.getInstance().getMediaSources().get(path));
                 }
 
@@ -172,8 +158,7 @@ public class TracksFragment extends WrappedFragment {
 
         public void addItems(List<MediaSource> sources) {
             MainActivity.instance.runOnUiThread(() -> {
-                items.addAll(sources);
-                items = items.stream().sorted((first, second) -> {
+                items = sources.stream().sorted((first, second) -> {
                     String firstC = first.artist + " - " + first.title;
                     String secondC = second.artist + " - " + second.title;
 
@@ -226,7 +211,7 @@ public class TracksFragment extends WrappedFragment {
             ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
             convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
                 System.out.println("show menu");
-                ContextMenuBuilder.buildForTrack(v, item.path+Global.separator+(playlist == null ? "" : playlist));
+                ContextMenuBuilder.buildForTrack(v, item.path + Global.separator + (playlist == null ? "" : playlist));
             });
             ImageView imageView = convertView.findViewById(R.id.imageView);
 

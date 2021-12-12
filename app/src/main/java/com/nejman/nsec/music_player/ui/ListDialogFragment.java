@@ -16,20 +16,18 @@ public class ListDialogFragment extends DialogFragment {
     private final Consumer<? super String> selected;
     private final String title;
 
-    public ListDialogFragment(String title, List<String> elements, Consumer<? super String> selected)
-    {
+    public ListDialogFragment(String title, List<String> elements, Consumer<? super String> selected) {
         this.elements = elements;
         this.selected = selected;
         this.title = title;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(title);
-        builder.setItems(elements.toArray(new String[0]), (dialog, which) -> {
-            selected.accept(elements.get(which));
-        });
+        builder.setItems(elements.toArray(new String[0]), (dialog, which) -> selected.accept(elements.get(which)));
         return builder.create();
     }
 }

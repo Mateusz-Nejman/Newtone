@@ -7,8 +7,6 @@ import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.PlaybackMode;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 public class Global {

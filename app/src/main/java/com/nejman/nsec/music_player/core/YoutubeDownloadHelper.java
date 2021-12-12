@@ -1,6 +1,5 @@
 package com.nejman.nsec.music_player.core;
 
-import android.provider.MediaStore;
 import android.util.Log;
 
 import com.github.kiulian.downloader.YoutubeDownloader;
@@ -16,7 +15,6 @@ import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
 import com.nejman.nsec.music_player.Global;
-import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import org.json.JSONArray;
@@ -28,27 +26,25 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class YoutubeDownloadHelper {
     private static final YoutubeDownloader downloader = new YoutubeDownloader();
+    public static String lastPlaylistName = "";
 
     public static AudioFormat getBestAudioFormat(String videoId) {
         RequestVideoInfo request = new RequestVideoInfo(videoId);
@@ -67,15 +63,17 @@ public class YoutubeDownloadHelper {
         AudioFormat format = getBestAudioFormat(id);
         RequestVideoFileDownload requestDownload = new RequestVideoFileDownload(format);
         requestDownload.saveTo(new File(Global.musicPath)).renameTo(filename).overwriteIfExists(true);
-        System.out.println("Start");
+        System.out.println("Start " + filename);
         RequestVideoFileDownload request1 = requestDownload.callback(new YoutubeProgressCallback<File>() {
             @Override
             public void onDownloading(int progress) {
+                System.out.println("onDownloading " + progress);
                 onProgressChanged.accept(progress);
             }
 
             @Override
             public void onFinished(File data) {
+                System.out.println("onFinished " + data.getName());
                 onFinishedConsumer.accept(data);
             }
 
@@ -103,9 +101,7 @@ public class YoutubeDownloadHelper {
 
         if (validators.containsKey(Query.Video)) {
             return new ArrayList<>(Collections.singletonList(getVideoInfo(validators.get(Query.Video), null)));
-        }
-        else if(validators.containsKey(Query.Search) || validators.containsKey(Query.None))
-        {
+        } else if (validators.containsKey(Query.Search) || validators.containsKey(Query.None)) {
             try {
                 URL url = new URL("https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8");
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -142,7 +138,7 @@ public class YoutubeDownloadHelper {
                         http.getInputStream());
                 BufferedReader reader = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
-                String line = "";
+                String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line).append("\n");
                 }
@@ -156,23 +152,21 @@ public class YoutubeDownloadHelper {
                 Log.e("HTTP GET:", e.toString());
                 return new ArrayList<>();
             }
-        }
-        else if(validators.containsKey(Query.Playlist))
-        {
+        } else if (validators.containsKey(Query.Playlist)) {
             RequestPlaylistInfo request = new RequestPlaylistInfo(validators.get(Query.Playlist));
             Response<PlaylistInfo> response = downloader.getPlaylistInfo(request);
             PlaylistInfo playlistInfo = response.data();
 
+            PlaylistDetails details = playlistInfo.details();
+            lastPlaylistName = details == null ? "Youtube Playlist" : details.title();
             List<MediaSource> playlist = new ArrayList<>();
 
-            for (PlaylistVideoDetails videoDetails : playlistInfo.videos())
-            {
-                if(!videoDetails.isPlayable())
-                {
+            for (PlaylistVideoDetails videoDetails : playlistInfo.videos()) {
+                if (!videoDetails.isPlayable()) {
                     continue;
                 }
 
-                playlist.add(getVideoInfo(videoDetails.videoId(), validators.get(Query.Playlist)));
+                playlist.add(getVideoInfo(videoDetails.videoId(), "https://www.youtube.com/watch?v=" + videoDetails.videoId() + "&list=" + validators.get(Query.Playlist)));
             }
 
             return playlist;
@@ -185,7 +179,7 @@ public class YoutubeDownloadHelper {
         HashMap<Query, String> returnDict = new HashMap<>();
 
         if (link == null) {
-            returnDict.put(Query.None, link);
+            returnDict.put(Query.None, "");
             return returnDict;
         }
 
@@ -209,13 +203,11 @@ public class YoutubeDownloadHelper {
             }
         }
 
-        if (trimmed.toLowerCase(Locale.ROOT).startsWith("playlist")) {
-            String temp = trimmed.substring(9);
+        if (trimmed.toLowerCase(Locale.ROOT).startsWith("playlist:")) {
+            System.out.println(trimmed);
 
-            if (temp.length() == 11) {
-                playlistId = temp;
-                playlistValid = true;
-            }
+            playlistId = trimmed.replace("playlist:","");
+            playlistValid = true;
         }
 
         if (searchValid) {
@@ -354,11 +346,14 @@ public class YoutubeDownloadHelper {
                 continue;
             }
 
-            if (!validatePlaylistId(matcher.group(1))) {
+            MatchResult result = matcher.toMatchResult();
+
+            if (!validatePlaylistId(result.group(1))) {
+                System.out.println("Playlist not validated");
                 continue;
             }
 
-            return matcher.group(1);
+            return result.group(1);
         }
 
         return null;
@@ -380,11 +375,13 @@ public class YoutubeDownloadHelper {
                 continue;
             }
 
-            if (!validateVideoId(matcher.group(1))) {
+            MatchResult result = matcher.toMatchResult();
+
+            if (!validateVideoId(result.group(1))) {
                 continue;
             }
 
-            return matcher.group(1);
+            return result.group(1);
         }
 
         return null;
@@ -416,7 +413,7 @@ public class YoutubeDownloadHelper {
 
         Pattern pattern = Pattern.compile("[^0-9a-zA-Z_\\-]");
 
-        return pattern.matcher(playlistId).find();
+        return !pattern.matcher(playlistId).find();
     }
 
     private static boolean validateVideoId(String videoId) {
@@ -430,13 +427,12 @@ public class YoutubeDownloadHelper {
 
         Pattern pattern = Pattern.compile("[^0-9a-zA-Z_\\-]");
 
-        return pattern.matcher(videoId).find();
+        return !pattern.matcher(videoId).find();
     }
 
     public enum Query {
         None,
         Video,
-        Channel,
         Playlist,
         Search
     }

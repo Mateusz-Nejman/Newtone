@@ -11,21 +11,19 @@ import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class WebPlayerController implements IPlayerController{
+public class WebPlayerController implements IPlayerController {
 
     @Override
     public void load(MediaPlayer mediaPlayer, String path) throws IOException {
         mediaPlayer.reset();
 
         AtomicReference<String> url = new AtomicReference<>(path);
-        if(!url.get().startsWith("https://"))
-        {
+        if (!url.get().startsWith("https://")) {
             Thread urlThread = new Thread(() -> {
                 AudioFormat format = YoutubeDownloadHelper.getBestAudioFormat(path);
 
-                if(format == null)
-                {
-                    MainActivity.instance.runOnUiThread(()-> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show());
+                if (format == null) {
+                    MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show());
                     return;
                 }
 
@@ -44,16 +42,6 @@ public class WebPlayerController implements IPlayerController{
 
     @Override
     public void loaded(MediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void prepared(MediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void completed(MediaPlayer mediaPlayer) {
 
     }
 }

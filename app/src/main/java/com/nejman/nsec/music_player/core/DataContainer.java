@@ -13,10 +13,8 @@ import java.util.Hashtable;
 public class DataContainer {
     private static DataContainer instance;
 
-    public static DataContainer getInstance()
-    {
-        if(instance == null)
-        {
+    public static DataContainer getInstance() {
+        if (instance == null) {
             instance = new DataContainer();
         }
 
@@ -30,8 +28,7 @@ public class DataContainer {
     private final DownloadDataContainer downloadDataContainer;
     private final ArtistDataContainer artistDataContainer;
 
-    public DataContainer()
-    {
+    public DataContainer() {
         playlistDataContainer = new PlaylistDataContainer(new Hashtable<>());
         historyDataContainer = new HistoryDataContainer(new ArrayList<>());
         mediaSourceDataContainer = new MediaSourceDataContainer();
@@ -40,30 +37,27 @@ public class DataContainer {
         artistDataContainer = new ArtistDataContainer();
     }
 
-    public PlaylistDataContainer getPlaylists()
-    {
+    public PlaylistDataContainer getPlaylists() {
         return playlistDataContainer;
     }
-    public HistoryDataContainer getHistory()
-    {
+
+    public HistoryDataContainer getHistory() {
         return historyDataContainer;
     }
 
-    public MediaSourceDataContainer getMediaSources()
-    {
+    public MediaSourceDataContainer getMediaSources() {
         return mediaSourceDataContainer;
     }
-    public MediaSourceTagsDataContainer getMediaSourceTags()
-    {
+
+    public MediaSourceTagsDataContainer getMediaSourceTags() {
         return mediaSourceTagsDataContainer;
     }
-    public DownloadDataContainer getDownloads()
-    {
+
+    public DownloadDataContainer getDownloads() {
         return downloadDataContainer;
     }
 
-    public ArtistDataContainer getArtists()
-    {
+    public ArtistDataContainer getArtists() {
         return artistDataContainer;
     }
 }

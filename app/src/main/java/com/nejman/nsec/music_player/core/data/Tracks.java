@@ -14,7 +14,7 @@ public class Tracks {
         if (!DataContainer.getInstance().getMediaSources().exists(source) && source.isLocal && new File(source.path).exists()) {
             DataContainer.getInstance().getMediaSources().add(source);
             System.out.println(source.artist);
-            Artists.add(source.artist, source);
+            Artists.add(source);
         }
     }
 
@@ -35,9 +35,11 @@ public class Tracks {
         DataContainer.getInstance().getMediaSourceTags().remove(source.path);
         Artists.remove(source.artist, source);
 
-        new File(source.path).delete();
-        if(source.id != null)
-        {
+        if (!new File(source.path).delete()) {
+            return;
+        }
+
+        if (source.id != null) {
             Global.downloadedIds.remove(source.id);
         }
         try {
@@ -47,23 +49,19 @@ public class Tracks {
         }
     }
 
-    public static void edit(MediaSource source, String artist, String title)
-    {
-        if(!DataContainer.getInstance().getMediaSources().exists(source.path))
-        {
+    public static void edit(MediaSource source, String artist, String title) {
+        if (!DataContainer.getInstance().getMediaSources().exists(source.path)) {
             return;
         }
 
         String oldArtist = source.artist;
 
-        if(!oldArtist.equals(artist))
-        {
+        if (!oldArtist.equals(artist)) {
             Artists.remove(oldArtist, source);
-            Artists.add(artist, source);
+            Artists.add(source);
         }
 
-        if(!DataContainer.getInstance().getMediaSourceTags().exists(source.path))
-        {
+        if (!DataContainer.getInstance().getMediaSourceTags().exists(source.path)) {
             MediaSourceTag tag = new MediaSourceTag();
             tag.path = source.path;
             tag.title = title;
@@ -75,7 +73,7 @@ public class Tracks {
         MediaSourceTag tag = DataContainer.getInstance().getMediaSourceTags().get(source.path);
         tag.author = artist;
         tag.title = title;
-        DataContainer.getInstance().getMediaSourceTags().edit(tag,tag);
+        DataContainer.getInstance().getMediaSourceTags().edit(tag, tag);
         MediaSource newSource = source.clone();
         newSource.artist = artist;
         newSource.title = title;

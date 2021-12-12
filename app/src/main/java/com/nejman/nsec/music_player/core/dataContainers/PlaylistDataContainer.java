@@ -4,16 +4,12 @@ import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.media.MediaSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.annotations.Nullable;
-import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.PublishSubject;
@@ -36,8 +32,7 @@ public class PlaylistDataContainer {
         return this.items.get(index);
     }
 
-    public List<PlaylistModel> getAll()
-    {
+    public List<PlaylistModel> getAll() {
         return items.values().stream().sorted(Comparator.comparing(playlistModel -> playlistModel.name)).collect(Collectors.toList());
     }
 
@@ -45,19 +40,16 @@ public class PlaylistDataContainer {
         return this.items.size();
     }
 
-    public boolean exists(String playlistName)
-    {
+    public boolean exists(String playlistName) {
         return this.items.containsKey(playlistName);
     }
 
-    public boolean contains(String playlistName, String track)
-    {
-        if(!exists(playlistName))
-        {
+    public boolean contains(String playlistName, String track) {
+        if (!exists(playlistName)) {
             return false;
         }
 
-        return this.items.get(playlistName).items.contains(track);
+        return Objects.requireNonNull(this.items.get(playlistName)).items.contains(track);
     }
 
     public void forEach(Consumer<? super String> consumer) throws Throwable {

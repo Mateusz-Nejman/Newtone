@@ -16,15 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.Subject;
-
 public class NewtoneMediaPlayer {
     public static NewtoneMediaPlayer instance;
 
     public static NewtoneMediaPlayer getInstance() {
-        if(instance == null)
-        {
+        if (instance == null) {
             instance = new NewtoneMediaPlayer();
         }
         return instance;
@@ -55,8 +51,7 @@ public class NewtoneMediaPlayer {
             seek(0);
         });
         this.player.setOnCompletionListener(mp -> {
-            if(player.getCurrentPosition() > 0 && prepared)
-            {
+            if (player.getCurrentPosition() > 0 && prepared) {
                 MediaPlayerHelper.next();
             }
         });
@@ -72,10 +67,8 @@ public class NewtoneMediaPlayer {
         });
     }
 
-    private IPlayerController getController(String path)
-    {
-        if(path.length() == 11 || path.startsWith("https://"))
-        {
+    private IPlayerController getController(String path) {
+        if (path.length() == 11 || path.startsWith("https://")) {
             return this.webPlayerController;
         }
 
@@ -96,23 +89,18 @@ public class NewtoneMediaPlayer {
         }
     }
 
-    public void load(MediaSource source)
-    {
+    public void load(MediaSource source) {
         load(source.path);
         Global.currentSource = source;
 
-        try
-        {
+        try {
             MainActivity.instance.updatePlayerSource(source);
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
 
         }
     }
 
-    public void loadPlaylist(List<MediaSource> playlist, int startIndex)
-    {
+    public void loadPlaylist(List<MediaSource> playlist, int startIndex) {
         Global.currentPlaylist.clear();
         Global.currentPlaylist.addAll(playlist);
         Global.currentPlaylistPosition = startIndex;
@@ -131,8 +119,7 @@ public class NewtoneMediaPlayer {
     }
 
     private void updateMetadata() {
-        if(Global.currentSource == null)
-        {
+        if (Global.currentSource == null) {
             return;
         }
         MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
@@ -152,19 +139,15 @@ public class NewtoneMediaPlayer {
         this.player.start();
         updateMetadata();
 
-        try
-        {
+        try {
             MainActivity.instance.updatePlayerState(true);
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
 
         }
     }
 
     public void prev() {
-        if(Global.currentPlaylist.size() == 0)
-        {
+        if (Global.currentPlaylist.size() == 0) {
             return;
         }
 
@@ -174,7 +157,7 @@ public class NewtoneMediaPlayer {
             nextPosition--;
 
             if (nextPosition < 0) {
-                nextPosition = Global.currentPlaylist.size()-1;
+                nextPosition = Global.currentPlaylist.size() - 1;
             }
         } else if (Global.playbackMode == PlaybackMode.Random) {
             if (randomIndexes.size() == 0) {
@@ -189,8 +172,7 @@ public class NewtoneMediaPlayer {
                 randomIndex = Global.currentPlaylist.size() - 1;
             }
 
-            if(randomIndex < 0)
-            {
+            if (randomIndex < 0) {
                 randomIndex = 0;
             }
 
@@ -200,8 +182,7 @@ public class NewtoneMediaPlayer {
 
         MediaSource source = Global.currentPlaylist.get(nextPosition);
 
-        if(source.isLocal && !new File(source.path).exists())
-        {
+        if (source.isLocal && !new File(source.path).exists()) {
             Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show();
             prev();
             return;
@@ -238,8 +219,7 @@ public class NewtoneMediaPlayer {
                 randomIndex = Global.currentPlaylist.size() - 1;
             }
 
-            if(randomIndex < 0)
-            {
+            if (randomIndex < 0) {
                 randomIndex = 0;
             }
 
@@ -249,8 +229,7 @@ public class NewtoneMediaPlayer {
 
         MediaSource source = Global.currentPlaylist.get(nextPosition);
 
-        if(source.isLocal && !new File(source.path).exists())
-        {
+        if (source.isLocal && !new File(source.path).exists()) {
             Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show();
             next();
             return;
@@ -261,29 +240,13 @@ public class NewtoneMediaPlayer {
         updateMetadata();
     }
 
-    public void stop() {
-        this.player.stop();
-
-        try
-        {
-            MainActivity.instance.updatePlayerState(false);
-        }
-        catch (Exception ignore)
-        {
-
-        }
-    }
-
     public void pause() {
         this.player.pause();
         updateMetadata();
 
-        try
-        {
+        try {
             MainActivity.instance.updatePlayerState(false);
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
 
         }
     }
@@ -297,10 +260,6 @@ public class NewtoneMediaPlayer {
         this.player.setVolume(volume, volume);
     }
 
-    public float getVolume() {
-        return 1.0f;
-    }
-
     public boolean isPlaying() {
         return this.player.isPlaying();
     }
@@ -311,9 +270,5 @@ public class NewtoneMediaPlayer {
 
     public int getCurrentPosition() {
         return this.player.getCurrentPosition();
-    }
-
-    public boolean canSeek() {
-        return this.player != null;
     }
 }

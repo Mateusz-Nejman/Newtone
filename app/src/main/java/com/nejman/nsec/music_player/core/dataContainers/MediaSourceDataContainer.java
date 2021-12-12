@@ -4,11 +4,8 @@ import com.nejman.nsec.music_player.core.data.Artists;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -16,7 +13,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
 public class MediaSourceDataContainer {
-    private Hashtable<String, MediaSource> items;
+    private final Hashtable<String, MediaSource> items;
     private final Subject<MediaSource> sourceAdded;
     private final Subject<MediaSource> sourceRemoved;
     private final Subject<MediaSource[]> sourceEdited;
@@ -55,19 +52,27 @@ public class MediaSourceDataContainer {
 
     public void remove(String path) {
         MediaSource item = this.items.get(path);
+
+        if (item == null) {
+            return;
+        }
         this.items.remove(path);
         this.sourceRemoved.onNext(item);
     }
 
     public void edit(MediaSource newItem) {
         MediaSource oldItem = this.items.get(newItem.path);
+
+        if (oldItem == null) {
+            return;
+        }
         this.items.put(oldItem.path, newItem);
 
-        System.out.println("edit "+(!oldItem.artist.equals(newItem.artist))+" "+oldItem.artist+" "+newItem.artist);
+        System.out.println("edit " + (!oldItem.artist.equals(newItem.artist)) + " " + oldItem.artist + " " + newItem.artist);
         if (!oldItem.artist.equals(newItem.artist)) {
             Artists.remove(oldItem.artist, oldItem);
-            Artists.add(newItem.artist, newItem);
-            System.out.println(oldItem.artist+" "+newItem.artist);
+            Artists.add(newItem);
+            System.out.println(oldItem.artist + " " + newItem.artist);
         }
         this.sourceEdited.onNext(new MediaSource[]{oldItem, newItem});
     }

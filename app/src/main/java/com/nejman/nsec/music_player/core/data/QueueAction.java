@@ -20,15 +20,12 @@ public class QueueAction {
         Global.queuePosition++;
     }
 
-    public static void add(String track)
-    {
+    public static void add(String track) {
         add(DataContainer.getInstance().getMediaSources().get(track));
     }
 
-    public static void add(List<String> tracks)
-    {
-        for(String track : tracks)
-        {
+    public static void add(List<String> tracks) {
+        for (String track : tracks) {
             add(track);
         }
     }

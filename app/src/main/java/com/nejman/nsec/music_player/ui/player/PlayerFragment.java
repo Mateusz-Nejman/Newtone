@@ -82,8 +82,7 @@ public class PlayerFragment extends WrappedFragment {
         binding.positionSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser)
-                {
+                if (fromUser) {
                     NewtoneMediaPlayer.getInstance().seek(progress);
                 }
             }
@@ -127,13 +126,9 @@ public class PlayerFragment extends WrappedFragment {
             }
         });
 
-        binding.backButton.setOnClickListener(v -> {
-            MainActivity.instance.onBackPressed();
-        });
+        binding.backButton.setOnClickListener(v -> MainActivity.instance.onBackPressed());
 
-        binding.menuButton.setOnClickListener(v -> {
-            ContextMenuBuilder.buildForTrack(v, Global.currentSource.path + Global.separator);
-        });
+        binding.menuButton.setOnClickListener(v -> ContextMenuBuilder.buildForTrack(v, Global.currentSource.path + Global.separator));
 
         binding.nextButton.setOnClickListener(v -> {
             MediaPlayerHelper.next();
@@ -198,27 +193,6 @@ public class PlayerFragment extends WrappedFragment {
         return durationString;
     }
 
-    private Bitmap getBlurred(Bitmap bitmap) {
-        if (bitmap == null) {
-            return null;
-        }
-
-        Bitmap blurredBitmap = Bitmap.createBitmap(bitmap);
-
-        RenderScript rs = RenderScript.create(MainActivity.instance);
-
-        Allocation input = Allocation.createFromBitmap(rs, blurredBitmap, Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SCRIPT);
-        Allocation output = Allocation.createTyped(rs, input.getType());
-
-        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, android.renderscript.Element.U8_4(rs));
-        script.setInput(input);
-        script.setRadius(25);
-        script.forEach(output);
-        output.copyTo(blurredBitmap);
-
-        return blurredBitmap;
-    }
-
     private void refreshView() {
         if (Global.currentSource == null) {
             System.out.println("currentSource null");
@@ -230,7 +204,7 @@ public class PlayerFragment extends WrappedFragment {
             binding.trackBackground.setVisibility(visibility ? View.VISIBLE : View.GONE);
 
             if (visibility) {
-                binding.trackBackground.setImageBitmap(getBlurred(Global.currentSource.image));
+                binding.trackBackground.setImageBitmap(Global.currentSource.image);
                 binding.trackImage.setImageBitmap(Global.currentSource.image);
             } else {
                 binding.trackImage.setImageBitmap(Global.currentSource.image);

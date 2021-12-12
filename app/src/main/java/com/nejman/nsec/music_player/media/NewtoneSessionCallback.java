@@ -2,23 +2,18 @@ package com.nejman.nsec.music_player.media;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.view.KeyEvent;
-
-import androidx.annotation.RequiresApi;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 
 public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
     private final Context context;
-    private final IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
 
     private final MusicNoisyReceiver musicNoisyReceiver = new MusicNoisyReceiver();
     private final MediaSessionCompat mediaSession;
@@ -26,14 +21,12 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
     private final NewtoneMediaPlayer player;
     private AudioFocusRequest audioFocusRequest;
 
-    public NewtoneSessionCallback(MusicPlaybackService service)
-    {
+    public NewtoneSessionCallback(MusicPlaybackService service) {
         this.context = service.getBaseContext();
         this.service = service;
         mediaSession = MusicPlaybackService.mediaSession;
         player = NewtoneMediaPlayer.getInstance();
     }
-
 
 
     @Override
@@ -51,8 +44,7 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
         int result = am.requestAudioFocus(audioFocusRequest);
 
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            if(MusicPlaybackService.instance == null)
-            {
+            if (MusicPlaybackService.instance == null) {
                 System.out.println("Start musicPlaybackService");
                 MainActivity.instance.getApplicationContext().startForegroundService(new Intent(context, MusicPlaybackService.class));
             }
@@ -68,8 +60,7 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
     public void onStop() {
         System.out.println("onStop");
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        if(audioFocusRequest != null)
-        {
+        if (audioFocusRequest != null) {
             am.abandonAudioFocusRequest(audioFocusRequest);
         }
 
@@ -105,25 +96,17 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
 
     @Override
     public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-        KeyEvent ev = (KeyEvent) mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+        KeyEvent ev = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
 
-        if(ev.getAction() == KeyEvent.ACTION_UP)
-        {
-            if(ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY)
-            {
+        if (ev.getAction() == KeyEvent.ACTION_UP) {
+            if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY) {
                 MediaPlayerHelper.play();
-            }
-            else if(ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE)
-            {
+            } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE) {
                 System.out.println("KeyEvent.KEYCODE_MEDIA_PAUSE");
                 MediaPlayerHelper.pause();
-            }
-            else if(ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PREVIOUS)
-            {
+            } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
                 MediaPlayerHelper.prev();
-            }
-            else if(ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_NEXT)
-            {
+            } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_NEXT) {
                 MediaPlayerHelper.next();
             }
         }

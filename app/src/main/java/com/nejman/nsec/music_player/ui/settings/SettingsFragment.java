@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.requireContext());
         Preference about = findPreference("about");
         try {
-            Objects.requireNonNull(about).setTitle("Newtone Lightning "+getActivity().getPackageManager().getPackageInfo(MainActivity.instance.getPackageName(), 0).versionName);
+            Objects.requireNonNull(about).setTitle("Newtone Lightning " + requireActivity().getPackageManager().getPackageInfo(MainActivity.instance.getPackageName(), 0).versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -32,8 +32,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Objects.requireNonNull(ignore).setChecked(Global.ignoreAutoFocus);
 
         preferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            if(key.equals("ignoreBroadcast"))
-            {
+            if (key.equals("ignoreBroadcast")) {
                 Global.ignoreAutoFocus = sharedPreferences.getBoolean("ignoreBroadcast", false);
                 try {
                     DataLoader.save();

@@ -8,37 +8,30 @@ import com.nejman.nsec.music_player.media.MediaSource;
 import java.util.ArrayList;
 
 public class Playlists {
-    public static void createIfNotExists(String playlistName)
-    {
-        if(DataContainer.getInstance().getPlaylists().exists(playlistName))
-        {
+    public static void createIfNotExists(String playlistName) {
+        if (DataContainer.getInstance().getPlaylists().exists(playlistName)) {
             return;
         }
 
-        DataContainer.getInstance().getPlaylists().addPlaylist(playlistName, new PlaylistModel(playlistName,null,new ArrayList<>()));
+        DataContainer.getInstance().getPlaylists().addPlaylist(playlistName, new PlaylistModel(playlistName, null, new ArrayList<>()));
     }
 
-    public static void add(String playlistName, MediaSource track)
-    {
+    public static void add(String playlistName, MediaSource track) {
         add(playlistName, track.path);
     }
 
-    public static void add(String playlistName, String track)
-    {
+    public static void add(String playlistName, String track) {
         createIfNotExists(playlistName);
 
-        if(DataContainer.getInstance().getPlaylists().contains(playlistName, track))
-        {
+        if (DataContainer.getInstance().getPlaylists().contains(playlistName, track)) {
             return;
         }
 
         DataContainer.getInstance().getPlaylists().addToPlaylist(playlistName, track);
     }
 
-    public static void remove(String playlistName)
-    {
-        if(!DataContainer.getInstance().getPlaylists().exists(playlistName))
-        {
+    public static void remove(String playlistName) {
+        if (!DataContainer.getInstance().getPlaylists().exists(playlistName)) {
             return;
         }
 
@@ -50,15 +43,12 @@ public class Playlists {
         }
     }
 
-    public static void remove(String playlistName, MediaSource track)
-    {
+    public static void remove(String playlistName, MediaSource track) {
         remove(playlistName, track.path);
     }
 
-    public static void remove(String playlistName, String filepath)
-    {
-        if(!DataContainer.getInstance().getPlaylists().exists(playlistName))
-        {
+    public static void remove(String playlistName, String filepath) {
+        if (!DataContainer.getInstance().getPlaylists().exists(playlistName)) {
             return;
         }
 
@@ -72,15 +62,12 @@ public class Playlists {
         }
     }
 
-    public static void changeName(String oldName, String newName)
-    {
-        if(!DataContainer.getInstance().getPlaylists().exists(oldName))
-        {
+    public static void changeName(String oldName, String newName) {
+        if (!DataContainer.getInstance().getPlaylists().exists(oldName)) {
             return;
         }
 
-        if(DataContainer.getInstance().getPlaylists().exists(newName))
-        {
+        if (DataContainer.getInstance().getPlaylists().exists(newName)) {
             return;
         }
 

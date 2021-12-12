@@ -4,21 +4,16 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.fragment.app.Fragment;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -116,28 +111,6 @@ public class SearchFragment extends WrappedFragment {
             MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
         }
 
-        public void removeItem(MediaSource mediaSource) {
-            int index = items.indexOf(mediaSource);
-
-            if (index == -1) {
-                return;
-            }
-
-            removeItem(index);
-        }
-
-        public void removeItem(int index) {
-            items.remove(index);
-            notifyDataSetChanged();
-        }
-
-        public void editItem(MediaSource oldItem, MediaSource newItem) {
-            int index = items.indexOf(oldItem);
-            items.set(index, newItem);
-
-            notifyDataSetChanged();
-        }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             MediaSource item = items.get(position);
@@ -151,8 +124,8 @@ public class SearchFragment extends WrappedFragment {
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
             ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
-            ((ImageButton) convertView.findViewById(R.id.menuButton)).setOnClickListener(v -> {
-                System.out.println("show menu");
+            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
+                System.out.println("show menu " + item.playlistId);
                 ContextMenuBuilder.buildForSearchResult(v, item.title + Global.separator + item.id + Global.separator + item.playlistId);
             });
             ImageView imageView = convertView.findViewById(R.id.imageView);
@@ -173,7 +146,7 @@ public class SearchFragment extends WrappedFragment {
                                 InputStream inputStream = http.getInputStream();
                                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                                int bytesRead = -1;
+                                int bytesRead;
                                 byte[] buffer = new byte[4096];
                                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                                     outputStream.write(buffer, 0, bytesRead);

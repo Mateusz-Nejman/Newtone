@@ -1,7 +1,6 @@
 package com.nejman.nsec.music_player.core.loaders;
 
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
@@ -71,7 +70,7 @@ public class DataLoader {
             validExtensions.add("m4a");
             validExtensions.add("ogg");
             String name = pathname.getName();
-            System.out.println("Try to load "+name);
+            System.out.println("Try to load " + name);
 
             if (!name.contains(".")) {
                 return false;
@@ -92,30 +91,6 @@ public class DataLoader {
 
         for (File scannedFile : scannedFiles) {
             Tracks.add(getSource(scannedFile));
-        }
-    }
-
-    public static MediaSource mediaSourceFromTags(File file) {
-        try {
-            AudioFile audioFile = AudioFileIO.read(file);
-            Tag tag = audioFile.getTag();
-
-            String artist = tag.getFirst(FieldKey.ARTIST);
-            String title = tag.getFirst(FieldKey.TITLE);
-            long duration = audioFile.getAudioHeader().getTrackLength();
-            Bitmap thumbnail = null;
-
-            List<Artwork> artworks = tag.getArtworkList();
-
-            if (artworks.size() > 0) {
-                Artwork artwork = artworks.get(0);
-                byte[] binary = artwork.getBinaryData();
-                thumbnail = BitmapFactory.decodeByteArray(binary, 0, binary.length);
-            }
-
-            return new MediaSource(file.getAbsolutePath(), artist, title, duration, thumbnail, null, null, null);
-        } catch (CannotReadException | IOException | TagException | InvalidAudioFrameException | ReadOnlyFileException e) {
-            return null;
         }
     }
 
@@ -239,8 +214,7 @@ public class DataLoader {
             }
         }
 
-        if(ignoreFile.exists())
-        {
+        if (ignoreFile.exists()) {
             String ignoreData = new String(Files.readAllBytes(ignoreFile.toPath()));
             Global.ignoreAutoFocus = Boolean.getBoolean(ignoreData);
         }
@@ -305,8 +279,8 @@ public class DataLoader {
     }
 
     public static MediaSource getSource(File file) {
-        String title = "";
-        String artist = "";
+        String title;
+        String artist;
         byte[] image = null;
         long duration = 0;
         String id = null;
@@ -332,21 +306,25 @@ public class DataLoader {
 
         if (tags.containsKey(file.getAbsolutePath())) {
             MediaSourceTag newTag = tags.get(file.getAbsolutePath());
-            artist = newTag.author;
-            title = newTag.title;
-            image = image == null ? newTag.image : image;
 
-            if (duration == 0) {
-                duration = newTag.duration;
-            }
+            if(newTag != null)
+            {
+                artist = newTag.author;
+                title = newTag.title;
+                image = image == null ? newTag.image : image;
 
-            if (newTag.id != null && !newTag.id.equals("") && !Global.downloadedIds.contains(newTag.id)) {
-                Global.downloadedIds.add(newTag.id);
-                id = newTag.id;
+                if (duration == 0) {
+                    duration = newTag.duration;
+                }
+
+                if (newTag.id != null && !newTag.id.equals("") && !Global.downloadedIds.contains(newTag.id)) {
+                    Global.downloadedIds.add(newTag.id);
+                    id = newTag.id;
+                }
             }
         }
 
-        System.out.println("Loaded "+artist+" -> "+title+" -> duration: "+duration);
+        System.out.println("Loaded " + artist + " -> " + title + " -> duration: " + duration);
         return new MediaSource(file.getAbsolutePath(), artist, title, duration, image == null ? null : BitmapFactory.decodeByteArray(image, 0, image.length), id, null, null);
     }
 }
