@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -37,12 +37,15 @@ public class DownloadDataContainer {
     private final Subject<String> onDownloadAdded;
     private final Subject<String> onDownloadEdited;
     private final Subject<String> onDownloadRemoved;
+    private final List<String> order;
+    private Thread downloadThread;
 
     public DownloadDataContainer() {
         items = new Hashtable<>();
         onDownloadAdded = PublishSubject.create();
         onDownloadEdited = PublishSubject.create();
         onDownloadRemoved = PublishSubject.create();
+        order = new ArrayList<>();
     }
 
     public DownloadModel get(String id) {
@@ -54,7 +57,13 @@ public class DownloadDataContainer {
     }
 
     public void setProgress(String name, int progress) {
-        Objects.requireNonNull(items.get(name)).progress = progress;
+        DownloadModel model = items.get(name);
+
+        if(model == null)
+        {
+            return;
+        }
+        model.progress = progress;
         onDownloadEdited.onNext(name);
     }
 
@@ -123,98 +132,14 @@ public class DownloadDataContainer {
         model.playlistId = playlistId;
 
         items.put(id, model);
+        order.add(id);
         onDownloadAdded.onNext(id);
 
-        Thread thread = new Thread(() -> {
-            System.out.println("start downloading " + id);
-            MediaSource source = YoutubeDownloadHelper.getVideoInfo(id, null);
-            String filename = source.title
-                    .replace('/', '_')
-                    .replace('\\', '_')
-                    .replace(':', '_')
-                    .replace('*', '_')
-                    .replace('"', '_')
-                    .replace('<', '_')
-                    .replace('>', '_')
-                    .replace('|', '_');
-
-            YoutubeDownloadHelper.downloadAudio(id, filename, file -> {
-                items.remove(id);
-                onDownloadRemoved.onNext(id);
-
-                String[] splitted = source.title.split("-");
-                String _artist = (splitted.length == 1 ? source.artist : splitted[0]).trim();
-                String _title = (splitted[splitted.length == 1 ? 0 : 1]).trim();
-
-                byte[] image = null;
-
-                try {
-                    URL _url = new URL(source.imageUrl);
-                    HttpURLConnection http = (HttpURLConnection) _url.openConnection();
-                    int responseCode = http.getResponseCode();
-
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        InputStream inputStream = http.getInputStream();
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-                        int bytesRead;
-                        byte[] buffer = new byte[4096];
-                        while ((bytesRead = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-
-                        image = outputStream.toByteArray();
-                        outputStream.close();
-                        inputStream.close();
-                    }
-
-                    http.disconnect();
-                } catch (IOException ignored) {
-
-                }
-
-                if (DataContainer.getInstance().getMediaSourceTags().exists(file.getAbsolutePath())) {
-                    String filepath = file.getAbsolutePath();
-                    MediaSourceTag tag = DataContainer.getInstance().getMediaSourceTags().get(filepath);
-                    tag.author = _artist;
-                    tag.title = title;
-                    tag.image = image;
-                    tag.id = source.id;
-                    tag.duration = source.duration;
-
-                    DataContainer.getInstance().getMediaSourceTags().edit(tag, tag);
-                } else {
-                    MediaSourceTag tag = new MediaSourceTag();
-                    tag.author = _artist;
-                    tag.title = _title;
-                    tag.image = image;
-                    tag.id = source.id;
-                    tag.duration = source.duration;
-                    tag.path = file.getAbsolutePath();
-
-                    DataContainer.getInstance().getMediaSourceTags().add(tag);
-                }
-
-                MediaSource container = DataLoader.getSource(file);
-                Tracks.add(container);
-                try {
-                    DataLoader.save();
-                    DataLoader.saveTags();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-
-                MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.file_downloaded) + " " + _artist + " " + _title, Toast.LENGTH_SHORT).show());
-
-                if (model.playlistName != null && !model.playlistName.equals("")) {
-                    Playlists.add(model.playlistName, file.getAbsolutePath());
-                }
-            }, progress -> {
-                setProgress(id, progress);
-                System.out.println("Downloading " + id + ": " + progress);
-            });
-        });
-        thread.start();
+        if(downloadThread == null)
+        {
+            downloadThread = new Thread(this::downloadThreadAction);
+            downloadThread.start();
+        }
     }
 
     public Disposable addOnDownloadAdded(Consumer<? super String> consumer) {
@@ -227,5 +152,123 @@ public class DownloadDataContainer {
 
     public Disposable addOnDownloadRemoved(Consumer<? super String> consumer) {
         return onDownloadRemoved.subscribe(consumer);
+    }
+
+    private boolean isTitleReversed(String artist)
+    {
+        String lower = artist.toLowerCase(Locale.ROOT);
+
+        return lower.contains("official video") || lower.contains("official music") || lower.contains("official lyric") || lower.contains("official hd");
+    }
+
+    private void downloadThreadAction()
+    {
+        if(items.size() == 0 || order.size() == 0)
+        {
+            downloadThread = null;
+            return;
+        }
+
+        DownloadModel model = items.get(order.get(0));
+        order.remove(0);
+
+        if(model == null)
+        {
+            downloadThread = null;
+            return;
+        }
+
+        String title = model.title;
+        String id = model.id;
+        System.out.println("start downloading " + id);
+        MediaSource source = YoutubeDownloadHelper.getVideoInfo(id, null);
+        String filename = source.title
+                .replace('/', '_')
+                .replace('\\', '_')
+                .replace(':', '_')
+                .replace('*', '_')
+                .replace('"', '_')
+                .replace('<', '_')
+                .replace('>', '_')
+                .replace('|', '_');
+
+        YoutubeDownloadHelper.downloadAudioSync(id, filename, file -> {
+            items.remove(id);
+            onDownloadRemoved.onNext(id);
+
+            String[] splitted = source.title.split("-");
+            String _artistTemp = (splitted.length == 1 ? source.artist : splitted[0]).trim();
+            String _titleTemp = (splitted[splitted.length == 1 ? 0 : 1]).trim();
+            String _artist = isTitleReversed(_artistTemp) ? _titleTemp : _artistTemp;
+            String _title = isTitleReversed(_artistTemp) ? _artistTemp : _titleTemp;
+
+            byte[] image = null;
+
+            try {
+                URL _url = new URL(source.imageUrl);
+                HttpURLConnection http = (HttpURLConnection) _url.openConnection();
+                int responseCode = http.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = http.getInputStream();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                    int bytesRead;
+                    byte[] buffer = new byte[4096];
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    image = outputStream.toByteArray();
+                    outputStream.close();
+                    inputStream.close();
+                }
+
+                http.disconnect();
+            } catch (IOException ignored) {
+
+            }
+
+            if (DataContainer.getInstance().getMediaSourceTags().exists(file.getAbsolutePath())) {
+                String filepath = file.getAbsolutePath();
+                MediaSourceTag tag = DataContainer.getInstance().getMediaSourceTags().get(filepath);
+                tag.author = _artist;
+                tag.title = title;
+                tag.image = image;
+                tag.id = source.id;
+                tag.duration = source.duration;
+
+                DataContainer.getInstance().getMediaSourceTags().edit(tag, tag);
+            } else {
+                MediaSourceTag tag = new MediaSourceTag();
+                tag.author = _artist;
+                tag.title = _title;
+                tag.image = image;
+                tag.id = source.id;
+                tag.duration = source.duration;
+                tag.path = file.getAbsolutePath();
+
+                DataContainer.getInstance().getMediaSourceTags().add(tag);
+            }
+
+            MediaSource container = DataLoader.getSource(file);
+            Tracks.add(container);
+            try {
+                DataLoader.save();
+                DataLoader.saveTags();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.file_downloaded) + " " + _artist + " " + _title, Toast.LENGTH_SHORT).show());
+
+            if (model.playlistName != null && !model.playlistName.equals("")) {
+                Playlists.add(model.playlistName, file.getAbsolutePath());
+            }
+
+            downloadThreadAction();
+        }, progress -> {
+            setProgress(id, progress);
+        });
     }
 }

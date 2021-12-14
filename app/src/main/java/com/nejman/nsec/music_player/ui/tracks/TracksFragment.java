@@ -146,24 +146,36 @@ public class TracksFragment extends WrappedFragment {
         public void addItem(MediaSource mediaSource) {
             MainActivity.instance.runOnUiThread(() -> {
                 items.add(mediaSource);
-                items = items.stream().sorted((first, second) -> {
-                    String firstC = first.artist + " - " + first.title;
-                    String secondC = second.artist + " - " + second.title;
 
-                    return firstC.compareTo(secondC);
-                }).collect(Collectors.toList());
+                if(playlist == null)
+                {
+                    items = items.stream().sorted((first, second) -> {
+                        String firstC = first.artist + " - " + first.title;
+                        String secondC = second.artist + " - " + second.title;
+
+                        return firstC.compareTo(secondC);
+                    }).collect(Collectors.toList());
+                }
                 notifyDataSetChanged();
             });
         }
 
         public void addItems(List<MediaSource> sources) {
             MainActivity.instance.runOnUiThread(() -> {
-                items = sources.stream().sorted((first, second) -> {
-                    String firstC = first.artist + " - " + first.title;
-                    String secondC = second.artist + " - " + second.title;
+                if(playlist == null)
+                {
+                    items = sources.stream().sorted((first, second) -> {
+                        String firstC = first.artist + " - " + first.title;
+                        String secondC = second.artist + " - " + second.title;
 
-                    return firstC.compareTo(secondC);
-                }).collect(Collectors.toList());
+                        return firstC.compareTo(secondC);
+                    }).collect(Collectors.toList());
+                }
+                else
+                {
+                    items = new ArrayList<>(sources);
+                }
+
                 notifyDataSetChanged();
             });
         }

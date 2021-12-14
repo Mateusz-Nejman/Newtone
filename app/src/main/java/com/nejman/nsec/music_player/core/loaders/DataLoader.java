@@ -1,8 +1,11 @@
 package com.nejman.nsec.music_player.core.loaders;
 
 
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+
+import androidx.preference.PreferenceManager;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -19,6 +22,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.NullBoxIdException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
@@ -34,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DataLoader {
 
@@ -207,7 +210,16 @@ public class DataLoader {
         }
 
         if (historyFile.exists()) {
-            List<String> history = Files.readAllLines(historyFile.toPath());
+            List<String> historyTemp = Files.readAllLines(historyFile.toPath());
+            List<String> history = new ArrayList<>();
+
+            for(String historyItem : historyTemp)
+            {
+                if(!history.contains(historyItem))
+                {
+                    history.add(historyItem);
+                }
+            }
 
             for (String historyItem : history) {
                 DataContainer.getInstance().getHistory().add(historyItem);
@@ -218,6 +230,18 @@ public class DataLoader {
             String ignoreData = new String(Files.readAllBytes(ignoreFile.toPath()));
             Global.ignoreAutoFocus = Boolean.getBoolean(ignoreData);
         }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.instance);
+
+        if(preferences == null)
+        {
+            return;
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putBoolean("ignoreBroadcast", Global.ignoreAutoFocus);
+        editor.apply();
     }
 
     public static void save() throws Throwable {
@@ -259,9 +283,18 @@ public class DataLoader {
         }
 
         {
-            List<HistoryModel> history = DataContainer.getInstance().getHistory().get();
+            List<HistoryModel> historyTemp = DataContainer.getInstance().getHistory().get();
+            List<String> history = new ArrayList<>();
 
-            String buffer = history.stream().map(item -> item.query).collect(Collectors.joining("\n"));
+            for(HistoryModel model : historyTemp)
+            {
+                if(!history.contains(model.query))
+                {
+                    history.add(model.query);
+                }
+            }
+
+            String buffer = String.join("\n", history);
             FileWriter fileWriter = new FileWriter(historyFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(buffer);
@@ -297,7 +330,7 @@ public class DataLoader {
             }
 
             duration = audioFile.getAudioHeader().getTrackLength() * 1000L;
-        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException | NullBoxIdException e) {
             title = file.getName();
             artist = MainActivity.instance.getString(R.string.unknown_artist);
         }

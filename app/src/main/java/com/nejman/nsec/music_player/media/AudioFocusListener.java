@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import com.nejman.nsec.music_player.Global;
 
 public class AudioFocusListener implements AudioManager.OnAudioFocusChangeListener {
+    private boolean previousPlaying = false;
     @Override
     public void onAudioFocusChange(int focusChange) {
         if (Global.ignoreAutoFocus) {
@@ -13,6 +14,7 @@ public class AudioFocusListener implements AudioManager.OnAudioFocusChangeListen
         //TODO break when TV
 
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS && NewtoneMediaPlayer.getInstance().getCurrentPosition() > 10000) {
+            previousPlaying = NewtoneMediaPlayer.getInstance().isPlaying();
             MediaPlayerHelper.pause();
         }
 
@@ -23,13 +25,14 @@ public class AudioFocusListener implements AudioManager.OnAudioFocusChangeListen
         if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
             NewtoneMediaPlayer.getInstance().setVolume(1.0f);
 
-            if (!NewtoneMediaPlayer.getInstance().isPlaying()) {
+            if (!NewtoneMediaPlayer.getInstance().isPlaying() && previousPlaying) {
                 NewtoneMediaPlayer.getInstance().play();
             }
         }
 
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
             System.out.println("AudioManager.AUDIOFOCUS_LOSS_TRANSIENT");
+            previousPlaying = NewtoneMediaPlayer.getInstance().isPlaying();
             MediaPlayerHelper.pause();
         }
     }

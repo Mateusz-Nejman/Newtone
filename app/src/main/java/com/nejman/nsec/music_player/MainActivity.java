@@ -316,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         @SuppressLint("WrongConstant") NotificationChannel notificationChannel = new NotificationChannel("Newtone Lightning", "Newtone Lightning", NotificationManager.IMPORTANCE_MAX);
         notificationChannel.setShowBadge(true);
+        notificationChannel.enableVibration(false);
         notificationManager.createNotificationChannel(notificationChannel);
         AudioFocusRequest audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).setOnAudioFocusChangeListener(Global.audioFocusListener).build();
         ((AudioManager) getSystemService(AUDIO_SERVICE)).requestAudioFocus(audioFocusRequest);

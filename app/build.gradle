@@ -9,8 +9,8 @@ android {
         applicationId "com.nejman.nsec.music_player"
         minSdk 26
         targetSdk 31
-        versionCode 80001
-        versionName "8.0001"
+        versionCode 80004
+        versionName "8.0004"
     }
 
     buildTypes {

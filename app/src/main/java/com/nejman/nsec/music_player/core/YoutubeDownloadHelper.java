@@ -87,13 +87,57 @@ public class YoutubeDownloadHelper {
         downloader.downloadVideoFile(request1);
     }
 
+    public static void downloadAudioSync(String id, String filename, Consumer<? super File> onFinishedConsumer, Consumer<? super Integer> onProgressChanged) {
+        //String directory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/NSEC/Music_Player";
+        AudioFormat format = getBestAudioFormat(id);
+        RequestVideoFileDownload requestDownload = new RequestVideoFileDownload(format);
+        requestDownload.saveTo(new File(Global.musicPath)).renameTo(filename).overwriteIfExists(true);
+        System.out.println("Start " + filename);
+        RequestVideoFileDownload request1 = requestDownload.callback(new YoutubeProgressCallback<File>() {
+            @Override
+            public void onDownloading(int progress) {
+                onProgressChanged.accept(progress);
+            }
+
+            @Override
+            public void onFinished(File data) {
+                System.out.println("onFinished " + data.getName());
+                onFinishedConsumer.accept(data);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                System.out.println("onError");
+                throwable.printStackTrace();
+            }
+        });
+
+        Response<File> response = downloader.downloadVideoFile(request1);
+        File downloaded = response.data();
+
+        System.out.println("downloaded");
+        if(downloaded == null)
+        {
+            return;
+        }
+
+        System.out.println(downloaded.getName());
+
+    }
+
     public static MediaSource getVideoInfo(String id, String playlistId) {
-        RequestVideoInfo request = new RequestVideoInfo(id);
-        Response<VideoInfo> response = downloader.getVideoInfo(request);
-        VideoInfo video = response.data();
-        VideoDetails details = video.details();
-        AudioFormat format = video.bestAudioFormat();
-        return new MediaSource(format.url(), details.author(), details.title(), details.lengthSeconds() * 1000L, null, id, details.thumbnails().get(0), playlistId);
+        try {
+            RequestVideoInfo request = new RequestVideoInfo(id);
+            Response<VideoInfo> response = downloader.getVideoInfo(request);
+            VideoInfo video = response.data();
+            VideoDetails details = video.details();
+            AudioFormat format = video.bestAudioFormat();
+            return new MediaSource(format.url(), details.author(), details.title(), details.lengthSeconds() * 1000L, null, id, details.thumbnails().get(0), playlistId);
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
 
     public static List<MediaSource> search(String keyword) {
@@ -166,7 +210,12 @@ public class YoutubeDownloadHelper {
                     continue;
                 }
 
-                playlist.add(getVideoInfo(videoDetails.videoId(), "https://www.youtube.com/watch?v=" + videoDetails.videoId() + "&list=" + validators.get(Query.Playlist)));
+                MediaSource playlistSource = getVideoInfo(videoDetails.videoId(), "https://www.youtube.com/watch?v=" + videoDetails.videoId() + "&list=" + validators.get(Query.Playlist));
+
+                if(playlistSource != null)
+                {
+                    playlist.add(playlistSource);
+                }
             }
 
             return playlist;
