@@ -10,8 +10,6 @@ import com.nejman.nsec.music_player.R;
 
 public class WrappedFragment extends Fragment {
     protected void showMenu(int id, boolean show) {
-        System.out.println(show);
-
         if (MainActivity.instance.menu == null) {
             return;
         }

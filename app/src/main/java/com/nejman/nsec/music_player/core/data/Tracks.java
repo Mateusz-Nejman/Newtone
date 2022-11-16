@@ -13,7 +13,6 @@ public class Tracks {
     public static void add(MediaSource source) {
         if (!DataContainer.getInstance().getMediaSources().exists(source) && source.isLocal && new File(source.path).exists()) {
             DataContainer.getInstance().getMediaSources().add(source);
-            System.out.println(source.artist);
             Artists.add(source);
         }
     }

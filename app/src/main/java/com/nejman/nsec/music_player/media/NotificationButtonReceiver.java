@@ -20,11 +20,9 @@ public class NotificationButtonReceiver extends MediaButtonReceiver {
         }
 
         if (ev.getAction() == KeyEvent.ACTION_DOWN) {
-            System.out.println("down");
             if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY) {
                 MediaPlayerHelper.play();
             } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE) {
-                System.out.println("ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE");
                 MediaPlayerHelper.pause();
             } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
                 MediaPlayerHelper.prev();

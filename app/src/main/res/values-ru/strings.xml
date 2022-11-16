@@ -72,4 +72,7 @@
     <string name="play">Играй</string>
     <string name="pause">Пауза</string>
     <string name="stop">Стоп</string>
+    <string name="send_bluetooth">Send</string>
+    <string name="send_bluetooth_info">You can send data to another device with Newtone installed. Continue?</string>
+    <string name="send_bluetooth_select">Select device</string>
 </resources>

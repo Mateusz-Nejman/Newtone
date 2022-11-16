@@ -31,7 +31,6 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
 
     @Override
     public void onPlay() {
-        System.out.println("onPlay");
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         // Request audio focus for playback, this registers the audioFocusRequest
         AudioAttributes attrs = new AudioAttributes.Builder()
@@ -45,20 +44,17 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
 
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             if (MusicPlaybackService.instance == null) {
-                System.out.println("Start musicPlaybackService");
                 MainActivity.instance.getApplicationContext().startForegroundService(new Intent(context, MusicPlaybackService.class));
             }
             mediaSession.setActive(true);
             player.play();
             //service.registerReceiver(musicNoisyReceiver, intentFilter);
             service.updateNotification(true);
-            System.out.println("onPlay updateNotification");
         }
     }
 
     @Override
     public void onStop() {
-        System.out.println("onStop");
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if (audioFocusRequest != null) {
             am.abandonAudioFocusRequest(audioFocusRequest);
@@ -79,7 +75,6 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
 
     @Override
     public void onPause() {
-        System.out.println("onPause");
         player.pause();
         service.updateNotification(false);
     }
@@ -102,7 +97,6 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
             if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY) {
                 MediaPlayerHelper.play();
             } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PAUSE) {
-                System.out.println("KeyEvent.KEYCODE_MEDIA_PAUSE");
                 MediaPlayerHelper.pause();
             } else if (ev.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
                 MediaPlayerHelper.prev();

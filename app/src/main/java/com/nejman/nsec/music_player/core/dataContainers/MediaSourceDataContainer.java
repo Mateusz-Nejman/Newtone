@@ -1,11 +1,13 @@
 package com.nejman.nsec.music_player.core.dataContainers;
 
+import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.core.data.Artists;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -67,12 +69,14 @@ public class MediaSourceDataContainer {
             return;
         }
         this.items.put(oldItem.path, newItem);
-
-        System.out.println("edit " + (!oldItem.artist.equals(newItem.artist)) + " " + oldItem.artist + " " + newItem.artist);
         if (!oldItem.artist.equals(newItem.artist)) {
             Artists.remove(oldItem.artist, oldItem);
             Artists.add(newItem);
-            System.out.println(oldItem.artist + " " + newItem.artist);
+        }
+
+        if (Global.currentSource != null && Objects.equals(Global.currentSource.path, newItem.path)) {
+            Global.currentSource.title = newItem.title;
+            Global.currentSource.artist = newItem.artist;
         }
         this.sourceEdited.onNext(new MediaSource[]{oldItem, newItem});
     }

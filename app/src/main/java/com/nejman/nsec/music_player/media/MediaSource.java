@@ -15,17 +15,23 @@ public class MediaSource {
     public String title;
     public long duration;
     public Bitmap image;
+    public byte[] imageData;
     public String path;
     public String id;
     public String imageUrl;
     public String playlistId;
     public boolean isLocal;
 
-    public MediaSource(String path, String artist, String title, long duration, Bitmap image, String id, String imageUrl, String playlistId) {
+    public MediaSource(String path, String artist, String title, long duration, byte[] image, String id, String imageUrl, String playlistId) {
         this.artist = artist;
         this.title = title;
         this.duration = duration;
-        this.image = image;
+        this.imageData = image;
+
+        if (image != null) {
+            this.image = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
+
         this.path = path;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -63,6 +69,6 @@ public class MediaSource {
     @NonNull
     @Override
     public MediaSource clone() {
-        return new MediaSource(path, artist, title, duration, image, id, imageUrl, playlistId);
+        return new MediaSource(path, artist, title, duration, imageData, id, imageUrl, playlistId);
     }
 }

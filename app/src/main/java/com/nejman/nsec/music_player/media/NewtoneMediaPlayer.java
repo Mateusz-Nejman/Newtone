@@ -124,7 +124,6 @@ public class NewtoneMediaPlayer {
         }
         MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
         mediaSession.setMetadata(Global.currentSource.toMetaData());
-        System.out.println("Current position " + player.getCurrentPosition());
         setPlaybackState(PlaybackStateCompat.STATE_NONE,
                 player.getCurrentPosition(),
                 1.0f);

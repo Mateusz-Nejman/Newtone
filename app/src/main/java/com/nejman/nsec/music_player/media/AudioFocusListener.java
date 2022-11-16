@@ -31,7 +31,6 @@ public class AudioFocusListener implements AudioManager.OnAudioFocusChangeListen
         }
 
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-            System.out.println("AudioManager.AUDIOFOCUS_LOSS_TRANSIENT");
             previousPlaying = NewtoneMediaPlayer.getInstance().isPlaying();
             MediaPlayerHelper.pause();
         }

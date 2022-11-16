@@ -7,7 +7,6 @@ import com.nejman.nsec.music_player.MainActivity;
 
 public class MediaPlayerHelper {
     public static void play() {
-        System.out.println("MediaPlayerHelper.play");
         if (cantBeUsed()) {
             return;
         }
@@ -20,7 +19,6 @@ public class MediaPlayerHelper {
     }
 
     public static void pause() {
-        System.out.println("MediaPlayerHelper.pause");
         if (cantBeUsed()) {
             return;
         }

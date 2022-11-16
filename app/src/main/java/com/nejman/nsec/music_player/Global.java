@@ -20,4 +20,5 @@ public class Global {
     public static PlaybackMode playbackMode = PlaybackMode.All;
     public static final AudioFocusListener audioFocusListener = new AudioFocusListener();
     public static boolean ignoreAutoFocus = false;
+    public static boolean inFullscreenPlayer = false;
 }

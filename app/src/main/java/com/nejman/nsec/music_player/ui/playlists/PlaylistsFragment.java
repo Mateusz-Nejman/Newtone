@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -49,12 +48,6 @@ public class PlaylistsFragment extends Fragment {
         playlistRemoved = DataContainer.getInstance().getPlaylists().addOnPlaylistRemoved(item -> adapter.removeItem(item));
 
         return root;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -139,10 +132,7 @@ public class PlaylistsFragment extends Fragment {
             convertView.setTag(String.valueOf(position));
 
             ((TextView) convertView.findViewById(R.id.textView)).setText(item.name);
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
-                System.out.println("show menu");
-                ContextMenuBuilder.buildForPlaylist(v, item.name);
-            });
+            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForPlaylist(v, item.name));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
             Bitmap imageNull = BitmapFactory.decodeResource(MainActivity.getRes(), R.drawable.empty_track);
@@ -163,7 +153,6 @@ public class PlaylistsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             int position = Integer.parseInt(v.getTag().toString());
-            System.out.println(position);
             onItemSelected(position);
         }
 

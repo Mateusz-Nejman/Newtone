@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,12 +69,6 @@ public class SearchFragment extends WrappedFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         this.showSearch(true);
@@ -124,10 +116,7 @@ public class SearchFragment extends WrappedFragment {
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
             ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
-                System.out.println("show menu " + item.playlistId);
-                ContextMenuBuilder.buildForSearchResult(v, item.title + Global.separator + item.id + Global.separator + item.playlistId);
-            });
+            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForSearchResult(v, item.title + Global.separator + item.id + Global.separator + item.playlistId));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
             if (item.image == null) {
@@ -184,7 +173,6 @@ public class SearchFragment extends WrappedFragment {
 
         public void onItemSelected(int position) {
             MediaSource clickedSource = (MediaSource) getItem(position);
-            System.out.println(clickedSource.title);
             Global.currentPlaylist.clear();
             Global.currentPlaylist.addAll(items);
             Global.currentPlaylistPosition = position;

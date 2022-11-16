@@ -1,6 +1,5 @@
 package com.nejman.nsec.music_player.ui.player;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,50 +8,30 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsic;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
-import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
-import com.nejman.nsec.music_player.core.models.ArtistModel;
-import com.nejman.nsec.music_player.core.models.DownloadModel;
-import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.databinding.FragmentPlayerBinding;
-import com.nejman.nsec.music_player.databinding.FragmentPlaylistsBinding;
 import com.nejman.nsec.music_player.media.MediaPlayerHelper;
-import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 import com.nejman.nsec.music_player.media.PlaybackMode;
+import com.nejman.nsec.music_player.ui.BlurBuilder;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
-import com.nejman.nsec.music_player.ui.artists.ArtistsFragment;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import io.reactivex.rxjava3.disposables.Disposable;
 
 public class PlayerFragment extends WrappedFragment {
     private FragmentPlayerBinding binding;
@@ -63,8 +42,10 @@ public class PlayerFragment extends WrappedFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Global.inFullscreenPlayer = true;
         binding = FragmentPlayerBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        binding.titleView.setSelected(true);
         showPlayer(false);
         showActionBar(false);
         showNavigationView(false);
@@ -160,17 +141,12 @@ public class PlayerFragment extends WrappedFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
         showActionBar(true);
         showNavigationView(true);
+        Global.inFullscreenPlayer = false;
         showPlayer(true);
 
         timer.cancel();
@@ -195,40 +171,38 @@ public class PlayerFragment extends WrappedFragment {
 
     private void refreshView() {
         if (Global.currentSource == null) {
-            System.out.println("currentSource null");
             return;
         }
 
         if (!playedTrack.equals(Global.currentSource.path)) {
-            boolean visibility = Global.currentSource.image != null;
-            binding.trackBackground.setVisibility(visibility ? View.VISIBLE : View.GONE);
-
-            if (visibility) {
-                binding.trackBackground.setImageBitmap(Global.currentSource.image);
-                binding.trackImage.setImageBitmap(Global.currentSource.image);
-            } else {
-                binding.trackImage.setImageBitmap(Global.currentSource.image);
-            }
-
+            setTrackImage(binding.trackBackground, Global.currentSource.image, true);
+            setTrackImage(binding.trackImage, Global.currentSource.image);
             playedTrack = Global.currentSource.path;
         }
 
         if (isPlayImage && NewtoneMediaPlayer.getInstance().isPlaying()) {
-            binding.playButton.setImageResource(R.drawable.pause_icon);
+            binding.playButton.setImageResource(R.drawable.pause_icon_blue);
             isPlayImage = false;
         }
 
         if (!isPlayImage && !NewtoneMediaPlayer.getInstance().isPlaying()) {
-            binding.playButton.setImageResource(R.drawable.play_icon);
+            binding.playButton.setImageResource(R.drawable.play_icon_blue);
             isPlayImage = true;
         }
 
         binding.positionBox.setText(getDurationString(NewtoneMediaPlayer.getInstance().getCurrentPosition()));
         binding.durationBox.setText(getDurationString(NewtoneMediaPlayer.getInstance().getDuration()));
-        binding.titleView.setText(Global.currentSource.title);
+
+        String oldTitle = binding.titleView.getText().toString();
+        if(!Objects.equals(Global.currentSource.title, oldTitle))
+        {
+            binding.titleView.setText(Global.currentSource.title);
+        }
         binding.artistView.setText(Global.currentSource.artist);
         binding.positionSlider.setMax((int) Global.currentSource.duration);
         binding.positionSlider.setProgress(NewtoneMediaPlayer.getInstance().getCurrentPosition(), true);
+        binding.progressBar.setMax((int) Global.currentSource.duration);
+        binding.progressBar.setProgress(NewtoneMediaPlayer.getInstance().getCurrentPosition(), true);
 
         if (Global.playbackMode != playerMode) {
             if (Global.playbackMode == PlaybackMode.All) {
@@ -241,5 +215,25 @@ public class PlayerFragment extends WrappedFragment {
 
             playerMode = Global.playbackMode;
         }
+    }
+
+    private void setTrackImage(ImageView imageView, Bitmap image, boolean blur)
+    {
+        if(image == null)
+        {
+            image = BitmapFactory.decodeResource(getResources(), R.drawable.empty_track);
+        }
+
+        if(blur)
+        {
+            image = BlurBuilder.blur(getContext(), image);
+        }
+
+        imageView.setImageBitmap(image);
+    }
+
+    private void setTrackImage(ImageView imageView, Bitmap image)
+    {
+        setTrackImage(imageView, image, false);
     }
 }

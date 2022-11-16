@@ -47,12 +47,16 @@
         android:label="@string/play"
         tools:layout="@layout/fragment_player" />
 
-    <action android:id="@+id/navigate_to_search"
-        app:destination="@id/navigation_search"/>
-    <action android:id="@+id/navigate_to_tracks"
-        app:destination="@id/navigation_tracks"/>
-    <action android:id="@+id/navigate_to_downloads"
-        app:destination="@id/navigation_downloads"/>
-    <action android:id="@+id/navigate_to_player"
-        app:destination="@id/navigation_player"/>
+    <action
+        android:id="@+id/navigate_to_search"
+        app:destination="@id/navigation_search" />
+    <action
+        android:id="@+id/navigate_to_tracks"
+        app:destination="@id/navigation_tracks" />
+    <action
+        android:id="@+id/navigate_to_downloads"
+        app:destination="@id/navigation_downloads" />
+    <action
+        android:id="@+id/navigate_to_player"
+        app:destination="@id/navigation_player" />
 </navigation>

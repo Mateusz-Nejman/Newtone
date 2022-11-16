@@ -72,4 +72,7 @@
     <string name="play">Odtwórz</string>
     <string name="pause">Pauza</string>
     <string name="stop">Zatrzymaj</string>
+    <string name="send_bluetooth">Wyślij</string>
+    <string name="send_bluetooth_info">Możesz wysłać utwory do urządzenia z zainstalowanym Newtone. Kontynuować?</string>
+    <string name="send_bluetooth_select">Wybierz urządzenie</string>
 </resources>

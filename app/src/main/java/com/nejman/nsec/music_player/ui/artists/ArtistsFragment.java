@@ -4,46 +4,26 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
-import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.databinding.FragmentArtistsBinding;
-import com.nejman.nsec.music_player.databinding.FragmentSearchBinding;
-import com.nejman.nsec.music_player.media.MediaSource;
-import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -68,12 +48,6 @@ public class ArtistsFragment extends WrappedFragment {
         artistRemoved = DataContainer.getInstance().getArtists().addOnArtistRemoved(model -> adapter.removeItem(model));
 
         return root;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -140,7 +114,6 @@ public class ArtistsFragment extends WrappedFragment {
         }
 
         public void editItem(ArtistModel item) {
-            System.out.println("Edit item");
             int index = items.indexOf(item);
 
             removeItem(index);
@@ -158,10 +131,7 @@ public class ArtistsFragment extends WrappedFragment {
             convertView.setTag(String.valueOf(position));
 
             ((TextView) convertView.findViewById(R.id.textView)).setText(item.name);
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
-                System.out.println("show menu");
-                ContextMenuBuilder.buildForArtist(v, item.name);
-            });
+            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForArtist(v, item.name));
             ImageView imageView = convertView.findViewById(R.id.imageView);
             imageView.setImageBitmap(item.image == null ? BitmapFactory.decodeResource(MainActivity.getRes(), R.drawable.empty_track) : item.image);
 
@@ -179,7 +149,6 @@ public class ArtistsFragment extends WrappedFragment {
 
             Bundle bundle = new Bundle();
             bundle.putString("artist", model.name);
-
             NavHostFragment.findNavController(ArtistsFragment.this).navigate(R.id.navigate_to_tracks, bundle);
         }
     }

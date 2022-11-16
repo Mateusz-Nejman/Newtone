@@ -73,7 +73,6 @@ public class DataLoader {
             validExtensions.add("m4a");
             validExtensions.add("ogg");
             String name = pathname.getName();
-            System.out.println("Try to load " + name);
 
             if (!name.contains(".")) {
                 return false;
@@ -357,7 +356,6 @@ public class DataLoader {
             }
         }
 
-        System.out.println("Loaded " + artist + " -> " + title + " -> duration: " + duration);
-        return new MediaSource(file.getAbsolutePath(), artist, title, duration, image == null ? null : BitmapFactory.decodeByteArray(image, 0, image.length), id, null, null);
+        return new MediaSource(file.getAbsolutePath(), artist, title, duration, image, id, null, null);
     }
 }

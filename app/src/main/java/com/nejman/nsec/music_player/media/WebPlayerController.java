@@ -3,7 +3,6 @@ package com.nejman.nsec.music_player.media;
 import android.media.MediaPlayer;
 import android.widget.Toast;
 
-import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
@@ -20,14 +19,13 @@ public class WebPlayerController implements IPlayerController {
         AtomicReference<String> url = new AtomicReference<>(path);
         if (!url.get().startsWith("https://")) {
             Thread urlThread = new Thread(() -> {
-                AudioFormat format = YoutubeDownloadHelper.getBestAudioFormat(path);
-
+                String format = YoutubeDownloadHelper.getAudioUrl(path);
                 if (format == null) {
                     MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show());
                     return;
                 }
 
-                url.set(format.url());
+                url.set(format);
             });
             urlThread.start();
             try {
@@ -36,7 +34,6 @@ public class WebPlayerController implements IPlayerController {
                 e.printStackTrace();
             }
         }
-
         mediaPlayer.setDataSource(url.get());
     }
 

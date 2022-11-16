@@ -3,7 +3,6 @@ package com.nejman.nsec.music_player.ui.downloads;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -44,12 +43,6 @@ public class DownloadsFragment extends WrappedFragment {
         downloadRemoved = DataContainer.getInstance().getDownloads().addOnDownloadRemoved(item -> MainActivity.instance.runOnUiThread(() -> adapter.removeItem(item)));
 
         return root;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

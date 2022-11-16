@@ -68,6 +68,7 @@ public class ContextMenuBuilder {
         elements.add(MainActivity.getResString(R.string.track_menu_edit));
         elements.add(MainActivity.getResString(R.string.track_menu_playlist));
         elements.add(MainActivity.getResString(R.string.track_menu_queue));
+        //TODO elements.add(MainActivity.getResString(R.string.send_bluetooth));
         elements.add(MainActivity.getResString(R.string.track_menu_delete));
         build(sender, elements, item -> {
             if (filePath.length() == 11) {
@@ -88,6 +89,9 @@ public class ContextMenuBuilder {
             } else if (item.equals(MainActivity.getResString(R.string.track_menu_queue))) {
                 QueueAction.add(filePath);
                 Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.snack_queue), Toast.LENGTH_SHORT).show();
+            } else if(item.equals(MainActivity.getResString(R.string.send_bluetooth)))
+            {
+                //TODO
             }
         });
     }

@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.MatrixCursor;
@@ -14,19 +15,19 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -36,6 +37,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
@@ -62,18 +64,19 @@ public class MainActivity extends AppCompatActivity {
     public static String dataPath;
     public static String musicPath;
     public BottomNavigationView navigationView;
-    private boolean backPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        System.out.println("onCreate");
         instance = this;
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.playerView.setAlpha(0.0f);
+        binding.playerView.setVisibility(View.GONE);
+        binding.playerViewTitle.setSelected(true);
 
         binding.playerViewPlayButton.setOnClickListener(v -> {
             if (NewtoneMediaPlayer.getInstance().isPlaying()) {
@@ -107,8 +110,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         runOnUiThread(() -> {
-            System.out.println("sourceChanged");
-            binding.playerView.setVisibility(View.VISIBLE);
+            if(!Global.inFullscreenPlayer)
+            {
+                showPlayerPanel(true);
+                binding.playerView.animate().setDuration(500).alpha(1.0f);
+            }
 
             binding.playerViewTitle.setText(source.title);
             binding.playerViewArtist.setText(source.artist);
@@ -136,15 +142,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             mediaBrowser.connect();
         } catch (Exception e) {
-            System.out.println("mediaBrowser.connect exception");
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        System.out.println("onSearchRequested");
-        return super.onSearchRequested();
     }
 
     @Override
@@ -184,11 +183,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-        } else if (!backPressed) {
-            this.backPressed = true;
-            Toast.makeText(this, R.string.back_pressed, Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(() -> backPressed = false, 2000);
         } else {
             super.onBackPressed();
         }
@@ -200,17 +194,10 @@ public class MainActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         } else if (item.getItemId() == R.id.downloadButton) {
-            System.out.println("download button pressed");
             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_downloads);
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        System.out.println("onKeyDown " + keyCode);
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -225,58 +212,65 @@ public class MainActivity extends AppCompatActivity {
         search.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
             public boolean onSuggestionSelect(int position) {
-                System.out.println("onSuggestionSelect");
                 search.setQuery(((SearchAdapter) search.getSuggestionsAdapter()).get(position), true);
                 return true;
             }
 
             @Override
             public boolean onSuggestionClick(int position) {
-                System.out.println("onSuggestionClick " + position);
                 search.setQuery(((SearchAdapter) search.getSuggestionsAdapter()).get(position), true);
                 return false;
             }
+        });
+
+        search.setOnSearchClickListener(view -> {
+            String[] columns = new String[]{"_id", "text"};
+            Object[] temp = new Object[]{0, "default"};
+            MatrixCursor cursor = new MatrixCursor(columns);
+            List<HistoryModel> items = DataContainer.getInstance().getHistory().get();
+
+            for (int i = 0; i < items.size(); i++) {
+                temp[0] = i;
+                temp[1] = items.get(i);
+                cursor.addRow(temp);
+            }
+            search.setQueryHint(getResString(R.string.search_tip));
+            search.setSuggestionsAdapter(new SearchAdapter(MainActivity.this, cursor, items));
+            search.setQuery("", false);
         });
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                System.out.println("onQueryTextSubmit " + query);
                 Bundle searchBundle = new Bundle();
                 searchBundle.putString("query", query);
 
                 DataContainer.getInstance().getHistory().addIfNeeded(query);
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_search, searchBundle);
+                closeKeyboard();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-
                 String[] columns = new String[]{"_id", "text"};
                 Object[] temp = new Object[]{0, "default"};
-
                 MatrixCursor cursor = new MatrixCursor(columns);
-
                 List<HistoryModel> items = DataContainer.getInstance().getHistory().get().stream().filter(item -> item.query.toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))).collect(Collectors.toList());
 
                 for (int i = 0; i < items.size(); i++) {
-
                     temp[0] = i;
                     temp[1] = items.get(i);
-
                     cursor.addRow(temp);
 
                 }
 
                 final SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
                 search.setQueryHint(getResString(R.string.search_tip));
-
                 search.setSuggestionsAdapter(new SearchAdapter(MainActivity.this, cursor, items));
 
                 return true;
-
             }
 
         });
@@ -293,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showPlayerPanel(boolean show) {
-        binding.playerView.setVisibility(show ? View.VISIBLE : View.GONE);
+        binding.playerView.setVisibility((show && !Global.inFullscreenPlayer) ? View.VISIBLE : View.GONE);
     }
 
     public static String getResString(int resId) {
@@ -365,11 +359,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+
+        if (view != null) {
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
+    }
+
     private final MediaBrowserCompat.ConnectionCallback connectionCallbacks =
             new MediaBrowserCompat.ConnectionCallback() {
                 @Override
                 public void onConnected() {
-                    System.out.println("MediaBrowser Connection onConnected");
                     MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
                     MediaControllerCompat mediaController =
                             new MediaControllerCompat(MainActivity.this, token);

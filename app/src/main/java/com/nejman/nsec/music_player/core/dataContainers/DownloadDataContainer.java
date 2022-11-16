@@ -71,7 +71,6 @@ public class DownloadDataContainer {
         String[] elements = elementsBuffer.split(Global.separator);
 
         HashMap<YoutubeDownloadHelper.Query, String> urlType = YoutubeDownloadHelper.checkLink(elements[elements.length == 2 ? 1 : 2]);
-        System.out.println(elementsBuffer);
         String id = elements[1];
         String title = elements[0];
         String url = elements[1];
@@ -180,8 +179,8 @@ public class DownloadDataContainer {
 
         String title = model.title;
         String id = model.id;
-        System.out.println("start downloading " + id);
         MediaSource source = YoutubeDownloadHelper.getVideoInfo(id, null);
+        assert source != null;
         String filename = source.title
                 .replace('/', '_')
                 .replace('\\', '_')
@@ -267,8 +266,6 @@ public class DownloadDataContainer {
             }
 
             downloadThreadAction();
-        }, progress -> {
-            setProgress(id, progress);
-        });
+        }, progress -> setProgress(id, progress));
     }
 }

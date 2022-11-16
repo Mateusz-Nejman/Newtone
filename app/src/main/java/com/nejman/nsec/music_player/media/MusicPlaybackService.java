@@ -35,12 +35,11 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        System.out.println("MusicPlaybackService onCreate");
         // Create a MediaSessionCompat
         mediaSession = new MediaSessionCompat(this.getBaseContext(), "Newtone Lightning");
 
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 99, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 99, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mediaSession.setSessionActivity(pendingIntent);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS);
 
@@ -98,11 +97,6 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
             return;
         }
         MediaDescriptionCompat description = mediaMetadata.getDescription();
-
-        System.out.println(description.getTitle());
-        System.out.println(description.getSubtitle());
-        System.out.println(description.getDescription());
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Newtone Lightning");
 
         builder
@@ -162,6 +156,5 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
         Notification notification = builder.build();
         startForeground(1, notification);
         MainActivity.notificationManager.notify(1, notification);
-        System.out.println("startForeground");
     }
 }

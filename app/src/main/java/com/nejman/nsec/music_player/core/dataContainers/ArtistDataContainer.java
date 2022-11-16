@@ -36,7 +36,6 @@ public class ArtistDataContainer {
     }
 
     public void add(MediaSource source) {
-        System.out.println("ArtistDataContainer.add source " + source.artist);
         createIfNotExists(source.artist);
 
         ArtistModel model = this.items.get(source.artist);
@@ -44,7 +43,6 @@ public class ArtistDataContainer {
         if (model == null) {
             return;
         }
-        System.out.println("ArtistDataContainer.add model " + model.name);
 
         if (model.image == null && source.image != null) {
             model.image = source.image;

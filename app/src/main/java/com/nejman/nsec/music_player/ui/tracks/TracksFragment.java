@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -52,7 +51,6 @@ public class TracksFragment extends WrappedFragment {
         View root = binding.getRoot();
         adapter = new TracksAdapter(this.requireContext());
         binding.listView.setAdapter(adapter);
-
         Bundle arguments = getArguments();
 
         if (arguments == null) {
@@ -93,6 +91,8 @@ public class TracksFragment extends WrappedFragment {
 
                 adapter.addItems(sources);
             }
+
+            showNavigationView(false);
         }
 
         trackAdded = DataContainer.getInstance().getMediaSources().addOnSourceAdded(source -> adapter.addItem(source));
@@ -100,12 +100,6 @@ public class TracksFragment extends WrappedFragment {
         trackRemoved = DataContainer.getInstance().getMediaSources().addOnSourceRemoved(source -> adapter.removeItem(source));
 
         return root;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        System.out.println("onOptionsItemSelected " + item.getTitle());
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -118,6 +112,7 @@ public class TracksFragment extends WrappedFragment {
         trackAdded = null;
         trackEdited = null;
         trackRemoved = null;
+        showNavigationView(true);
     }
 
     private class TracksAdapter extends BaseAdapter implements View.OnClickListener {
@@ -221,10 +216,7 @@ public class TracksFragment extends WrappedFragment {
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
             ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> {
-                System.out.println("show menu");
-                ContextMenuBuilder.buildForTrack(v, item.path + Global.separator + (playlist == null ? "" : playlist));
-            });
+            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForTrack(v, item.path + Global.separator + (playlist == null ? "" : playlist)));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
             if (item.image == null) {
