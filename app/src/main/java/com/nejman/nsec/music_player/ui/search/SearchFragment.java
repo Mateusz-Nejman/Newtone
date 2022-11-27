@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBar;
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
+import com.nejman.nsec.music_player.Utils;
 import com.nejman.nsec.music_player.core.YoutubeDownloadHelper;
 import com.nejman.nsec.music_player.databinding.FragmentSearchBinding;
 import com.nejman.nsec.music_player.media.MediaSource;
@@ -107,7 +108,7 @@ public class SearchFragment extends WrappedFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             MediaSource item = items.get(position);
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.base_track_item, null);
+                convertView = layoutInflater.inflate(R.layout.track_item, null);
                 convertView.setOnClickListener(this);
             }
 
@@ -115,7 +116,7 @@ public class SearchFragment extends WrappedFragment {
 
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
-            ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
+            ((TextView) convertView.findViewById(R.id.durationView)).setText(Utils.getDurationStringMilliseconds(item.duration));
             convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForSearchResult(v, item.title + Global.separator + item.id + Global.separator + item.playlistId));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 

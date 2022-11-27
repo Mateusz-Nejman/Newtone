@@ -2,7 +2,6 @@ package com.nejman.nsec.music_player.core.loaders;
 
 
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import androidx.preference.PreferenceManager;
@@ -14,6 +13,7 @@ import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.data.Tracks;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
+import com.nejman.nsec.music_player.media.MediaFormat;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.MediaSourceTag;
 import com.nejman.nsec.music_player.media.PlaybackMode;
@@ -57,6 +57,8 @@ public class DataLoader {
             validExtensions.add("mp3");
             validExtensions.add("m4a");
             validExtensions.add("ogg");
+            validExtensions.add("webm");
+            validExtensions.add("weba");
             String name = pathname.getName();
 
             if (!name.contains(".")) {
@@ -72,6 +74,8 @@ public class DataLoader {
             validExtensions.add("mp3");
             validExtensions.add("m4a");
             validExtensions.add("ogg");
+            validExtensions.add("webm");
+            validExtensions.add("weba");
             String name = pathname.getName();
 
             if (!name.contains(".")) {
@@ -181,6 +185,7 @@ public class DataLoader {
         File playbackModeFile = new File(dataPath + "/newtonePlaybackMode.data");
         File historyFile = new File(dataPath + "/newtoneHistory.data");
         File ignoreFile = new File(dataPath + "/newtoneIgnore.data");
+        File mediaFormatFile = new File(dataPath + "/newtoneMediaType.data");
 
         if (playlistsFile.exists()) {
             List<String> playlists = Files.readAllLines(playlistsFile.toPath());
@@ -212,10 +217,8 @@ public class DataLoader {
             List<String> historyTemp = Files.readAllLines(historyFile.toPath());
             List<String> history = new ArrayList<>();
 
-            for(String historyItem : historyTemp)
-            {
-                if(!history.contains(historyItem))
-                {
+            for (String historyItem : historyTemp) {
+                if (!history.contains(historyItem)) {
                     history.add(historyItem);
                 }
             }
@@ -230,16 +233,21 @@ public class DataLoader {
             Global.ignoreAutoFocus = Boolean.getBoolean(ignoreData);
         }
 
+        if (mediaFormatFile.exists()) {
+            String mediaFormat = new String(Files.readAllBytes(mediaFormatFile.toPath()));
+            Global.mediaFormat = mediaFormat.equals("ogg") ? MediaFormat.ogg : MediaFormat.m4a;
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.instance);
 
-        if(preferences == null)
-        {
+        if (preferences == null) {
             return;
         }
 
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putBoolean("ignoreBroadcast", Global.ignoreAutoFocus);
+        editor.putString("mediaFormat", Global.mediaFormat == MediaFormat.ogg ? "ogg" : "m4a");
         editor.apply();
     }
 
@@ -249,6 +257,7 @@ public class DataLoader {
         File playbackModeFile = new File(dataPath + "/newtonePlaybackMode.data");
         File historyFile = new File(dataPath + "/newtoneHistory.data");
         File ignoreFile = new File(dataPath + "/newtoneIgnore.data");
+        File mediaFormatFile = new File(dataPath + "/newtoneMediaType.data");
 
         if (DataContainer.getInstance().getPlaylists().count() > 0) {
             List<String> buffer = new ArrayList<>();
@@ -285,10 +294,8 @@ public class DataLoader {
             List<HistoryModel> historyTemp = DataContainer.getInstance().getHistory().get();
             List<String> history = new ArrayList<>();
 
-            for(HistoryModel model : historyTemp)
-            {
-                if(!history.contains(model.query))
-                {
+            for (HistoryModel model : historyTemp) {
+                if (!history.contains(model.query)) {
                     history.add(model.query);
                 }
             }
@@ -305,6 +312,14 @@ public class DataLoader {
             FileWriter fileWriter = new FileWriter(ignoreFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(Boolean.toString(Global.ignoreAutoFocus));
+            bufferedWriter.close();
+            fileWriter.close();
+        }
+
+        {
+            FileWriter fileWriter = new FileWriter(mediaFormatFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(Global.mediaFormat == MediaFormat.ogg ? "ogg" : "m4a");
             bufferedWriter.close();
             fileWriter.close();
         }
@@ -339,8 +354,7 @@ public class DataLoader {
         if (tags.containsKey(file.getAbsolutePath())) {
             MediaSourceTag newTag = tags.get(file.getAbsolutePath());
 
-            if(newTag != null)
-            {
+            if (newTag != null) {
                 artist = newTag.author;
                 title = newTag.title;
                 image = image == null ? newTag.image : image;

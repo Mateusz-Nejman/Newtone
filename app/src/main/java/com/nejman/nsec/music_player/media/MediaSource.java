@@ -9,18 +9,17 @@ import androidx.annotation.NonNull;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 
-
 public class MediaSource {
     public String artist;
     public String title;
-    public long duration;
+    public final long duration;
     public Bitmap image;
-    public byte[] imageData;
-    public String path;
-    public String id;
-    public String imageUrl;
-    public String playlistId;
-    public boolean isLocal;
+    public final byte[] imageData;
+    public final String path;
+    public final String id;
+    public final String imageUrl;
+    public final String playlistId;
+    public final boolean isLocal;
 
     public MediaSource(String path, String artist, String title, long duration, byte[] image, String id, String imageUrl, String playlistId) {
         this.artist = artist;
@@ -39,25 +38,7 @@ public class MediaSource {
         this.isLocal = !path.startsWith("https://") && path.length() > 11;
     }
 
-    public String getDurationString() {
-        int hours = (int) (duration / 3600000);
-        int minutes = (int) ((duration - (hours * 3600000)) / 60000);
-        int seconds = (int) ((duration - (hours * 3600000) - (minutes * 60000))) / 1000;
-
-        String durationString = "";
-
-        if (hours > 0) {
-            durationString += hours + ":";
-        }
-
-        durationString += String.format("%1$" + 2 + "s", minutes).replace(' ', '0') + ":";
-        durationString += String.format("%1$" + 2 + "s", seconds).replace(' ', '0');
-
-        return durationString;
-    }
-
     public MediaMetadataCompat toMetaData() {
-
         return MusicPlaybackService.metadataBuilder
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, this.title)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, this.artist)

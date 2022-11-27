@@ -1,7 +1,5 @@
 package com.nejman.nsec.music_player.core.data;
 
-import android.widget.Toast;
-
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
@@ -37,7 +35,7 @@ public class PlaylistsAction {
     public static void add(List<String> tracks) {
         selectPlaylist(selected -> {
             add(selected, tracks);
-            Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.ready);
         });
     }
 
@@ -49,7 +47,7 @@ public class PlaylistsAction {
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-            Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.ready);
         });
     }
 
@@ -63,7 +61,7 @@ public class PlaylistsAction {
                 return;
             }
             Playlists.remove(playlistName);
-            Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.ready);
         });
         alert.show(MainActivity.instance.getSupportFragmentManager(), "alert");
     }
@@ -74,18 +72,18 @@ public class PlaylistsAction {
         }
 
         Playlists.remove(playlistName, track);
-        Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
+        MainActivity.toast(R.string.ready);
     }
 
     public static void changeName(String playlistName) {
         PromptDialogFragment prompt = new PromptDialogFragment(MainActivity.getResString(R.string.change_name), playlistName, "OK", MainActivity.getResString(R.string.cancel), playlistName, newName -> {
             if (DataContainer.getInstance().getPlaylists().exists(newName)) {
-                Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.playlist_exists), Toast.LENGTH_SHORT).show();
+                MainActivity.toast(R.string.playlist_exists);
                 return;
             }
 
             Playlists.changeName(playlistName, newName);
-            Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.ready), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.ready);
         });
 
         prompt.show(MainActivity.instance.getSupportFragmentManager(), "prompt");

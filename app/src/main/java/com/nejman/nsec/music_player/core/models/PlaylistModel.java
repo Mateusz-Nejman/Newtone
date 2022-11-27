@@ -11,7 +11,7 @@ import java.util.List;
 public class PlaylistModel {
     public String name;
     public Bitmap image;
-    public List<String> items;
+    public final List<String> items;
 
     public PlaylistModel(String name, Bitmap image, List<String> items) {
         this.name = name;

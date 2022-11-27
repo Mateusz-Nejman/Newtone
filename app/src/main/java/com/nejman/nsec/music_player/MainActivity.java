@@ -27,7 +27,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -37,8 +36,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.nejman.nsec.music_player.core.DataContainer;
+import com.nejman.nsec.music_player.core.bluetooth.BluetoothManager;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
 import com.nejman.nsec.music_player.databinding.ActivityMainBinding;
@@ -64,14 +63,17 @@ public class MainActivity extends AppCompatActivity {
     public static String dataPath;
     public static String musicPath;
     public BottomNavigationView navigationView;
+    public static BluetoothManager bluetoothManager;
+
+    public MainActivity()
+    {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         instance = this;
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.playerView.setAlpha(0.0f);
@@ -85,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 NewtoneMediaPlayer.getInstance().play();
             }
         });
+
+        binding.playerViewButton.setOnClickListener(view -> Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_player));
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.navigation_player).setVisible(false);
@@ -110,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         runOnUiThread(() -> {
-            if(!Global.inFullscreenPlayer)
-            {
+            if (!Global.inFullscreenPlayer) {
                 showPlayerPanel(true);
                 binding.playerView.animate().setDuration(500).alpha(1.0f);
             }
@@ -139,17 +142,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        try {
-            mediaBrowser.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!mediaBrowser.isConnected()) {
+            try {
+                mediaBrowser.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void onResume() {
-        super.onResume();
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        try {
+            super.onResume();
+            setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -195,6 +204,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.downloadButton) {
             Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_downloads);
+        } else if (item.getItemId() == R.id.bluetoothButton) {
+            if (MainActivity.bluetoothManager.canSend()) {
+                Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_bluetooth);
+            } else {
+                toast(R.string.bluetooth_no_device);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -315,8 +330,9 @@ public class MainActivity extends AppCompatActivity {
         AudioFocusRequest audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).setOnAudioFocusChangeListener(Global.audioFocusListener).build();
         ((AudioManager) getSystemService(AUDIO_SERVICE)).requestAudioFocus(audioFocusRequest);
 
-        if (!checkPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})) {
-            requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
+        String[] permissions = new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH};
+        if (!checkPermissions(permissions)) {
+            requestPermissions(permissions, 111);
             return;
         }
 
@@ -347,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         audioLoader.start();
+        bluetoothManager = new BluetoothManager(getSystemService(android.bluetooth.BluetoothManager.class));
     }
 
     private boolean checkPermissions(String[] permissions) {
@@ -359,8 +376,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void closeKeyboard()
-    {
+    private void closeKeyboard() {
         View view = this.getCurrentFocus();
 
         if (view != null) {

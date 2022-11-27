@@ -1,7 +1,6 @@
 package com.nejman.nsec.music_player.media;
 
 import android.media.MediaPlayer;
-import android.widget.Toast;
 
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
@@ -21,7 +20,7 @@ public class WebPlayerController implements IPlayerController {
             Thread urlThread = new Thread(() -> {
                 String format = YoutubeDownloadHelper.getAudioUrl(path);
                 if (format == null) {
-                    MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show());
+                    MainActivity.toast(R.string.snack_file_exists);
                     return;
                 }
 

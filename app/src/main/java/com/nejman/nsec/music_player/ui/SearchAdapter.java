@@ -20,9 +20,7 @@ public class SearchAdapter extends CursorAdapter {
     private TextView text;
 
     public SearchAdapter(Context context, Cursor cursor, List<HistoryModel> items) {
-
         super(context, cursor, false);
-
         this.items = items;
 
     }
@@ -38,11 +36,8 @@ public class SearchAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View view = inflater.inflate(R.layout.search_item, parent, false);
-
         text = view.findViewById(R.id.searchItem);
 
         return view;

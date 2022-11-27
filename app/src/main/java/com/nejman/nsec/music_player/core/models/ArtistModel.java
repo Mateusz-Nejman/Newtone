@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistModel {
-    public String name;
-    public List<String> items;
+    public final String name;
+    public final List<String> items;
     public Bitmap image;
 
     public ArtistModel(String name, List<String> items) {

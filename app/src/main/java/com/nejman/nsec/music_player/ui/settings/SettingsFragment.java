@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -13,6 +14,7 @@ import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
+import com.nejman.nsec.music_player.media.MediaFormat;
 
 import java.util.Objects;
 
@@ -29,7 +31,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
         SwitchPreference ignore = findPreference("ignoreBroadcast");
+        ListPreference mediaType = findPreference("mediaFormat");
         Objects.requireNonNull(ignore).setChecked(Global.ignoreAutoFocus);
+        Objects.requireNonNull(mediaType).setValue(Global.mediaFormat == MediaFormat.ogg ? "ogg" : "m4a");
 
         preferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
             if (key.equals("ignoreBroadcast")) {
@@ -39,6 +43,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
+            }
+            else if(key.equals("mediaFormat"))
+            {
+                ListPreference preference = findPreference("mediaFormat");
+                assert preference != null;
+                Global.mediaFormat = Objects.equals(preference.getValue(), "ogg") ? MediaFormat.ogg : MediaFormat.m4a;
             }
         });
     }

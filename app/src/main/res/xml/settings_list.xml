@@ -5,6 +5,12 @@
         app:key="ignoreBroadcast"
         app:summary="@string/settings_changes"
         app:title="@string/settings1" />
+    <ListPreference
+        android:defaultValue="opus"
+        android:entries="@array/settings_media_types"
+        android:entryValues="@array/settings_media_types"
+        app:key="mediaFormat"
+        app:title="@string/settings2" />
 
     <Preference
         app:key="about"

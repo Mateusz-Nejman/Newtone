@@ -1,7 +1,5 @@
 package com.nejman.nsec.music_player.core.dataContainers;
 
-import android.widget.Toast;
-
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
@@ -59,8 +57,7 @@ public class DownloadDataContainer {
     public void setProgress(String name, int progress) {
         DownloadModel model = items.get(name);
 
-        if(model == null)
-        {
+        if (model == null) {
             return;
         }
         model.progress = progress;
@@ -78,7 +75,7 @@ public class DownloadDataContainer {
         if (urlType.containsKey(YoutubeDownloadHelper.Query.Playlist) && urlType.containsKey(YoutubeDownloadHelper.Query.Video)) {
             AlertDialogFragment alert = new AlertDialogFragment(MainActivity.getResString(R.string.question), MainActivity.getResString(R.string.playlist_or_track), MainActivity.getResString(R.string.track), MainActivity.getResString(R.string.playlist), selected -> {
                 if (selected) {
-                    add(id, title, url, "", "");
+                    add(id, url, title, "", "");
                 } else {
                     String playlistId = urlType.get(YoutubeDownloadHelper.Query.Playlist);
                     AlertDialogFragment alertCreatePlaylist = new AlertDialogFragment(MainActivity.getResString(R.string.question), MainActivity.instance.getString(R.string.playlist_download), MainActivity.getResString(R.string.yes), MainActivity.getResString(R.string.no), create -> {
@@ -104,7 +101,7 @@ public class DownloadDataContainer {
 
     private void add(List<MediaSource> sources, String playlist, String playlistId) {
         for (MediaSource source : sources) {
-            add(source.id, source.title, source.path, playlistId, playlist);
+            add(source.id, source.path, source.title, playlistId, playlist);
         }
     }
 
@@ -134,8 +131,7 @@ public class DownloadDataContainer {
         order.add(id);
         onDownloadAdded.onNext(id);
 
-        if(downloadThread == null)
-        {
+        if (downloadThread == null) {
             downloadThread = new Thread(this::downloadThreadAction);
             downloadThread.start();
         }
@@ -153,17 +149,14 @@ public class DownloadDataContainer {
         return onDownloadRemoved.subscribe(consumer);
     }
 
-    private boolean isTitleReversed(String artist)
-    {
+    private boolean isTitleReversed(String artist) {
         String lower = artist.toLowerCase(Locale.ROOT);
 
         return lower.contains("official video") || lower.contains("official music") || lower.contains("official lyric") || lower.contains("official hd");
     }
 
-    private void downloadThreadAction()
-    {
-        if(items.size() == 0 || order.size() == 0)
-        {
+    private void downloadThreadAction() {
+        if (items.size() == 0 || order.size() == 0) {
             downloadThread = null;
             return;
         }
@@ -171,8 +164,7 @@ public class DownloadDataContainer {
         DownloadModel model = items.get(order.get(0));
         order.remove(0);
 
-        if(model == null)
-        {
+        if (model == null) {
             downloadThread = null;
             return;
         }
@@ -195,7 +187,7 @@ public class DownloadDataContainer {
             items.remove(id);
             onDownloadRemoved.onNext(id);
 
-            String[] splitted = source.title.split("-");
+            String[] splitted = source.title.split(" - ");
             String _artistTemp = (splitted.length == 1 ? source.artist : splitted[0]).trim();
             String _titleTemp = (splitted[splitted.length == 1 ? 0 : 1]).trim();
             String _artist = isTitleReversed(_artistTemp) ? _titleTemp : _artistTemp;
@@ -258,8 +250,7 @@ public class DownloadDataContainer {
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-
-            MainActivity.instance.runOnUiThread(() -> Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.file_downloaded) + " " + _artist + " " + _title, Toast.LENGTH_SHORT).show());
+            MainActivity.toast(MainActivity.instance.getString(R.string.file_downloaded) + " " + _artist + " " + _title);
 
             if (model.playlistName != null && !model.playlistName.equals("")) {
                 Playlists.add(model.playlistName, file.getAbsolutePath());

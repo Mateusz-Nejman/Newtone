@@ -3,6 +3,7 @@ package com.nejman.nsec.music_player;
 import android.os.Environment;
 
 import com.nejman.nsec.music_player.media.AudioFocusListener;
+import com.nejman.nsec.music_player.media.MediaFormat;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.PlaybackMode;
 
@@ -21,4 +22,5 @@ public class Global {
     public static final AudioFocusListener audioFocusListener = new AudioFocusListener();
     public static boolean ignoreAutoFocus = false;
     public static boolean inFullscreenPlayer = false;
+    public static MediaFormat mediaFormat = MediaFormat.ogg;
 }

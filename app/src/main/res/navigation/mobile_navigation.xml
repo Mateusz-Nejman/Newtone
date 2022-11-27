@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_downloads" />
 
     <fragment
+        android:id="@+id/navigation_bluetooth"
+        android:name="com.nejman.nsec.music_player.ui.bluetooth.BluetoothFragment"
+        android:label="@string/bluetooth"
+        tools:layout="@layout/fragment_bluetooth" />
+
+    <fragment
         android:id="@+id/navigation_player"
         android:name="com.nejman.nsec.music_player.ui.player.PlayerFragment"
         android:label="@string/play"
@@ -56,6 +62,9 @@
     <action
         android:id="@+id/navigate_to_downloads"
         app:destination="@id/navigation_downloads" />
+    <action
+        android:id="@+id/navigate_to_bluetooth"
+        app:destination="@id/navigation_bluetooth" />
     <action
         android:id="@+id/navigate_to_player"
         app:destination="@id/navigation_player" />

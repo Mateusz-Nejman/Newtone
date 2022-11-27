@@ -15,6 +15,9 @@ import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
 import com.nejman.nsec.music_player.Global;
+import com.nejman.nsec.music_player.MainActivity;
+import com.nejman.nsec.music_player.R;
+import com.nejman.nsec.music_player.media.MediaFormat;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import org.json.JSONArray;
@@ -55,7 +58,20 @@ public class YoutubeDownloadHelper {
             return null;
         }
 
-        return video.audioFormats().get(0);
+        int bitrate = 0;
+        AudioFormat audioFormat = null;
+        for (AudioFormat format : video.audioFormats()) {
+            if (!format.mimeType().contains(getAudioMimeString())) {
+                continue;
+            }
+
+            if (format.bitrate() > bitrate) {
+                bitrate = format.bitrate();
+                audioFormat = format;
+            }
+        }
+
+        return audioFormat;
     }
 
     public static String getAudioUrl(String videoId) {
@@ -69,46 +85,21 @@ public class YoutubeDownloadHelper {
 
         int bitrate = 0;
         AudioFormat audioFormat = null;
-        for(AudioFormat format : video.audioFormats())
-        {
-            if(!format.mimeType().contains("mp4a"))
-            {
+        for (AudioFormat format : video.audioFormats()) {
+            System.out.println(format.mimeType());
+        }
+        for (AudioFormat format : video.audioFormats()) {
+            if (!format.mimeType().contains(getAudioMimeString())) {
                 continue;
             }
 
-            if(format.bitrate() < bitrate)
-            {
-                bitrate = format.bitrate();;
+            if (format.bitrate() > bitrate) {
+                bitrate = format.bitrate();
                 audioFormat = format;
             }
         }
         assert audioFormat != null;
         return audioFormat.url();
-    }
-
-    public static void downloadAudio(String id, String filename, Consumer<? super File> onFinishedConsumer, Consumer<? super Integer> onProgressChanged) {
-        //String directory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/NSEC/Music_Player";
-        AudioFormat format = getBestAudioFormat(id);
-        RequestVideoFileDownload requestDownload = new RequestVideoFileDownload(format);
-        requestDownload.saveTo(new File(Global.musicPath)).renameTo(filename).overwriteIfExists(true);
-        RequestVideoFileDownload request1 = requestDownload.callback(new YoutubeProgressCallback<File>() {
-            @Override
-            public void onDownloading(int progress) {
-                onProgressChanged.accept(progress);
-            }
-
-            @Override
-            public void onFinished(File data) {
-                onFinishedConsumer.accept(data);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        }).async();
-
-        downloader.downloadVideoFile(request1);
     }
 
     public static void downloadAudioSync(String id, String filename, Consumer<? super File> onFinishedConsumer, Consumer<? super Integer> onProgressChanged) {
@@ -119,6 +110,7 @@ public class YoutubeDownloadHelper {
         RequestVideoFileDownload request1 = requestDownload.callback(new YoutubeProgressCallback<File>() {
             @Override
             public void onDownloading(int progress) {
+                System.out.println(filename + " " + progress);
                 onProgressChanged.accept(progress);
             }
 
@@ -144,10 +136,8 @@ public class YoutubeDownloadHelper {
             VideoInfo video = response.data();
             VideoDetails details = video.details();
             AudioFormat format = video.bestAudioFormat();
-            return new MediaSource(format.url(), details.author(), details.title(), details.lengthSeconds() * 1000L, null, id, details.thumbnails().get(0), playlistId);
-        }
-        catch(Exception e)
-        {
+            return new MediaSource(format.url(), details.author(), details.title(), details.lengthSeconds() * 1000L, null, id, details.thumbnails().get(0).url, playlistId);
+        } catch (Exception e) {
             return null;
         }
     }
@@ -211,6 +201,11 @@ public class YoutubeDownloadHelper {
             Response<PlaylistInfo> response = downloader.getPlaylistInfo(request);
             PlaylistInfo playlistInfo = response.data();
 
+            if (playlistInfo == null) {
+                MainActivity.toast(R.string.snack_playlist_exists);
+                return new ArrayList<>();
+            }
+
             PlaylistDetails details = playlistInfo.details();
             lastPlaylistName = details == null ? "Youtube Playlist" : details.title();
             List<MediaSource> playlist = new ArrayList<>();
@@ -222,8 +217,7 @@ public class YoutubeDownloadHelper {
 
                 MediaSource playlistSource = getVideoInfo(videoDetails.videoId(), "https://www.youtube.com/watch?v=" + videoDetails.videoId() + "&list=" + validators.get(Query.Playlist));
 
-                if(playlistSource != null)
-                {
+                if (playlistSource != null) {
                     playlist.add(playlistSource);
                 }
             }
@@ -263,7 +257,7 @@ public class YoutubeDownloadHelper {
         }
 
         if (trimmed.toLowerCase(Locale.ROOT).startsWith("playlist:")) {
-            playlistId = trimmed.replace("playlist:","");
+            playlistId = trimmed.replace("playlist:", "");
             playlistValid = true;
         }
 
@@ -304,17 +298,23 @@ public class YoutubeDownloadHelper {
             String videoId = object.getString("videoId");
             String thumbnail = "";
             int thumbnailWidth = 0;
+            int thumbnailHeight = 0;
 
             JSONArray thumbnails = object.getJSONObject("thumbnail").getJSONArray("thumbnails");
+            System.out.println(thumbnails);
 
             for (int a = 0; a < thumbnails.length(); a++) {
                 JSONObject currentThumbnail = thumbnails.getJSONObject(a);
 
                 if (currentThumbnail.getInt("width") > thumbnailWidth) {
                     thumbnailWidth = currentThumbnail.getInt("width");
+                    thumbnailHeight = currentThumbnail.getInt("height");
                     thumbnail = currentThumbnail.getString("url");
                 }
             }
+
+            System.out.println(thumbnail);
+            System.out.println(thumbnailWidth + " x " + thumbnailHeight);
 
             String title = object.getJSONObject("title").getJSONArray("runs").getJSONObject(0).getString("text");
             String author = object.getJSONObject("longBylineText").getJSONArray("runs").getJSONObject(0).getString("text");
@@ -336,7 +336,7 @@ public class YoutubeDownloadHelper {
                 duration += (long) minutesCount * 60 * 1000;
             }
 
-            duration += secondsCount;
+            duration += secondsCount * 1000L;
 
             if (duration > 0) {
                 mediaSources.add(new MediaSource(videoId, author, title, duration, null, videoId, thumbnail, null));
@@ -478,6 +478,10 @@ public class YoutubeDownloadHelper {
         Pattern pattern = Pattern.compile("[^0-9a-zA-Z_\\-]");
 
         return !pattern.matcher(videoId).find();
+    }
+
+    private static String getAudioMimeString() {
+        return Global.mediaFormat == MediaFormat.ogg ? "opus" : "mp4a";
     }
 
     public enum Query {

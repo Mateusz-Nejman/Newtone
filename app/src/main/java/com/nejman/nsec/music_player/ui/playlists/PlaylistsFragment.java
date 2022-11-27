@@ -63,7 +63,7 @@ public class PlaylistsFragment extends Fragment {
         playlistRemoved = null;
     }
 
-    private class PlaylistsAdapter extends BaseAdapter implements View.OnClickListener {
+    private class PlaylistsAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
         private final ArrayList<PlaylistModel> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;
 
@@ -125,14 +125,14 @@ public class PlaylistsFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             PlaylistModel item = items.get(position);
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.single_text_item, null);
+                convertView = layoutInflater.inflate(R.layout.playlist_item, null);
                 convertView.setOnClickListener(this);
+                convertView.setOnLongClickListener(this);
             }
 
             convertView.setTag(String.valueOf(position));
 
             ((TextView) convertView.findViewById(R.id.textView)).setText(item.name);
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForPlaylist(v, item.name));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
             Bitmap imageNull = BitmapFactory.decodeResource(MainActivity.getRes(), R.drawable.empty_track);
@@ -163,6 +163,14 @@ public class PlaylistsFragment extends Fragment {
             bundle.putString("playlist", model.name);
 
             NavHostFragment.findNavController(PlaylistsFragment.this).navigate(R.id.navigate_to_tracks, bundle);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int position = Integer.parseInt(view.getTag().toString());
+            PlaylistModel model = items.get(position);
+            ContextMenuBuilder.buildForPlaylist(view, model.name);
+            return true;
         }
     }
 }

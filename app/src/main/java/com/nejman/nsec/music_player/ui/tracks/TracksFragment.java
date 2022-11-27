@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBar;
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
+import com.nejman.nsec.music_player.Utils;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
@@ -115,7 +116,7 @@ public class TracksFragment extends WrappedFragment {
         showNavigationView(true);
     }
 
-    private class TracksAdapter extends BaseAdapter implements View.OnClickListener {
+    private class TracksAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
         private List<MediaSource> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;
 
@@ -142,8 +143,7 @@ public class TracksFragment extends WrappedFragment {
             MainActivity.instance.runOnUiThread(() -> {
                 items.add(mediaSource);
 
-                if(playlist == null)
-                {
+                if (playlist == null) {
                     items = items.stream().sorted((first, second) -> {
                         String firstC = first.artist + " - " + first.title;
                         String secondC = second.artist + " - " + second.title;
@@ -157,17 +157,14 @@ public class TracksFragment extends WrappedFragment {
 
         public void addItems(List<MediaSource> sources) {
             MainActivity.instance.runOnUiThread(() -> {
-                if(playlist == null)
-                {
+                if (playlist == null) {
                     items = sources.stream().sorted((first, second) -> {
                         String firstC = first.artist + " - " + first.title;
                         String secondC = second.artist + " - " + second.title;
 
                         return firstC.compareTo(secondC);
                     }).collect(Collectors.toList());
-                }
-                else
-                {
+                } else {
                     items = new ArrayList<>(sources);
                 }
 
@@ -207,15 +204,16 @@ public class TracksFragment extends WrappedFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             MediaSource item = items.get(position);
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.base_track_item, null);
+                convertView = layoutInflater.inflate(R.layout.track_item, null);
                 convertView.setOnClickListener(this);
+                convertView.setOnLongClickListener(this);
             }
 
             convertView.setTag(String.valueOf(position));
 
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
-            ((TextView) convertView.findViewById(R.id.durationView)).setText(item.getDurationString());
+            ((TextView) convertView.findViewById(R.id.durationView)).setText(Utils.getDurationStringMilliseconds(item.duration));
             convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForTrack(v, item.path + Global.separator + (playlist == null ? "" : playlist)));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
@@ -273,6 +271,14 @@ public class TracksFragment extends WrappedFragment {
 
         public void onItemSelected(int position) {
             NewtoneMediaPlayer.getInstance().loadPlaylist(items, position);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int position = Integer.parseInt(view.getTag().toString());
+            MediaSource item = items.get(position);
+            ContextMenuBuilder.buildForTrack(view, item.path + Global.separator + (playlist == null ? "" : playlist));
+            return true;
         }
     }
 }

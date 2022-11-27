@@ -25,6 +25,10 @@ public class WrappedFragment extends Fragment {
         showMenu(R.id.downloadButton, show);
     }
 
+    protected void showBluetoothButton(boolean show) {
+        showMenu(R.id.bluetoothButton, show);
+    }
+
     protected void showPlayer(boolean show) {
         MainActivity.instance.showPlayerPanel(show);
     }

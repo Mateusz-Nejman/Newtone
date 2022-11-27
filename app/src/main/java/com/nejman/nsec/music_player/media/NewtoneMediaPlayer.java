@@ -4,7 +4,6 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.widget.Toast;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -90,6 +89,7 @@ public class NewtoneMediaPlayer {
     }
 
     public void load(MediaSource source) {
+        System.out.println(source.title);
         load(source.path);
         Global.currentSource = source;
 
@@ -105,6 +105,7 @@ public class NewtoneMediaPlayer {
         Global.currentPlaylist.addAll(playlist);
         Global.currentPlaylistPosition = startIndex;
 
+        System.out.println("currentPlaylist "+startIndex+" "+Global.currentPlaylist.size());
         load(Global.currentPlaylist.get(startIndex));
         updateMetadata();
     }
@@ -182,7 +183,7 @@ public class NewtoneMediaPlayer {
         MediaSource source = Global.currentPlaylist.get(nextPosition);
 
         if (source.isLocal && !new File(source.path).exists()) {
-            Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.snack_file_exists);
             prev();
             return;
         }
@@ -229,7 +230,7 @@ public class NewtoneMediaPlayer {
         MediaSource source = Global.currentPlaylist.get(nextPosition);
 
         if (source.isLocal && !new File(source.path).exists()) {
-            Toast.makeText(MainActivity.instance, MainActivity.instance.getString(R.string.snack_file_exists), Toast.LENGTH_SHORT).show();
+            MainActivity.toast(R.string.snack_file_exists);
             next();
             return;
         }

@@ -62,7 +62,7 @@ public class ArtistsFragment extends WrappedFragment {
         artistRemoved = null;
     }
 
-    private class ArtistsAdapter extends BaseAdapter implements View.OnClickListener {
+    private class ArtistsAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
         private List<ArtistModel> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;
 
@@ -124,14 +124,14 @@ public class ArtistsFragment extends WrappedFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ArtistModel item = items.get(position);
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.single_text_item, null);
+                convertView = layoutInflater.inflate(R.layout.playlist_item, null);
                 convertView.setOnClickListener(this);
+                convertView.setOnLongClickListener(this);
             }
 
             convertView.setTag(String.valueOf(position));
 
             ((TextView) convertView.findViewById(R.id.textView)).setText(item.name);
-            convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForArtist(v, item.name));
             ImageView imageView = convertView.findViewById(R.id.imageView);
             imageView.setImageBitmap(item.image == null ? BitmapFactory.decodeResource(MainActivity.getRes(), R.drawable.empty_track) : item.image);
 
@@ -150,6 +150,17 @@ public class ArtistsFragment extends WrappedFragment {
             Bundle bundle = new Bundle();
             bundle.putString("artist", model.name);
             NavHostFragment.findNavController(ArtistsFragment.this).navigate(R.id.navigate_to_tracks, bundle);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            System.out.println("onLongClick");
+            int position = Integer.parseInt(view.getTag().toString());
+            System.out.println(position);
+            ArtistModel model = items.get(position);
+            System.out.println(model.name);
+            ContextMenuBuilder.buildForArtist(view, model.name);
+            return true;
         }
     }
 }

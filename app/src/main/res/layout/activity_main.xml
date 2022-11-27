@@ -28,6 +28,7 @@
             android:id="@+id/playerViewBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,23 +53,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="#00FFFFFF"
+            android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/empty_track" />
-
-        <ImageButton
-            android:id="@+id/playerViewPlayButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="#00FFFFFF"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/play_icon" />
 
         <TextView
             android:id="@+id/playerViewTitle"
@@ -83,7 +72,6 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="TextView"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/playerViewPlayButton"
@@ -97,11 +85,34 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="TextView"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/playerViewPlayButton"
             app:layout_constraintStart_toEndOf="@+id/playerViewImage" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/playerViewButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#00000000"
+            app:layout_constraintBottom_toBottomOf="@id/playerView"
+            app:layout_constraintLeft_toLeftOf="@id/playerView"
+            app:layout_constraintRight_toLeftOf="@id/playerViewPlayButton"
+            app:layout_constraintTop_toTopOf="@id/playerView" />
+
+        <ImageButton
+            android:id="@+id/playerViewPlayButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="@string/play"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/play_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment

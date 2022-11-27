@@ -1,8 +1,10 @@
 package com.nejman.nsec.music_player.ui;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.Toast;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -14,6 +16,7 @@ import com.nejman.nsec.music_player.core.data.TracksAction;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
+import com.nejman.nsec.music_player.ui.bluetooth.BluetoothSendFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +58,7 @@ public class ContextMenuBuilder {
             } else if (item.equals(MainActivity.getResString(R.string.track_menu_queue))) {
                 PlaylistModel model = DataContainer.getInstance().getPlaylists().get(playlistName);
                 QueueAction.add(model.items);
-                Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.snack_queue), Toast.LENGTH_SHORT).show();
+                MainActivity.toast(R.string.snack_queue);
             }
         });
     }
@@ -68,7 +71,7 @@ public class ContextMenuBuilder {
         elements.add(MainActivity.getResString(R.string.track_menu_edit));
         elements.add(MainActivity.getResString(R.string.track_menu_playlist));
         elements.add(MainActivity.getResString(R.string.track_menu_queue));
-        //TODO elements.add(MainActivity.getResString(R.string.send_bluetooth));
+        elements.add(MainActivity.getResString(R.string.bluetooth_send));
         elements.add(MainActivity.getResString(R.string.track_menu_delete));
         build(sender, elements, item -> {
             if (filePath.length() == 11) {
@@ -88,10 +91,19 @@ public class ContextMenuBuilder {
                 }
             } else if (item.equals(MainActivity.getResString(R.string.track_menu_queue))) {
                 QueueAction.add(filePath);
-                Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.snack_queue), Toast.LENGTH_SHORT).show();
-            } else if(item.equals(MainActivity.getResString(R.string.send_bluetooth)))
-            {
-                //TODO
+                MainActivity.toast(R.string.snack_queue);
+            } else if (item.equals(MainActivity.getResString(R.string.bluetooth_send))) {
+                if (MainActivity.bluetoothManager.canSend()) {
+                    FragmentManager fm = MainActivity.instance.getSupportFragmentManager();
+                    Bundle arguments = new Bundle();
+                    arguments.putString("mediaSourcePath", filePath);
+                    BluetoothSendFragment sendFragment = new BluetoothSendFragment(DataContainer.getInstance().getMediaSources().get(filePath));
+                    sendFragment.setArguments(arguments);
+                    //sendFragment.setTargetFragment(OrderProcessFragment.this, 1);
+                    sendFragment.show(fm, "Send");
+                } else {
+                    MainActivity.toast(R.string.bluetooth_no_device);
+                }
             }
         });
     }
@@ -115,7 +127,7 @@ public class ContextMenuBuilder {
             } else if (item.equals(MainActivity.getResString(R.string.track_menu_queue))) {
                 ArtistModel model = DataContainer.getInstance().getArtists().get(artistName);
                 QueueAction.add(model.items);
-                Toast.makeText(MainActivity.instance, MainActivity.getResString(R.string.snack_queue), Toast.LENGTH_SHORT).show();
+                MainActivity.toast(R.string.snack_queue);
             }
         });
     }

@@ -8,6 +8,14 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/bluetoothButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:icon="@drawable/bluetooth_icon"
+        android:padding="10dp"
+        android:title="@string/bluetooth"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/downloadButton"
         android:layout_width="64dp"
         android:layout_height="64dp"
