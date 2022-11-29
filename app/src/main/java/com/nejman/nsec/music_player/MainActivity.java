@@ -5,12 +5,12 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.SearchManager;
+import android.app.UiModeManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.MatrixCursor;
-import android.graphics.BitmapFactory;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -22,6 +22,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
@@ -30,31 +31,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.bluetooth.BluetoothManager;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.core.models.HistoryModel;
 import com.nejman.nsec.music_player.databinding.ActivityMainBinding;
 import com.nejman.nsec.music_player.media.MediaPlayerHelper;
-import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.MusicPlaybackService;
-import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
+import com.nejman.nsec.music_player.ui.MainNavigation;
 import com.nejman.nsec.music_player.ui.SearchAdapter;
+import com.nejman.nsec.music_player.ui.SwipeController;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MainActivity extends AppCompatActivity {
+import io.reactivex.rxjava3.disposables.Disposable;
 
+public class MainActivity extends AppCompatActivity {
     public static MediaBrowserCompat mediaBrowser;
     private ActivityMainBinding binding;
     public Menu menu;
@@ -62,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
     public static MainActivity instance;
     public static String dataPath;
     public static String musicPath;
-    public BottomNavigationView navigationView;
     public static BluetoothManager bluetoothManager;
+    public MainNavigation navigation;
+    private SwipeController swipeController;
+    private Disposable swipedLeft;
+    private Disposable swipedRight;
 
-    public MainActivity()
-    {
+    public MainActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
 
@@ -76,67 +76,26 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.playerView.setAlpha(0.0f);
-        binding.playerView.setVisibility(View.GONE);
-        binding.playerViewTitle.setSelected(true);
-
-        binding.playerViewPlayButton.setOnClickListener(v -> {
-            if (NewtoneMediaPlayer.getInstance().isPlaying()) {
-                NewtoneMediaPlayer.getInstance().pause();
-            } else {
-                NewtoneMediaPlayer.getInstance().play();
-            }
-        });
-
-        binding.playerViewButton.setOnClickListener(view -> Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_player));
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.navigation_player).setVisible(false);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_player, R.id.navigation_artists, R.id.navigation_tracks, R.id.navigation_playlists, R.id.navigation_settings)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        navigation = new MainNavigation((NavHostFragment) Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)));
 
         initialize();
         mediaBrowser = new MediaBrowserCompat(this,
                 new ComponentName(this, MusicPlaybackService.class),
                 connectionCallbacks,
                 null); // optional Bundle
-    }
 
-    public void updatePlayerSource(MediaSource source) {
-        if (source == null) {
-            return;
-        }
+        swipeController = new SwipeController();
 
-        runOnUiThread(() -> {
-            if (!Global.inFullscreenPlayer) {
-                showPlayerPanel(true);
-                binding.playerView.animate().setDuration(500).alpha(1.0f);
-            }
-
-            binding.playerViewTitle.setText(source.title);
-            binding.playerViewArtist.setText(source.artist);
-
-            if (source.image == null) {
-                binding.playerViewBackground.setVisibility(View.GONE);
-                binding.playerViewBackgroundDarker.setVisibility(View.GONE);
-                binding.playerViewImage.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.empty_track));
-            } else {
-                binding.playerViewBackground.setVisibility(View.VISIBLE);
-                binding.playerViewBackgroundDarker.setVisibility(View.VISIBLE);
-                binding.playerViewBackground.setImageBitmap(source.image);
-                binding.playerViewImage.setImageBitmap(source.image);
+        swipedLeft = swipeController.addOnSwipeLeft(state -> {
+            if (navigation.getModalCount() >= 1) {
+                onBackPressed();
             }
         });
-    }
-
-    public void updatePlayerState(boolean isPlaying) {
-        runOnUiThread(() -> binding.playerViewPlayButton.setImageResource(isPlaying ? R.drawable.pause_icon : R.drawable.play_icon));
+        swipedRight = swipeController.addOnSwipeRight(state -> {
+            if (navigation.getModalCount() >= 1) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -186,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ignore) {
 
         }
+
+        swipedLeft.dispose();
+        swipedRight.dispose();
     }
 
     @Override
@@ -203,13 +165,15 @@ public class MainActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         } else if (item.getItemId() == R.id.downloadButton) {
-            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_downloads);
+            navigation.navigate(R.id.navigate_to_downloads);
         } else if (item.getItemId() == R.id.bluetoothButton) {
             if (MainActivity.bluetoothManager.canSend()) {
-                Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_bluetooth);
+                navigation.navigate(R.id.navigate_to_bluetooth);
             } else {
                 toast(R.string.bluetooth_no_device);
             }
+        } else if (item.getItemId() == R.id.settingsButton) {
+            navigation.navigate(R.id.navigate_to_settings);
         }
 
         return super.onOptionsItemSelected(item);
@@ -262,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 searchBundle.putString("query", query);
 
                 DataContainer.getInstance().getHistory().addIfNeeded(query);
-                Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_search, searchBundle);
+                navigation.navigate(R.id.navigate_to_search, searchBundle);
                 closeKeyboard();
                 return true;
             }
@@ -301,6 +265,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (swipeController.dispatchTouchEvent(event)) {
+            return true;
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
     public void showPlayerPanel(boolean show) {
         binding.playerView.setVisibility((show && !Global.inFullscreenPlayer) ? View.VISIBLE : View.GONE);
     }
@@ -331,8 +304,8 @@ public class MainActivity extends AppCompatActivity {
         ((AudioManager) getSystemService(AUDIO_SERVICE)).requestAudioFocus(audioFocusRequest);
 
         String[] permissions = new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH};
-        if (!checkPermissions(permissions)) {
-            requestPermissions(permissions, 111);
+        if (!PermissionHelper.checkPermissions(permissions)) {
+            PermissionHelper.requestPermissions(permissions, 111);
             return;
         }
 
@@ -358,22 +331,13 @@ public class MainActivity extends AppCompatActivity {
                 DataLoader.load();
                 DataLoader.loadTags();
                 DataLoader.loadAudioFiles();
-            } catch (IOException e) {
+                DataLoader.playerStateLoader.load();
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         });
         audioLoader.start();
         bluetoothManager = new BluetoothManager(getSystemService(android.bluetooth.BluetoothManager.class));
-    }
-
-    private boolean checkPermissions(String[] permissions) {
-        for (String permission : permissions) {
-            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private void closeKeyboard() {
@@ -388,6 +352,11 @@ public class MainActivity extends AppCompatActivity {
                     .hideSoftInputFromWindow(
                             view.getWindowToken(), 0);
         }
+    }
+
+    public static boolean isCarUiMode() {
+        UiModeManager uiModeManager = (UiModeManager) instance.getSystemService(Context.UI_MODE_SERVICE);
+        return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_CAR;
     }
 
     private final MediaBrowserCompat.ConnectionCallback connectionCallbacks =

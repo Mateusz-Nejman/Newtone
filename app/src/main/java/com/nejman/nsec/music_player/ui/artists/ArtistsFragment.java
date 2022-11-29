@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.models.ArtistModel;
 import com.nejman.nsec.music_player.databinding.FragmentArtistsBinding;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
+import com.nejman.nsec.music_player.ui.MainFragment;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
 
 import java.util.ArrayList;
@@ -40,14 +42,18 @@ public class ArtistsFragment extends WrappedFragment {
         binding = FragmentArtistsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         adapter = new ArtistsAdapter(this.requireContext());
-        binding.listView.setAdapter(adapter);
-
-        adapter.addItems(DataContainer.getInstance().getArtists().getAll());
+        binding.gridView.setAdapter(adapter);
         artistAdded = DataContainer.getInstance().getArtists().addOnArtistAdded(model -> adapter.addItem(model));
         artistEdited = DataContainer.getInstance().getArtists().addOnArtistEdited(model -> adapter.editItem(model));
         artistRemoved = DataContainer.getInstance().getArtists().addOnArtistRemoved(model -> adapter.removeItem(model));
-
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.removeAllItems();
+        adapter.addItems(DataContainer.getInstance().getArtists().getAll());
     }
 
     @Override
@@ -60,6 +66,12 @@ public class ArtistsFragment extends WrappedFragment {
         artistAdded = null;
         artistEdited = null;
         artistRemoved = null;
+    }
+
+    @Override
+    protected String getTitle() {
+        MainFragment.instance.fragmentTitle = MainActivity.getResString(R.string.artists);
+        return MainFragment.instance.fragmentTitle;
     }
 
     private class ArtistsAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
@@ -90,12 +102,14 @@ public class ArtistsFragment extends WrappedFragment {
 
             items = items.stream().sorted(Comparator.comparing(artistModel -> artistModel.name)).collect(Collectors.toList());
             MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void addItems(List<ArtistModel> artists) {
             items.addAll(artists);
             items = items.stream().sorted(Comparator.comparing(artistModel -> artistModel.name)).collect(Collectors.toList());
             MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void removeItem(ArtistModel artist) {
@@ -110,7 +124,14 @@ public class ArtistsFragment extends WrappedFragment {
 
         public void removeItem(int index) {
             items.remove(index);
-            notifyDataSetChanged();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
+        }
+
+        public void removeAllItems() {
+            items.clear();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void editItem(ArtistModel item) {
@@ -150,17 +171,29 @@ public class ArtistsFragment extends WrappedFragment {
             Bundle bundle = new Bundle();
             bundle.putString("artist", model.name);
             NavHostFragment.findNavController(ArtistsFragment.this).navigate(R.id.navigate_to_tracks, bundle);
+            System.out.println(NavHostFragment.findNavController(ArtistsFragment.this).getBackQueue().getSize());
         }
 
         @Override
         public boolean onLongClick(View view) {
-            System.out.println("onLongClick");
             int position = Integer.parseInt(view.getTag().toString());
             System.out.println(position);
             ArtistModel model = items.get(position);
             System.out.println(model.name);
             ContextMenuBuilder.buildForArtist(view, model.name);
             return true;
+        }
+
+        private void updateColumnStretchMode() {
+            if (MainActivity.isCarUiMode()) {
+                return;
+            }
+
+            if (items.size() < 2) {
+                binding.gridView.setStretchMode(GridView.NO_STRETCH);
+            } else {
+                binding.gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+            }
         }
     }
 }

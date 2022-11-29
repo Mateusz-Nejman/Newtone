@@ -11,12 +11,9 @@ import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.core.data.Tracks;
-import com.nejman.nsec.music_player.core.models.HistoryModel;
-import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.media.MediaFormat;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.MediaSourceTag;
-import com.nejman.nsec.music_player.media.PlaybackMode;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -40,6 +37,12 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class DataLoader {
+    private final static PlaylistLoader playlistLoader = new PlaylistLoader();
+    private final static PlaybackModeLoader playbackModeLoader = new PlaybackModeLoader();
+    private final static HistoryLoader historyLoader = new HistoryLoader();
+    private final static IgnoreLoader ignoreLoader = new IgnoreLoader();
+    private final static MediaFormatLoader mediaFormatLoader = new MediaFormatLoader();
+    public final static PlayerStateLoader playerStateLoader = new PlayerStateLoader();
 
     public static void loadAudioFiles() {
         if (DataContainer.getInstance().getMediaSources().count() > 0) {
@@ -179,64 +182,12 @@ public class DataLoader {
         fileWriter.close();
     }
 
-    public static void load() throws IOException {
-        String dataPath = MainActivity.dataPath;
-        File playlistsFile = new File(dataPath + "/newtonePlaylists.data");
-        File playbackModeFile = new File(dataPath + "/newtonePlaybackMode.data");
-        File historyFile = new File(dataPath + "/newtoneHistory.data");
-        File ignoreFile = new File(dataPath + "/newtoneIgnore.data");
-        File mediaFormatFile = new File(dataPath + "/newtoneMediaType.data");
-
-        if (playlistsFile.exists()) {
-            List<String> playlists = Files.readAllLines(playlistsFile.toPath());
-
-            for (String playlistBuffer : playlists) {
-                List<String> playlist = new ArrayList<>();
-                String[] parts = playlistBuffer.split(Global.separator);
-                String name = parts[0];
-                String[] items = parts[1].split(";");
-
-                for (String filepath : items) {
-                    File file = new File(filepath);
-
-                    if (file.exists() || filepath.length() == 11) {
-                        playlist.add(filepath);
-                    }
-                }
-
-                DataContainer.getInstance().getPlaylists().addPlaylist(name, new PlaylistModel(name, null, playlist));
-            }
-        }
-
-        if (playbackModeFile.exists()) {
-            String playbackModeData = new String(Files.readAllBytes(playbackModeFile.toPath()));
-            Global.playbackMode = PlaybackMode.valueOf(playbackModeData);
-        }
-
-        if (historyFile.exists()) {
-            List<String> historyTemp = Files.readAllLines(historyFile.toPath());
-            List<String> history = new ArrayList<>();
-
-            for (String historyItem : historyTemp) {
-                if (!history.contains(historyItem)) {
-                    history.add(historyItem);
-                }
-            }
-
-            for (String historyItem : history) {
-                DataContainer.getInstance().getHistory().add(historyItem);
-            }
-        }
-
-        if (ignoreFile.exists()) {
-            String ignoreData = new String(Files.readAllBytes(ignoreFile.toPath()));
-            Global.ignoreAutoFocus = Boolean.getBoolean(ignoreData);
-        }
-
-        if (mediaFormatFile.exists()) {
-            String mediaFormat = new String(Files.readAllBytes(mediaFormatFile.toPath()));
-            Global.mediaFormat = mediaFormat.equals("ogg") ? MediaFormat.ogg : MediaFormat.m4a;
-        }
+    public static void load() throws Throwable {
+        playlistLoader.load();
+        playbackModeLoader.load();
+        historyLoader.load();
+        ignoreLoader.load();
+        mediaFormatLoader.load();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.instance);
 
@@ -252,77 +203,12 @@ public class DataLoader {
     }
 
     public static void save() throws Throwable {
-        String dataPath = MainActivity.dataPath;
-        File playlistsFile = new File(dataPath + "/newtonePlaylists.data");
-        File playbackModeFile = new File(dataPath + "/newtonePlaybackMode.data");
-        File historyFile = new File(dataPath + "/newtoneHistory.data");
-        File ignoreFile = new File(dataPath + "/newtoneIgnore.data");
-        File mediaFormatFile = new File(dataPath + "/newtoneMediaType.data");
-
-        if (DataContainer.getInstance().getPlaylists().count() > 0) {
-            List<String> buffer = new ArrayList<>();
-            DataContainer.getInstance().getPlaylists().forEach(key -> {
-                PlaylistModel playlist = DataContainer.getInstance().getPlaylists().get(key);
-
-                if (playlist.items.size() > 0) {
-                    StringBuilder playlistItem = new StringBuilder(key + Global.separator);
-
-                    for (String item : playlist.items) {
-                        playlistItem.append(item).append(";");
-                    }
-
-                    buffer.add(playlistItem.toString());
-                }
-            });
-
-            FileWriter fileWriter = new FileWriter(playlistsFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(String.join("\n", buffer));
-            bufferedWriter.close();
-            fileWriter.close();
-        }
-
-        {
-            FileWriter fileWriter = new FileWriter(playbackModeFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(Global.playbackMode.toString());
-            bufferedWriter.close();
-            fileWriter.close();
-        }
-
-        {
-            List<HistoryModel> historyTemp = DataContainer.getInstance().getHistory().get();
-            List<String> history = new ArrayList<>();
-
-            for (HistoryModel model : historyTemp) {
-                if (!history.contains(model.query)) {
-                    history.add(model.query);
-                }
-            }
-
-            String buffer = String.join("\n", history);
-            FileWriter fileWriter = new FileWriter(historyFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(buffer);
-            bufferedWriter.close();
-            fileWriter.close();
-        }
-
-        {
-            FileWriter fileWriter = new FileWriter(ignoreFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(Boolean.toString(Global.ignoreAutoFocus));
-            bufferedWriter.close();
-            fileWriter.close();
-        }
-
-        {
-            FileWriter fileWriter = new FileWriter(mediaFormatFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(Global.mediaFormat == MediaFormat.ogg ? "ogg" : "m4a");
-            bufferedWriter.close();
-            fileWriter.close();
-        }
+        playlistLoader.save();
+        playbackModeLoader.save();
+        historyLoader.save();
+        ignoreLoader.save();
+        mediaFormatLoader.save();
+        playerStateLoader.save();
     }
 
     public static MediaSource getSource(File file) {

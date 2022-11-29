@@ -1,5 +1,7 @@
 package com.nejman.nsec.music_player.media;
 
+import static androidx.media.MediaBrowserServiceCompat.BrowserRoot.EXTRA_RECENT;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -23,10 +25,14 @@ import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MusicPlaybackService extends MediaBrowserServiceCompat {
-
+    private static final String RECENT_ROOT = "recent_root";
+    private static final String BROWSABLE_ROOT = "browsable_root";
     public static MediaSessionCompat mediaSession;
     public static PlaybackStateCompat.Builder stateBuilder;
     public static MediaMetadataCompat.Builder metadataBuilder;
@@ -70,9 +76,19 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
     @Override
     public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid,
                                  Bundle rootHints) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("android.media.browse.SEARCH_SUPPORTED", true);
-        return new BrowserRoot("Newtone Lightning root", bundle);
+        Bundle rootExtras = new Bundle();
+        rootExtras.putBoolean("android.media.browse.SEARCH_SUPPORTED", true);
+        rootExtras.putBoolean("android.media.browse.CONTENT_STYLE_SUPPORTED", true);
+        rootExtras.putInt("android.media.browse.CONTENT_STYLE_BROWSABLE_HINT", 2);
+        rootExtras.putInt("android.media.browse.CONTENT_STYLE_PLAYABLE_HINT", 1);
+
+        boolean current = true;
+
+        if (rootHints != null) {
+            current = rootHints.getBoolean(EXTRA_RECENT, false);
+        }
+
+        return new BrowserRoot(current ? RECENT_ROOT : BROWSABLE_ROOT, rootExtras);
     }
 
     @Override
@@ -85,6 +101,19 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
     @Override
     public void onLoadChildren(@NonNull final String parentMediaId,
                                @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result) {
+        if (parentMediaId.equals(RECENT_ROOT)) {
+            if (Global.currentSource != null) {
+                result.sendResult(Collections.singletonList(Global.currentSource.toMediaItem()));
+            }
+        } else if (parentMediaId.equals(BROWSABLE_ROOT)) {
+            List<MediaBrowserCompat.MediaItem> items = new ArrayList<>();
+
+            for (MediaSource source : Global.currentPlaylist) {
+                items.add(source.toMediaItem());
+            }
+
+            result.sendResult(items);
+        }
         result.sendResult(null);
     }
 

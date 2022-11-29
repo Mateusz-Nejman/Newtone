@@ -2,6 +2,9 @@ package com.nejman.nsec.music_player.media;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
 import androidx.annotation.NonNull;
@@ -45,6 +48,12 @@ public class MediaSource {
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, this.duration)
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, this.image == null ? BitmapFactory.decodeResource(MainActivity.instance.getResources(), R.drawable.empty_track) : this.image)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, this.id).build();
+    }
+
+    public MediaBrowserCompat.MediaItem toMediaItem() {
+        Bundle songDuration = new Bundle();
+        songDuration.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, this.duration);
+        return new MediaBrowserCompat.MediaItem(new MediaDescriptionCompat.Builder().setMediaId(path).setTitle(title).setSubtitle(artist).setExtras(songDuration).setIconBitmap(this.image == null ? BitmapFactory.decodeResource(MainActivity.instance.getResources(), R.drawable.empty_track) : this.image).build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE);
     }
 
     @NonNull

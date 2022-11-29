@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.nejman.nsec.music_player.MainActivity;
@@ -22,13 +22,15 @@ import com.nejman.nsec.music_player.core.models.PlaylistModel;
 import com.nejman.nsec.music_player.databinding.FragmentPlaylistsBinding;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
+import com.nejman.nsec.music_player.ui.MainFragment;
+import com.nejman.nsec.music_player.ui.WrappedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class PlaylistsFragment extends Fragment {
+public class PlaylistsFragment extends WrappedFragment {
     private FragmentPlaylistsBinding binding;
     private PlaylistsAdapter adapter;
     private Disposable playlistEdited;
@@ -40,14 +42,19 @@ public class PlaylistsFragment extends Fragment {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         adapter = new PlaylistsAdapter(this.requireContext());
-        binding.listView.setAdapter(adapter);
-
-        adapter.addItems(DataContainer.getInstance().getPlaylists().getAll());
+        binding.gridView.setAdapter(adapter);
         playlistAdded = DataContainer.getInstance().getPlaylists().addOnPlaylistAdded(item -> adapter.addItem(item));
         playlistEdited = DataContainer.getInstance().getPlaylists().addOnPlaylistEdited(item -> adapter.editItem(item));
         playlistRemoved = DataContainer.getInstance().getPlaylists().addOnPlaylistRemoved(item -> adapter.removeItem(item));
-
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        adapter.removeAllItems();
+        adapter.addItems(DataContainer.getInstance().getPlaylists().getAll());
     }
 
     @Override
@@ -61,6 +68,12 @@ public class PlaylistsFragment extends Fragment {
         playlistAdded = null;
         playlistEdited = null;
         playlistRemoved = null;
+    }
+
+    @Override
+    protected String getTitle() {
+        MainFragment.instance.fragmentTitle = MainActivity.getResString(R.string.playlists);
+        return MainFragment.instance.fragmentTitle;
     }
 
     private class PlaylistsAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
@@ -89,12 +102,14 @@ public class PlaylistsFragment extends Fragment {
         public void addItem(String playlistName) {
             PlaylistModel model = DataContainer.getInstance().getPlaylists().get(playlistName);
             items.add(model);
-            notifyDataSetChanged();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void addItems(List<PlaylistModel> playlists) {
             items.addAll(playlists);
-            notifyDataSetChanged();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void removeItem(String item) {
@@ -110,7 +125,14 @@ public class PlaylistsFragment extends Fragment {
 
         public void removeItem(int index) {
             items.remove(index);
-            notifyDataSetChanged();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
+        }
+
+        public void removeAllItems() {
+            items.clear();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
+            updateColumnStretchMode();
         }
 
         public void editItem(String item) {
@@ -118,7 +140,7 @@ public class PlaylistsFragment extends Fragment {
             int index = items.indexOf(model);
             items.set(index, model);
 
-            notifyDataSetChanged();
+            MainActivity.instance.runOnUiThread(this::notifyDataSetChanged);
         }
 
         @Override
@@ -171,6 +193,18 @@ public class PlaylistsFragment extends Fragment {
             PlaylistModel model = items.get(position);
             ContextMenuBuilder.buildForPlaylist(view, model.name);
             return true;
+        }
+
+        private void updateColumnStretchMode() {
+            if (MainActivity.isCarUiMode()) {
+                return;
+            }
+
+            if (items.size() < 2) {
+                binding.gridView.setStretchMode(GridView.NO_STRETCH);
+            } else {
+                binding.gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+            }
         }
     }
 }

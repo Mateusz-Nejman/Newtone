@@ -1,9 +1,6 @@
 package com.nejman.nsec.music_player.core.bluetooth;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.pm.PackageManager;
 
@@ -13,8 +10,6 @@ import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;

@@ -3,31 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_tracks">
+    app:startDestination="@+id/navigation_main">
 
     <fragment
-        android:id="@+id/navigation_artists"
-        android:name="com.nejman.nsec.music_player.ui.artists.ArtistsFragment"
-        android:label="@string/artists"
-        tools:layout="@layout/fragment_artists" />
-
+        android:id="@+id/navigation_main"
+        android:name="com.nejman.nsec.music_player.ui.MainFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/navigation_tracks"
         android:name="com.nejman.nsec.music_player.ui.tracks.TracksFragment"
         android:label="@string/tracks"
         tools:layout="@layout/fragment_tracks" />
-
-    <fragment
-        android:id="@+id/navigation_playlists"
-        android:name="com.nejman.nsec.music_player.ui.playlists.PlaylistsFragment"
-        android:label="@string/playlists"
-        tools:layout="@layout/fragment_playlists" />
-
-    <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.nejman.nsec.music_player.ui.settings.SettingsFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_search"
@@ -53,6 +40,12 @@
         android:label="@string/play"
         tools:layout="@layout/fragment_player" />
 
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.nejman.nsec.music_player.ui.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
     <action
         android:id="@+id/navigate_to_search"
         app:destination="@id/navigation_search" />
@@ -68,4 +61,7 @@
     <action
         android:id="@+id/navigate_to_player"
         app:destination="@id/navigation_player" />
+    <action
+        android:id="@+id/navigate_to_settings"
+        app:destination="@id/navigation_settings" />
 </navigation>

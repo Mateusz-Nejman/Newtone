@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -21,6 +22,11 @@ import java.util.Objects;
 public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        ActionBar actionBar = MainActivity.instance.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.settings);
+        }
         setPreferencesFromResource(R.xml.settings_list, rootKey);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.requireContext());
         Preference about = findPreference("about");

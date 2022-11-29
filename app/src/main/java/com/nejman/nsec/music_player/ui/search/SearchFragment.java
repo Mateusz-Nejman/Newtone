@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -36,6 +35,7 @@ import java.util.Objects;
 public class SearchFragment extends WrappedFragment {
     private FragmentSearchBinding binding;
     private SearchAdapter adapter;
+    private String fragmentTitle;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,12 +50,7 @@ public class SearchFragment extends WrappedFragment {
         }
 
         String query = getArguments().getString("query");
-        ActionBar actionBar = MainActivity.instance.getSupportActionBar();
-
-        if (actionBar == null) {
-            return root;
-        }
-        actionBar.setTitle(query);
+        fragmentTitle = query;
 
         Thread searchThread = new Thread(() -> {
             List<MediaSource> searchResult = YoutubeDownloadHelper.search(query);
@@ -74,6 +69,11 @@ public class SearchFragment extends WrappedFragment {
         super.onDestroyView();
         this.showSearch(true);
         binding = null;
+    }
+
+    @Override
+    protected String getTitle() {
+        return fragmentTitle;
     }
 
     private static class SearchAdapter extends BaseAdapter implements View.OnClickListener {

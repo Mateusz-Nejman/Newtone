@@ -15,8 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
+
 public class NewtoneMediaPlayer {
-    public static NewtoneMediaPlayer instance;
+    private static NewtoneMediaPlayer instance;
 
     public static NewtoneMediaPlayer getInstance() {
         if (instance == null) {
@@ -31,6 +36,9 @@ public class NewtoneMediaPlayer {
     private final List<Integer> randomIndexes;
     private final Random random;
     private boolean prepared = false;
+
+    private Subject<Boolean> onStateChanged;
+    private Subject<MediaSource> onMediaSourceChanged;
 
     public NewtoneMediaPlayer() {
         this.random = new Random();
@@ -64,28 +72,9 @@ public class NewtoneMediaPlayer {
             }
             return true;
         });
-    }
 
-    private IPlayerController getController(String path) {
-        if (path.length() == 11 || path.startsWith("https://")) {
-            return this.webPlayerController;
-        }
-
-        return this.localPlayerController;
-    }
-
-    private void load(String path) {
-        try {
-            pause();
-            player.reset();
-            getController(path).load(player, path);
-            getController(path).loaded(player);
-            prepared = false;
-            player.prepareAsync();
-            MainActivity.instance.navigationView.getMenu().findItem(R.id.navigation_player).setVisible(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.onStateChanged = PublishSubject.create();
+        this.onMediaSourceChanged = PublishSubject.create();
     }
 
     public void load(MediaSource source) {
@@ -94,7 +83,7 @@ public class NewtoneMediaPlayer {
         Global.currentSource = source;
 
         try {
-            MainActivity.instance.updatePlayerSource(source);
+            onMediaSourceChanged.onNext(source);
         } catch (Exception ignore) {
 
         }
@@ -105,45 +94,16 @@ public class NewtoneMediaPlayer {
         Global.currentPlaylist.addAll(playlist);
         Global.currentPlaylistPosition = startIndex;
 
-        System.out.println("currentPlaylist "+startIndex+" "+Global.currentPlaylist.size());
+        System.out.println("currentPlaylist " + startIndex + " " + Global.currentPlaylist.size());
         load(Global.currentPlaylist.get(startIndex));
         updateMetadata();
-    }
-
-    private void setPlaybackState(int state, long position, float playbackSpeed) {
-        MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
-        mediaSession.setPlaybackState(
-                MusicPlaybackService.stateBuilder.setState(
-                        state,
-                        position,
-                        playbackSpeed).build());
-    }
-
-    private void updateMetadata() {
-        if (Global.currentSource == null) {
-            return;
-        }
-        MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
-        mediaSession.setMetadata(Global.currentSource.toMetaData());
-        setPlaybackState(PlaybackStateCompat.STATE_NONE,
-                player.getCurrentPosition(),
-                1.0f);
-        setPlaybackState(player.isPlaying() ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
-                player.getCurrentPosition(),
-                player.isPlaying() ? 1.0f : 0);
-
-        MusicPlaybackService.instance.updateNotification(player.isPlaying());
     }
 
     public void play() {
         this.player.start();
         updateMetadata();
 
-        try {
-            MainActivity.instance.updatePlayerState(true);
-        } catch (Exception ignore) {
-
-        }
+        onStateChanged.onNext(true);
     }
 
     public void prev() {
@@ -245,7 +205,7 @@ public class NewtoneMediaPlayer {
         updateMetadata();
 
         try {
-            MainActivity.instance.updatePlayerState(false);
+            onStateChanged.onNext(false);
         } catch (Exception ignore) {
 
         }
@@ -270,5 +230,60 @@ public class NewtoneMediaPlayer {
 
     public int getCurrentPosition() {
         return this.player.getCurrentPosition();
+    }
+
+    public Disposable addOnStateChanged(Consumer<Boolean> consumer) {
+        return onStateChanged.subscribe(consumer);
+    }
+
+    public Disposable addOnMediaSourceChanged(Consumer<MediaSource> consumer) {
+        return onMediaSourceChanged.subscribe(consumer);
+    }
+
+
+    private IPlayerController getController(String path) {
+        if (path.length() == 11 || path.startsWith("https://")) {
+            return this.webPlayerController;
+        }
+
+        return this.localPlayerController;
+    }
+
+    private void load(String path) {
+        try {
+            pause();
+            player.reset();
+            getController(path).load(player, path);
+            getController(path).loaded(player);
+            prepared = false;
+            player.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setPlaybackState(int state, long position, float playbackSpeed) {
+        MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
+        mediaSession.setPlaybackState(
+                MusicPlaybackService.stateBuilder.setState(
+                        state,
+                        position,
+                        playbackSpeed).build());
+    }
+
+    private void updateMetadata() {
+        if (Global.currentSource == null) {
+            return;
+        }
+        MediaSessionCompat mediaSession = MusicPlaybackService.mediaSession;
+        mediaSession.setMetadata(Global.currentSource.toMetaData());
+        setPlaybackState(PlaybackStateCompat.STATE_NONE,
+                player.getCurrentPosition(),
+                1.0f);
+        setPlaybackState(player.isPlaying() ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
+                player.getCurrentPosition(),
+                player.isPlaying() ? 1.0f : 0);
+
+        MusicPlaybackService.instance.updateNotification(player.isPlaying());
     }
 }

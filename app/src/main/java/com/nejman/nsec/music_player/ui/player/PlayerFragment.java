@@ -170,7 +170,7 @@ public class PlayerFragment extends WrappedFragment {
     }
 
     private void refreshView() {
-        if (Global.currentSource == null) {
+        if (Global.currentSource == null || binding == null) {
             return;
         }
 
@@ -194,8 +194,7 @@ public class PlayerFragment extends WrappedFragment {
         binding.durationBox.setText(getDurationString(NewtoneMediaPlayer.getInstance().getDuration()));
 
         String oldTitle = binding.titleView.getText().toString();
-        if(!Objects.equals(Global.currentSource.title, oldTitle))
-        {
+        if (!Objects.equals(Global.currentSource.title, oldTitle)) {
             binding.titleView.setText(Global.currentSource.title);
         }
         binding.artistView.setText(Global.currentSource.artist);
@@ -217,23 +216,24 @@ public class PlayerFragment extends WrappedFragment {
         }
     }
 
-    private void setTrackImage(ImageView imageView, Bitmap image, boolean blur)
-    {
-        if(image == null)
-        {
+    private void setTrackImage(ImageView imageView, Bitmap image, boolean blur) {
+        if (image == null) {
             image = BitmapFactory.decodeResource(getResources(), R.drawable.empty_track);
         }
 
-        if(blur)
-        {
+        if (blur) {
             image = BlurBuilder.blur(getContext(), image);
         }
 
         imageView.setImageBitmap(image);
     }
 
-    private void setTrackImage(ImageView imageView, Bitmap image)
-    {
+    private void setTrackImage(ImageView imageView, Bitmap image) {
         setTrackImage(imageView, image, false);
+    }
+
+    @Override
+    protected String getTitle() {
+        return MainActivity.getResString(R.string.app_name);
     }
 }

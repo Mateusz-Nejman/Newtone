@@ -60,11 +60,18 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
             am.abandonAudioFocusRequest(audioFocusRequest);
         }
 
-        service.unregisterReceiver(musicNoisyReceiver);
-        service.stopSelf();
-        mediaSession.setActive(false);
-        player.pause();
-        service.stopForeground(false);
+        try
+        {
+            service.unregisterReceiver(musicNoisyReceiver);
+            service.stopSelf();
+            mediaSession.setActive(false);
+            player.pause();
+            service.stopForeground(false);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

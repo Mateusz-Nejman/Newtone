@@ -14,7 +14,7 @@
         android:icon="@drawable/bluetooth_icon"
         android:padding="10dp"
         android:title="@string/bluetooth"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/downloadButton"
         android:layout_width="64dp"
@@ -22,5 +22,14 @@
         android:icon="@drawable/download_icon"
         android:padding="10dp"
         android:title="@string/download"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/settingsButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:icon="@drawable/settings_icon"
+        android:padding="10dp"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
 </menu>

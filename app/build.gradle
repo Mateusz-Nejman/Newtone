@@ -9,8 +9,8 @@ android {
         applicationId "com.nejman.nsec.music_player"
         minSdk 26
         targetSdk 33
-        versionCode 90003
-        versionName "9.0003"
+        versionCode 90004
+        versionName "9.0004"
     }
 
     buildTypes {
@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

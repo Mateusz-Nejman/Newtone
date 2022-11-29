@@ -59,6 +59,11 @@ public class DownloadsFragment extends WrappedFragment {
         downloadRemoved = null;
     }
 
+    @Override
+    protected String getTitle() {
+        return MainActivity.getResString(R.string.download);
+    }
+
     private static class DownloadsAdapter extends BaseAdapter {
         private final ArrayList<DownloadModel> items = new ArrayList<>();
         private final LayoutInflater layoutInflater;

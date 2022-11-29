@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
@@ -24,6 +23,7 @@ import com.nejman.nsec.music_player.databinding.FragmentTracksBinding;
 import com.nejman.nsec.music_player.media.MediaSource;
 import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 import com.nejman.nsec.music_player.ui.ContextMenuBuilder;
+import com.nejman.nsec.music_player.ui.MainFragment;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -45,30 +45,47 @@ public class TracksFragment extends WrappedFragment {
     private Disposable trackAdded;
     private Disposable trackEdited;
     private Disposable trackRemoved;
+    private String fragmentTitle;
+    private boolean mainFragment;
+
+    public TracksFragment(boolean main) {
+        this.mainFragment = main;
+    }
+
+    public TracksFragment() {
+        this.mainFragment = false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mainFragment) {
+            return;
+        }
+
+        adapter.removeAllItems();
+        adapter.addItems(DataContainer.getInstance().getMediaSources().getAll());
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("onCreateView tracksFragment");
         binding = FragmentTracksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         adapter = new TracksAdapter(this.requireContext());
         binding.listView.setAdapter(adapter);
         Bundle arguments = getArguments();
 
+        fragmentTitle = MainActivity.getResString(R.string.tracks);
         if (arguments == null) {
             adapter.addItems(DataContainer.getInstance().getMediaSources().getAll());
         } else {
-            ActionBar actionBar = MainActivity.instance.getSupportActionBar();
-
-            if (actionBar == null) {
-                return root;
-            }
-
-            actionBar.setDisplayHomeAsUpEnabled(true);
             String artist = arguments.getString("artist");
             playlist = arguments.getString("playlist");
 
             if (artist != null) {
-                actionBar.setTitle(artist);
+                fragmentTitle = artist;
 
                 ArtistModel artistModel = DataContainer.getInstance().getArtists().get(artist);
 
@@ -80,7 +97,7 @@ public class TracksFragment extends WrappedFragment {
 
                 adapter.addItems(sources);
             } else if (playlist != null) {
-                actionBar.setTitle(playlist);
+                fragmentTitle = playlist;
 
                 PlaylistModel playlistModel = DataContainer.getInstance().getPlaylists().get(playlist);
 
@@ -114,6 +131,12 @@ public class TracksFragment extends WrappedFragment {
         trackEdited = null;
         trackRemoved = null;
         showNavigationView(true);
+    }
+
+    @Override
+    protected String getTitle() {
+        MainFragment.instance.fragmentTitle = fragmentTitle;
+        return MainFragment.instance.fragmentTitle;
     }
 
     private class TracksAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
@@ -187,6 +210,11 @@ public class TracksFragment extends WrappedFragment {
             notifyDataSetChanged();
         }
 
+        public void removeAllItems() {
+            items.clear();
+            notifyDataSetChanged();
+        }
+
         public void editItem(MediaSource oldItem, MediaSource newItem) {
             int index = items.indexOf(oldItem);
             items.set(index, newItem);
@@ -214,6 +242,8 @@ public class TracksFragment extends WrappedFragment {
             ((TextView) convertView.findViewById(R.id.titleView)).setText(item.title);
             ((TextView) convertView.findViewById(R.id.authorView)).setText(item.artist);
             ((TextView) convertView.findViewById(R.id.durationView)).setText(Utils.getDurationStringMilliseconds(item.duration));
+            ((TextView) convertView.findViewById(R.id.typeView)).setText(getFormatString(item.path));
+
             convertView.findViewById(R.id.menuButton).setOnClickListener(v -> ContextMenuBuilder.buildForTrack(v, item.path + Global.separator + (playlist == null ? "" : playlist)));
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
@@ -279,6 +309,18 @@ public class TracksFragment extends WrappedFragment {
             MediaSource item = items.get(position);
             ContextMenuBuilder.buildForTrack(view, item.path + Global.separator + (playlist == null ? "" : playlist));
             return true;
+        }
+
+        private String getFormatString(String path) {
+            if (path.endsWith(".m4a")) {
+                return "m4a";
+            } else if (path.endsWith(".ogg")) {
+                return "ogg";
+            } else if (path.endsWith(".mp3")) {
+                return "mp3";
+            } else {
+                return "web";
+            }
         }
     }
 }

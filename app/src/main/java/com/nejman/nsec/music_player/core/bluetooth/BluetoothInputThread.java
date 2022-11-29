@@ -1,8 +1,6 @@
 package com.nejman.nsec.music_player.core.bluetooth;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.pm.PackageManager;

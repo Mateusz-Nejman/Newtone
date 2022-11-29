@@ -1,7 +1,6 @@
 package com.nejman.nsec.music_player.ui.bluetooth;
 
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
-import com.nejman.nsec.music_player.core.bluetooth.BluetoothDeviceModel;
 import com.nejman.nsec.music_player.core.bluetooth.BluetoothInputThread;
 import com.nejman.nsec.music_player.databinding.FragmentBluetoothBinding;
 import com.nejman.nsec.music_player.ui.WrappedFragment;
@@ -61,8 +59,7 @@ public class BluetoothFragment extends WrappedFragment {
             onReceived.dispose();
         }
 
-        if(this.inputThread != null && this.inputThread.isAlive())
-        {
+        if (this.inputThread != null && this.inputThread.isAlive()) {
             inputThread.cancel();
             inputThread = null;
         }
@@ -70,5 +67,10 @@ public class BluetoothFragment extends WrappedFragment {
         onConnected = null;
         onError = null;
         onReceived = null;
+    }
+
+    @Override
+    protected String getTitle() {
+        return MainActivity.getResString(R.string.bluetooth);
     }
 }

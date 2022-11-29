@@ -18,6 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ImageView.Corner" />
+    <TextView
+        android:id="@+id/typeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="#59000000"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        />
 
     <TextView
         android:id="@+id/titleView"
