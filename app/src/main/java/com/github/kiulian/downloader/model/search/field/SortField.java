@@ -10,7 +10,7 @@ public enum SortField {
 
     private final byte value;
 
-    private SortField(int value) {
+    SortField(int value) {
         this.value = (byte) value;
     }
 

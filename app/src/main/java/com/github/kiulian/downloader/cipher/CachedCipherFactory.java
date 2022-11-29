@@ -37,11 +37,11 @@ public class CachedCipherFactory implements CipherFactory {
             Pattern.compile("\\w+\\[(\\\"\\w+\\\")\\]\\(\\w,(\\d+)\\)")
     };
 
-    private Downloader downloader;
+    private final Downloader downloader;
 
-    private List<Pattern> knownInitialFunctionPatterns = new ArrayList<>();
-    private Map<Pattern, CipherFunction> functionsEquivalentMap = new HashMap<>();
-    private Map<String, Cipher> ciphers = new HashMap<>();
+    private final List<Pattern> knownInitialFunctionPatterns = new ArrayList<>();
+    private final Map<Pattern, CipherFunction> functionsEquivalentMap = new HashMap<>();
+    private final Map<String, Cipher> ciphers = new HashMap<>();
 
     public CachedCipherFactory(Downloader downloader) {
         this.downloader = downloader;
@@ -117,7 +117,7 @@ public class CachedCipherFactory implements CipherFactory {
 
         Matcher matcher = pattern.matcher(js);
         if (matcher.find()) {
-            String[] jsFunctions = matcher.group(1).split(";");
+            String[] jsFunctions = Objects.requireNonNull(matcher.group(1)).split(";");
             List<JsFunction> transformFunctions = new ArrayList<>(jsFunctions.length);
             for (String jsFunction : jsFunctions) {
                 JsFunction parsedFunction = parseFunction(jsFunction);
@@ -208,7 +208,7 @@ public class CachedCipherFactory implements CipherFactory {
         Pattern pattern = Pattern.compile(String.format("var %s=\\{(.*?)\\};", var), Pattern.DOTALL);
         Matcher matcher = pattern.matcher(js);
         if (matcher.find()) {
-            return matcher.group(1).replaceAll("\n", " ").split(", ");
+            return Objects.requireNonNull(matcher.group(1)).replaceAll("\n", " ").split(", ");
         }
 
         throw new YoutubeException.CipherException("Transform object not found");

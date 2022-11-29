@@ -3,6 +3,7 @@ package com.github.kiulian.downloader.cipher;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DefaultCipher implements Cipher {
 
@@ -18,7 +19,7 @@ public class DefaultCipher implements Cipher {
     public String getSignature(String cipheredSignature) {
         char[] signature = cipheredSignature.toCharArray();
         for (JsFunction jsFunction : functions) {
-            signature = functionsMap.get(jsFunction.getName()).apply(signature, jsFunction.getArgument());
+            signature = Objects.requireNonNull(functionsMap.get(jsFunction.getName())).apply(signature, jsFunction.getArgument());
         }
         return String.valueOf(signature);
     }

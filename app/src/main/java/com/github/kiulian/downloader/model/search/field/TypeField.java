@@ -8,7 +8,7 @@ public enum TypeField implements SearchField {
 
     private final byte[] data;
 
-    private TypeField(int... data) {
+    TypeField(int... data) {
         this.data = SearchField.convert(data);
     }
 

@@ -7,7 +7,7 @@ public class RequestSubtitlesDownload extends RequestWebpage {
 
     private Extension format;
     private String translationLanguage;
-    private boolean fromCaptions;
+    private final boolean fromCaptions;
 
     public RequestSubtitlesDownload(SubtitlesInfo subtitlesInfo) {
         super(subtitlesInfo.getUrl());

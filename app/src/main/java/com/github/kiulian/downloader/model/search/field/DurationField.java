@@ -7,7 +7,7 @@ public enum DurationField implements SearchField {
 
     private final byte[] data;
 
-    private DurationField(int... data) {
+    DurationField(int... data) {
         this.data = SearchField.convert(data);
     }
 

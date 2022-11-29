@@ -10,7 +10,7 @@ public enum FeatureField implements SearchField {
 
     private final byte[] data;
 
-    private FeatureField(int... data) {
+    FeatureField(int... data) {
         this.data = SearchField.convert(data);
     }
 

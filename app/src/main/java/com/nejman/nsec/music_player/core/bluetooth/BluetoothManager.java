@@ -3,11 +3,8 @@ package com.nejman.nsec.music_player.core.bluetooth;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.pm.PackageManager;
 
-import androidx.core.app.ActivityCompat;
-
-import com.nejman.nsec.music_player.MainActivity;
+import com.nejman.nsec.music_player.PermissionHelper;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.util.ArrayList;
@@ -42,7 +39,7 @@ public class BluetoothManager {
 
     public List<BluetoothDeviceModel> getPairedDevices() {
         List<BluetoothDeviceModel> models = new ArrayList<>();
-        if (ActivityCompat.checkSelfPermission(MainActivity.instance, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (!PermissionHelper.checkPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
             return models;
         }
         Set<BluetoothDevice> devices = adapter.getBondedDevices();

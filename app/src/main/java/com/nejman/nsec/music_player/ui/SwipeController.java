@@ -9,12 +9,9 @@ import io.reactivex.rxjava3.subjects.Subject;
 
 public class SwipeController {
     private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private float startX;
-    private float startY;
-    private Subject<Boolean> swipeLeft;
-    private Subject<Boolean> swipeRight;
+    private final Subject<Boolean> swipeLeft;
+    private final Subject<Boolean> swipeRight;
     private boolean swiping;
     private boolean swipedLeft;
     private boolean swipedRight;
@@ -42,7 +39,6 @@ public class SwipeController {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 startX = event.getX();
-                startY = event.getY();
                 swipedLeft = false;
                 swipedRight = false;
                 break;

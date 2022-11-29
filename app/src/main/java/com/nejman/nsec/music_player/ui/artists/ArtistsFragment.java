@@ -167,20 +167,15 @@ public class ArtistsFragment extends WrappedFragment {
 
         public void onItemSelected(int position) {
             ArtistModel model = items.get(position);
-
             Bundle bundle = new Bundle();
             bundle.putString("artist", model.name);
             NavHostFragment.findNavController(ArtistsFragment.this).navigate(R.id.navigate_to_tracks, bundle);
-            System.out.println(NavHostFragment.findNavController(ArtistsFragment.this).getBackQueue().getSize());
         }
 
         @Override
         public boolean onLongClick(View view) {
             int position = Integer.parseInt(view.getTag().toString());
-            System.out.println(position);
-            ArtistModel model = items.get(position);
-            System.out.println(model.name);
-            ContextMenuBuilder.buildForArtist(view, model.name);
+            ContextMenuBuilder.buildForArtist(view, items.get(position).name);
             return true;
         }
 

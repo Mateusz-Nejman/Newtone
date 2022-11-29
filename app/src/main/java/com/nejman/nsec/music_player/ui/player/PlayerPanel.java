@@ -28,7 +28,6 @@ public class PlayerPanel extends ConstraintLayout {
     private ImageButton playerViewImage;
     private TextView playerViewTitle;
     private TextView playerViewArtist;
-    private AppCompatButton playerViewButton;
     private ImageButton playerViewPlayButton;
 
     private Disposable stateChanged;
@@ -66,7 +65,7 @@ public class PlayerPanel extends ConstraintLayout {
         playerViewImage = findViewById(R.id.playerViewImage);
         playerViewTitle = findViewById(R.id.playerViewTitle);
         playerViewArtist = findViewById(R.id.playerViewArtist);
-        playerViewButton = findViewById(R.id.playerViewButton);
+        AppCompatButton playerViewButton = findViewById(R.id.playerViewButton);
         playerViewPlayButton = findViewById(R.id.playerViewPlayButton);
         setAlpha(0.0f);
         setVisibility(GONE);
@@ -80,9 +79,7 @@ public class PlayerPanel extends ConstraintLayout {
             }
         });
 
-        playerViewButton.setOnClickListener(v -> {
-            MainActivity.instance.navigation.navigate(R.id.navigate_to_player);
-        });
+        playerViewButton.setOnClickListener(v -> MainActivity.instance.navigation.navigate(R.id.navigate_to_player));
 
         setMediaSource(Global.currentSource);
 

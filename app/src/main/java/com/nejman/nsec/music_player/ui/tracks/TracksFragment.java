@@ -46,7 +46,7 @@ public class TracksFragment extends WrappedFragment {
     private Disposable trackEdited;
     private Disposable trackRemoved;
     private String fragmentTitle;
-    private boolean mainFragment;
+    private final boolean mainFragment;
 
     public TracksFragment(boolean main) {
         this.mainFragment = main;
@@ -70,7 +70,6 @@ public class TracksFragment extends WrappedFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("onCreateView tracksFragment");
         binding = FragmentTracksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         adapter = new TracksAdapter(this.requireContext());
@@ -109,8 +108,6 @@ public class TracksFragment extends WrappedFragment {
 
                 adapter.addItems(sources);
             }
-
-            showNavigationView(false);
         }
 
         trackAdded = DataContainer.getInstance().getMediaSources().addOnSourceAdded(source -> adapter.addItem(source));
@@ -130,7 +127,6 @@ public class TracksFragment extends WrappedFragment {
         trackAdded = null;
         trackEdited = null;
         trackRemoved = null;
-        showNavigationView(true);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class VideoDetails extends AbstractVideoDetails {
         author = json.getString("author");
         isLive = json.getBooleanValue("isLive");
 
-        keywords = json.containsKey("keywords") ? json.getJSONArray("keywords").toJavaList(String.class) : new ArrayList<String>();
+        keywords = json.containsKey("keywords") ? json.getJSONArray("keywords").toJavaList(String.class) : new ArrayList<>();
         shortDescription = json.getString("shortDescription");
         averageRating = json.getIntValue("averageRating");
         viewCount = json.getLongValue("viewCount");

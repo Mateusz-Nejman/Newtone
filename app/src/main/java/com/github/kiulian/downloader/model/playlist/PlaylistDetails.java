@@ -3,11 +3,11 @@ package com.github.kiulian.downloader.model.playlist;
 
 public class PlaylistDetails {
 
-    private String playlistId;
-    private String title;
-    private String author;
-    private int videoCount;
-    private int viewCount;
+    private final String playlistId;
+    private final String title;
+    private final String author;
+    private final int videoCount;
+    private final int viewCount;
 
     public PlaylistDetails(String playlistId, String title, String author, int videoCount, int viewCount) {
         super();

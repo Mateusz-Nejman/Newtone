@@ -14,7 +14,6 @@ import com.nejman.nsec.music_player.databinding.FragmentMainBinding;
 
 public class MainFragment extends WrappedFragment {
     private FragmentMainBinding binding;
-    private MainFragmentManager manager;
     public static MainFragment instance;
     public String fragmentTitle;
 
@@ -22,11 +21,10 @@ public class MainFragment extends WrappedFragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
         instance = this;
-        System.out.println("MainFragment onCreateView");
         View root = binding.getRoot();
         binding.tabLayout.setTabTextColors(ContextCompat.getColor(MainActivity.instance, R.color.white), ContextCompat.getColor(MainActivity.instance, R.color.blue));
         binding.viewPager.setAdapter(new MainFragmentAdapter(MainActivity.instance));
-        manager = new MainFragmentManager(binding.tabLayout, binding.viewPager);
+        MainFragmentManager manager = new MainFragmentManager(binding.tabLayout, binding.viewPager);
         return root;
     }
 

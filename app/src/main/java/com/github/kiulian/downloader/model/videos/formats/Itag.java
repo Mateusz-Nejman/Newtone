@@ -2,6 +2,8 @@ package com.github.kiulian.downloader.model.videos.formats;
 
 
 
+import androidx.annotation.NonNull;
+
 import com.github.kiulian.downloader.model.videos.quality.AudioQuality;
 import com.github.kiulian.downloader.model.videos.quality.VideoQuality;
 
@@ -129,7 +131,6 @@ public enum Itag {
     protected int id;
     private VideoQuality videoQuality;
     private AudioQuality audioQuality;
-    private boolean isVRor3D;
 
     Itag() {
     }
@@ -150,7 +151,6 @@ public enum Itag {
         setId(Integer.parseInt(name().substring(1)));
         this.videoQuality = videoQuality;
         this.audioQuality = audioQuality;
-        this.isVRor3D = isVRor3D;
     }
 
     public void setId(int id) {
@@ -177,6 +177,7 @@ public enum Itag {
         return this != unknown && audioQuality != AudioQuality.noAudio;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.valueOf(id);

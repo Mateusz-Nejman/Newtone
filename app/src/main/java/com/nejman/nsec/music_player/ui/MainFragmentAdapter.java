@@ -18,15 +18,13 @@ public class MainFragmentAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        System.out.println("createFragment " + position);
-        switch (position) {
-            case 1:
-                return new ArtistsFragment();
-            case 2:
-                return new PlaylistsFragment();
-            default:
-                return new TracksFragment(true);
+        if (position == 1) {
+            return new ArtistsFragment();
+        } else if (position == 2) {
+            return new PlaylistsFragment();
         }
+
+        return new TracksFragment(true);
     }
 
     @Override

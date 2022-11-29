@@ -4,6 +4,7 @@ import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.core.DataContainer;
 import com.nejman.nsec.music_player.media.MediaSource;
+import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,7 +45,7 @@ public class PlayerStateLoader implements IDataLoader {
             return;
         }
 
-        //NewtoneMediaPlayer.getInstance().loadPlaylist(playlist, Integer.parseInt(currentPositionBuffer));
+        NewtoneMediaPlayer.getInstance().loadPlaylist(playlist, Integer.parseInt(currentPositionBuffer));
     }
 
     @Override

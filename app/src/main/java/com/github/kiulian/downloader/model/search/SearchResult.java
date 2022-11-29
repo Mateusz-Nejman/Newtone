@@ -20,7 +20,7 @@ public class SearchResult {
         suggestion = (QuerySuggestion) queryElements.get(QueryElementType.SUGGESTION);
         refinementList = (QueryRefinementList) queryElements.get(QueryElementType.REFINEMENT_LIST);
         if (queryElements.containsKey(QueryElementType.AUTO_CORRECTION)) {
-            autoCorrectedQuery = ((QueryAutoCorrection) queryElements.get(QueryElementType.AUTO_CORRECTION)).query();
+            autoCorrectedQuery = ((QueryAutoCorrection) Objects.requireNonNull(queryElements.get(QueryElementType.AUTO_CORRECTION))).query();
         } else {
             autoCorrectedQuery = null;
         }

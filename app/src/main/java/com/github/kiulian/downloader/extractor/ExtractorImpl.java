@@ -112,11 +112,11 @@ public class ExtractorImpl implements Extractor {
             String html = response.data();
             Matcher matcher = ASSETS_JS_REGEX.matcher(html);
             if (matcher.find()) {
-                js = matcher.group(1).replace("\\", "");
+                js = Objects.requireNonNull(matcher.group(1)).replace("\\", "");
             } else {
                 matcher = EMB_JS_REGEX.matcher(html);
                 if (matcher.find()) {
-                    js = matcher.group(1).replace("\\", "");
+                    js = Objects.requireNonNull(matcher.group(1)).replace("\\", "");
                 }
             }
         }
@@ -147,7 +147,7 @@ public class ExtractorImpl implements Extractor {
     public int extractIntegerFromText(String text) {
         Matcher matcher = TEXT_NUMBER_REGEX.matcher(text);
         if (matcher.find()) {
-            return Integer.parseInt(matcher.group(0).replaceAll("[, ']", ""));
+            return Integer.parseInt(Objects.requireNonNull(matcher.group(0)).replaceAll("[, ']", ""));
         }
         return 0;
     }

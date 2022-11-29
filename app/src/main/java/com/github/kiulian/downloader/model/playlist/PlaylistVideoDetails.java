@@ -6,7 +6,7 @@ import com.github.kiulian.downloader.model.AbstractListVideoDetails;
 public class PlaylistVideoDetails extends AbstractListVideoDetails {
 
     private int index;
-    private boolean isPlayable;
+    private final boolean isPlayable;
 
     public PlaylistVideoDetails(JSONObject json) {
         super(json);

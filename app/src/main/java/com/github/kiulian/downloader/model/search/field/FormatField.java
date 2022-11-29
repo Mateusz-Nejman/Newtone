@@ -11,7 +11,7 @@ public enum FormatField implements SearchField {
 
     private final byte[] data;
 
-    private FormatField(int... data) {
+    FormatField(int... data) {
         this.data = SearchField.convert(data);
     }
 

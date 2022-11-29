@@ -2,11 +2,9 @@ package com.nejman.nsec.music_player.core.bluetooth;
 
 import android.Manifest;
 import android.bluetooth.BluetoothSocket;
-import android.content.pm.PackageManager;
-
-import androidx.core.app.ActivityCompat;
 
 import com.nejman.nsec.music_player.MainActivity;
+import com.nejman.nsec.music_player.PermissionHelper;
 import com.nejman.nsec.music_player.media.MediaSource;
 
 import java.io.IOException;
@@ -29,7 +27,7 @@ public class BluetoothOutputThread extends Thread {
         this.deviceModel = deviceModel;
 
         try {
-            if (ActivityCompat.checkSelfPermission(MainActivity.instance, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            if (PermissionHelper.checkPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 temp = this.deviceModel.device.createRfcommSocketToServiceRecord(BluetoothManager.UUID);
             }
         } catch (IOException e) {
@@ -57,7 +55,7 @@ public class BluetoothOutputThread extends Thread {
 
     public void run() {
         try {
-            if (ActivityCompat.checkSelfPermission(MainActivity.instance, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            if (!PermissionHelper.checkPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 return;
             }
             MainActivity.bluetoothManager.getAdapter().cancelDiscovery();

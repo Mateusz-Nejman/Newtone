@@ -32,7 +32,7 @@ public class Config {
     private static final String DEFAULT_ACCEPT_LANG = "en-US,en;";
     private static final int DEFAULT_RETRY_ON_FAILURE = 0;
 
-    private Map<String, String> headers;
+    private final Map<String, String> headers;
     private int maxRetries;
     private boolean compressionEnabled;
     private ExecutorService executorService;
@@ -113,7 +113,7 @@ public class Config {
     }
 
     public static class Builder {
-        private Map<String, String> headers = new HashMap<>();
+        private final Map<String, String> headers = new HashMap<>();
         private int maxRetries = DEFAULT_RETRY_ON_FAILURE;
         private boolean compressionEnabled = true;
         private ExecutorService executorService;

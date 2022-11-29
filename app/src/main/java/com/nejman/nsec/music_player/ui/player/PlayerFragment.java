@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import com.nejman.nsec.music_player.Global;
 import com.nejman.nsec.music_player.MainActivity;
 import com.nejman.nsec.music_player.R;
+import com.nejman.nsec.music_player.Utils;
 import com.nejman.nsec.music_player.core.loaders.DataLoader;
 import com.nejman.nsec.music_player.databinding.FragmentPlayerBinding;
 import com.nejman.nsec.music_player.media.MediaPlayerHelper;
@@ -48,7 +49,6 @@ public class PlayerFragment extends WrappedFragment {
         binding.titleView.setSelected(true);
         showPlayer(false);
         showActionBar(false);
-        showNavigationView(false);
         playedTrack = "";
 
         binding.positionSlider.setPadding(0, 0, 0, 0);
@@ -145,28 +145,9 @@ public class PlayerFragment extends WrappedFragment {
         super.onDestroyView();
         binding = null;
         showActionBar(true);
-        showNavigationView(true);
         Global.inFullscreenPlayer = false;
         showPlayer(true);
-
         timer.cancel();
-    }
-
-    private String getDurationString(long duration) {
-        int hours = (int) (duration / 3600000);
-        int minutes = (int) ((duration - (hours * 3600000)) / 60000);
-        int seconds = (int) ((duration - (hours * 3600000) - (minutes * 60000))) / 1000;
-
-        String durationString = "";
-
-        if (hours > 0) {
-            durationString += hours + ":";
-        }
-
-        durationString += String.format("%1$" + 2 + "s", minutes).replace(' ', '0') + ":";
-        durationString += String.format("%1$" + 2 + "s", seconds).replace(' ', '0');
-
-        return durationString;
     }
 
     private void refreshView() {
@@ -190,8 +171,8 @@ public class PlayerFragment extends WrappedFragment {
             isPlayImage = true;
         }
 
-        binding.positionBox.setText(getDurationString(NewtoneMediaPlayer.getInstance().getCurrentPosition()));
-        binding.durationBox.setText(getDurationString(NewtoneMediaPlayer.getInstance().getDuration()));
+        binding.positionBox.setText(Utils.getDurationStringMilliseconds(NewtoneMediaPlayer.getInstance().getCurrentPosition()));
+        binding.durationBox.setText(Utils.getDurationStringMilliseconds(NewtoneMediaPlayer.getInstance().getDuration()));
 
         String oldTitle = binding.titleView.getText().toString();
         if (!Objects.equals(Global.currentSource.title, oldTitle)) {

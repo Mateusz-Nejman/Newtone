@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class ResponseImpl<T> implements Response<T> {
 
-    private Future<T> data;
+    private final Future<T> data;
     private Throwable error;
 
     private ResponseImpl(Future<T> data, Throwable error) {

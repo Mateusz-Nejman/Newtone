@@ -30,13 +30,13 @@ public class BluetoothFragment extends WrappedFragment {
         inputThread = MainActivity.bluetoothManager.getInputThread();
         onConnected = inputThread.addOnDeviceConnected(deviceModel -> MainActivity.instance.runOnUiThread(() -> {
             binding.selectedDeviceText.setText(deviceModel.name);
-            binding.statusText.setText(R.string.bluetooth_status_sending);
+            binding.statusText.setText(R.string.bluetooth_status_connected);
         }));
         onError = inputThread.addOnDeviceError(error -> {
             error.printStackTrace();
             MainActivity.toast(R.string.bluetooth_status_error);
         });
-        onReceived = inputThread.addOnFileReceived(source -> MainActivity.toast(MainActivity.getResString(R.string.bluetooth_status_sent) + " " + source.artist + " - " + source.title));
+        onReceived = inputThread.addOnFileReceived(source -> MainActivity.toast(MainActivity.getResString(R.string.bluetooth_status_received) + " " + source.artist + " - " + source.title));
         inputThread.start();
         return root;
     }

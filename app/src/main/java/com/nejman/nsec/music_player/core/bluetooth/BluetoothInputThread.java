@@ -3,11 +3,9 @@ package com.nejman.nsec.music_player.core.bluetooth;
 import android.Manifest;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.pm.PackageManager;
-
-import androidx.core.app.ActivityCompat;
 
 import com.nejman.nsec.music_player.MainActivity;
+import com.nejman.nsec.music_player.PermissionHelper;
 import com.nejman.nsec.music_player.core.data.Tracks;
 import com.nejman.nsec.music_player.media.MediaSource;
 
@@ -31,7 +29,7 @@ public class BluetoothInputThread extends Thread {
 
         BluetoothServerSocket temp = null;
         try {
-            if (ActivityCompat.checkSelfPermission(MainActivity.instance, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            if (PermissionHelper.checkPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 temp = MainActivity.bluetoothManager.getAdapter().listenUsingInsecureRfcommWithServiceRecord("Newtone", BluetoothManager.UUID);
             }
         } catch (IOException e) {

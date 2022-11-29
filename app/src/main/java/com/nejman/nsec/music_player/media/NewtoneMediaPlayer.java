@@ -37,8 +37,8 @@ public class NewtoneMediaPlayer {
     private final Random random;
     private boolean prepared = false;
 
-    private Subject<Boolean> onStateChanged;
-    private Subject<MediaSource> onMediaSourceChanged;
+    private final Subject<Boolean> onStateChanged;
+    private final Subject<MediaSource> onMediaSourceChanged;
 
     public NewtoneMediaPlayer() {
         this.random = new Random();
