@@ -60,7 +60,9 @@ public class MusicPlaybackService extends MediaBrowserServiceCompat {
                                 PlaybackStateCompat.ACTION_PREPARE |
                                 PlaybackStateCompat.ACTION_PREPARE_FROM_MEDIA_ID |
                                 PlaybackStateCompat.ACTION_PREPARE_FROM_SEARCH |
-                                PlaybackStateCompat.ACTION_PREPARE_FROM_URI);
+                                PlaybackStateCompat.ACTION_PREPARE_FROM_URI |
+                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
         mediaSession.setPlaybackState(stateBuilder.build());
 
         // MySessionCallback() has methods that handle callbacks from a media controller

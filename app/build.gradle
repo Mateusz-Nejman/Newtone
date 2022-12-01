@@ -9,8 +9,8 @@ android {
         applicationId "com.nejman.nsec.music_player"
         minSdk 26
         targetSdk 33
-        versionCode 90004
-        versionName "9.0004"
+        versionCode 90005
+        versionName "9.0005"
     }
 
     buildTypes {
@@ -45,5 +45,6 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
     implementation 'net.jthink:jaudiotagger:3.0.1'
     implementation 'com.alibaba:fastjson:2.0.19.android'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation files('libs/nsec3.jar')
 }

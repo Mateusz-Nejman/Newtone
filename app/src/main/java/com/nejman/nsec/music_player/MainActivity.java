@@ -40,6 +40,7 @@ import com.nejman.nsec.music_player.core.models.HistoryModel;
 import com.nejman.nsec.music_player.databinding.ActivityMainBinding;
 import com.nejman.nsec.music_player.media.MediaPlayerHelper;
 import com.nejman.nsec.music_player.media.MusicPlaybackService;
+import com.nejman.nsec.music_player.media.NewtoneMediaPlayer;
 import com.nejman.nsec.music_player.ui.MainNavigation;
 import com.nejman.nsec.music_player.ui.SearchAdapter;
 import com.nejman.nsec.music_player.ui.SwipeController;
@@ -87,12 +88,16 @@ public class MainActivity extends AppCompatActivity {
         swipeController = new SwipeController();
 
         swipedLeft = swipeController.addOnSwipeLeft(state -> {
-            if (navigation.getModalCount() >= 1) {
+            if (Global.inFullscreenPlayer) {
+                NewtoneMediaPlayer.getInstance().next();
+            } else {
                 onBackPressed();
             }
         });
         swipedRight = swipeController.addOnSwipeRight(state -> {
-            if (navigation.getModalCount() >= 1) {
+            if (Global.inFullscreenPlayer) {
+                NewtoneMediaPlayer.getInstance().prev();
+            } else {
                 onBackPressed();
             }
         });
@@ -267,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (swipeController.dispatchTouchEvent(event)) {
+        if (navigation.getModalCount() >= 1 && swipeController.dispatchTouchEvent(event)) {
             return true;
         }
 

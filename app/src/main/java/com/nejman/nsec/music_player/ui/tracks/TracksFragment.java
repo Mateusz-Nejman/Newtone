@@ -131,8 +131,10 @@ public class TracksFragment extends WrappedFragment {
 
     @Override
     protected String getTitle() {
-        MainFragment.instance.fragmentTitle = fragmentTitle;
-        return MainFragment.instance.fragmentTitle;
+        if (mainFragment) {
+            MainFragment.instance.fragmentTitle = fragmentTitle;
+        }
+        return fragmentTitle;
     }
 
     private class TracksAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {

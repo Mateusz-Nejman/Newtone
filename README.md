@@ -2,7 +2,7 @@
 
 ## Devices
 - Android Phones
-- Android Automotive
+- Android Automotive (also for chinese multimedia unit)
 
 ## Completed
 - Basic media player functionality
