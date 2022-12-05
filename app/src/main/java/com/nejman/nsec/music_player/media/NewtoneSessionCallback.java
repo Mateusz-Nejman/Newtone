@@ -2,6 +2,7 @@ package com.nejman.nsec.music_player.media;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -14,7 +15,7 @@ import com.nejman.nsec.music_player.MainActivity;
 
 public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
     private final Context context;
-
+    private IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
     private final MusicNoisyReceiver musicNoisyReceiver = new MusicNoisyReceiver();
     private final MediaSessionCompat mediaSession;
     private final MusicPlaybackService service;
@@ -48,7 +49,7 @@ public class NewtoneSessionCallback extends MediaSessionCompat.Callback {
             }
             mediaSession.setActive(true);
             player.play();
-            //service.registerReceiver(musicNoisyReceiver, intentFilter);
+            service.registerReceiver(musicNoisyReceiver, intentFilter);
             service.updateNotification(true);
         }
     }
